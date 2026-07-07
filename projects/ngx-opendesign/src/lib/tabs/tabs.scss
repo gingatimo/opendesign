@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+.g-tabs__list {
+  display: inline-flex;
+  gap: var(--g-space-1);
+  padding: var(--g-space-1);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface);
+}
+
+.g-tabs__tab {
+  height: var(--g-control-sm);
+  padding: 0 var(--g-space-4);
+  border: none;
+  border-radius: var(--g-radius-pill);
+  background: transparent;
+  color: var(--g-text-muted);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color var(--g-duration-fast) var(--g-ease),
+    color var(--g-duration-fast) var(--g-ease);
+
+  &:hover:not(:disabled):not(.g-tabs__tab--active) {
+    color: var(--g-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.g-tabs__tab--active {
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  box-shadow: var(--g-shadow-sm);
+}
+
+.g-tabs__panel {
+  padding-top: var(--g-space-4);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}

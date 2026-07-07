@@ -1,0 +1,9 @@
+:host {
+  display: block;
+  padding: var(--g-space-5);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+}

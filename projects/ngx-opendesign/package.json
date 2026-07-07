@@ -1,0 +1,29 @@
+{
+  "name": "ngx-opendesign",
+  "version": "0.1.0",
+  "description": "Design system hiện đại cho Angular — pill shape, light/dark theme, tiếng Việt",
+  "keywords": ["angular", "design-system", "components", "ui"],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gingatimo/opendesign.git",
+    "directory": "projects/ngx-opendesign"
+  },
+  "homepage": "https://github.com/gingatimo/opendesign",
+  "bugs": {
+    "url": "https://github.com/gingatimo/opendesign/issues"
+  },
+  "peerDependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/cdk": "^22.0.0",
+    "@angular/forms": "^22.0.0"
+  },
+  "sideEffects": ["**/*.css"],
+  "exports": {
+    "./styles/opendesign.css": {
+      "style": "./styles/opendesign.css",
+      "default": "./styles/opendesign.css"
+    }
+  }
+}

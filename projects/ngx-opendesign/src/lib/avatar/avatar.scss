@@ -1,0 +1,37 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--g-secondary-bg);
+  color: var(--g-secondary-text);
+  font-family: var(--g-font-family);
+  font-weight: 500;
+  overflow: hidden;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+:host(.g-avatar--sm) {
+  width: var(--g-control-sm);
+  height: var(--g-control-sm);
+  font-size: var(--g-font-size-xs);
+}
+
+:host(.g-avatar--md) {
+  width: var(--g-control-md);
+  height: var(--g-control-md);
+  font-size: var(--g-font-size-sm);
+}
+
+:host(.g-avatar--lg) {
+  width: var(--g-control-lg);
+  height: var(--g-control-lg);
+  font-size: var(--g-font-size-lg);
+}
+
+.g-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

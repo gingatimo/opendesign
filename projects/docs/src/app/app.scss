@@ -1,0 +1,146 @@
+// Task 2 (viết lại): sửa lỗi 3 thanh cuộn. Bản cũ là flex COLUMN [topbar full-width] + [docs-shell]
+// cao 100vh — nhưng chiều cao THỰC của hai khối cộng lại có thể vượt 100vh (border/line-height
+// làm tròn, v.v.), và vì :host không có overflow: hidden nên phần vượt đẩy ra thanh cuộn của CHÍNH
+// <body>/viewport — thanh cuộn thứ 3, cộng thêm 2 thanh cuộn nội bộ sẵn có (.g-sidebar__body,
+// .docs-main) là 3. Bỏ topbar (không còn khối xếp chồng theo chiều dọc phía trên docs-shell) nên
+// đổi flex-direction column → ROW: giờ :host chỉ có đúng MỘT hàng ngang cao 100vh (sidebar +
+// main), không còn phép cộng chiều cao nào có thể vượt 100vh. overflow: hidden là lưới an toàn
+// thứ hai — chặn tuyệt đối thanh cuộn cả trang dù có sai số nào khác phát sinh sau này.
+:host {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// Skip link (WCAG 2.4.1): ẩn trực quan bằng đúng kỹ thuật visually-hidden mà thư viện đã dùng
+// cho .g-sidebar-item__label (xem projects/ngx-opendesign/styles/opendesign.scss) — kích thước
+// 1px + clip + overflow hidden, KHÔNG dùng display:none/visibility:hidden vì cả hai gỡ luôn phần
+// tử khỏi thứ tự Tab, khiến skip link không thể focus được bằng bàn phím. Khác sidebar-item-label
+// (không bao giờ cần hiện lại), skip link phải hiện trực quan khi được focus nên có thêm state
+// :focus reset lại toàn bộ các thuộc tính ẩn.
+.docs-skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+
+  &:focus {
+    position: fixed;
+    top: var(--g-space-3);
+    left: var(--g-space-3);
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: var(--g-space-2) var(--g-space-4);
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    z-index: 1000;
+    background: var(--g-surface);
+    color: var(--g-text);
+    border-radius: var(--g-radius-md);
+    box-shadow: 0 0 0 2px var(--g-primary);
+  }
+}
+
+// [gSidebarHeader] chỉ là directive (không có view riêng, xem sidebar.ts thư viện) — thẻ mang
+// nó là <a> thật (routerLink về trang chủ) chứ không phải <div> như demo thư viện, nên cần tự
+// đặt lại màu/gạch chân giống mọi link khác trong docs. Specificity thắng .g-sidebar__header
+// (global, không có [gSidebarHeader] scope) nhờ Angular gắn thêm attribute [_ngcontent-*] của
+// chính app.scss vào class này — đã kiểm thật: chữ "OpenDesign" không có gạch chân, không đổi
+// màu khi hover/visited, đúng như topbar cũ.
+.docs-brand {
+  font-weight: 500;
+  font-size: var(--g-font-size-lg);
+  color: var(--g-text);
+  text-decoration: none;
+}
+
+.docs-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-5);
+}
+
+.docs-nav-group__title {
+  padding: 0 var(--g-space-3);
+  margin-bottom: var(--g-space-1);
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+// Sidebar thu gọn còn 72px thì tiêu đề nhóm không còn chỗ và bị cắt ngang chữ ("BẮT ĐẦ", "NÚ").
+// Thư viện CHỈ tự ẩn [gSidebarItemLabel]; mọi nội dung khác trong thân sidebar là việc của
+// consumer — trang docs Sidebar ghi đúng giới hạn này, và đây là chỗ docs shell tự áp dụng nó.
+// Ẩn trực quan chứ KHÔNG display:none: tiêu đề nhóm vẫn là ngữ cảnh có ích cho trình đọc màn
+// hình, nên giữ trong accessibility tree — cùng kỹ thuật thư viện dùng cho nhãn item. Khoảng
+// cách giữa các nhóm vẫn còn nhờ gap của .docs-nav.
+.g-sidebar--collapsed .docs-nav-group__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// .docs-main chiếm full width (không max-width/margin:auto ở chính nó) để thanh cuộn dọc
+// nằm sát mép phải viewport — overflow-y:auto trên một hộp full-width thì thanh cuộn luôn
+// bám mép phải của hộp đó.
+//
+// Nội dung được căn giữa tối đa 960px bằng .docs-main__inner (max-width + margin:auto) —
+// KHÔNG dùng padding theo % (vd. calc((100% - 960px) / 2)) như phác thảo ban đầu: % trong
+// padding của flex-item quy chiếu theo chiều rộng của containing block (toàn bộ .docs-shell,
+// gồm cả sidebar), không phải phần không gian còn lại của riêng .docs-main. Đã đo thật trên
+// trình duyệt: docs-shell rộng 1512px (sidebar 240px + docs-main 1272px) nhưng padding theo
+// công thức % lại ra 276px mỗi bên — tức (1512-960)/2, dựa trên bề rộng TOÀN docs-shell chứ
+// không phải 1272px thực có của docs-main — khiến nội dung bị bóp còn ~705px thay vì ~945px,
+// và co giãn sai lệch theo trạng thái mở/thu gọn sidebar. margin:auto trên inner wrapper
+// không có vấn đề này vì containing block của nó chính là .docs-main (đã có kích thước đúng).
+.docs-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+// padding-top rộng hơn hẳn (--g-space-6, 24px) so với các cạnh còn lại (--g-space-7 dùng chung
+// trước đây) — chừa chỗ cho .docs-theme-toggle nổi đè lên trên (xem dưới): nút cao 40px, đặt cách
+// mép trên var(--g-space-4) (16px) nên chiếm tới y=56px; --g-space-8 (40px) + --g-space-6 (24px)
+// = 64px đủ để dòng chữ/nội dung đầu tiên của MỌI trang (kể cả trang có heading ngay sát đầu,
+// không có breadcrumb/toolbar riêng) luôn bắt đầu dưới đáy nút — đã đo thật trên /playbook và
+// /components/sidebar (trang có heading ngay đầu, nhiều chữ nhất).
+.docs-main__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--g-space-8) var(--g-space-6) var(--g-space-7);
+}
+
+// Nút theme nổi góc phải trên — thay cho vị trí cũ trong <g-topbar> (đã bỏ hẳn topbar). z-index
+// không có token --g-z-* nào sẵn có trong thư viện (đã kiểm: chỉ .docs-skip-link dùng z-index
+// hardcode 1000 trong chính file này); chọn 10 — đủ để nổi trên nội dung thường (không z-index/
+// auto) nhưng thấp hơn hẳn overlay CDK (dialog/tooltip/toast, z-index ~1000) nên dialog vẫn luôn
+// che được nút, không bao giờ ngược lại. Tự thêm background + border + shadow (g-icon-button
+// biến thể mặc định "ghost" chỉ có nền lúc hover, xem icon-button.scss) vì giờ nút nổi trực tiếp
+// trên nội dung trang thay vì nằm sẵn trong khối nền của topbar — không có nền riêng thì chữ/hình
+// bên dưới sẽ xuyên qua, khó đọc.
+.docs-theme-toggle {
+  position: fixed;
+  top: var(--g-space-4);
+  right: var(--g-space-4);
+  z-index: 10;
+  background: var(--g-surface);
+  border: 1px solid var(--g-border);
+  box-shadow: var(--g-shadow-sm);
+}

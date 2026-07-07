@@ -1,0 +1,47 @@
+# Changelog
+
+Mọi thay đổi đáng chú ý của dự án này được ghi lại trong file này.
+
+Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
+[Semantic Versioning](https://semver.org/).
+
+## [0.1.0] — chưa phát hành
+
+### Added
+
+#### Component (22)
+
+- **Nút**: `GButton`, `GIconButton`
+- **Form**: `GInput`, `GTextarea`, `GCheckbox`, `GToggle`, `GRadioGroup` + `GRadio`, `GSelect` +
+  `GOption` (trigger có mũi tên xuống, xoay khi mở panel), `GInputGroup` (input kèm icon/nút phụ
+  trợ trước/sau qua `GInputPrefix`/`GInputSuffix`)
+- **Hiển thị**: `GBadge`, `GSpinner`, `GProgress`, `GChip`, `GAvatar`, `GCard`, `GIcon` (+ bộ 28
+  icon SVG tree-shakable)
+- **Overlay**: Dialog (qua `GDialogService`), `GTooltip`, Toast (qua `GToastService` — cấu hình vị
+  trí qua `setPosition(GToastPosition)`, mặc định `top-right`, hỗ trợ 6 góc)
+- **Điều hướng**: `GTabs`, `GTopbar`, `GSidebar` (thu gọn: ẩn header, item active hiện vạch mép
+  trái, icon căn giữa, tooltip nhãn xổ sang phải), `GSidebarToggle` (nút thu gọn/mở lại — mở rộng thì nằm trái header, thu gọn thì
+  căn giữa cùng cấp các mục nav), `GLink`
+
+Toàn bộ component: standalone, `ChangeDetectionStrategy.OnPush`, signal input/output, ARIA đúng
+pattern, điều hướng bàn phím đầy đủ. Theme sáng/tối qua design token `--g-*`, đổi bằng thuộc tính
+`data-g-theme` trên `<html>`.
+
+#### Hạ tầng
+
+- Design token (`projects/ngx-opendesign/styles/opendesign.scss`): màu sắc, typography, radius,
+  spacing — hai bảng màu sáng/tối, `color-scheme` để UI gốc trình duyệt (thanh cuộn, autofill...)
+  đi theo theme. Kèm luôn rule `.cdk-visually-hidden` (tương đương `@angular/cdk/a11y-prebuilt.css`)
+  vì `GToastService` dùng `LiveAnnouncer` — CDK tự inject style overlay nhưng KHÔNG tự inject style
+  a11y, thiếu rule này thì vùng live-region đọc cho screen reader render như block thường và sinh
+  một thanh cuộn dọc thừa mỗi lần bắn toast. Nhờ vậy consumer chỉ cần import `opendesign.css`.
+- Docs site tiếng Việt (`projects/docs`): trang Nền tảng (màu sắc, typography, radius & spacing,
+  dark mode), trang riêng cho từng component (demo sống + code mẫu đọc từ file nguồn + bảng API +
+  ghi chú accessibility), Playbook (4 recipe ghép component thành màn hình thực chiến — form đăng
+  nhập, trang cài đặt, dashboard layout, danh sách có filter).
+- CI (`.github/workflows/ci.yml`): lint, format check, test, build lib + build docs trên mỗi push
+  và pull request.
+- Hạ tầng phát hành: `release.yml` (publish `ngx-opendesign` lên npm kèm provenance khi push tag
+  `v*`), `deploy-docs.yml` (deploy docs site lên GitHub Pages khi push nhánh `main`).
+
+[0.1.0]: https://github.com/gingatimo/opendesign/releases/tag/v0.1.0

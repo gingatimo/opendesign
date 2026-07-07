@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Bắt buộc để npm publish --provenance lấy được OIDC token ký provenance statement.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          # Bắt buộc để setup-node ghi registry này vào .npmrc — thiếu dòng này thì
+          # NODE_AUTH_TOKEN không được npm publish đọc, dù đã set env đúng.
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build:lib
+      # ./ đứng đầu là BẮT BUỘC: thiếu nó, npm-package-arg parse "dist/ngx-opendesign"
+      # thành GitHub shorthand (owner/repo) và đi git ls-remote thay vì publish thư mục.
+      - run: npm publish ./dist/ngx-opendesign --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

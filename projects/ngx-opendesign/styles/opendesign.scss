@@ -1,0 +1,707 @@
+// OpenDesign — design tokens (API theming public là các biến --g-*)
+// Light là mặc định; dark override qua html[data-g-theme="dark"].
+
+:root {
+  // Báo cho trình duyệt biết bề mặt hiện là sáng hay tối, để UI GỐC của trình duyệt tự đi theo
+  // theme: thanh cuộn, ô chọn ngày/giờ, nền autofill, gạch chân spellcheck... — những thứ CSS
+  // variable không với tới được. Thiếu dòng này thì dark mode vẫn hiện thanh cuộn sáng của hệ
+  // thống, chỏi hẳn với nền gần đen.
+  //
+  // Cố ý dùng giá trị đơn ('light' ở đây, 'dark' ở block dưới) chứ không phải 'light dark':
+  // theme của OpenDesign do consumer quyết định qua data-g-theme, KHÔNG chạy theo
+  // prefers-color-scheme của hệ điều hành — nên phải khai báo đúng cái đang thực sự hiển thị.
+  color-scheme: light;
+
+  // Màu semantic — light
+  --g-bg: #ffffff;
+  --g-surface: #f5f5f6;
+  --g-surface-raised: #ffffff;
+  --g-text: #18181b;
+  --g-text-muted: #71717a;
+  --g-border: #e4e4e7;
+  --g-border-strong: #d4d4d8;
+  --g-primary: #141416;
+  --g-primary-hover: #2d2d30;
+  --g-on-primary: #ffffff;
+  --g-secondary-bg: #ececee;
+  --g-secondary-text: #3f3f46;
+
+  // Trạng thái
+  --g-success-text: #15803d;
+  --g-success-bg: #e8f7ee;
+  --g-success-solid: #16a34a;
+  --g-danger-text: #b91c1c;
+  --g-danger-bg: #fdecec;
+  --g-danger-solid: #dc2626;
+  --g-warning-text: #a16207;
+  --g-warning-bg: #fcf4e0;
+  --g-warning-solid: #d97706;
+
+  // Radius — linh hồn của OpenDesign
+  --g-radius-pill: 9999px;
+  --g-radius-sm: 8px;
+  --g-radius-md: 12px;
+
+  // Control height
+  --g-control-sm: 32px;
+  --g-control-md: 40px;
+  --g-control-lg: 48px;
+
+  // Spacing (bậc 4px)
+  --g-space-1: 4px;
+  --g-space-2: 8px;
+  --g-space-3: 12px;
+  --g-space-4: 16px;
+  --g-space-5: 20px;
+  --g-space-6: 24px;
+  --g-space-7: 32px;
+  --g-space-8: 40px;
+
+  // Typography
+  --g-font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --g-font-size-xs: 12px;
+  --g-font-size-sm: 13px;
+  --g-font-size-md: 14px;
+  --g-font-size-lg: 16px;
+
+  // Motion
+  --g-duration-fast: 120ms;
+  --g-duration-base: 200ms;
+  --g-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  // Elevation
+  --g-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+  --g-shadow-md: 0 4px 12px rgb(0 0 0 / 0.1);
+  --g-shadow-lg: 0 12px 32px rgb(0 0 0 / 0.16);
+
+  // Focus ring (chỉ dùng với :focus-visible)
+  --g-focus-ring: 0 0 0 2px var(--g-bg), 0 0 0 4px var(--g-primary);
+}
+
+[data-g-theme='dark'] {
+  // Xem ghi chú ở :root — dòng này là thứ khiến thanh cuộn và mọi UI gốc khác của trình duyệt
+  // chuyển sang tối theo. Trên macOS nó còn giữ nguyên hành vi overlay scrollbar quen thuộc,
+  // khác với việc tự tô màu bằng scrollbar-color (sẽ ép thanh cuộn luôn hiện).
+  color-scheme: dark;
+
+  --g-bg: #0b0b0c;
+  --g-surface: #161618;
+  --g-surface-raised: #1f1f23;
+  --g-text: #ededef;
+  --g-text-muted: #8f8f96;
+  --g-border: #29292e;
+  --g-border-strong: #3f3f46;
+  --g-primary: #fafafa;
+  --g-primary-hover: #e4e4e7;
+  --g-on-primary: #111113;
+  --g-secondary-bg: #26262b;
+  --g-secondary-text: #d4d4d8;
+
+  --g-success-text: #4ade80;
+  --g-success-bg: #132a1d;
+  --g-success-solid: #22c55e;
+  --g-danger-text: #f87171;
+  --g-danger-bg: #2c1414;
+  --g-danger-solid: #ef4444;
+  --g-warning-text: #fbbf24;
+  --g-warning-bg: #2b2110;
+  --g-warning-solid: #f59e0b;
+
+  --g-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --g-shadow-md: 0 4px 12px rgb(0 0 0 / 0.5);
+  --g-shadow-lg: 0 12px 32px rgb(0 0 0 / 0.6);
+}
+
+// Nền + chữ mặc định theo theme (có chủ đích — để dark mode phủ toàn trang).
+body {
+  margin: 0;
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+}
+
+// GInput / GTextarea — directive không có view riêng, style đặt trực tiếp ở đây (xem spec §5.1)
+.g-input {
+  display: block;
+  // width: 100% + padding + border mà không có border-box thì tổng bề rộng = 100% + 34px,
+  // tràn ra ngoài container. <input> mặc định là content-box và thư viện KHÔNG áp reset
+  // box-sizing toàn cục lên app của consumer, nên phải tự khai báo ở đây.
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--g-control-md);
+  padding: 0 var(--g-space-4);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  transition:
+    border-color var(--g-duration-fast) var(--g-ease),
+    box-shadow var(--g-duration-fast) var(--g-ease);
+
+  &::placeholder {
+    color: var(--g-text-muted);
+  }
+
+  // :not(:focus-visible) ở cuối — bắt buộc, không phải phòng xa thừa: click chuột vào <input>
+  // vẫn để chuột nằm nguyên trên đó, nên :hover và :focus-visible cùng đúng một lúc. Hover
+  // (0,3,0) thắng focus-visible (0,2,0) ở border-color → viền ra xám thay vì primary dù ring
+  // (box-shadow) vẫn đúng — đã tự bắt lỗi này bằng trình duyệt thật (xem task-3-report.md của
+  // Plan 8), cùng nguyên nhân với .g-input-group ở dưới. Loại hẳn khỏi tập khớp thay vì đấu
+  // specificity: đấu specificity vỡ ngay khi có người thêm rule khác.
+  &:hover:not(:disabled):not(:focus-visible) {
+    border-color: var(--g-border-strong);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--g-primary);
+    box-shadow: var(--g-focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.g-input.g-input--invalid {
+  border-color: var(--g-danger-solid);
+}
+
+// GInputGroup — bọc <input gInput> cùng icon/nút prefix/suffix (vd. kính lúp cho ô tìm kiếm, nút
+// con mắt cho ô mật khẩu). Directive không có view riêng thì style đặt trực tiếp ở đây (xem ghi chú
+// .g-card__header/.g-card__footer bên dưới) — nhưng GInputGroup LÀ component có view
+// (`<ng-content />`), lý do style của nó cũng nằm ở global thay vì styleUrl là vì các rule dưới đây
+// phải với vào <input gInput>/icon/nút được projected từ template consumer: style scoped
+// (ViewEncapsulation) của GInputGroup chỉ áp lên nội dung TEMPLATE của chính nó, không với ra ngoài
+// nội dung projected được — giống hệt lý do .g-card__header/footer nằm ở global thay vì card.scss.
+//
+// Viền + focus ring đặt trên CHÍNH .g-input-group, KHÔNG phải trên <input> bên trong — input bên
+// trong bỏ hẳn viền/nền/padding riêng, nhường cho group vẽ. Nếu để cả hai cùng vẽ viền sẽ thấy hai
+// lớp chồng nhau (đúng cạm bẫy brief cảnh báo).
+.g-input-group {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--g-control-md);
+  padding-inline: var(--g-space-4);
+  gap: var(--g-space-2);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-bg);
+  color: var(--g-text);
+  transition:
+    border-color var(--g-duration-fast) var(--g-ease),
+    box-shadow var(--g-duration-fast) var(--g-ease);
+
+  // :not(:has(.g-input:focus-visible)) ở cuối — bắt buộc, không phải phòng xa thừa: click chuột
+  // vào <input> vẫn để chuột nằm nguyên trên đó, nên :hover và :focus-visible cùng đúng một lúc.
+  // Nếu thiếu vế loại trừ này, selector hover (0,3,0: class+hover+not) có specificity CAO HƠN
+  // selector focus bên dưới (0,2,0: class+has) nên border-color của hover thắng, viền xám thay vì
+  // màu primary dù ring (box-shadow) vẫn đúng — đã tự bắt lỗi này bằng trình duyệt thật (xem
+  // task-3-report.md), không phải suy đoán. Nhắm đúng .g-input (không phải :focus-visible chung
+  // chung) để đối xứng với rule focus bên dưới: nếu không, khi nút suffix (vd. con mắt mật khẩu)
+  // đang focus mà con trỏ di lên group thì viền hover không hiện — group tưởng nhầm "đang có
+  // :focus-visible bên trong" trong khi thứ đang focus không phải input.
+  &:hover:not(:has(.g-input:disabled)):not(:has(.g-input:focus-visible)) {
+    border-color: var(--g-border-strong);
+  }
+
+  // :has(.g-input:focus-visible) — CHỈ <input> mới kéo ring của cả nhóm, không phải bất kỳ
+  // :focus-visible nào bên trong. Trước đây dùng :has(:focus-visible) chung chung: Tab từ input
+  // sang nút suffix (vd. con mắt mật khẩu) khiến group vẫn vẽ y hệt ring đó — hai trạng thái focus
+  // khác nhau nhưng nhìn giống hệt nhau, vi phạm WCAG 2.4.7 (chỉ báo phải cho biết PHẦN TỬ NÀO
+  // đang focus, không chỉ "có gì đó" đang focus). Thu hẹp lại còn input thì nút suffix không còn
+  // kéo ring của group nữa — nó dùng ring riêng của chính nó (xem .g-icon-button bên dưới).
+  &:has(.g-input:focus-visible) {
+    border-color: var(--g-primary);
+    box-shadow: var(--g-focus-ring);
+  }
+
+  &:has(.g-input--invalid) {
+    border-color: var(--g-danger-solid);
+  }
+
+  // Input bên trong disabled thì CẢ NHÓM phải trông disabled — không chỉ chữ mờ trong khi viền vẫn
+  // sắc nét và icon prefix (vd. kính lúp) đậm nguyên. Khớp với .g-input đứng một mình (mờ cả khối
+  // qua &:disabled ở trên).
+  &:has(.g-input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // <input gInput> bên trong nhóm: bỏ viền/nền/padding riêng của .g-input — group đã vẽ viền +
+  // focus ring bao quanh CẢ nhóm rồi, giữ nguyên .g-input sẽ ra hai lớp viền/ring chồng nhau.
+  .g-input {
+    flex: 1 1 auto;
+    width: auto;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    &:focus-visible {
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
+
+  // Nút suffix (vd. con mắt hiện/ẩn mật khẩu) là .g-icon-button — GIỮ NGUYÊN box-shadow
+  // :focus-visible riêng của nó (icon-button.scss). Group giờ chỉ phản ứng với
+  // :has(.g-input:focus-visible) (xem ở trên) nên không còn vẽ ring khi nút đang focus — ring
+  // riêng của nút là chỉ báo DUY NHẤT lúc đó, không lồng với ring của group nữa.
+}
+
+.g-input-group__prefix,
+.g-input-group__suffix {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+// Icon trang trí ở prefix (vd. kính lúp) tô màu nhạt hơn chữ chính, giống placeholder — nút ở
+// suffix (vd. con mắt hiện/ẩn mật khẩu) tự quản màu qua GIconButton nên không override ở đây.
+.g-input-group__prefix {
+  color: var(--g-text-muted);
+}
+
+.g-textarea {
+  display: block;
+  // Xem ghi chú ở .g-input — cùng lý do.
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(var(--g-font-size-md) * 1.5 * 3 + var(--g-space-4) * 2);
+  padding: var(--g-space-3) var(--g-space-4);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-sm);
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  resize: vertical;
+  transition:
+    border-color var(--g-duration-fast) var(--g-ease),
+    box-shadow var(--g-duration-fast) var(--g-ease);
+
+  &::placeholder {
+    color: var(--g-text-muted);
+  }
+
+  // Xem ghi chú ở .g-input — cùng lý do: click chuột vào <textarea> vẫn để chuột nằm nguyên trên
+  // đó nên :hover và :focus-visible cùng đúng một lúc, hover thắng focus-visible ở border-color
+  // nếu thiếu :not(:focus-visible).
+  &:hover:not(:disabled):not(:focus-visible) {
+    border-color: var(--g-border-strong);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--g-primary);
+    box-shadow: var(--g-focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.g-textarea.g-textarea--invalid {
+  border-color: var(--g-danger-solid);
+}
+
+// GRadioGroup trước đây KHÔNG có rule nào: <g-radio-group> rơi về display: inline mặc
+// định của custom element, nên các <g-radio> (inline-flex, xem radio.scss) chỉ cách nhau
+// bởi khoảng trắng giữa các thẻ trong template — bị HTML gộp còn đúng một dấu cách, khiến
+// các lựa chọn dính liền nhau.
+//
+// gap PHẢI lớn hơn hẳn --g-space-2 (8px, khoảng cách nút tròn ↔ nhãn BÊN TRONG .g-radio):
+// nếu hai khoảng bằng nhau thì mắt không phân biệt được nhãn thuộc nút nào — nhãn sẽ nằm
+// gần nút của lựa chọn KẾ TIẾP đúng bằng nút của chính nó (lỗi nhóm gần). Đã kiểm bằng mắt
+// trên trình duyệt thật (trang Playbook → Cài đặt và trang Radio): --g-space-5 (20px, tỉ lệ
+// 2.5:1 so với --g-space-2) tách nhóm rõ ràng hơn --g-space-4 (16px, tỉ lệ 2:1) — ở 16px mắt
+// vẫn phải nhìn kỹ mới chắc nhãn "Pro" thuộc nút giữa chứ không phải nút đầu.
+.g-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--g-space-5);
+}
+
+// GCardHeader / GCardFooter — directive không có view riêng, style đặt trực tiếp ở đây (xem spec §5.1)
+.g-card__header {
+  margin-bottom: var(--g-space-4);
+  padding-bottom: var(--g-space-3);
+  border-bottom: 1px solid var(--g-border);
+  font-weight: 500;
+}
+
+.g-card__footer {
+  margin-top: var(--g-space-4);
+  padding-top: var(--g-space-3);
+  border-top: 1px solid var(--g-border);
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-sm);
+}
+
+// GDialog — panel/backdrop được CDK portal ra ngoài cây component nên style phải global.
+.g-dialog-panel {
+  display: block;
+  max-width: calc(100vw - var(--g-space-8));
+  max-height: calc(100vh - var(--g-space-8));
+  overflow: auto;
+  padding: var(--g-space-6);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  box-shadow: var(--g-shadow-lg);
+}
+
+.g-dialog-backdrop {
+  background: rgb(0 0 0 / 0.32);
+}
+
+// GTooltip — panel được portal ra ngoài cây component nên style phải global.
+.g-tooltip {
+  position: relative;
+  display: block;
+  max-width: 240px;
+  padding: var(--g-space-2) var(--g-space-3);
+  border-radius: var(--g-radius-sm);
+  background: var(--g-text);
+  color: var(--g-bg);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-xs);
+  line-height: 1.4;
+
+  // "Hover bridge" — WCAG 1.4.13 Hoverable. tooltip.ts đặt panel cách trigger đúng
+  // var(--g-space-2) (TOOLTIP_OFFSET = 8px), và .cdk-overlay-pane không có margin/pseudo-element
+  // nào lấp khoảng đó, nên box của pane == box của .g-tooltip. .cdk-overlay-container lại là
+  // pointer-events: none (chỉ .cdk-overlay-pane mới auto) — nghĩa là con trỏ đứng giữa khoảng
+  // trống 8px đó xuyên thẳng xuống trang bên dưới. Với người di chuyển chuột chậm (đặc biệt
+  // người dùng screen-magnifier — đúng nhóm mà Hoverable bảo vệ), mỗi lần lấy mẫu vị trí con trỏ
+  // đều rơi vào khoảng trống này, khiến mouseleave trên trigger bắn ra với relatedTarget KHÔNG
+  // nằm trong panel — phá vỡ guard contains() trong tooltip.ts dù nó đúng về logic.
+  //
+  // Vá bằng một quầng vô hình (::before, pointer-events: auto) phủ đều 8px quanh mọi cạnh panel,
+  // ăn khớp con số TOOLTIP_OFFSET bên tooltip.ts. Material vá đúng lỗi này bằng một ::before
+  // *định hướng theo từng vị trí* (panelClass riêng cho top/bottom/left/right, chỉ mở rộng về
+  // phía trigger). Ở đây chọn phương án đơn giản hơn — quầng đều bốn phía — vì: (1) không cần
+  // panelClass hay wiring theo hướng, ít chỗ để sai; (2) tooltip chỉ chứa text thuần, không có gì
+  // bên trong panel để quầng vô tình che mất. Đánh đổi: quầng cũng lấn 8px ra những cạnh KHÔNG
+  // hướng về trigger, có thể "nuốt" sự kiện con trỏ của một phần tử khác nằm sát tooltip trong
+  // khoảng đó. Chấp nhận vì quầng chỉ tồn tại trong lúc tooltip đang mở (trigger đang được hover),
+  // và bố cục dùng --g-space-2 trở lên giữa các phần tử tương tác nên va chạm thực tế hiếm.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: calc(var(--g-space-2) * -1);
+    pointer-events: auto;
+  }
+}
+
+// CDK visually-hidden — tương đương @angular/cdk/a11y-prebuilt.css (bỏ prefix -webkit/-moz cũ,
+// dùng appearance chuẩn, hợp gu CSS hiện đại của lib).
+//
+// GToastService dùng LiveAnnouncer (@angular/cdk/a11y) để đọc nội dung toast cho screen reader; nó
+// chèn một <div class="cdk-live-announcer-element cdk-visually-hidden"> vào <body>. Khác với style
+// overlay (CDK tự inject runtime qua CdkOverlayStyleLoader), style a11y KHÔNG được tự inject — phải
+// do stylesheet nạp. Thiếu rule này thì vùng live-region đó không bị ẩn: nó render như block thường
+// (~19px) ở cuối <body>, đẩy scrollHeight vượt viewport và sinh ra một thanh cuộn dọc thừa mỗi lần
+// bắn toast. Ship kèm đây để consumer chỉ cần import opendesign.css là đủ, không phải nhớ nạp thêm
+// @angular/cdk/a11y-prebuilt.css. (Không @use mixin CDK vì build:lib compile bằng sass CLI thuần,
+// không có load-path tới node_modules.)
+.cdk-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+  outline: 0;
+  appearance: none;
+  left: 0;
+}
+
+[dir='rtl'] .cdk-visually-hidden {
+  right: 0;
+  left: auto;
+}
+
+// GToast — panel được portal ra ngoài cây component nên style phải global.
+// align-items: flex-end là mặc định cho vị trí bên phải (top-right/bottom-right) — không cần
+// class riêng cho nhóm này. Bên trái/giữa ghi đè bằng hai modifier class dưới, do
+// GToastContainer áp theo GToastService.position() (xem toast.service.ts).
+.g-toast-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.g-toast-container--start {
+  align-items: flex-start;
+}
+
+.g-toast-container--center {
+  align-items: center;
+}
+
+.g-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-3);
+  min-width: 240px;
+  max-width: 400px;
+  margin-top: var(--g-space-2);
+  padding: var(--g-space-3) var(--g-space-4);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  box-shadow: var(--g-shadow-md);
+}
+
+.g-toast--success {
+  border-color: var(--g-success-solid);
+}
+
+.g-toast--warning {
+  border-color: var(--g-warning-solid);
+}
+
+.g-toast--danger {
+  border-color: var(--g-danger-solid);
+}
+
+.g-toast__message {
+  flex: 1;
+}
+
+.g-toast__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--g-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--g-surface);
+    color: var(--g-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+// GTopbar slots — directive không có view riêng, style đặt trực tiếp ở đây (xem spec §5.1)
+.g-topbar__start {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-3);
+}
+
+// flex: 1 ở đây tiêu thụ hết free space còn lại ngay ở bước resolve flex-grow (trước bước
+// phân bổ auto margin) — nên margin-left: auto của .g-topbar__end không hề xung đột với nó:
+// khi center có mặt, center đã chiếm hết chỗ trống nên auto margin của end không còn gì để
+// nhận (vô hại); khi center vắng mặt (không có phần tử nào khớp selector), toàn bộ free space
+// nghiễm nhiên chảy vào margin-left: auto của end như bình thường. Cả hai layout đều đúng.
+.g-topbar__center {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.g-topbar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-3);
+  margin-left: auto;
+}
+
+// GSidebarHeader / GSidebarFooter — directive không có view riêng, style đặt trực tiếp ở đây.
+//
+// Plan 10 Task 1: BỎ padding-bottom (var(--g-space-4)) từng có ở đây. Header là flex item của
+// hàng .g-sidebar__top (align-items: center, xem sidebar.ts/sidebar.scss) — align-items canh
+// giữa theo BOX của item, nên padding-bottom một phía làm box cao hơn phía dưới, đẩy TEXT bên
+// trong lệch lên trên tâm hàng ~8px (đo thật trên trình duyệt, xem task-1-report.md). Bỏ padding
+// dọc hẳn thì box header chỉ còn cao bằng dòng chữ, tâm box = tâm chữ = tâm toggle (cả hai đều
+// var(--g-control-md) 40px). Khoảng cách header→body vốn do padding-bottom này lo nay chuyển
+// sang .g-sidebar__top { margin-bottom } (xem sidebar.scss) — giữ đúng khoảng cách cũ, không
+// cộng dồn.
+.g-sidebar__header {
+  padding: 0;
+  font-weight: 600;
+  font-size: var(--g-font-size-lg);
+}
+
+.g-sidebar__footer {
+  padding: var(--g-space-4) var(--g-space-3) 0;
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-xs);
+}
+
+// Thu gọn còn 72px thì header (tên app, font-size lg) không còn chỗ — tràn ra ngoài và
+// nút toggle đè lên. Ẩn TRỰC QUAN chứ KHÔNG display:none: tên app vẫn có ích cho trình
+// đọc màn hình, giữ trong accessibility tree — cùng lý do .g-sidebar-item__label làm vậy
+// (kỹ thuật visually-hidden y hệt, xem rule đó bên dưới). Đặt ở đây (global), KHÔNG
+// ::ng-deep trong sidebar.scss: giống .g-sidebar__header ở trên, đây là nội dung PROJECTED
+// từ consumer — nằm ngoài view encapsulation của GSidebar.
+.g-sidebar--collapsed .g-sidebar__header {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// GSidebarItem là @Component (selector kebab-case trên phần tử native, xem sidebar-item.ts)
+// nhưng nhãn/icon con là directive không có view riêng nên gộp chung style vào đây cho dễ đọc.
+.g-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-3);
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--g-control-md);
+  padding: 0 var(--g-space-3);
+  border: none;
+  border-radius: var(--g-radius-pill);
+  background: transparent;
+  color: var(--g-text-muted);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--g-surface);
+    color: var(--g-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+// Trạng thái active: consumer gắn routerLinkActive="g-active" (class thuần, không truyền tải
+// trạng thái tới AT — docs hướng dẫn consumer thêm [attr.aria-current]="'page'" hoặc dùng
+// ariaCurrentWhenActive của RouterLinkActive, đã xác minh có thật trong @angular/router).
+.g-sidebar-item.g-active {
+  background: var(--g-secondary-bg);
+  color: var(--g-text);
+  font-weight: 500;
+}
+
+// Thu gọn: bỏ nền pill, thay bằng vạch dọc ở mép trái. Nền pill 48px trong sidebar hẹp trông
+// như một khối đặc không rõ nghĩa; vạch là pattern nav quen thuộc và không đánh nhau với bo
+// tròn pill (không đặt border-left trực tiếp lên item vì border-radius: pill sẽ bẻ cong nó).
+.g-sidebar--collapsed .g-sidebar-item.g-active {
+  position: relative;
+  background: transparent;
+}
+
+.g-sidebar--collapsed .g-sidebar-item.g-active::before {
+  content: '';
+  position: absolute;
+  // left: 0 (lối (a) trong brief), KHÔNG phải âm mép sidebar (-var(--g-space-2)): đã thử lối
+  // (b) trên trình duyệt thật (Chromium) và bị xén hoàn toàn, biến mất — .g-sidebar__body có
+  // overflow-y: auto nên overflow-x tính thành auto theo CSS spec (spec: một trục auto thì
+  // trục kia không thể visible), và containing block của vạch là chính item — nằm TRONG box
+  // đó — nên phần nhô ra ngoài mép trái item bị cắt bởi scrollport, không có lối thoát như
+  // <g-sidebar-toggle /> (containing block của nó là g-sidebar, nằm NGOÀI overflow box). Bằng
+  // chứng: đo getComputedStyle thật, .g-sidebar__body có x=338.5 nhưng vạch ở left:-8px nằm ở
+  // x=330.5 — ngoài scrollport 8px, và pixel không hề xuất hiện trên màn hình (xem
+  // task-2-report.md). left: 0 giữ vạch trong lòng item, cách mép sidebar đúng padding host
+  // (--g-space-2 = 8px) — không đẹp bằng ý tưởng ban đầu nhưng là lựa chọn AN TOÀN, có bằng
+  // chứng, thay vì chọn trên giấy.
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: var(--g-space-5);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-primary);
+}
+
+.g-sidebar-item__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+// collapsed: ẩn nhãn chữ TRỰC QUAN nhưng vẫn giữ trong accessibility tree. Kỹ thuật
+// visually-hidden chuẩn (kích thước 1px + clip + overflow hidden) — KHÔNG dùng display:none
+// hay visibility:hidden vì cả hai đều gỡ phần tử khỏi accessibility tree, khiến item mất
+// accessible name. position: absolute cũng đưa nhãn ra khỏi luồng flex của item, nên khi
+// collapsed chỉ còn icon chiếm chỗ — canh giữa icon cho gọn.
+.g-sidebar--collapsed .g-sidebar-item {
+  justify-content: center;
+}
+
+.g-sidebar--collapsed .g-sidebar-item__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// GLink — directive không có view riêng (a[gLink]), style đặt trực tiếp ở đây (xem quy ước
+// .g-card__header/.g-input-group ở trên).
+//
+// Gạch chân LUÔN hiện (không chỉ khi hover) — đây là điều kiện để đạt WCAG 1.4.1 (Use of Color):
+// link phải phân biệt được với chữ thường quanh nó bằng một dấu hiệu KHÔNG PHẢI màu sắc. Bảng màu
+// OpenDesign là đơn sắc (--g-primary #141416 ở light gần như cùng tông với --g-text #18181b) nên
+// chỉ đổi màu không đủ tương phản để phân biệt — bắt buộc phải có gạch chân làm dấu hiệu hình học,
+// độc lập với màu, đọc được kể cả ở chế độ mù màu / grayscale.
+.g-link {
+  color: var(--g-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  border-radius: var(--g-radius-sm);
+
+  &:hover {
+    color: var(--g-primary-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}

@@ -1,0 +1,46 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  width: 40px;
+  height: 22px;
+  padding: 2px;
+  border-radius: var(--g-radius-pill);
+  background: var(--g-border-strong);
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+:host(.g-toggle--checked) {
+  background: var(--g-primary);
+}
+
+:host(.g-toggle--disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.g-toggle__thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--g-bg);
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+
+:host(.g-toggle--checked) .g-toggle__thumb {
+  transform: translateX(18px);
+}
+
+// Thumb trượt ngang là chuyển động theo tương tác, không phải indicator liên tục như
+// spinner/progress — nên khi người dùng yêu cầu giảm chuyển động thì TẮT hẳn, không làm
+// chậm: trạng thái cuối (thumb đúng bên) vẫn hiện đủ, không mất thông tin nào.
+@media (prefers-reduced-motion: reduce) {
+  .g-toggle__thumb {
+    transition: none;
+  }
+}

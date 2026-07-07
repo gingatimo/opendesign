@@ -1,0 +1,31 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--g-space-2);
+  border-radius: var(--g-radius-pill);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-xs);
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+:host(.g-badge--neutral) {
+  background: var(--g-secondary-bg);
+  color: var(--g-secondary-text);
+}
+
+:host(.g-badge--success) {
+  background: var(--g-success-bg);
+  color: var(--g-success-text);
+}
+
+:host(.g-badge--warning) {
+  background: var(--g-warning-bg);
+  color: var(--g-warning-text);
+}
+
+:host(.g-badge--danger) {
+  background: var(--g-danger-bg);
+  color: var(--g-danger-text);
+}

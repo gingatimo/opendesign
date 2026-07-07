@@ -1,0 +1,61 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  cursor: pointer;
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  color: var(--g-text);
+
+  &:focus-visible {
+    outline: none;
+
+    .g-radio__dot {
+      box-shadow: var(--g-focus-ring);
+    }
+  }
+}
+
+:host(.g-radio--disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.g-radio__dot {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 1px solid var(--g-border-strong);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--g-duration-fast) var(--g-ease);
+
+  &::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--g-primary);
+    transform: scale(0);
+    transition: transform var(--g-duration-fast) var(--g-ease);
+  }
+}
+
+.g-radio__dot--checked {
+  border-color: var(--g-primary);
+
+  &::after {
+    transform: scale(1);
+  }
+}
+
+// Dot phóng to khi chọn là chuyển động theo tương tác, không phải indicator liên tục như
+// spinner/progress — nên khi người dùng yêu cầu giảm chuyển động thì TẮT hẳn, không làm
+// chậm: trạng thái cuối (dot hiện đủ khi checked) vẫn hiện đủ, không mất thông tin nào.
+@media (prefers-reduced-motion: reduce) {
+  .g-radio__dot::after {
+    transition: none;
+  }
+}

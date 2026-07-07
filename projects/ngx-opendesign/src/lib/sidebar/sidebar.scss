@@ -1,0 +1,82 @@
+:host {
+  // Task 2b vòng 2: <g-sidebar-toggle /> KHÔNG còn absolute (xem sidebar-toggle.scss), nên
+  // position: relative ở đây không còn phục vụ nó nữa. Giữ lại làm containing block mặc định
+  // cho mọi phần tử con projected có thể cần position: absolute trong tương lai — vô hại, không
+  // phần tử nào hiện tại phụ thuộc vào nó (vạch active dùng containing block là chính item, xem
+  // opendesign.scss).
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: var(--g-space-4) var(--g-space-2);
+  border-right: 1px solid var(--g-border);
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  transition: width var(--g-duration-fast) var(--g-ease);
+}
+
+// 72px (không phải 64px): đủ chỗ cho item thu gọn (icon 20px + padding 8px hai bên = 56px dùng
+// được, xem sidebar-item.ts) và cho <g-sidebar-toggle /> không đè lên border-right (xem
+// sidebar-toggle.scss). Đổi padding hai bên host (--g-space-2) thì phải kiểm lại cả hai.
+:host(.g-sidebar--collapsed) {
+  width: 72px;
+}
+
+// Plan 9 Task 1: header + <g-sidebar-toggle /> chung một hàng (xem template sidebar.ts).
+// Vòng đổi mặc định: toggle nay đứng TRƯỚC header trong markup projected, cả hai canh trái —
+// justify-content mặc định (flex-start) đã đúng, không cần set gì thêm lúc mở rộng; gap tạo
+// khoảng cách đều giữa toggle và header (thay cho space-between/margin-left: auto trước đây,
+// xem sidebar-toggle.scss). Thu gọn vẫn cần justify-content: center riêng bên dưới — header đã
+// ẩn (position: absolute, không chiếm chỗ flex) nên top row chỉ còn toggle, cần tự canh giữa.
+// Plan 10 Task 1 — lỗi 1 (spacing): margin-bottom thế chỗ padding-bottom cũ đã bỏ khỏi
+// .g-sidebar__header (opendesign.scss) — giữ đúng khoảng cách header→body cũ (var(--g-space-4))
+// nhưng đặt ở TOP ROW (bao ngoài, ảnh hưởng cả khi không có header) thay vì trên chính header
+// (bên trong, chỉ đẩy lệch tâm khi có align-items: center). Áp dụng cả khi thu gọn: header đã ẩn
+// trực quan (position: absolute, không chiếm chỗ flex) nhưng margin-bottom của top row vẫn giữ,
+// đúng khoảng cách toggle→nav item đầu tiên như trước.
+//
+// Plan 10 Task 1 — lỗi 2 (scrollbar gutter): overflow: hidden biến top row thành scroll
+// container (không cuộn thật, "OpenDesign" ngắn nên không bị clip — đã kiểm bằng trình duyệt
+// thật) để scrollbar-gutter: stable có tác dụng, dành SẴN đúng bề rộng gutter mà .g-sidebar__body
+// dành cho thanh cuộn thật của nó (đã xác nhận khớp trên Chromium — xem task-1-report.md). Nếu
+// không dành gutter, toggle (không thanh cuộn) căn giữa TOÀN bộ bề ngang 72px trong khi nav icon
+// (có thanh cuộn khi >30 mục) bị đẩy lệch trái — hai bên lệch cột.
+.g-sidebar__top {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-1);
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+// margin-bottom chỉ khi top-row có phần tử con (header/toggle được projected). Khi sidebar
+// không có header lẫn toggle (vd. toggle đặt ở topbar ngoài), top-row rỗng — margin sẽ đẩy
+// item đầu xuống lệch với nội dung bên cạnh, nên bỏ.
+.g-sidebar__top:has(*) {
+  margin-bottom: var(--g-space-4);
+}
+
+:host(.g-sidebar--collapsed) .g-sidebar__top {
+  justify-content: center;
+}
+
+.g-sidebar__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--g-space-1);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+// Sidebar trượt khi thu/mở là chuyển động theo tương tác, không phải indicator liên tục
+// như spinner/progress — nên khi người dùng yêu cầu giảm chuyển động thì TẮT hẳn, không
+// làm chậm: trạng thái cuối (rộng/hẹp) vẫn hiện đủ, không mất thông tin nào.
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    transition: none;
+  }
+}

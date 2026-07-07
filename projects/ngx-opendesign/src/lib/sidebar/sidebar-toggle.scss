@@ -1,0 +1,27 @@
+// Task 2b vòng 2: nút KHÔNG còn position: absolute — <g-sidebar-toggle /> được content-projected
+// vào <g-sidebar> (nay luôn rơi vào hàng .g-sidebar__top, xem sidebar.ts vòng Plan 9 Task 1),
+// nên host chỉ cần tham gia luồng flex bình thường — không nổi ở mép, không cần z-index/nền che
+// border-right nữa (đã đủ chỗ nhờ width 72px, xem sidebar.scss).
+//
+// Vòng đổi mặc định: toggle nay đứng TRƯỚC header trong .g-sidebar__top (sidebar.ts) và top row
+// mặc định justify-content: flex-start (sidebar.scss) — không còn cần margin-left: auto để ghém
+// phải nữa (khác Plan 9 Task 1). Thu gọn vẫn canh giữa nhờ top row tự đặt
+// justify-content: center khi đó (header đã ẩn, không chiếm chỗ flex) — không cần host tự set gì
+// thêm.
+
+// Nút không còn là hàng item full-width nữa mà là một ô vuông 40x40 độc lập. Hai chỗ ghi đè so
+// với .g-sidebar-item gốc (opendesign.scss), CẢ HAI đều thắng nhờ specificity cao hơn (view
+// encapsulation gắn thêm [_ngcontent-*] vào .g-sidebar-toggle__button):
+// - width: var(--g-control-md) thay 100% — nếu không, nút vẫn chiếm hết bề ngang hàng, "ghém
+//   phải"/"căn giữa" của host phía trên vô nghĩa.
+// - padding: 0 thay 0 var(--g-space-3) — .g-sidebar-item chừa padding ngang cho icon + nhãn kề
+//   nhau; nút chỉ có một icon 20px trong hộp 40px, giữ nguyên padding 12px hai bên sẽ chỉ còn
+//   16px cho icon (40 − 24), tràn ra ngoài. Bỏ padding rồi ép justify-content: center để icon
+//   luôn nằm giữa hộp — .g-sidebar-item mặc định flex-start (dành cho icon+nhãn) khi mở rộng, chỉ
+//   center khi ".g-sidebar--collapsed" (xem opendesign.scss); nút không có nhãn nên cần center ở
+//   CẢ HAI trạng thái, không dựa được vào rule collapsed đó.
+.g-sidebar-toggle__button {
+  width: var(--g-control-md);
+  padding: 0;
+  justify-content: center;
+}

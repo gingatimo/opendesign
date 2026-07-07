@@ -1,0 +1,75 @@
+@use '../../ngx-opendesign/styles/opendesign';
+
+// Bảng màu syntax cho code block.
+//
+// CodeBlock dùng hljs.highlight() nên sinh ra các <span class="hljs-*">, nhưng highlight.js KHÔNG
+// kèm màu — màu nằm ở file CSS theme riêng mà dự án chưa bao giờ import. Hệ quả: từ Plan 1 tới giờ
+// mọi code block đều xám một màu. Test không bắt được vì chỉ assert textContent, không assert màu.
+//
+// Cố ý tự viết thay vì import theme có sẵn của highlight.js (vd. github-dark.css): theme của họ
+// hardcode màu tuyệt đối nên sẽ không đổi theo data-g-theme, và sẽ chỏi với bảng màu đơn sắc của
+// OpenDesign. Ở đây map thẳng vào token --g-* nên tự động đúng ở cả sáng lẫn tối.
+//
+// Bảng màu đơn sắc: dùng độ đậm/nhạt và in nghiêng để phân biệt, chỉ điểm xuyết màu ở chuỗi và
+// số — tránh biến code block thành cầu vồng.
+.hljs-comment,
+.hljs-quote {
+  color: var(--g-text-muted);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-doctag,
+.hljs-name {
+  color: var(--g-text);
+  font-weight: 600;
+}
+
+.hljs-string,
+.hljs-attr,
+.hljs-attribute,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-addition {
+  color: var(--g-success-text);
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-meta,
+.hljs-link {
+  color: var(--g-warning-text);
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-type,
+.hljs-built_in,
+.hljs-class .hljs-title {
+  color: var(--g-text);
+  font-weight: 500;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-params,
+.hljs-property {
+  color: var(--g-text);
+}
+
+.hljs-deletion {
+  color: var(--g-danger-text);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 600;
+}

@@ -1,0 +1,84 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--g-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background-color var(--g-duration-fast) var(--g-ease),
+    color var(--g-duration-fast) var(--g-ease);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // CHỈ svg là con TRỰC TIẾP của nút. Rule này có từ v1 để cỡ hoá <svg> trần mà consumer thả
+  // thẳng vào nút — và mọi cách dùng v1 đều đúng như vậy. Nhưng nếu để nó quét cả svg cháu, nó
+  // sẽ với vào trong <g-icon> (Plan 7) và đè lên cỡ mà chính GIcon đặt: svg trong g-icon lấy
+  // 100% hộp g-icon, còn 55% ở đây lại tính theo hộp g-icon (containing block gần nhất) chứ
+  // không phải theo nút → icon co lại còn 55% cỡ đúng của nó. Tệ hơn: hai selector này có
+  // specificity BẰNG NHAU ((0,1,1): svg[_ngcontent] vs [_nghost] svg) nên kẻ thắng phụ thuộc
+  // thứ tự stylesheet — hỏng một cách không xác định. Giới hạn ở con trực tiếp giữ nguyên 100%
+  // cách dùng v1 và trả quyền cỡ hoá icon lồng về cho GIcon.
+  > ::ng-deep svg {
+    width: 55%;
+    height: 55%;
+  }
+}
+
+:host(.g-icon-button--sm) {
+  width: var(--g-control-sm);
+  height: var(--g-control-sm);
+}
+:host(.g-icon-button--md) {
+  width: var(--g-control-md);
+  height: var(--g-control-md);
+}
+:host(.g-icon-button--lg) {
+  width: var(--g-control-lg);
+  height: var(--g-control-lg);
+}
+
+:host(.g-icon-button--primary) {
+  background: var(--g-primary);
+  color: var(--g-on-primary);
+  &:hover:not(:disabled) {
+    background: var(--g-primary-hover);
+  }
+}
+:host(.g-icon-button--secondary) {
+  background: var(--g-secondary-bg);
+  color: var(--g-secondary-text);
+  &:hover:not(:disabled) {
+    background: var(--g-border);
+  }
+}
+:host(.g-icon-button--outline) {
+  border-color: var(--g-border-strong);
+  &:hover:not(:disabled) {
+    background: var(--g-surface);
+  }
+}
+:host(.g-icon-button--ghost) {
+  &:hover:not(:disabled) {
+    background: var(--g-surface);
+  }
+}
+:host(.g-icon-button--danger) {
+  background: var(--g-danger-solid);
+  color: #ffffff;
+  &:hover:not(:disabled) {
+    filter: brightness(0.92);
+  }
+}

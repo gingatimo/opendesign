@@ -1,0 +1,103 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--g-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--g-radius-pill);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    background-color var(--g-duration-fast) var(--g-ease),
+    border-color var(--g-duration-fast) var(--g-ease),
+    color var(--g-duration-fast) var(--g-ease);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+:host(.g-button--sm) {
+  height: var(--g-control-sm);
+  padding: 0 var(--g-space-4);
+  font-size: var(--g-font-size-sm);
+}
+:host(.g-button--md) {
+  height: var(--g-control-md);
+  padding: 0 var(--g-space-5);
+}
+:host(.g-button--lg) {
+  height: var(--g-control-lg);
+  padding: 0 var(--g-space-6);
+  font-size: var(--g-font-size-lg);
+}
+
+:host(.g-button--primary) {
+  background: var(--g-primary);
+  color: var(--g-on-primary);
+  &:hover:not(:disabled) {
+    background: var(--g-primary-hover);
+  }
+}
+:host(.g-button--secondary) {
+  background: var(--g-secondary-bg);
+  color: var(--g-secondary-text);
+  &:hover:not(:disabled) {
+    background: var(--g-border);
+  }
+}
+:host(.g-button--outline) {
+  background: transparent;
+  color: var(--g-text);
+  border-color: var(--g-border-strong);
+  &:hover:not(:disabled) {
+    background: var(--g-surface);
+  }
+}
+:host(.g-button--ghost) {
+  background: transparent;
+  color: var(--g-text);
+  &:hover:not(:disabled) {
+    background: var(--g-surface);
+  }
+}
+:host(.g-button--danger) {
+  background: var(--g-danger-solid);
+  color: #ffffff;
+  &:hover:not(:disabled) {
+    filter: brightness(0.92);
+  }
+}
+
+:host(.g-button--loading) {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.g-button__spinner {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: g-button-spin 0.6s linear infinite;
+}
+
+@keyframes g-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
