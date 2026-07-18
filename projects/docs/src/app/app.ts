@@ -39,6 +39,7 @@ type NavIcon =
   | 'tooltip'
   | 'toast'
   | 'tabs'
+  | 'stepper'
   | 'topbar'
   | 'sidebar'
   | 'link'
@@ -142,6 +143,7 @@ export class App {
       title: 'Điều hướng',
       links: sortByLabel([
         { path: '/components/tabs', label: 'Tabs', icon: 'tabs' },
+        { path: '/components/stepper', label: 'Stepper', icon: 'stepper' },
         { path: '/components/topbar', label: 'Topbar', icon: 'topbar' },
         { path: '/components/sidebar', label: 'Sidebar', icon: 'sidebar' },
         { path: '/components/link', label: 'Link', icon: 'link' },

@@ -294,6 +294,7 @@ export default class HomePage {
       links: [
         { path: '/components/link', label: 'Link' },
         { path: '/components/sidebar', label: 'Sidebar' },
+        { path: '/components/stepper', label: 'Stepper' },
         { path: '/components/tabs', label: 'Tabs' },
         { path: '/components/topbar', label: 'Topbar' },
       ],

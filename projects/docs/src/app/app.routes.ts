@@ -118,6 +118,11 @@ export const routes: Routes = [
     title: 'Tabs — OpenDesign',
   },
   {
+    path: 'components/stepper',
+    loadComponent: () => import('./pages/stepper.page'),
+    title: 'Stepper — OpenDesign',
+  },
+  {
     path: 'components/topbar',
     loadComponent: () => import('./pages/topbar.page'),
     title: 'Topbar — OpenDesign',

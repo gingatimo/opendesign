@@ -1,0 +1,113 @@
+:host {
+  display: block;
+}
+
+.g-stepper__list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// Chỉ áp dụng đường nối ngang khi horizontal — vertical dùng chung .g-stepper__step nhưng
+// không cần connector giữa các cột vì đã xếp chồng dọc (mỗi step một hàng riêng).
+.g-stepper__step {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--g-border);
+    transition: background-color var(--g-duration-fast) var(--g-ease);
+  }
+}
+
+.g-stepper__step--completed:not(:last-child)::after {
+  background: var(--g-primary);
+}
+
+:host(.g-stepper--vertical) .g-stepper__list {
+  flex-direction: column;
+  gap: var(--g-space-2);
+}
+
+:host(.g-stepper--vertical) .g-stepper__step {
+  flex: none;
+  display: block;
+
+  &::after {
+    display: none;
+  }
+}
+
+.g-stepper__header {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2) 0;
+  background: none;
+  border: none;
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  color: var(--g-text);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+    border-radius: var(--g-radius-sm);
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+.g-stepper__indicator {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--g-border);
+  background: var(--g-surface-raised);
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-xs);
+  font-weight: 600;
+  transition:
+    background-color var(--g-duration-fast) var(--g-ease),
+    border-color var(--g-duration-fast) var(--g-ease),
+    color var(--g-duration-fast) var(--g-ease);
+}
+
+.g-stepper__step--completed .g-stepper__indicator,
+.g-stepper__step--active .g-stepper__indicator {
+  border-color: var(--g-primary);
+  background: var(--g-primary);
+  color: var(--g-on-primary);
+}
+
+.g-stepper__label {
+  white-space: nowrap;
+}
+
+.g-stepper__optional {
+  color: var(--g-text-muted);
+}
+
+.g-stepper__panel {
+  padding-top: var(--g-space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-stepper__indicator {
+    transition: none;
+  }
+}

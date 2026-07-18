@@ -24,6 +24,8 @@ export * from './lib/tooltip/tooltip';
 export * from './lib/toast/toast.service';
 export * from './lib/tabs/tabs';
 export * from './lib/tabs/tab';
+export * from './lib/stepper/stepper';
+export * from './lib/stepper/step';
 export * from './lib/topbar/topbar';
 export * from './lib/sidebar/sidebar';
 export * from './lib/sidebar/sidebar-item';
