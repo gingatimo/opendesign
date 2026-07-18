@@ -298,6 +298,10 @@ export default class HomePage {
         { path: '/components/topbar', label: 'Topbar' },
       ],
     },
+    {
+      title: 'Cấu trúc',
+      links: [{ path: '/components/container', label: 'Container' }],
+    },
   ];
 
   protected readonly installSnippet = `npm install ngx-opendesign @angular/cdk @angular/forms`;

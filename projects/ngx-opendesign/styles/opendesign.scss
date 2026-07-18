@@ -12,6 +12,9 @@
   // prefers-color-scheme của hệ điều hành — nên phải khai báo đúng cái đang thực sự hiển thị.
   color-scheme: light;
 
+  // Layout
+  --g-container-max-width: 960px;
+
   // Màu semantic — light
   --g-bg: #ffffff;
   --g-surface: #f5f5f6;
@@ -704,4 +707,14 @@ body {
     outline: none;
     box-shadow: var(--g-focus-ring);
   }
+}
+
+// GContainer — directive không có view riêng ([gContainer]), style đặt trực tiếp ở đây (xem quy
+// ước .g-card__header/.g-input-group ở trên). Giới hạn chiều rộng nội dung để dòng chữ không kéo
+// dài quá mức trên màn hình lớn, canh giữa bằng margin-inline: auto; padding-inline giữ khoảng
+// cách với mép viewport trên màn hình nhỏ hơn max-width.
+.g-container {
+  max-width: var(--g-container-max-width);
+  margin-inline: auto;
+  padding-inline: var(--g-space-4);
 }
