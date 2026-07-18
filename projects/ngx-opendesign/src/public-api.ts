@@ -38,4 +38,5 @@ export * from './lib/layout/stack';
 export * from './lib/layout/layout';
 export * from './lib/table/table';
 export * from './lib/table/sort-header';
+export * from './lib/table/freeze';
 export * from './lib/pagination/pagination';

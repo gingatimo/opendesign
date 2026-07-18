@@ -785,6 +785,22 @@ body {
   top: 0;
   z-index: 1;
 }
+.g-table--freeze th,
+.g-table--freeze td {
+  background: var(--g-surface-raised);
+}
+.g-table--freeze thead th {
+  background: var(--g-surface);
+}
+.g-table--freeze.g-table--striped tbody tr:nth-child(even) td {
+  background: var(--g-surface);
+}
+.g-table__freeze-col-edge {
+  box-shadow: 2px 0 4px -2px rgb(0 0 0 / 15%);
+}
+.g-table__freeze-row-edge {
+  box-shadow: 0 2px 4px -2px rgb(0 0 0 / 15%);
+}
 
 .g-sort-header {
   cursor: pointer;
