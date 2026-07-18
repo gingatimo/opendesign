@@ -42,3 +42,4 @@ export * from './lib/table/freeze';
 export * from './lib/pagination/pagination';
 export * from './lib/file-input/file-input';
 export * from './lib/image-preview/image-preview';
+export * from './lib/image-slider/image-slider';

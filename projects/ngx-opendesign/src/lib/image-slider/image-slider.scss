@@ -1,0 +1,123 @@
+.g-image-slider {
+  position: relative;
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  overflow: hidden;
+  background: var(--g-surface);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+.g-image-slider__viewport {
+  overflow: hidden;
+}
+.g-image-slider__track {
+  display: flex;
+  transition: transform var(--g-duration-base) var(--g-ease);
+}
+.g-image-slider__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+}
+.g-image-slider__img,
+.g-image-slider__zoom {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.g-image-slider__zoom {
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: zoom-in;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+    outline-offset: -2px;
+  }
+}
+.g-image-slider__img,
+.g-image-slider__zoom img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.g-image-slider__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+
+  &:hover:not(:disabled) {
+    background: var(--g-surface);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+.g-image-slider__nav--prev {
+  left: var(--g-space-3);
+}
+.g-image-slider__nav--next {
+  right: var(--g-space-3);
+}
+.g-image-slider__dots {
+  position: absolute;
+  bottom: var(--g-space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--g-space-2);
+}
+.g-image-slider__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--g-border-strong);
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+.g-image-slider__dot--active {
+  background: var(--g-primary);
+}
+.g-image-slider__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-image-slider__track {
+    transition: none;
+  }
+}
