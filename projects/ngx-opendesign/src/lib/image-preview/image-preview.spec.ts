@@ -30,6 +30,8 @@ describe('GImagePreview', () => {
     expect(imgs[0].getAttribute('src')).toBe('a.png');
   });
   it('removable → có nút xoá, click phát remove với index; không kích hoạt lightbox', () => {
+    const openSpy = vi.fn();
+    TestBed.overrideProvider(Dialog, { useValue: { open: openSpy } });
     const f = TestBed.createComponent(Host);
     f.componentInstance.rm.set(true);
     f.detectChanges();
@@ -38,6 +40,7 @@ describe('GImagePreview', () => {
     expect(rmBtns.length).toBe(2);
     (rmBtns[1] as HTMLButtonElement).click();
     expect(f.componentInstance.removed).toEqual([1]);
+    expect(openSpy).not.toHaveBeenCalled();
   });
   it('click thumbnail mở lightbox qua Dialog.open (index đúng)', () => {
     const openSpy = vi.fn();

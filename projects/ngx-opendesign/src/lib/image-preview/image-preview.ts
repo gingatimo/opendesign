@@ -30,7 +30,7 @@ import { GLightbox, GLightboxData } from './lightbox';
             <button
               type="button"
               class="g-image-preview__remove"
-              aria-label="Xoá ảnh"
+              [attr.aria-label]="'Xoá ảnh ' + ($index + 1)"
               (click)="remove.emit($index)"
             >
               <g-icon [icon]="iconX" size="sm" />

@@ -18,6 +18,9 @@
   cursor: grab;
   transition: none; // pan mượt, không transition khi kéo
 }
+.g-lightbox__img--zoomed:active {
+  cursor: grabbing;
+}
 .g-lightbox__toolbar {
   position: absolute;
   bottom: var(--g-space-4);

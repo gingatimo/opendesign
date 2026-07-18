@@ -38,6 +38,7 @@
   }
 }
 .g-file-input__name {
+  min-width: 0;
   color: var(--g-text-muted);
   font-size: var(--g-font-size-sm);
   overflow: hidden;

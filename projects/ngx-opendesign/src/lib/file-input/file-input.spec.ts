@@ -37,7 +37,7 @@ describe('GFileInput', () => {
     expect(f.componentInstance.files().length).toBe(1);
     expect(f.nativeElement.querySelector('.g-file-input__name').textContent.trim()).toBe('anh.png');
   });
-  it('multiple=false → chỉ lấy file đầu; label "N tệp" khi nhiều (multiple=true)', () => {
+  it('multiple=true → nhận nhiều file; label "N tệp"', () => {
     const f = TestBed.createComponent(Host);
     f.componentInstance.multiple.set(true);
     f.detectChanges();
@@ -48,6 +48,14 @@ describe('GFileInput', () => {
     expect(f.nativeElement.querySelector('.g-file-input__name').textContent.trim()).toBe(
       '2 tệp đã chọn',
     );
+  });
+  it('multiple=false (mặc định) → chỉ lấy file đầu dù chọn nhiều', () => {
+    const f = TestBed.createComponent(Host);
+    f.detectChanges();
+    const input = f.nativeElement.querySelector('input[type=file]') as HTMLInputElement;
+    setNativeFiles(input, [new File(['a'], 'a.png'), new File(['b'], 'b.png')]);
+    f.detectChanges();
+    expect(f.componentInstance.files().length).toBe(1);
   });
   it('drop file → cập nhật files (kéo-thả)', () => {
     const f = TestBed.createComponent(Host);

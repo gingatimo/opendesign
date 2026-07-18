@@ -31,7 +31,7 @@ import { gIconUpload } from '../icon/icons';
         <g-icon [icon]="iconUpload" size="sm" />
         Chọn tệp
       </button>
-      <span class="g-file-input__name">{{ label() }}</span>
+      <span class="g-file-input__name" aria-live="polite">{{ label() }}</span>
       <input
         #native
         type="file"
