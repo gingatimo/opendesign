@@ -43,10 +43,12 @@ export class GTable {
   }
 
   private applyFreeze(): void {
-    this.clearFreeze();
     const colMarker = this.table.querySelector<HTMLTableCellElement>('th[gFreezeColumn]');
     const rowMarker = this.table.querySelector<HTMLTableRowElement>('tr[gFreezeRow]');
     const hasFreeze = !!colMarker || !!rowMarker;
+    // Bảng không freeze và chưa từng freeze → return sớm, khỏi quét (tránh overhead cho bảng cơ bản).
+    if (!hasFreeze && !this.table.classList.contains('g-table--freeze')) return;
+    this.clearFreeze();
     this.table.classList.toggle('g-table--freeze', hasFreeze);
     if (!hasFreeze) return;
 
@@ -87,21 +89,22 @@ export class GTable {
           cell.style.position = 'sticky';
           cell.style.top = `${tops[r]}px`;
           cell.style.zIndex = cell.style.left ? '4' : '3'; // góc giao (có cả left) cao nhất
+          // Chỉ HÀNG RANH GIỚI có bóng-dưới; áp lên CELL (box-shadow trên <tr> + border-collapse
+          // render không đáng tin) — đối xứng với freeze-col-edge.
+          if (r === boundary) cell.classList.add('g-table__freeze-row-edge');
         }
-        row.classList.add('g-table__freeze-row-edge');
       }
     }
   }
 
   private clearFreeze(): void {
     for (const row of Array.from(this.table.rows)) {
-      row.classList.remove('g-table__freeze-row-edge');
       for (const cell of Array.from(row.cells)) {
         cell.style.position = '';
         cell.style.left = '';
         cell.style.top = '';
         cell.style.zIndex = '';
-        cell.classList.remove('g-table__freeze-col-edge');
+        cell.classList.remove('g-table__freeze-col-edge', 'g-table__freeze-row-edge');
       }
     }
   }
