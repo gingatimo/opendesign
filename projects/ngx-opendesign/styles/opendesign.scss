@@ -772,7 +772,9 @@ body {
 .g-table thead th {
   font-weight: 600;
   color: var(--g-text-muted);
-  background: var(--g-surface);
+  // Nền thead đậm hơn một bậc so với row tbody để phân biệt rõ (sáng: xám hơn surface; tối: xám sáng
+  // hơn surface → header nổi lên). Dùng --g-border thay vì --g-surface (vốn trùng nền row/hover/sọc).
+  background: var(--g-border);
 }
 .g-table tbody tr:hover {
   background: var(--g-surface);
@@ -790,7 +792,7 @@ body {
   background: var(--g-surface-raised);
 }
 .g-table--freeze thead th {
-  background: var(--g-surface);
+  background: var(--g-border);
 }
 .g-table--freeze.g-table--striped tbody tr:nth-child(even) td {
   background: var(--g-surface);
