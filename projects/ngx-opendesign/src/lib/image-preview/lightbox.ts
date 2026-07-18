@@ -8,7 +8,6 @@ import {
   signal,
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
-import { GIconButton } from '../icon-button/icon-button';
 import { gIconChevronLeft, gIconChevronRight, gIconMinus, gIconPlus, gIconX } from '../icon/icons';
 
 export interface GLightboxData {
@@ -23,35 +22,33 @@ const MAX_SCALE = 4;
 // double-click, pan kéo khi zoom, prev/next nếu nhiều ảnh. Nội bộ: GImagePreview mở, KHÔNG export.
 @Component({
   selector: 'g-lightbox',
-  imports: [GIcon, GIconButton],
+  imports: [GIcon],
   template: `
     <div class="g-lightbox">
       <div class="g-lightbox__toolbar">
-        <button g-icon-button variant="ghost" aria-label="Thu nhỏ" (click)="zoomBy(-0.5)">
+        <button type="button" class="g-lightbox__btn" aria-label="Thu nhỏ" (click)="zoomBy(-0.5)">
           <g-icon [icon]="iconMinus" size="sm" />
         </button>
-        <button g-icon-button variant="ghost" aria-label="Phóng to" (click)="zoomBy(0.5)">
+        <button type="button" class="g-lightbox__btn" aria-label="Phóng to" (click)="zoomBy(0.5)">
           <g-icon [icon]="iconPlus" size="sm" />
         </button>
-        <button g-icon-button variant="ghost" aria-label="Đóng" (click)="close()">
+        <button type="button" class="g-lightbox__btn" aria-label="Đóng" (click)="close()">
           <g-icon [icon]="iconX" size="sm" />
         </button>
       </div>
 
       @if (urls.length > 1) {
         <button
-          g-icon-button
-          variant="ghost"
-          class="g-lightbox__nav g-lightbox__nav--prev"
+          type="button"
+          class="g-lightbox__btn g-lightbox__nav g-lightbox__nav--prev"
           aria-label="Ảnh trước"
           (click)="prev()"
         >
           <g-icon [icon]="iconPrev" />
         </button>
         <button
-          g-icon-button
-          variant="ghost"
-          class="g-lightbox__nav g-lightbox__nav--next"
+          type="button"
+          class="g-lightbox__btn g-lightbox__nav g-lightbox__nav--next"
           aria-label="Ảnh sau"
           (click)="next()"
         >

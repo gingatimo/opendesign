@@ -42,11 +42,28 @@
 .g-lightbox__nav--next {
   right: var(--g-space-4);
 }
-// Nút trên nền tối: ép sáng (icon button ghost mặc định theo --g-text; trong lightbox nền tối cần trắng).
-.g-lightbox__toolbar button,
-.g-lightbox__nav {
+// Nút điều khiển trên overlay nền tối — style thuần (không dùng GIconButton vốn theo theme sáng):
+// icon trắng trên nền trắng-mờ, hover đậm hơn, viền focus trắng.
+.g-lightbox__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--g-radius-pill);
   color: #fff;
   background: rgb(255 255 255 / 12%);
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-lightbox__btn:hover {
+  background: rgb(255 255 255 / 25%);
+}
+.g-lightbox__btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 @media (prefers-reduced-motion: reduce) {
   .g-lightbox__img {
