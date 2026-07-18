@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconX } from '../icon/icons';
-import { GLightbox, GLightboxData } from './lightbox';
+import { openLightbox } from './lightbox';
 
 // Lưới thumbnail ảnh. Nhận string URL hoặc File (File → objectURL, revoke khi đổi/huỷ để không rò).
 // Click thumbnail → mở GLightbox (zoom/pan). removable → nút × phát (remove) index.
@@ -75,14 +75,6 @@ export class GImagePreview {
   }
 
   protected openLightbox(startIndex: number): void {
-    this.dialog.open<unknown, GLightboxData>(GLightbox, {
-      data: { urls: this.urls(), startIndex },
-      panelClass: 'g-lightbox-panel',
-      backdropClass: 'g-lightbox-backdrop',
-      hasBackdrop: true,
-      ariaLabel: 'Xem ảnh',
-      autoFocus: 'dialog',
-      restoreFocus: true,
-    });
+    openLightbox(this.dialog, this.urls(), startIndex);
   }
 }

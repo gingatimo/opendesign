@@ -1,4 +1,4 @@
-import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -183,4 +183,17 @@ export class GLightbox {
       // Esc: CDK Dialog tự đóng.
     }
   }
+}
+
+// Mở GLightbox với cấu hình chuẩn — GImagePreview và GImageSlider dùng chung (DRY).
+export function openLightbox(dialog: Dialog, urls: string[], startIndex: number): void {
+  dialog.open<unknown, GLightboxData>(GLightbox, {
+    data: { urls, startIndex },
+    panelClass: 'g-lightbox-panel',
+    backdropClass: 'g-lightbox-backdrop',
+    hasBackdrop: true,
+    ariaLabel: 'Xem ảnh',
+    autoFocus: 'dialog',
+    restoreFocus: true,
+  });
 }
