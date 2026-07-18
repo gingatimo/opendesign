@@ -3,6 +3,7 @@ import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { DashboardLayoutDemo } from '../demos/playbook/dashboard-layout.demo';
 import { FilterableListDemo } from '../demos/playbook/filterable-list.demo';
+import { ImageUploadDemo } from '../demos/playbook/image-upload.demo';
 import { ListPageDemo } from '../demos/playbook/list-page.demo';
 import { LoginFormDemo } from '../demos/playbook/login-form.demo';
 import { SettingsPageDemo } from '../demos/playbook/settings-page.demo';
@@ -14,13 +15,14 @@ import { SettingsPageDemo } from '../demos/playbook/settings-page.demo';
     DashboardLayoutDemo,
     FilterableListDemo,
     ListPageDemo,
+    ImageUploadDemo,
     CodeBlock,
     DemoSection,
   ],
   template: `
     <h1>Playbook</h1>
     <p>
-      5 recipe ghép nhiều component OpenDesign thành màn hình thực chiến — xem sống, tương tác thật,
+      6 recipe ghép nhiều component OpenDesign thành màn hình thực chiến — xem sống, tương tác thật,
       copy nguyên khối về dự án của bạn. Đây không phải ảnh chụp: form có validation thật, nút lưu
       bắn toast thật, danh sách lọc thật khi bấm chip.
     </p>
@@ -78,6 +80,17 @@ import { SettingsPageDemo } from '../demos/playbook/settings-page.demo';
       <docs-list-page-demo />
     </docs-demo-section>
     <docs-code-block src="demo-sources/playbook/list-page.demo.ts" />
+
+    <h2>Tải ảnh lên</h2>
+    <p>
+      <code>GFileInput</code> chọn/kéo-thả ảnh, phát <code>File[]</code> — ghép ngay với
+      <code>GImagePreview</code> để xem trước lưới thumbnail, click một ảnh mở lightbox zoom/pan,
+      nút xoá (<code>removable</code>) gỡ khỏi danh sách trước khi consumer tự upload lên server.
+    </p>
+    <docs-demo-section>
+      <docs-image-upload-demo />
+    </docs-demo-section>
+    <docs-code-block src="demo-sources/playbook/image-upload.demo.ts" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
