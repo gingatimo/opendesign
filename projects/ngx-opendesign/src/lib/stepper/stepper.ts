@@ -7,6 +7,7 @@ import {
   input,
   model,
 } from '@angular/core';
+import { gNextId } from '../core/id-generator';
 import { GIcon } from '../icon/icon';
 import { gIconCheck } from '../icon/icons';
 import { GStep } from './step';
@@ -30,8 +31,10 @@ import { GStep } from './step';
           <button
             type="button"
             class="g-stepper__header"
+            [id]="headerId($index)"
             (click)="select($index)"
             [attr.aria-label]="headerAriaLabel(step, $index)"
+            [attr.aria-controls]="$index === active() ? panelId($index) : null"
           >
             <span class="g-stepper__indicator" aria-hidden="true">
               @if ($index < active()) {
@@ -48,13 +51,25 @@ import { GStep } from './step';
             </span>
           </button>
           @if (orientation() === 'vertical' && $index === active()) {
-            <div class="g-stepper__panel"><ng-container [ngTemplateOutlet]="step.content()" /></div>
+            <div
+              class="g-stepper__panel"
+              role="group"
+              [id]="panelId($index)"
+              [attr.aria-labelledby]="headerId($index)"
+            >
+              <ng-container [ngTemplateOutlet]="step.content()" />
+            </div>
           }
         </li>
       }
     </ol>
     @if (orientation() === 'horizontal') {
-      <div class="g-stepper__panel">
+      <div
+        class="g-stepper__panel"
+        role="group"
+        [id]="panelId(active())"
+        [attr.aria-labelledby]="headerId(active())"
+      >
         @if (activeStepRef(); as ref) {
           <ng-container [ngTemplateOutlet]="ref.content()" />
         }
@@ -72,6 +87,11 @@ export class GStepper {
   protected readonly steps = contentChildren(GStep);
   protected readonly iconCheck = gIconCheck;
 
+  // Liên kết ARIA: panel nội dung có role="group" + aria-labelledby trỏ về header của bước, header
+  // active có aria-controls trỏ tới panel (gương cách GTabs nối tab↔tabpanel). Id ổn định qua gNextId.
+  private readonly headerIdPrefix = gNextId('g-step-header');
+  private readonly panelIdPrefix = gNextId('g-step-panel');
+
   // Clamp index ngoài khoảng về 0 (giống GTabs.activeIndex) để luôn có đúng một bước active hợp lệ.
   protected readonly active = computed(() => {
     const n = this.steps().length;
@@ -82,6 +102,14 @@ export class GStepper {
 
   protected select(index: number): void {
     this.activeStep.set(index);
+  }
+
+  protected headerId(index: number): string {
+    return `${this.headerIdPrefix}-${index}`;
+  }
+
+  protected panelId(index: number): string {
+    return `${this.panelIdPrefix}-${index}`;
   }
 
   protected headerAriaLabel(step: GStep, index: number): string {

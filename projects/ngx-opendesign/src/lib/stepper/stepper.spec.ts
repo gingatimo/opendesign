@@ -59,4 +59,15 @@ describe('GStepper', () => {
     f.detectChanges();
     expect(f.nativeElement.textContent).toContain('ND-mot');
   });
+  it('panel nội dung liên kết ARIA với header bước active (role=group, aria-labelledby ↔ aria-controls)', () => {
+    const f = TestBed.createComponent(Host);
+    f.componentInstance.active.set(1);
+    f.detectChanges();
+    const panel = f.nativeElement.querySelector('.g-stepper__panel') as HTMLElement;
+    const activeHeader = f.nativeElement.querySelectorAll('.g-stepper__header')[1] as HTMLElement;
+    expect(panel.getAttribute('role')).toBe('group');
+    expect(panel.id).toBeTruthy();
+    expect(panel.getAttribute('aria-labelledby')).toBe(activeHeader.id);
+    expect(activeHeader.getAttribute('aria-controls')).toBe(panel.id);
+  });
 });

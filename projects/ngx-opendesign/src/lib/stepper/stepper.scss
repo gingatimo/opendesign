@@ -107,7 +107,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .g-stepper__indicator {
+  .g-stepper__indicator,
+  .g-stepper__step:not(:last-child)::after {
     transition: none;
   }
 }
