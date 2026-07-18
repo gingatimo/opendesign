@@ -5,7 +5,7 @@ import { GFileInput, GImagePreview } from 'ngx-opendesign';
   selector: 'docs-image-upload-demo',
   imports: [GFileInput, GImagePreview],
   template: `
-    <g-file-input [(files)]="files" accept="image/*" [multiple]="true" />
+    <g-file-input [(files)]="files" accept="image/*" [multiple]="true" [showFileList]="false" />
     @if (files().length) {
       <g-image-preview [images]="files()" [removable]="true" (remove)="removeAt($event)" />
     }
