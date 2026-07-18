@@ -37,6 +37,7 @@ type NavIcon =
   | 'card'
   | 'icon'
   | 'image-preview'
+  | 'image-slider'
   | 'dialog'
   | 'tooltip'
   | 'toast'
@@ -134,6 +135,7 @@ export class App {
         { path: '/components/card', label: 'Card', icon: 'card' },
         { path: '/components/icon', label: 'Icon', icon: 'icon' },
         { path: '/components/image-preview', label: 'Image Preview', icon: 'image-preview' },
+        { path: '/components/image-slider', label: 'Image Slider', icon: 'image-slider' },
       ]),
     },
     {

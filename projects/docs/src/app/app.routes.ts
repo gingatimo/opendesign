@@ -173,6 +173,11 @@ export const routes: Routes = [
     title: 'Image Preview — OpenDesign',
   },
   {
+    path: 'components/image-slider',
+    loadComponent: () => import('./pages/image-slider.page'),
+    title: 'Image Slider — OpenDesign',
+  },
+  {
     path: 'playbook',
     loadComponent: () => import('./pages/playbook.page'),
     title: 'Playbook — OpenDesign',
