@@ -279,6 +279,7 @@ export default class HomePage {
         { path: '/components/chip', label: 'Chip' },
         { path: '/components/icon', label: 'Icon' },
         { path: '/components/image-preview', label: 'Image Preview' },
+        { path: '/components/image-slider', label: 'Image Slider' },
         { path: '/components/progress', label: 'Progress' },
         { path: '/components/spinner', label: 'Spinner' },
       ],

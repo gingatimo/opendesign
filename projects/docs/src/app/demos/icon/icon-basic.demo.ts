@@ -14,6 +14,7 @@ import {
   gIconError,
   gIconEye,
   gIconEyeOff,
+  gIconFile,
   gIconHome,
   gIconInfo,
   gIconMenu,
@@ -69,6 +70,7 @@ const ICON_ENTRIES: readonly IconEntry[] = [
   { name: 'gIconEdit', glyph: gIconEdit },
   { name: 'gIconDownload', glyph: gIconDownload },
   { name: 'gIconUpload', glyph: gIconUpload },
+  { name: 'gIconFile', glyph: gIconFile },
   { name: 'gIconPanelLeftClose', glyph: gIconPanelLeftClose },
   { name: 'gIconPanelLeftOpen', glyph: gIconPanelLeftOpen },
 ];
