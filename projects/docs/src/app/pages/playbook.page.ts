@@ -3,6 +3,7 @@ import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { DashboardLayoutDemo } from '../demos/playbook/dashboard-layout.demo';
 import { FilterableListDemo } from '../demos/playbook/filterable-list.demo';
+import { ListPageDemo } from '../demos/playbook/list-page.demo';
 import { LoginFormDemo } from '../demos/playbook/login-form.demo';
 import { SettingsPageDemo } from '../demos/playbook/settings-page.demo';
 
@@ -12,13 +13,14 @@ import { SettingsPageDemo } from '../demos/playbook/settings-page.demo';
     SettingsPageDemo,
     DashboardLayoutDemo,
     FilterableListDemo,
+    ListPageDemo,
     CodeBlock,
     DemoSection,
   ],
   template: `
     <h1>Playbook</h1>
     <p>
-      4 recipe ghép nhiều component OpenDesign thành màn hình thực chiến — xem sống, tương tác thật,
+      5 recipe ghép nhiều component OpenDesign thành màn hình thực chiến — xem sống, tương tác thật,
       copy nguyên khối về dự án của bạn. Đây không phải ảnh chụp: form có validation thật, nút lưu
       bắn toast thật, danh sách lọc thật khi bấm chip.
     </p>
@@ -64,6 +66,18 @@ import { SettingsPageDemo } from '../demos/playbook/settings-page.demo';
       <docs-filterable-list-demo />
     </docs-demo-section>
     <docs-code-block src="demo-sources/playbook/filterable-list.demo.ts" />
+
+    <h2>Trang danh sách</h2>
+    <p>
+      Khối search/filter phía trên, bảng đóng băng cột <b>Tên</b> và hàng tiêu đề để cuộn ngang/dọc
+      không mất mốc, cột trạng thái dùng <code>GBadge</code>, cột thời gian format qua
+      <code>DatePipe</code>, cột hành động là hai <code>GIconButton</code>. Phân trang thật ở dưới —
+      lọc/tìm kiếm đổi thì tự quay về trang 1.
+    </p>
+    <docs-demo-section>
+      <docs-list-page-demo />
+    </docs-demo-section>
+    <docs-code-block src="demo-sources/playbook/list-page.demo.ts" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
