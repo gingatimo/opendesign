@@ -201,6 +201,11 @@ export const gIconUpload: GIconGlyph = {
   paths: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M17 8l-5-5-5 5', 'M12 3v12'],
 };
 
+export const gIconFile: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6'],
+};
+
 /**
  * Khung ngoài + vạch dọc dùng chung cho panelLeftClose/panelLeftOpen — bo góc thật qua <rect rx>
  * (không quy về path), xem lý do ở JSDoc GIconGlyph phía trên.
