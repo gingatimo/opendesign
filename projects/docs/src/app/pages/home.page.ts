@@ -262,6 +262,7 @@ export default class HomePage {
       title: 'Form',
       links: [
         { path: '/components/checkbox', label: 'Checkbox' },
+        { path: '/components/file-input', label: 'File Input' },
         { path: '/components/input', label: 'Input' },
         { path: '/components/radio', label: 'Radio' },
         { path: '/components/select', label: 'Select' },

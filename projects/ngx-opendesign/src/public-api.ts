@@ -40,3 +40,4 @@ export * from './lib/table/table';
 export * from './lib/table/sort-header';
 export * from './lib/table/freeze';
 export * from './lib/pagination/pagination';
+export * from './lib/file-input/file-input';

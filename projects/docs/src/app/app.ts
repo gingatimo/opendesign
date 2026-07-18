@@ -28,6 +28,7 @@ type NavIcon =
   | 'toggle'
   | 'radio'
   | 'select'
+  | 'file-input'
   | 'badge'
   | 'spinner'
   | 'progress'
@@ -118,6 +119,7 @@ export class App {
         { path: '/components/toggle', label: 'Toggle', icon: 'toggle' },
         { path: '/components/radio', label: 'Radio', icon: 'radio' },
         { path: '/components/select', label: 'Select', icon: 'select' },
+        { path: '/components/file-input', label: 'File Input', icon: 'file-input' },
       ]),
     },
     {

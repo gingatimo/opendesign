@@ -1,0 +1,46 @@
+.g-file-input {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-3);
+  padding: var(--g-space-1);
+  padding-right: var(--g-space-4);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+}
+.g-file-input--dragover {
+  border-color: var(--g-primary);
+  background: var(--g-surface);
+}
+.g-file-input--disabled {
+  opacity: 0.5;
+}
+.g-file-input__button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2) var(--g-space-4);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+  &:disabled {
+    cursor: default;
+  }
+}
+.g-file-input__name {
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
