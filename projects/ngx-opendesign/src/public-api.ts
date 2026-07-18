@@ -32,3 +32,4 @@ export * from './lib/icon/icon';
 export * from './lib/icon/icons';
 export * from './lib/link/link';
 export * from './lib/layout/container';
+export * from './lib/layout/stack';

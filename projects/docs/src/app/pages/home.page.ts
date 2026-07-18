@@ -300,7 +300,10 @@ export default class HomePage {
     },
     {
       title: 'Cấu trúc',
-      links: [{ path: '/components/container', label: 'Container' }],
+      links: [
+        { path: '/components/container', label: 'Container' },
+        { path: '/components/stack', label: 'Stack' },
+      ],
     },
   ];
 

@@ -43,6 +43,7 @@ type NavIcon =
   | 'sidebar'
   | 'link'
   | 'container'
+  | 'stack'
   | 'playbook';
 
 interface NavLink {
@@ -148,6 +149,7 @@ export class App {
       title: 'Cấu trúc',
       links: sortByLabel([
         { path: '/components/container', label: 'Container', icon: 'container' },
+        { path: '/components/stack', label: 'Stack', icon: 'stack' },
       ]),
     },
     // Nhóm riêng, đặt cuối: đây là phần "ráp lại" sau khi đã học từng component riêng lẻ ở các
