@@ -9,8 +9,8 @@ import { LayoutBasicDemo } from '../demos/layout/layout-basic.demo';
   template: `
     <h1>Layout</h1>
     <p>
-      Component <code>g-layout</code> dựng app-shell: topbar (đỉnh) + sidebar (trái) + nội dung —
-      ba region chiếu qua content projection, không có input. Bố cục lưới CSS (grid +
+      Component <code>g-layout</code> dựng app-shell: topbar (đỉnh) + sidebar (trái) + nội dung — ba
+      region chiếu qua content projection, không có input. Bố cục lưới CSS (grid +
       <code>:has()</code>) tự chọn theo region nào thực sự có mặt trong markup: chỉ có
       <code>&lt;g-topbar&gt;</code>, chỉ có <code>&lt;g-sidebar&gt;</code>, có cả hai, hoặc không
       region nào. Chỉ vùng nội dung cuộn — topbar và sidebar luôn đứng yên.
@@ -32,8 +32,8 @@ import { LayoutBasicDemo } from '../demos/layout/layout-basic.demo';
         chiếu vào vùng đỉnh, chiều rộng đầy đủ.
       </li>
       <li>
-        <code>&lt;g-sidebar&gt;</code> — đặt làm con trực tiếp để chiếu vào vùng trái, chiều cao
-        đầy đủ.
+        <code>&lt;g-sidebar&gt;</code> — đặt làm con trực tiếp để chiếu vào vùng trái, chiều cao đầy
+        đủ.
       </li>
       <li>
         Mọi nội dung khác (không khớp hai selector trên) tự rơi vào vùng nội dung —

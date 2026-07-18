@@ -4,7 +4,10 @@ import { GLayout } from './layout';
 
 @Component({
   imports: [GLayout],
-  template: `<g-layout><div class="topbar-slot">tb</div><main>nội dung</main></g-layout>`,
+  template: `<g-layout
+    ><div class="topbar-slot">tb</div>
+    <main>nội dung</main></g-layout
+  >`,
 })
 class Host {}
 

@@ -5,6 +5,18 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] — chưa phát hành
+
+### Added
+
+- **Cấu trúc**: `GLayout` (app-shell topbar + sidebar + content bằng CSS grid, chỉ vùng nội dung cuộn),
+  `GContainer` (bọc nội dung max-width canh giữa, token `--g-container-max-width` mặc định 960px),
+  `GStack` (flex xếp dọc/ngang, `gap` theo thang token `--g-space-*`).
+- **Dữ liệu**: `GTable` (directive thuần hiển thị trên `<table>` native — kẻ dòng, `striped`, `stickyHeader`;
+  consumer tự lo dữ liệu/sắp xếp/phân trang, bọc `overflow-x:auto` để cuộn ngang).
+- **Điều hướng**: `GStepper` + `GStep` (wizard nhiều bước, `[(activeStep)]` hai chiều, ngang/dọc, chỉ
+  render nội dung bước đang chọn, ARIA `aria-current="step"`).
+
 ## [0.1.0] — chưa phát hành
 
 ### Added

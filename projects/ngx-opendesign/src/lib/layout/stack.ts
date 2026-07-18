@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input, numberAttribute } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  numberAttribute,
+} from '@angular/core';
 
 // Flex xếp dọc/ngang, gap theo thang token --g-space-N (N=1..8). Host style bindings (inline) để gap
 // động map thẳng token. gap<=0 → không giãn.

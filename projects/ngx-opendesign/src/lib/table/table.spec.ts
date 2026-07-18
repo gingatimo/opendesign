@@ -4,7 +4,13 @@ import { GTable } from './table';
 
 @Component({
   imports: [GTable],
-  template: `<table gTable id="t" [striped]="striped()" [stickyHeader]="sticky()"><tbody><tr><td>x</td></tr></tbody></table>`,
+  template: `<table gTable id="t" [striped]="striped()" [stickyHeader]="sticky()">
+    <tbody>
+      <tr>
+        <td>x</td>
+      </tr>
+    </tbody>
+  </table>`,
 })
 class Host {
   striped = signal(false);

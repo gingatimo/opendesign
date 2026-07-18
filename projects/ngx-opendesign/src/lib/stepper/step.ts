@@ -1,4 +1,11 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, TemplateRef, viewChild } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  TemplateRef,
+  viewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'g-step',

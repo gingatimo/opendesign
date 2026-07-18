@@ -1,5 +1,12 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, contentChildren, input, model } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  input,
+  model,
+} from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconCheck } from '../icon/icons';
 import { GStep } from './step';
@@ -34,7 +41,10 @@ import { GStep } from './step';
               }
             </span>
             <span class="g-stepper__label">
-              {{ step.label() }}@if (step.optional()) {<span class="g-stepper__optional"> (tuỳ chọn)</span>}
+              {{ step.label() }}
+              @if (step.optional()) {
+                <span class="g-stepper__optional"> (tuỳ chọn)</span>
+              }
             </span>
           </button>
           @if (orientation() === 'vertical' && $index === active()) {
@@ -45,7 +55,9 @@ import { GStep } from './step';
     </ol>
     @if (orientation() === 'horizontal') {
       <div class="g-stepper__panel">
-        @if (activeStepRef(); as ref) { <ng-container [ngTemplateOutlet]="ref.content()" /> }
+        @if (activeStepRef(); as ref) {
+          <ng-container [ngTemplateOutlet]="ref.content()" />
+        }
       </div>
     }
   `,
@@ -73,7 +85,8 @@ export class GStepper {
   }
 
   protected headerAriaLabel(step: GStep, index: number): string {
-    const state = index < this.active() ? 'đã xong' : index === this.active() ? 'đang chọn' : 'chưa tới';
+    const state =
+      index < this.active() ? 'đã xong' : index === this.active() ? 'đang chọn' : 'chưa tới';
     const opt = step.optional() ? ', tuỳ chọn' : '';
     return `Bước ${index + 1}: ${step.label()}${opt}, ${state}`;
   }

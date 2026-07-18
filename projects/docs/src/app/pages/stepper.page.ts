@@ -9,9 +9,9 @@ import { StepperBasicDemo } from '../demos/stepper/stepper-basic.demo';
   template: `
     <h1>Stepper</h1>
     <p>
-      Wizard nhiều bước: thanh bước hiển thị tiến trình (đã xong/đang chọn/chưa tới) và chỉ khởi
-      tạo nội dung của bước đang active. Header từng bước bấm được (non-linear) — consumer tự gắn
-      nút Tiếp/Quay lại bằng <code>[(activeStep)]</code>.
+      Wizard nhiều bước: thanh bước hiển thị tiến trình (đã xong/đang chọn/chưa tới) và chỉ khởi tạo
+      nội dung của bước đang active. Header từng bước bấm được (non-linear) — consumer tự gắn nút
+      Tiếp/Quay lại bằng <code>[(activeStep)]</code>.
     </p>
 
     <docs-demo-section>
@@ -30,8 +30,8 @@ import { StepperBasicDemo } from '../demos/stepper/stepper-basic.demo';
         <code>aria-current="step"</code>.
       </li>
       <li>
-        Header mỗi bước là <code>&lt;button&gt;</code> native, có <code>aria-label</code> gồm số
-        thứ tự, nhãn, trạng thái tuỳ chọn (nếu có) và trạng thái đã xong/đang chọn/chưa tới — screen
+        Header mỗi bước là <code>&lt;button&gt;</code> native, có <code>aria-label</code> gồm số thứ
+        tự, nhãn, trạng thái tuỳ chọn (nếu có) và trạng thái đã xong/đang chọn/chưa tới — screen
         reader nghe được đầy đủ ý nghĩa dù chỉ số/icon trên indicator là <code>aria-hidden</code>.
       </li>
       <li>

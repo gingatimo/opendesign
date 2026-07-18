@@ -35,7 +35,9 @@ describe('GStepper', () => {
   it('click header bước → set activeStep (emit) và render nội dung bước đó', () => {
     const f = TestBed.createComponent(Host);
     f.detectChanges();
-    const headers = f.nativeElement.querySelectorAll('.g-stepper__header') as NodeListOf<HTMLButtonElement>;
+    const headers = f.nativeElement.querySelectorAll(
+      '.g-stepper__header',
+    ) as NodeListOf<HTMLButtonElement>;
     headers[2].click();
     f.detectChanges();
     expect(f.componentInstance.active()).toBe(2);

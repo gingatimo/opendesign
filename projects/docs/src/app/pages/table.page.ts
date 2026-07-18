@@ -9,13 +9,13 @@ import { TableBasicDemo } from '../demos/table/table-basic.demo';
   template: `
     <h1>Table</h1>
     <p>
-      Directive <code>gTable</code> gắn class lên phần tử <code>&lt;table&gt;</code> native để
-      style — <b>thuần hiển thị</b>: không quản lý dữ liệu, sắp xếp hay phân trang. Consumer tự
-      dựng <code>&lt;thead&gt;</code>/<code>&lt;tbody&gt;</code> và tự lo logic đó.
+      Directive <code>gTable</code> gắn class lên phần tử <code>&lt;table&gt;</code> native để style
+      — <b>thuần hiển thị</b>: không quản lý dữ liệu, sắp xếp hay phân trang. Consumer tự dựng
+      <code>&lt;thead&gt;</code>/<code>&lt;tbody&gt;</code> và tự lo logic đó.
     </p>
     <p>
-      Bọc <code>&lt;table&gt;</code> trong một khối <code>overflow-x: auto</code> (như demo dưới)
-      để bảng cuộn ngang thay vì tràn trang trên màn hình hẹp.
+      Bọc <code>&lt;table&gt;</code> trong một khối <code>overflow-x: auto</code> (như demo dưới) để
+      bảng cuộn ngang thay vì tràn trang trên màn hình hẹp.
     </p>
 
     <docs-demo-section>
