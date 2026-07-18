@@ -785,3 +785,21 @@ body {
   top: 0;
   z-index: 1;
 }
+
+.g-sort-header {
+  cursor: pointer;
+}
+.g-sort-header::after {
+  content: '↕';
+  margin-left: var(--g-space-1);
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-xs);
+}
+.g-sort-header[aria-sort='ascending']::after {
+  content: '▲';
+  color: var(--g-text);
+}
+.g-sort-header[aria-sort='descending']::after {
+  content: '▼';
+  color: var(--g-text);
+}
