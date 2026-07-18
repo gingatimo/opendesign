@@ -36,6 +36,7 @@ type NavIcon =
   | 'avatar'
   | 'card'
   | 'icon'
+  | 'image-preview'
   | 'dialog'
   | 'tooltip'
   | 'toast'
@@ -132,6 +133,7 @@ export class App {
         { path: '/components/avatar', label: 'Avatar', icon: 'avatar' },
         { path: '/components/card', label: 'Card', icon: 'card' },
         { path: '/components/icon', label: 'Icon', icon: 'icon' },
+        { path: '/components/image-preview', label: 'Image Preview', icon: 'image-preview' },
       ]),
     },
     {
