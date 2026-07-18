@@ -1,0 +1,51 @@
+.g-lightbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.g-lightbox__img {
+  max-width: 92vw;
+  max-height: 88vh;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+.g-lightbox__img--zoomed {
+  cursor: grab;
+  transition: none; // pan mượt, không transition khi kéo
+}
+.g-lightbox__toolbar {
+  position: absolute;
+  top: var(--g-space-4);
+  right: var(--g-space-4);
+  display: flex;
+  gap: var(--g-space-2);
+  z-index: 1;
+}
+.g-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+.g-lightbox__nav--prev {
+  left: var(--g-space-4);
+}
+.g-lightbox__nav--next {
+  right: var(--g-space-4);
+}
+// Nút trên nền tối: ép sáng (icon button ghost mặc định theo --g-text; trong lightbox nền tối cần trắng).
+.g-lightbox__toolbar button,
+.g-lightbox__nav {
+  color: #fff;
+  background: rgb(255 255 255 / 12%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-lightbox__img {
+    transition: none;
+  }
+}

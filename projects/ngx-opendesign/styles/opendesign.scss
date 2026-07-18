@@ -368,6 +368,15 @@ body {
   background: rgb(0 0 0 / 0.32);
 }
 
+// GLightbox — panel/backdrop được CDK portal ra ngoài cây component nên style phải global.
+.g-lightbox-backdrop {
+  background: rgb(0 0 0 / 85%);
+}
+.g-lightbox-panel {
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
 // GTooltip — panel được portal ra ngoài cây component nên style phải global.
 .g-tooltip {
   position: relative;
