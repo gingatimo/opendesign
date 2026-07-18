@@ -20,8 +20,9 @@
 }
 .g-lightbox__toolbar {
   position: absolute;
-  top: var(--g-space-4);
-  right: var(--g-space-4);
+  bottom: var(--g-space-4);
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: var(--g-space-2);
   z-index: 1;
