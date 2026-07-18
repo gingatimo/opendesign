@@ -718,3 +718,40 @@ body {
   margin-inline: auto;
   padding-inline: var(--g-space-4);
 }
+
+// GLayout — app-shell: topbar (đỉnh) + sidebar (trái) + nội dung (vùng cuộn). g-topbar/g-sidebar là
+// light-DOM con projected của g-layout, nằm ngoài view encapsulation Emulated của layout.ts nên style
+// phải đặt GLOBAL ở đây — cùng lý do .g-card__header/.g-input-group ở trên. :has() chọn 1 trong 4 bố
+// cục theo region nào thực sự có mặt trong markup.
+.g-layout {
+  display: grid;
+  height: 100vh;
+  overflow: hidden;
+  grid-template: 'main' 1fr / 1fr; // mặc định: chỉ content
+}
+.g-layout > g-topbar {
+  grid-area: topbar;
+}
+.g-layout > g-sidebar {
+  grid-area: sidebar;
+}
+.g-layout__main {
+  grid-area: main;
+  overflow: auto;
+  min-height: 0; // bắt buộc để grid item cho phép con cuộn
+}
+.g-layout:has(> g-sidebar):not(:has(> g-topbar)) {
+  grid-template: 'sidebar main' 1fr / auto 1fr;
+}
+.g-layout:has(> g-topbar):not(:has(> g-sidebar)) {
+  grid-template:
+    'topbar' auto
+    'main' 1fr
+    / 1fr;
+}
+.g-layout:has(> g-topbar):has(> g-sidebar) {
+  grid-template:
+    'topbar topbar' auto
+    'sidebar main' 1fr
+    / auto 1fr;
+}

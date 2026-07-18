@@ -303,6 +303,7 @@ export default class HomePage {
       links: [
         { path: '/components/container', label: 'Container' },
         { path: '/components/stack', label: 'Stack' },
+        { path: '/components/layout', label: 'Layout' },
       ],
     },
   ];

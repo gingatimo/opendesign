@@ -44,6 +44,7 @@ type NavIcon =
   | 'link'
   | 'container'
   | 'stack'
+  | 'layout'
   | 'playbook';
 
 interface NavLink {
@@ -150,6 +151,7 @@ export class App {
       links: sortByLabel([
         { path: '/components/container', label: 'Container', icon: 'container' },
         { path: '/components/stack', label: 'Stack', icon: 'stack' },
+        { path: '/components/layout', label: 'Layout', icon: 'layout' },
       ]),
     },
     // Nhóm riêng, đặt cuối: đây là phần "ráp lại" sau khi đã học từng component riêng lẻ ở các
