@@ -306,6 +306,10 @@ export default class HomePage {
         { path: '/components/layout', label: 'Layout' },
       ],
     },
+    {
+      title: 'Dữ liệu',
+      links: [{ path: '/components/table', label: 'Table' }],
+    },
   ];
 
   protected readonly installSnippet = `npm install ngx-opendesign @angular/cdk @angular/forms`;

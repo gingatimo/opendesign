@@ -755,3 +755,33 @@ body {
     'sidebar main' 1fr
     / auto 1fr;
 }
+
+.g-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  color: var(--g-text);
+}
+.g-table th,
+.g-table td {
+  padding: var(--g-space-2) var(--g-space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--g-border);
+}
+.g-table thead th {
+  font-weight: 600;
+  color: var(--g-text-muted);
+  background: var(--g-surface);
+}
+.g-table tbody tr:hover {
+  background: var(--g-surface);
+}
+.g-table--striped tbody tr:nth-child(even) {
+  background: var(--g-surface);
+}
+.g-table--sticky thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
