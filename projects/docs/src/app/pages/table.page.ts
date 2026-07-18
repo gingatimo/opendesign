@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ApiRow, ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
+import { TableAdvancedDemo } from '../demos/table/table-advanced.demo';
 import { TableBasicDemo } from '../demos/table/table-basic.demo';
 
 @Component({
-  imports: [TableBasicDemo, CodeBlock, ApiTable, DemoSection],
+  imports: [TableBasicDemo, TableAdvancedDemo, CodeBlock, ApiTable, DemoSection],
   template: `
     <h1>Table</h1>
     <p>
@@ -24,6 +25,32 @@ import { TableBasicDemo } from '../demos/table/table-basic.demo';
 
     <docs-code-block src="demo-sources/table/table-basic.demo.ts" />
 
+    <h2>Sắp xếp</h2>
+    <p>
+      <code>[gSortHeader]</code> đặt trên <code>&lt;th&gt;</code>, nhận trạng thái sort của cột
+      (<code>'asc' | 'desc' | null</code>) rồi tự đặt <code>aria-sort</code> cùng chỉ báo hướng
+      ▲/▼/↕ — <b>logic sắp xếp nằm ở consumer</b>, directive chỉ trình bày trạng thái. Để bấm được
+      và giữ đúng a11y, đặt một <code>&lt;button&gt;</code> bên trong <code>&lt;th&gt;</code> làm
+      điểm kích hoạt thay vì gắn <code>(click)</code> thẳng lên <code>&lt;th&gt;</code>.
+    </p>
+
+    <h2>Đóng băng cột/hàng</h2>
+    <p>
+      Theo kiểu Excel panes: <code>[gFreezeColumn]</code> đặt trên một <code>&lt;th&gt;</code> làm
+      các cột từ mép trái tới cột đó dính (sticky) khi cuộn ngang; <code>[gFreezeRow]</code> đặt
+      trên một <code>&lt;tr&gt;</code> làm các hàng từ đỉnh tới hàng đó dính khi cuộn dọc.
+      <code>gTable</code> tự dò hai marker này và áp sticky — nhớ bọc bảng trong một khối
+      <code>overflow: auto</code> có chiều cao/chiều rộng giới hạn thì mới thấy hiệu ứng cuộn. Nền
+      của các ô đóng băng được tự động đục để không lộ nội dung bên dưới, kể cả khi kết hợp với
+      <code>striped</code>.
+    </p>
+
+    <docs-demo-section>
+      <docs-table-advanced-demo />
+    </docs-demo-section>
+
+    <docs-code-block src="demo-sources/table/table-advanced.demo.ts" />
+
     <h2>API — GTable</h2>
     <docs-api-table [rows]="apiRows" />
 
@@ -32,6 +59,12 @@ import { TableBasicDemo } from '../demos/table/table-basic.demo';
       Dùng đúng phần tử <code>&lt;table&gt;</code> native cùng <code>&lt;th scope="col"&gt;</code>
       cho header — screen reader đọc đúng cấu trúc bảng theo hàng/cột mà không cần thêm
       <code>role</code> nào. <code>gTable</code> chỉ gắn class trình bày, không đụng tới ARIA.
+    </p>
+    <p>
+      <code>[gSortHeader]</code> phản ánh trạng thái sort qua <code>aria-sort</code> trên chính
+      <code>&lt;th&gt;</code>. Nút kích hoạt sắp xếp phải là một <code>&lt;button&gt;</code> thật
+      bên trong <code>&lt;th&gt;</code> để dùng được bằng bàn phím (Tab tới, Enter/Space kích hoạt)
+      thay vì chỉ bắt sự kiện click bằng chuột.
     </p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +82,26 @@ export default class TablePage {
       type: 'boolean',
       default: 'false',
       description: 'Ghim hàng tiêu đề (thead) khi cuộn dọc.',
+    },
+    {
+      name: '[gSortHeader]',
+      type: "'asc' | 'desc' | null",
+      default: 'null',
+      description:
+        'Đặt trên <th> — set aria-sort + chỉ báo hướng ▲/▼/↕. Logic sắp xếp do consumer tự xử lý.',
+    },
+    {
+      name: '[gFreezeColumn]',
+      type: 'marker',
+      default: '—',
+      description:
+        'Đặt trên một <th> header: các cột từ mép trái tới cột đó dính (sticky) khi cuộn ngang.',
+    },
+    {
+      name: '[gFreezeRow]',
+      type: 'marker',
+      default: '—',
+      description: 'Đặt trên một <tr>: các hàng từ đỉnh tới hàng đó dính (sticky) khi cuộn dọc.',
     },
   ];
 }
