@@ -9,7 +9,7 @@ import { IconBasicDemo } from '../demos/icon/icon-basic.demo';
   template: `
     <h1>Icon</h1>
     <p>
-      <code>g-icon</code> render icon set có sẵn của OpenDesign — 28 icon. Mỗi icon là dữ liệu hình
+      <code>g-icon</code> render icon set có sẵn của OpenDesign — 30 icon. Mỗi icon là dữ liệu hình
       học có cấu trúc (<code>{{ '{ viewBox, paths?, circles?, rects? }' }}</code
       >), không phải chuỗi HTML/SVG thô hay font icon — <code>GIcon</code> vẽ bằng binding thường
       (<code>[attr.d]</code>...), không dùng <code>innerHTML</code> hay
@@ -82,9 +82,9 @@ import { IconBasicDemo } from '../demos/icon/icon-basic.demo';
       (<code>gIconSearch</code>), build <code>--configuration production</code>, rồi grep bundle tìm
       đoạn path đặc trưng của các icon không dùng tới (vd. <code>gIconSettings</code>,
       <code>gIconTrash</code>, <code>gIconCart</code>) — không thấy đoạn nào trong số đó. Đối chứng:
-      lặp lại với app import <b>cả 28 icon</b>, cùng đoạn path đó xuất hiện đầy đủ — xác nhận cách
+      lặp lại với app import <b>cả bộ icon</b>, cùng đoạn path đó xuất hiện đầy đủ — xác nhận cách
       grep có phát hiện được khi dữ liệu thực sự có mặt, không phải false negative. Bundle 1-icon
-      116.75&nbsp;kB, bundle 28-icon 119.61&nbsp;kB (phần lớn 116.75&nbsp;kB là chi phí cố định của
+      116.75&nbsp;kB, bundle cả-bộ ~119.6&nbsp;kB (phần lớn 116.75&nbsp;kB là chi phí cố định của
       framework Angular, không phải icon).
     </p>
   `,

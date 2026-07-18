@@ -55,6 +55,18 @@ export const gIconChevronDown: GIconGlyph = {
   paths: ['M6 9l6 6 6-6'],
 };
 
+// Angle up/down — caret nhọn hơn chevron một chút, dùng cho chỉ báo sắp xếp (GSortHeader) và tái dùng
+// chung. Path này khớp với mask trong .g-sort-header (opendesign.scss) — sửa path thì sửa cả hai chỗ.
+export const gIconAngleUp: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M7 14l5-5 5 5'],
+};
+
+export const gIconAngleDown: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M7 10l5 5 5-5'],
+};
+
 export const gIconCheck: GIconGlyph = {
   viewBox: VIEW_BOX_24,
   paths: ['M20 6L9 17l-5-5'],

@@ -28,10 +28,11 @@ import { TableBasicDemo } from '../demos/table/table-basic.demo';
     <h2>Sắp xếp</h2>
     <p>
       <code>[gSortHeader]</code> đặt trên <code>&lt;th&gt;</code>, nhận trạng thái sort của cột
-      (<code>'asc' | 'desc' | null</code>) rồi tự đặt <code>aria-sort</code> cùng chỉ báo hướng
-      ▲/▼/↕ — <b>logic sắp xếp nằm ở consumer</b>, directive chỉ trình bày trạng thái. Để bấm được
-      và giữ đúng a11y, đặt một <code>&lt;button&gt;</code> bên trong <code>&lt;th&gt;</code> làm
-      điểm kích hoạt thay vì gắn <code>(click)</code> thẳng lên <code>&lt;th&gt;</code>.
+      (<code>'asc' | 'desc' | null</code>) rồi tự đặt <code>aria-sort</code> cùng chỉ báo hướng icon
+      angle lên/xuống — <b>logic sắp xếp nằm ở consumer</b>, directive chỉ trình bày trạng thái. Để
+      bấm được và giữ đúng a11y, đặt một <code>&lt;button&gt;</code> bên trong
+      <code>&lt;th&gt;</code> làm điểm kích hoạt thay vì gắn <code>(click)</code> thẳng lên
+      <code>&lt;th&gt;</code>.
     </p>
 
     <h2>Đóng băng cột/hàng</h2>
@@ -88,7 +89,7 @@ export default class TablePage {
       type: "'asc' | 'desc' | null",
       default: 'null',
       description:
-        'Đặt trên <th> — set aria-sort + chỉ báo hướng ▲/▼/↕. Logic sắp xếp do consumer tự xử lý.',
+        'Đặt trên <th> — set aria-sort + chỉ báo hướng icon angle lên/xuống. Logic sắp xếp do consumer tự xử lý.',
     },
     {
       name: '[gFreezeColumn]',

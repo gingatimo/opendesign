@@ -1,6 +1,7 @@
 import { computed, Directive, input } from '@angular/core';
 
-// Directive TRÌNH BÀY cho <th> sort được: đặt aria-sort + class để CSS hiện chỉ báo ▲/▼/↕. KHÔNG xử lý
+// Directive TRÌNH BÀY cho <th> sort được: đặt aria-sort + class để CSS hiện chỉ báo icon angle
+// lên/xuống (mask, cùng path gIconAngleUp/Down). KHÔNG xử lý
 // click — consumer đặt <button> trong <th> để kích hoạt và tự lo logic sort (giữ triết lý thuần hiển thị).
 @Directive({
   selector: '[gSortHeader]',

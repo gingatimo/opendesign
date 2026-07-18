@@ -805,17 +805,32 @@ body {
 .g-sort-header {
   cursor: pointer;
 }
+// Chỉ báo sắp xếp = mask icon angle (path khớp gIconAngleUp/Down trong icons.ts — sửa path thì sửa
+// cả hai chỗ). Dùng mask + background-color để tô theo token, đổi màu theo theme. Chưa sort: hiện cả
+// hai chiều, màu muted (báo cột sort được); asc/desc: một chiều, màu text.
 .g-sort-header::after {
-  content: '↕';
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
   margin-left: var(--g-space-1);
-  color: var(--g-text-muted);
-  font-size: var(--g-font-size-xs);
+  vertical-align: -0.15em;
+  background-color: var(--g-text-muted);
+  -webkit-mask-image: var(--_g-sort-icon);
+  mask-image: var(--_g-sort-icon);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 10l4-4 4 4'/%3E%3Cpath d='M8 14l4 4 4-4'/%3E%3C/svg%3E");
 }
 .g-sort-header[aria-sort='ascending']::after {
-  content: '▲';
-  color: var(--g-text);
+  background-color: var(--g-text);
+  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 14l5-5 5 5'/%3E%3C/svg%3E");
 }
 .g-sort-header[aria-sort='descending']::after {
-  content: '▼';
-  color: var(--g-text);
+  background-color: var(--g-text);
+  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E");
 }

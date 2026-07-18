@@ -15,6 +15,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   `[gFreezeRow]` (GTable đo và áp `position: sticky` + nền đục, khớp sọc).
 - **Playbook**: recipe "Trang danh sách" (search/filter trên, table trạng thái + thời gian (DatePipe) +
   cột hành động, đóng băng cột Tên + header, phân trang dưới).
+- **Icon**: thêm `gIconAngleUp` / `gIconAngleDown` vào icon set; chỉ báo sắp xếp của `GSortHeader`
+  đổi từ ký tự ▲▼↕ sang icon angle (mask cùng path, tô theo token).
 
 ## [0.2.0] — chưa phát hành
 

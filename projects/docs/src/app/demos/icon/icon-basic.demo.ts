@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   GIcon,
+  gIconAngleDown,
+  gIconAngleUp,
   gIconCart,
   gIconCheck,
   gIconChevronDown,
@@ -45,6 +47,8 @@ const ICON_ENTRIES: readonly IconEntry[] = [
   { name: 'gIconChevronRight', glyph: gIconChevronRight },
   { name: 'gIconChevronUp', glyph: gIconChevronUp },
   { name: 'gIconChevronDown', glyph: gIconChevronDown },
+  { name: 'gIconAngleUp', glyph: gIconAngleUp },
+  { name: 'gIconAngleDown', glyph: gIconAngleDown },
   { name: 'gIconCheck', glyph: gIconCheck },
   { name: 'gIconPlus', glyph: gIconPlus },
   { name: 'gIconMinus', glyph: gIconMinus },
