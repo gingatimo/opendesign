@@ -219,9 +219,9 @@ interface ComponentGroup {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class HomePage {
-  protected readonly version = '0.3.0';
+  protected readonly version = '0.4.0';
   protected readonly angularVersion = 22;
-  protected readonly componentCount = 28;
+  protected readonly componentCount = 30;
 
   protected readonly features: FeatureCard[] = [
     {

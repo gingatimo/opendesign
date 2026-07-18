@@ -5,6 +5,15 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] — chưa phát hành
+
+### Added
+
+- **Form**: `GFileInput` (chọn tệp + vùng kéo-thả, thuần trình bày — phát `File[]`, consumer tự upload).
+- **Hiển thị**: `GImagePreview` (lưới thumbnail từ URL hoặc `File`; click mở lightbox toàn màn hình
+  zoom cuộn/nút/double-click + pan kéo + prev/next + phím tắt; `removable` phát `(remove)`).
+- **Playbook**: recipe "Tải ảnh lên" (file input → image preview → lightbox).
+
 ## [0.3.0] — chưa phát hành
 
 ### Added

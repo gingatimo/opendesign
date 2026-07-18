@@ -1,8 +1,13 @@
 {
   "name": "ngx-opendesign",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Design system hiện đại cho Angular — pill shape, light/dark theme, tiếng Việt",
-  "keywords": ["angular", "design-system", "components", "ui"],
+  "keywords": [
+    "angular",
+    "design-system",
+    "components",
+    "ui"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -19,7 +24,9 @@
     "@angular/cdk": "^22.0.0",
     "@angular/forms": "^22.0.0"
   },
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     "./styles/opendesign.css": {
       "style": "./styles/opendesign.css",

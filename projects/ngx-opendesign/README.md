@@ -61,11 +61,11 @@ export class ViDuComponent {
 
 Đặt thuộc tính `data-g-theme="dark"` lên thẻ `<html>`. Không có thuộc tính này thì mặc định là giao diện sáng; mọi component đều đọc token nên đổi màu đồng loạt, không cần sửa gì thêm.
 
-File theme cũng khai báo sẵn `color-scheme: light`/`dark` tương ứng — đây là thứ CSS variable không làm được: nó báo cho trình duyệt biết bề mặt đang sáng hay tối, để những phần giao diện do *trình duyệt* tự vẽ (thanh cuộn, ô chọn ngày/giờ, nền autofill, gạch chân spellcheck) cũng đi theo theme.
+File theme cũng khai báo sẵn `color-scheme: light`/`dark` tương ứng — đây là thứ CSS variable không làm được: nó báo cho trình duyệt biết bề mặt đang sáng hay tối, để những phần giao diện do _trình duyệt_ tự vẽ (thanh cuộn, ô chọn ngày/giờ, nền autofill, gạch chân spellcheck) cũng đi theo theme.
 
 ## Component
 
-Nút (Button, Icon Button) · Form (Input, Textarea, Checkbox, Toggle, Radio, Select) · Hiển thị (Badge, Spinner, Progress, Chip, Avatar, Card, Icon) · Overlay (Dialog, Tooltip, Toast) · Điều hướng (Tabs, Topbar, Sidebar, Stepper, Link, Pagination) · Cấu trúc (Layout, Container, Stack) · Dữ liệu (Table).
+Nút (Button, Icon Button) · Form (Input, Textarea, Checkbox, Toggle, Radio, Select, File Input) · Hiển thị (Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Image Preview) · Overlay (Dialog, Tooltip, Toast) · Điều hướng (Tabs, Topbar, Sidebar, Stepper, Link, Pagination) · Cấu trúc (Layout, Container, Stack) · Dữ liệu (Table).
 
 ## Yêu cầu
 

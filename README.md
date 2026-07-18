@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml/badge.svg)](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml)
 
-Design system Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — 28
+Design system Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — 30
 component, standalone và `OnPush`. Package npm: [`ngx-opendesign`](projects/ngx-opendesign).
 
 **Docs site (demo sống, code mẫu, bảng API):** https://gingatimo.github.io/opendesign/
 
-Repo này là source của cả thư viện lẫn docs site. Nếu bạn chỉ muốn *dùng* OpenDesign trong dự án
+Repo này là source của cả thư viện lẫn docs site. Nếu bạn chỉ muốn _dùng_ OpenDesign trong dự án
 Angular của mình, xem [README của package](projects/ngx-opendesign/README.md) — hướng dẫn cài đặt
 dành cho người tiêu thụ npm. README này (ở gốc repo) dành cho người muốn phát triển/đóng góp cho
 chính dự án.
