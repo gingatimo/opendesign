@@ -13,8 +13,8 @@ jobs:
       # Bắt buộc để npm publish --provenance lấy được OIDC token ký provenance statement.
       id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
