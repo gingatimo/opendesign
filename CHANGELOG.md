@@ -5,6 +5,17 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] — chưa phát hành
+
+### Added
+
+- **Điều hướng**: `GPagination` (control phân trang trình bày, có ellipsis; consumer tự cắt dữ liệu).
+- **Table (nâng cao, vẫn thuần hiển thị)**: `GSortHeader` (directive `[gSortHeader]` đặt `aria-sort` +
+  chỉ báo hướng; logic sort ở consumer), đóng băng cột/hàng kiểu Excel qua marker `[gFreezeColumn]` /
+  `[gFreezeRow]` (GTable đo và áp `position: sticky` + nền đục, khớp sọc).
+- **Playbook**: recipe "Trang danh sách" (search/filter trên, table trạng thái + thời gian (DatePipe) +
+  cột hành động, đóng băng cột Tên + header, phân trang dưới).
+
 ## [0.2.0] — chưa phát hành
 
 ### Added

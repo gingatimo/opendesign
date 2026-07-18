@@ -65,7 +65,7 @@ File theme cũng khai báo sẵn `color-scheme: light`/`dark` tương ứng — 
 
 ## Component
 
-Nút (Button, Icon Button) · Form (Input, Textarea, Checkbox, Toggle, Radio, Select) · Hiển thị (Badge, Spinner, Progress, Chip, Avatar, Card, Icon) · Overlay (Dialog, Tooltip, Toast) · Điều hướng (Tabs, Topbar, Sidebar, Stepper, Link) · Cấu trúc (Layout, Container, Stack) · Dữ liệu (Table).
+Nút (Button, Icon Button) · Form (Input, Textarea, Checkbox, Toggle, Radio, Select) · Hiển thị (Badge, Spinner, Progress, Chip, Avatar, Card, Icon) · Overlay (Dialog, Tooltip, Toast) · Điều hướng (Tabs, Topbar, Sidebar, Stepper, Link, Pagination) · Cấu trúc (Layout, Container, Stack) · Dữ liệu (Table).
 
 ## Yêu cầu
 
