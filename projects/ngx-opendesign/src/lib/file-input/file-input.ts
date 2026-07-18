@@ -11,10 +11,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
-import { gIconUpload } from '../icon/icons';
+import { gIconFile, gIconUpload, gIconX } from '../icon/icons';
 
 // Chọn file thuần TRÌNH BÀY: nút + tên file + vùng kéo-thả, bọc <input type=file> ẩn (native picker +
 // bàn phím + a11y). Phát File[] qua model; CONSUMER tự upload (network). Không đụng mạng.
+// Single-file: hàng pill gọn. Multi-file: dưới nút hiện danh sách file đã chọn, mỗi file có nút xoá;
+// chọn lần mới NỐI thêm (khử trùng name+size). showFileList=false để consumer tự hiển thị preview.
 @Component({
   selector: 'g-file-input',
   imports: [GIcon],
@@ -27,11 +29,35 @@ import { gIconUpload } from '../icon/icons';
       (dragleave)="onDragLeave($event)"
       (drop)="onDrop($event)"
     >
-      <button type="button" class="g-file-input__button" [disabled]="disabled()" (click)="pick()">
-        <g-icon [icon]="iconUpload" size="sm" />
-        Chọn tệp
-      </button>
-      <span class="g-file-input__name" aria-live="polite">{{ label() }}</span>
+      <div class="g-file-input__row">
+        <button type="button" class="g-file-input__button" [disabled]="disabled()" (click)="pick()">
+          <g-icon [icon]="iconUpload" size="sm" />
+          Chọn tệp
+        </button>
+        <span class="g-file-input__name" aria-live="polite">{{ label() }}</span>
+      </div>
+
+      @if (multiple() && showFileList() && files().length) {
+        <ul class="g-file-input__list">
+          @for (file of files(); track file.name + file.size; let i = $index) {
+            <li class="g-file-input__item">
+              <g-icon class="g-file-input__file-icon" [icon]="iconFile" size="sm" />
+              <span class="g-file-input__item-name">{{ file.name }}</span>
+              <span class="g-file-input__item-size">{{ formatSize(file.size) }}</span>
+              <button
+                type="button"
+                class="g-file-input__remove"
+                [disabled]="disabled()"
+                [attr.aria-label]="'Xoá ' + file.name"
+                (click)="removeAt(i)"
+              >
+                <g-icon [icon]="iconX" size="sm" />
+              </button>
+            </li>
+          }
+        </ul>
+      }
+
       <input
         #native
         type="file"
@@ -52,9 +78,12 @@ export class GFileInput {
   readonly accept = input<string>();
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
+  readonly showFileList = input(true, { transform: booleanAttribute });
 
   private readonly native = viewChild.required<ElementRef<HTMLInputElement>>('native');
   protected readonly iconUpload = gIconUpload;
+  protected readonly iconFile = gIconFile;
+  protected readonly iconX = gIconX;
   protected readonly dragover = signal(false);
 
   protected readonly label = computed(() => {
@@ -79,7 +108,10 @@ export class GFileInput {
   }
 
   protected onNativeChange(event: Event): void {
-    this.setFromList((event.target as HTMLInputElement).files);
+    const input = event.target as HTMLInputElement;
+    this.setFromList(input.files);
+    // Multi: xoá value sau mỗi lần chọn để lần sau chọn lại (kể cả cùng file) vẫn phát change.
+    if (this.multiple()) input.value = '';
   }
 
   protected onDragOver(event: DragEvent): void {
@@ -100,11 +132,36 @@ export class GFileInput {
     this.setFromList(event.dataTransfer?.files ?? null);
   }
 
+  protected removeAt(index: number): void {
+    this.files.update((list) => list.filter((_, i) => i !== index));
+  }
+
+  // Format dung lượng: B / KB / MB (tối đa 1 chữ số thập phân, bỏ ".0" thừa).
+  protected formatSize(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${trim1(bytes / 1024)} KB`;
+    return `${trim1(bytes / (1024 * 1024))} MB`;
+  }
+
   private setFromList(list: FileList | null): void {
     if (!list || list.length === 0) return;
-    let arr = Array.from(list).filter((f) => this.matchesAccept(f));
-    if (!this.multiple()) arr = arr.slice(0, 1);
-    if (arr.length > 0) this.files.set(arr);
+    const incoming = Array.from(list).filter((f) => this.matchesAccept(f));
+    if (incoming.length === 0) return;
+    if (!this.multiple()) {
+      this.files.set(incoming.slice(0, 1));
+      return;
+    }
+    // Multi: nối thêm, khử trùng theo name+size.
+    const seen = new Set(this.files().map(keyOf));
+    const merged = [...this.files()];
+    for (const f of incoming) {
+      const k = keyOf(f);
+      if (!seen.has(k)) {
+        seen.add(k);
+        merged.push(f);
+      }
+    }
+    this.files.set(merged);
   }
 
   // Lọc accept cho kéo-thả (native picker đã tự lọc): hỗ trợ 'image/*', 'image/png', '.png'.
@@ -120,4 +177,11 @@ export class GFileInput {
         return file.type === rule;
       });
   }
+}
+
+function keyOf(f: File): string {
+  return `${f.name}:${f.size}`;
+}
+function trim1(n: number): string {
+  return (Math.round(n * 10) / 10).toString();
 }
