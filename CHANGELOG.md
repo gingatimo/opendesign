@@ -9,9 +9,13 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
-- **Form**: `GFileInput` (chọn tệp + vùng kéo-thả, thuần trình bày — phát `File[]`, consumer tự upload).
+- **Form**: `GFileInput` (chọn tệp + vùng kéo-thả, thuần trình bày — phát `File[]`, consumer tự
+  upload). Khi `multiple` hiện danh sách tệp đã chọn (tên + dung lượng + nút xoá từng tệp), chọn
+  lần sau nối thêm; input `showFileList` để tắt danh sách khi tự hiển thị preview.
 - **Hiển thị**: `GImagePreview` (lưới thumbnail từ URL hoặc `File`; click mở lightbox toàn màn hình
   zoom cuộn/nút/double-click + pan kéo + prev/next + phím tắt; `removable` phát `(remove)`).
+- **Hiển thị**: `GImageSlider` (băng chuyền ảnh — 1 ảnh/khung, nút ‹ › + chấm chỉ vị trí + phím
+  ←/→, `loop` cuộn vòng, `lightbox` click ảnh mở zoom toàn màn hình; nhận URL hoặc `File`).
 - **Playbook**: recipe "Tải ảnh lên" (file input → image preview → lightbox).
 
 ## [0.3.0] — chưa phát hành
