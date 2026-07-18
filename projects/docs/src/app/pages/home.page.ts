@@ -293,6 +293,7 @@ export default class HomePage {
       title: 'Điều hướng',
       links: [
         { path: '/components/link', label: 'Link' },
+        { path: '/components/pagination', label: 'Pagination' },
         { path: '/components/sidebar', label: 'Sidebar' },
         { path: '/components/stepper', label: 'Stepper' },
         { path: '/components/tabs', label: 'Tabs' },

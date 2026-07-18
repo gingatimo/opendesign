@@ -138,6 +138,11 @@ export const routes: Routes = [
     title: 'Link — OpenDesign',
   },
   {
+    path: 'components/pagination',
+    loadComponent: () => import('./pages/pagination.page'),
+    title: 'Pagination — OpenDesign',
+  },
+  {
     path: 'components/container',
     loadComponent: () => import('./pages/container.page'),
     title: 'Container — OpenDesign',

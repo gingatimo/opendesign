@@ -43,6 +43,7 @@ type NavIcon =
   | 'topbar'
   | 'sidebar'
   | 'link'
+  | 'pagination'
   | 'container'
   | 'stack'
   | 'layout'
@@ -147,6 +148,7 @@ export class App {
         { path: '/components/topbar', label: 'Topbar', icon: 'topbar' },
         { path: '/components/sidebar', label: 'Sidebar', icon: 'sidebar' },
         { path: '/components/link', label: 'Link', icon: 'link' },
+        { path: '/components/pagination', label: 'Pagination', icon: 'pagination' },
       ]),
     },
     {
