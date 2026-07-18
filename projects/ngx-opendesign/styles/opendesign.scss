@@ -758,7 +758,10 @@ body {
 
 .g-table {
   width: 100%;
-  border-collapse: collapse;
+  // separate (spacing 0) thay vì collapse: cho phép bo góc cell (thead) hoạt động — border-collapse
+  // collapse bỏ qua border-radius của cell. Cells chỉ có border-bottom nên không bị viền đôi.
+  border-collapse: separate;
+  border-spacing: 0;
   font-family: var(--g-font-family);
   font-size: var(--g-font-size-sm);
   color: var(--g-text);
@@ -775,6 +778,13 @@ body {
   // Nền thead đậm hơn một bậc so với row tbody để phân biệt rõ (sáng: xám hơn surface; tối: xám sáng
   // hơn surface → header nổi lên). Dùng --g-border thay vì --g-surface (vốn trùng nền row/hover/sọc).
   background: var(--g-border);
+}
+// Bo nhẹ 2 góc trên của thead (như card) — góc trên-trái của ô đầu, trên-phải của ô cuối.
+.g-table thead tr:first-child th:first-child {
+  border-top-left-radius: var(--g-radius-sm);
+}
+.g-table thead tr:first-child th:last-child {
+  border-top-right-radius: var(--g-radius-sm);
 }
 .g-table tbody tr:hover {
   background: var(--g-surface);
