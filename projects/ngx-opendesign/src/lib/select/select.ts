@@ -104,7 +104,7 @@ function normalize(s: string): string {
     '[class.g-select--multiple]': 'multiple()',
     '(click)': 'onTriggerClick($event)',
     '(keydown)': 'onKeydown($event)',
-    '(blur)': 'onTouchedFn()',
+    '(blur)': 'onBlur($event)',
   },
 })
 export class GSelect implements ControlValueAccessor {
@@ -225,7 +225,15 @@ export class GSelect implements ControlValueAccessor {
   close(): void {
     this.open.set(false);
     this.activeIndex.set(-1);
-    this.elementRef.nativeElement.focus();
+    // preventScroll: đóng bằng backdrop/detach không nên cuộn select vào tầm nhìn (giật trang).
+    this.elementRef.nativeElement.focus({ preventScroll: true });
+  }
+
+  // Chỉ đánh dấu touched khi focus thực sự RỜI khỏi select — không phải khi mở panel searchable làm
+  // focus chuyển vào ô tìm kiếm (nằm trong CDK overlay, ngoài DOM host), tránh required báo lỗi sớm.
+  protected onBlur(event: FocusEvent): void {
+    if (event.relatedTarget === this.searchInput()?.nativeElement) return;
+    this.onTouchedFn();
   }
 
   protected onTriggerClick(event: MouseEvent): void {
