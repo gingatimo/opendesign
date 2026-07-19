@@ -221,7 +221,7 @@ interface ComponentGroup {
 export default class HomePage {
   protected readonly version = '0.4.0';
   protected readonly angularVersion = 22;
-  protected readonly componentCount = 31;
+  protected readonly componentCount = 35;
 
   protected readonly features: FeatureCard[] = [
     {
@@ -255,6 +255,7 @@ export default class HomePage {
       title: 'Nút',
       links: [
         { path: '/components/button', label: 'Button' },
+        { path: '/components/fab', label: 'Fab' },
         { path: '/components/icon-button', label: 'Icon Button' },
       ],
     },
@@ -262,6 +263,7 @@ export default class HomePage {
       title: 'Form',
       links: [
         { path: '/components/checkbox', label: 'Checkbox' },
+        { path: '/components/datepicker', label: 'Datepicker' },
         { path: '/components/file-input', label: 'File Input' },
         { path: '/components/input', label: 'Input' },
         { path: '/components/radio', label: 'Radio' },
@@ -277,6 +279,7 @@ export default class HomePage {
         { path: '/components/badge', label: 'Badge' },
         { path: '/components/card', label: 'Card' },
         { path: '/components/chip', label: 'Chip' },
+        { path: '/components/divider', label: 'Divider' },
         { path: '/components/icon', label: 'Icon' },
         { path: '/components/image-preview', label: 'Image Preview' },
         { path: '/components/image-slider', label: 'Image Slider' },
@@ -307,6 +310,7 @@ export default class HomePage {
       title: 'Cấu trúc',
       links: [
         { path: '/components/container', label: 'Container' },
+        { path: '/components/grid', label: 'Grid' },
         { path: '/components/stack', label: 'Stack' },
         { path: '/components/layout', label: 'Layout' },
       ],

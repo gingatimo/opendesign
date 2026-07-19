@@ -3,6 +3,7 @@ import {
   GIcon,
   gIconAngleDown,
   gIconAngleUp,
+  gIconCalendar,
   gIconCart,
   gIconCheck,
   gIconChevronDown,
@@ -71,6 +72,7 @@ const ICON_ENTRIES: readonly IconEntry[] = [
   { name: 'gIconDownload', glyph: gIconDownload },
   { name: 'gIconUpload', glyph: gIconUpload },
   { name: 'gIconFile', glyph: gIconFile },
+  { name: 'gIconCalendar', glyph: gIconCalendar },
   { name: 'gIconPanelLeftClose', glyph: gIconPanelLeftClose },
   { name: 'gIconPanelLeftOpen', glyph: gIconPanelLeftOpen },
 ];

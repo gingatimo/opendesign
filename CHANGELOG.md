@@ -5,6 +5,22 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [0.5.0] — chưa phát hành
+
+### Added
+
+- **Hiển thị**: `GDivider` (vạch phân cách ngang/dọc, nhãn giữa tuỳ chọn qua nội dung chiếu).
+- **Nút**: `GFab` (nút hành động nổi — `position: fixed` ở góc màn hình, dạng tròn hoặc `extended` có nhãn).
+- **Cấu trúc**: `GGrid` (primitive CSS grid — `cols` cột đều hoặc `minColWidth` responsive auto-fill, `gap` token).
+- **Form**: `GDatepicker` (chọn 1 ngày — ô read-only + popover lịch, điều hướng tháng, bàn phím
+  ←→↑↓/Enter/Esc/PageUp-Down, `min`/`max`, định dạng `dd/MM/yyyy`).
+
+### Changed
+
+- **GStack**: thêm input `wrap` (bật `flex-wrap: wrap`).
+- **GStepper**: chế độ `vertical` nay có đường nối dọc giữa các bước và thụt lề nội dung.
+- **Icon**: thêm `gIconCalendar` (32 icon).
+
 ## [0.4.0] — 2026-07-18
 
 ### Added
