@@ -198,6 +198,16 @@ export const routes: Routes = [
     title: 'Datepicker — OpenDesign',
   },
   {
+    path: 'components/menu',
+    loadComponent: () => import('./pages/menu.page'),
+    title: 'Menu — OpenDesign',
+  },
+  {
+    path: 'components/breadcrumb',
+    loadComponent: () => import('./pages/breadcrumb.page'),
+    title: 'Breadcrumb — OpenDesign',
+  },
+  {
     path: 'playbook',
     loadComponent: () => import('./pages/playbook.page'),
     title: 'Playbook — OpenDesign',

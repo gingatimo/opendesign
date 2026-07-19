@@ -128,6 +128,8 @@ export class App {
         { path: '/components/topbar', label: 'Topbar', icon: 'topbar' },
         { path: '/components/sidebar', label: 'Sidebar', icon: 'sidebar' },
         { path: '/components/link', label: 'Link', icon: 'link' },
+        { path: '/components/menu', label: 'Menu', icon: 'menu' },
+        { path: '/components/breadcrumb', label: 'Breadcrumb', icon: 'breadcrumb' },
         { path: '/components/pagination', label: 'Pagination', icon: 'pagination' },
       ]),
     },

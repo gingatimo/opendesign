@@ -44,6 +44,8 @@ export type NavIcon =
   | 'topbar'
   | 'sidebar'
   | 'link'
+  | 'menu'
+  | 'breadcrumb'
   | 'pagination'
   | 'container'
   | 'stack'
@@ -170,6 +172,8 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     rects: [{ x: 4, y: 4, width: 16, height: 16, rx: 2 }],
   },
   link: gIconLink,
+  menu: { viewBox: VB, paths: ['M3 5h13', 'M3 12h13', 'M3 19h13', 'M19 9l2.5 3-2.5 3'] },
+  breadcrumb: { viewBox: VB, paths: ['M4 12h4', 'M16 12h4', 'M10 8l3 4-3 4'] },
   pagination: { viewBox: VB, paths: ['M4 12h2m4 0h2m4 0h2', 'M5 8l-3 4 3 4M19 8l3 4-3 4'] },
   container: {
     viewBox: VB,

@@ -13,6 +13,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Overlay**: `GToast` thêm `title` tuỳ chọn (hiển thị đậm trên message; screen reader đọc cả hai).
 - **Icon**: thêm 7 icon vào bộ public (32 → 39): `gIconBell`, `gIconCopy`, `gIconLink`, `gIconImage`,
   `gIconGrid`, `gIconLayout`, `gIconTable`.
+- **Điều hướng**: `GMenu` + `GMenuItem` + `GSubmenu` (menu điều hướng có mục con phân cấp —
+  `orientation="vertical"` mở/gập inline accordion, `orientation="horizontal"` bung dropdown; lồng được nhiều cấp).
+- **Điều hướng**: `GBreadcrumb` + `GBreadcrumbItem` (đường dẫn phân cấp, dấu `›` tự chèn, mục cuối `aria-current="page"`).
 
 ### Changed
 
