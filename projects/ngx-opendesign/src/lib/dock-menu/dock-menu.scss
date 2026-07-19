@@ -1,0 +1,85 @@
+:host {
+  display: inline-block;
+}
+
+:host(.g-dock-menu--bottom) {
+  position: fixed;
+  bottom: var(--g-space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+}
+
+.g-dock-menu__list {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--g-space-2);
+  margin: 0;
+  padding: var(--g-space-2);
+  list-style: none;
+  background: var(--g-surface-raised);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  box-shadow: var(--g-shadow-md);
+}
+
+.g-dock-menu__item {
+  position: relative;
+  transform: scale(var(--g-dock-scale, 1));
+  transform-origin: bottom center;
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+
+.g-dock-menu__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface);
+  color: var(--g-text);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--g-primary);
+    color: var(--g-on-primary);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+// Nhãn nổi phía trên item, hiện khi hover.
+.g-dock-menu__tooltip {
+  position: absolute;
+  bottom: calc(100% + var(--g-space-2));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px var(--g-space-2);
+  border-radius: var(--g-radius-sm);
+  background: var(--g-text);
+  color: var(--g-bg);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--g-duration-fast) var(--g-ease);
+}
+.g-dock-menu__item:hover .g-dock-menu__tooltip {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-dock-menu__item {
+    transform: none;
+    transition: none;
+  }
+  .g-dock-menu__tooltip {
+    transition: none;
+  }
+}

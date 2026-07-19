@@ -64,3 +64,4 @@ export * from './lib/accordion/accordion';
 export * from './lib/accordion/accordion-panel';
 export * from './lib/input-otp/input-otp';
 export * from './lib/chips/chips';
+export * from './lib/dock-menu/dock-menu';
