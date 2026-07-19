@@ -3,12 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
   inject,
   input,
   numberAttribute,
   signal,
-  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { GChip } from '../chip/chip';
@@ -19,7 +17,7 @@ import { GChip } from '../chip/chip';
   selector: 'g-chips',
   imports: [GChip],
   template: `
-    <div class="g-chips__field" (click)="focusInput()">
+    <label class="g-chips__field">
       @for (chip of chips(); track $index) {
         <g-chip
           removable
@@ -31,7 +29,6 @@ import { GChip } from '../chip/chip';
         </g-chip>
       }
       <input
-        #input
         type="text"
         class="g-chips__input"
         [placeholder]="chips().length ? '' : placeholder()"
@@ -40,7 +37,7 @@ import { GChip } from '../chip/chip';
         (keydown)="onKeydown($event)"
         (blur)="onTouchedFn()"
       />
-    </div>
+    </label>
   `,
   host: {
     class: 'g-chips',
@@ -61,8 +58,6 @@ export class GChips implements ControlValueAccessor {
     return m != null && this.chips().length >= m;
   });
 
-  private readonly inputRef = viewChild.required<ElementRef<HTMLInputElement>>('input');
-
   private onChange: (value: string[]) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
 
@@ -70,10 +65,6 @@ export class GChips implements ControlValueAccessor {
 
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
-  }
-
-  protected focusInput(): void {
-    this.inputRef().nativeElement.focus();
   }
 
   private add(text: string): void {

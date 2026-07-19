@@ -46,7 +46,10 @@ function findPath(
   selector: 'g-cascade-select',
   imports: [CdkConnectedOverlay, GIcon],
   template: `
-    <div class="g-cascade-select__value" [class.g-cascade-select__value--placeholder]="!selectedLabel()">
+    <div
+      class="g-cascade-select__value"
+      [class.g-cascade-select__value--placeholder]="!selectedLabel()"
+    >
       {{ selectedLabel() || placeholder() }}
     </div>
     <g-icon class="g-cascade-select__arrow" [icon]="iconDown" />
@@ -61,7 +64,7 @@ function findPath(
       (backdropClick)="close()"
       (detach)="close()"
     >
-      <div #panel class="g-cascade-select__panel" (keydown)="onKeydown($event)">
+      <div #panel class="g-cascade-select__panel">
         @for (col of columns(); track $index; let ci = $index) {
           <ul class="g-cascade-select__col" role="listbox">
             @for (opt of col; track $index; let ri = $index) {
@@ -77,6 +80,7 @@ function findPath(
                   [attr.aria-haspopup]="opt.children?.length ? 'true' : null"
                   (mouseenter)="opt.children?.length ? expand(ci, opt) : null"
                   (click)="onClick(ci, opt)"
+                  (keydown)="onKeydown($event)"
                 >
                   <span>{{ opt.label }}</span>
                   @if (opt.children?.length) {
@@ -171,7 +175,8 @@ export class GCascadeSelect implements ControlValueAccessor {
 
   protected onTriggerClick(): void {
     if (this.disabled()) return;
-    this.open() ? this.close() : this.openPanel();
+    if (this.open()) this.close();
+    else this.openPanel();
   }
   protected onTriggerKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
@@ -186,7 +191,10 @@ export class GCascadeSelect implements ControlValueAccessor {
 
   private openPanel(): void {
     // Khởi tạo path theo giá trị đang chọn (nếu có) để mở đúng nhánh.
-    const p = this.valueSignal() != null ? findPath(this.options(), this.valueSignal(), this.compareWith()) : null;
+    const p =
+      this.valueSignal() != null
+        ? findPath(this.options(), this.valueSignal(), this.compareWith())
+        : null;
     this.path.set(p ? p.slice(0, -1) : []);
     this.open.set(true);
   }

@@ -31,7 +31,11 @@ const POSITIONS: ConnectedPosition[] = [
   { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 },
 ];
 
-function findLabel(nodes: GTreeNode[], value: unknown, eq: (a: unknown, b: unknown) => boolean): string {
+function findLabel(
+  nodes: GTreeNode[],
+  value: unknown,
+  eq: (a: unknown, b: unknown) => boolean,
+): string {
   for (const n of nodes) {
     if (n.value !== undefined && eq(n.value, value)) return n.label;
     if (n.children?.length) {
@@ -186,7 +190,8 @@ export class GTreeSelect implements ControlValueAccessor {
   protected toggleExpand(event: Event, node: GTreeNode): void {
     event.stopPropagation();
     const set = new Set(this.expandedSet());
-    set.has(node) ? set.delete(node) : set.add(node);
+    if (set.has(node)) set.delete(node);
+    else set.add(node);
     this.expandedSet.set(set);
   }
 
@@ -199,7 +204,8 @@ export class GTreeSelect implements ControlValueAccessor {
 
   protected onTriggerClick(): void {
     if (this.disabled()) return;
-    this.open() ? this.close() : this.openPanel();
+    if (this.open()) this.close();
+    else this.openPanel();
   }
   protected onTriggerKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
