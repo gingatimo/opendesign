@@ -1,0 +1,67 @@
+:host {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: var(--g-border);
+}
+
+// Vệt shimmer quét ngang qua khối.
+:host::after,
+.g-skeleton__line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.12), transparent);
+  animation: g-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes g-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// ----- biến thể một khối -----
+:host(.g-skeleton--text):not(.g-skeleton--multiline) {
+  height: 0.8em;
+  border-radius: var(--g-radius-sm);
+}
+:host(.g-skeleton--circular) {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+:host(.g-skeleton--rectangular) {
+  height: 120px;
+  border-radius: var(--g-radius-sm);
+}
+
+// ----- text nhiều dòng: host thành vùng chứa, mỗi dòng là một bar -----
+:host(.g-skeleton--multiline) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-2);
+  background: none;
+  overflow: visible;
+}
+:host(.g-skeleton--multiline)::after {
+  content: none;
+}
+.g-skeleton__line {
+  position: relative;
+  overflow: hidden;
+  height: 0.8em;
+  background: var(--g-border);
+  border-radius: var(--g-radius-sm);
+}
+.g-skeleton__line--last {
+  width: 60%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host::after,
+  .g-skeleton__line::after {
+    animation: none;
+  }
+}
