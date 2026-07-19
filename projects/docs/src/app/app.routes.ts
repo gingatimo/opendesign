@@ -213,6 +213,21 @@ export const routes: Routes = [
     title: 'Slider — OpenDesign',
   },
   {
+    path: 'components/time-picker',
+    loadComponent: () => import('./pages/time-picker.page'),
+    title: 'Time Picker — OpenDesign',
+  },
+  {
+    path: 'components/date-range-picker',
+    loadComponent: () => import('./pages/date-range-picker.page'),
+    title: 'Date Range Picker — OpenDesign',
+  },
+  {
+    path: 'components/color-picker',
+    loadComponent: () => import('./pages/color-picker.page'),
+    title: 'Color Picker — OpenDesign',
+  },
+  {
     path: 'components/menu',
     loadComponent: () => import('./pages/menu.page'),
     title: 'Menu — OpenDesign',

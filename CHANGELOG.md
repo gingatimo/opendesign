@@ -5,6 +5,23 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Form**: `GTimePicker` (chọn giờ:phút 24h — ô read-only + popover 2 cột Giờ/Phút, `minuteStep`,
+  value `"HH:mm"`, bàn phím ↑↓/Enter/Esc).
+- **Form**: `GDateRangePicker` (chọn khoảng ngày trên 1 lịch — tô dải + xem trước khi hover, value
+  `GDateRange { start, end }`, `min`/`max`, bàn phím như Datepicker).
+- **Form**: `GColorPicker` (chọn màu — vùng Saturation/Value kéo chuột, thanh Hue, ô hex, swatch;
+  value hex `#rrggbb`).
+- **Icon**: thêm `gIconClock` vào bộ public (44 → 45).
+
+### Changed
+
+- **GSlider**: track nền dùng biến `--g-slider-track` (mặc định giữ nguyên fill) để consumer thay
+  hẳn nền track — `GColorPicker` đặt dải Hue cầu vồng cho thanh Hue.
+
 ## [0.7.0] — 2026-07-19
 
 ### Added

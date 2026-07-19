@@ -1,5 +1,6 @@
 import {
   type GIconGlyph,
+  gIconClock,
   gIconGrid,
   gIconImage,
   gIconLayout,
@@ -25,6 +26,9 @@ export type NavIcon =
   | 'file-input'
   | 'datepicker'
   | 'slider'
+  | 'time-picker'
+  | 'date-range-picker'
+  | 'color-picker'
   | 'badge'
   | 'spinner'
   | 'progress'
@@ -142,6 +146,13 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     rects: [{ x: 3, y: 4, width: 18, height: 18, rx: 2 }],
   },
   slider: { viewBox: VB, paths: ['M3 12h18'], circles: [{ cx: 9, cy: 12, r: 3 }] },
+  'time-picker': gIconClock,
+  'date-range-picker': {
+    viewBox: VB,
+    paths: ['M16 2v4M8 2v4M3 10h18', 'M8 15h8'],
+    rects: [{ x: 3, y: 4, width: 18, height: 18, rx: 2 }],
+  },
+  'color-picker': { viewBox: VB, paths: ['M12 3s6 5.5 6 10a6 6 0 0 1-12 0c0-4.5 6-10 6-10z'] },
   dialog: {
     viewBox: VB,
     rects: [
