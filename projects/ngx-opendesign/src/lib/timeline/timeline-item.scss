@@ -1,0 +1,47 @@
+:host {
+  display: flex;
+  gap: var(--g-space-3);
+  min-height: 44px;
+  font-family: var(--g-font-family);
+  color: var(--g-text);
+}
+
+.g-timeline-item__rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.g-timeline-item__marker {
+  z-index: 1;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+// Marker mặc định (không chiếu gì) = chấm tròn màu chính.
+.g-timeline-item__marker:empty {
+  width: 12px;
+  height: 12px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: var(--g-primary);
+}
+
+// Đường nối dọc chạy từ dưới marker xuống item kế.
+.g-timeline-item__rail::after {
+  content: '';
+  flex: 1;
+  width: 2px;
+  margin-top: 2px;
+  background: var(--g-border);
+}
+:host(:last-child) .g-timeline-item__rail::after {
+  display: none;
+}
+
+.g-timeline-item__content {
+  flex: 1;
+  padding-bottom: var(--g-space-5);
+}

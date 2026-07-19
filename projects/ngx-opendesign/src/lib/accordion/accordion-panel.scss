@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  font-family: var(--g-font-family);
+  color: var(--g-text);
+}
+:host + :host {
+  border-top: 1px solid var(--g-border);
+}
+
+.g-accordion-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--g-space-3);
+  width: 100%;
+  padding: var(--g-space-3) var(--g-space-4);
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: var(--g-font-size-md);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--g-surface);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+.g-accordion-panel__chevron {
+  flex: none;
+  color: var(--g-text-muted);
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+:host(.g-accordion-panel--open) .g-accordion-panel__chevron {
+  transform: rotate(180deg);
+}
+
+// Animate chiều cao qua grid-template-rows 0fr → 1fr (nội dung trong ô overflow:hidden).
+.g-accordion-panel__region {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--g-duration-base) var(--g-ease);
+}
+:host(.g-accordion-panel--open) .g-accordion-panel__region {
+  grid-template-rows: 1fr;
+}
+// overflow:hidden để 0fr kẹp nội dung (kể cả padding) về 0 khi gập.
+.g-accordion-panel__content {
+  overflow: hidden;
+  padding: var(--g-space-1) var(--g-space-4) var(--g-space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-accordion-panel__region {
+    transition: none;
+  }
+  .g-accordion-panel__chevron {
+    transition: none;
+  }
+}
