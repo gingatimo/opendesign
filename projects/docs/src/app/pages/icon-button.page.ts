@@ -11,9 +11,9 @@ import { IconButtonBasicDemo } from '../demos/icon-button/icon-button-basic.demo
   template: `
     <h1>Icon Button</h1>
     <p>
-      Nút tròn chỉ chứa icon, chiếu vào qua <code>&lt;ng-content&gt;</code> — dùng SVG tự viết (như
-      demo dưới) hoặc <code>&lt;g-icon&gt;</code> từ
-      <a gLink routerLink="/components/icon">icon set có sẵn</a> của OpenDesign.
+      Nút tròn chỉ chứa icon, chiếu vào qua <code>&lt;ng-content&gt;</code> — dùng
+      <code>&lt;g-icon&gt;</code> (như demo dưới) từ
+      <a gLink routerLink="/components/icon">icon set có sẵn</a> của OpenDesign, hoặc SVG tự viết.
     </p>
 
     <docs-demo-section>
