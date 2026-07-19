@@ -278,3 +278,39 @@ export const gIconPanelLeftOpen: GIconGlyph = {
   paths: [PANEL_DIVIDER, 'M14 9l3 3-3 3'],
   rects: [PANEL_RECT],
 };
+
+// ----- Media player -----
+
+export const gIconPlay: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M8 5v14l11-7z'],
+};
+
+export const gIconPause: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M9 5v14', 'M15 5v14'],
+};
+
+// Nón loa dùng chung cho volume/mute — chỉ khác phần sóng/dấu X bên phải (xem lý do gom hằng ở
+// PANEL_RECT phía trên).
+const SPEAKER_CONE = 'M11 5 6 9H2v6h4l5 4z';
+
+export const gIconVolume: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [SPEAKER_CONE, 'M15.54 8.46a5 5 0 0 1 0 7.07', 'M19.07 4.93a10 10 0 0 1 0 14.14'],
+};
+
+export const gIconVolumeMute: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [SPEAKER_CONE, 'M22 9l-6 6', 'M16 9l6 6'],
+};
+
+export const gIconMaximize: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M8 3H5a2 2 0 0 0-2 2v3',
+    'M21 8V5a2 2 0 0 0-2-2h-3',
+    'M3 16v3a2 2 0 0 0 2 2h3',
+    'M16 21h3a2 2 0 0 0 2-2v-3',
+  ],
+};
