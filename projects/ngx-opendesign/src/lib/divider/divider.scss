@@ -1,0 +1,29 @@
+.g-divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-sm);
+}
+.g-divider__line {
+  flex: 1;
+  height: 1px;
+  background: var(--g-border);
+}
+.g-divider__label {
+  padding: 0 var(--g-space-3);
+}
+.g-divider__label:empty {
+  display: none;
+}
+.g-divider--vertical {
+  display: inline-flex;
+  flex-direction: column;
+  width: auto;
+  align-self: stretch;
+}
+.g-divider--vertical .g-divider__line {
+  width: 1px;
+  height: auto;
+  flex: 1;
+}
