@@ -28,7 +28,12 @@ const FOCUSABLE =
   selector: 'g-drawer',
   imports: [CdkTrapFocus],
   template: `
-    <div class="g-drawer__backdrop" (click)="onBackdropClick()"></div>
+    <!--
+      Backdrop là lớp phủ trang trí (aria-hidden nên nằm ngoài a11y tree): click đóng là tiện lợi cho
+      chuột, bàn phím dùng Esc (đã xử ở document — đúng WAI-ARIA dialog). aria-hidden cũng khiến các
+      rule click-phải-kèm-phím bỏ qua scrim, khỏi cần thêm tab-stop vô nghĩa.
+    -->
+    <div class="g-drawer__backdrop" aria-hidden="true" (click)="onBackdropClick()"></div>
     <div
       class="g-drawer__panel"
       role="dialog"
