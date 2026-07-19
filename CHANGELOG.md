@@ -5,7 +5,7 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.9.0] — 2026-07-19
 
 ### Added
 
@@ -168,6 +168,7 @@ pattern, điều hướng bàn phím đầy đủ. Theme sáng/tối qua design 
 - Hạ tầng phát hành: `release.yml` (publish `ngx-opendesign` lên npm kèm provenance khi push tag
   `v*`), `deploy-docs.yml` (deploy docs site lên GitHub Pages khi push nhánh `main`).
 
+[0.9.0]: https://github.com/gingatimo/opendesign/releases/tag/v0.9.0
 [0.8.0]: https://github.com/gingatimo/opendesign/releases/tag/v0.8.0
 [0.7.0]: https://github.com/gingatimo/opendesign/releases/tag/v0.7.0
 [0.6.0]: https://github.com/gingatimo/opendesign/releases/tag/v0.6.0
