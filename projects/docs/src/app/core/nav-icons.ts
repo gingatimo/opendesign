@@ -59,6 +59,14 @@ export type NavIcon =
   | 'stack'
   | 'layout'
   | 'table'
+  | 'scroll-panel'
+  | 'timeline'
+  | 'accordion'
+  | 'input-otp'
+  | 'chips'
+  | 'cascade-select'
+  | 'tree-select'
+  | 'dock-menu'
   | 'playbook';
 
 const VB = '0 0 24 24';
@@ -219,6 +227,62 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   },
   layout: gIconLayout,
   table: gIconTable,
+  'scroll-panel': {
+    viewBox: VB,
+    paths: ['M18 5v14'],
+    rects: [{ x: 3, y: 4, width: 12, height: 16, rx: 2 }],
+  },
+  timeline: {
+    viewBox: VB,
+    paths: ['M6 5v14', 'M11 7h9', 'M11 17h6'],
+    circles: [
+      { cx: 6, cy: 7, r: 2 },
+      { cx: 6, cy: 17, r: 2 },
+    ],
+  },
+  accordion: {
+    viewBox: VB,
+    paths: ['M3 9h18', 'M3 15h18'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
+  },
+  'input-otp': {
+    viewBox: VB,
+    rects: [
+      { x: 2, y: 8, width: 4, height: 8, rx: 1 },
+      { x: 10, y: 8, width: 4, height: 8, rx: 1 },
+      { x: 18, y: 8, width: 4, height: 8, rx: 1 },
+    ],
+  },
+  chips: {
+    viewBox: VB,
+    rects: [
+      { x: 3, y: 6, width: 9, height: 5, rx: 2.5 },
+      { x: 14, y: 6, width: 7, height: 5, rx: 2.5 },
+      { x: 3, y: 14, width: 7, height: 5, rx: 2.5 },
+    ],
+  },
+  'cascade-select': {
+    viewBox: VB,
+    paths: ['M4 7h6M4 12h6M4 17h6', 'M14 8l3 4-3 4'],
+  },
+  'tree-select': {
+    viewBox: VB,
+    paths: ['M5 4v15M5 9h5M5 16h5'],
+    circles: [
+      { cx: 5, cy: 4, r: 1.5 },
+      { cx: 12, cy: 9, r: 1.5 },
+      { cx: 12, cy: 16, r: 1.5 },
+    ],
+  },
+  'dock-menu': {
+    viewBox: VB,
+    rects: [{ x: 2, y: 9, width: 20, height: 8, rx: 3 }],
+    circles: [
+      { cx: 7, cy: 13, r: 1.5 },
+      { cx: 12, cy: 13, r: 1.5 },
+      { cx: 17, cy: 13, r: 1.5 },
+    ],
+  },
   playbook: {
     viewBox: VB,
     rects: [

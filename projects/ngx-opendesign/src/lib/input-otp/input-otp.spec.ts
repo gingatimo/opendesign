@@ -16,7 +16,9 @@ class Host {
 function setup() {
   const f = TestBed.createComponent(Host);
   f.detectChanges();
-  const boxes = f.nativeElement.querySelectorAll('.g-input-otp__box') as NodeListOf<HTMLInputElement>;
+  const boxes = f.nativeElement.querySelectorAll(
+    '.g-input-otp__box',
+  ) as NodeListOf<HTMLInputElement>;
   return { f, boxes };
 }
 

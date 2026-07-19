@@ -25,7 +25,9 @@ class Host {
 function setup() {
   const f = TestBed.createComponent(Host);
   f.detectChanges();
-  const btns = f.nativeElement.querySelectorAll('.g-dock-menu__btn') as NodeListOf<HTMLButtonElement>;
+  const btns = f.nativeElement.querySelectorAll(
+    '.g-dock-menu__btn',
+  ) as NodeListOf<HTMLButtonElement>;
   return { f, btns };
 }
 

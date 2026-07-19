@@ -19,7 +19,9 @@ class Host {
 function setup() {
   const f = TestBed.createComponent(Host);
   f.detectChanges();
-  const headers = f.nativeElement.querySelectorAll('.g-accordion-panel__header') as NodeListOf<HTMLElement>;
+  const headers = f.nativeElement.querySelectorAll(
+    '.g-accordion-panel__header',
+  ) as NodeListOf<HTMLElement>;
   const panels = f.nativeElement.querySelectorAll('g-accordion-panel') as NodeListOf<HTMLElement>;
   return { f, headers, panels };
 }

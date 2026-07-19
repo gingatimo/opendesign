@@ -1,4 +1,11 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+} from '@angular/core';
 
 // Tham chiếu tối giản của một panel để GAccordion điều phối mà không phụ thuộc trực tiếp lớp panel.
 export interface GAccordionPanelRef {

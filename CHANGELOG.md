@@ -5,6 +5,19 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Form**: `GCascadeSelect` (chọn qua danh mục lồng — overlay flyout nhiều cột, chọn lá; CVA).
+- **Form**: `GTreeSelect` (chọn một node từ cây — overlay cây gập/mở, chọn node bất kỳ; CVA).
+- **Form**: `GChips` (nhập nhiều giá trị dạng chip — Enter/dấu phẩy thêm, ×/Backspace xoá, chống trùng; CVA `string[]`).
+- **Form**: `GInputOtp` (nhập mã OTP/PIN — N ô một ký tự, tự nhảy, dán rải, `integerOnly`/`mask`; CVA).
+- **Hiển thị**: `GTimeline` + `GTimelineItem` (dòng thời gian dọc — marker + đường nối, marker tuỳ biến).
+- **Điều hướng**: `GAccordion` + `GAccordionPanel` (panel gập/mở — single-open hoặc `multiple`, animate, ARIA).
+- **Điều hướng**: `GDockMenu` (thanh dock kiểu macOS — icon phóng to khi hover, tooltip, `position` bottom/static).
+- **Cấu trúc**: `GScrollPanel` (vùng cuộn thanh cuộn mảnh theo theme).
+
 ## [0.9.0] — 2026-07-19
 
 ### Added

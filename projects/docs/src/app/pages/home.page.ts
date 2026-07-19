@@ -221,7 +221,7 @@ interface ComponentGroup {
 export default class HomePage {
   protected readonly version = '0.9.0';
   protected readonly angularVersion = 22;
-  protected readonly componentCount = 44;
+  protected readonly componentCount = 52;
 
   protected readonly features: FeatureCard[] = [
     {
@@ -267,7 +267,11 @@ export default class HomePage {
         { path: '/components/file-input', label: 'File Input' },
         { path: '/components/input', label: 'Input' },
         { path: '/components/radio', label: 'Radio' },
+        { path: '/components/cascade-select', label: 'Cascade Select' },
+        { path: '/components/chips', label: 'Chips' },
         { path: '/components/color-picker', label: 'Color Picker' },
+        { path: '/components/input-otp', label: 'Input OTP' },
+        { path: '/components/tree-select', label: 'Tree Select' },
         { path: '/components/date-range-picker', label: 'Date Range Picker' },
         { path: '/components/select', label: 'Select' },
         { path: '/components/slider', label: 'Slider' },
@@ -290,6 +294,7 @@ export default class HomePage {
         { path: '/components/media-player', label: 'Media Player' },
         { path: '/components/progress', label: 'Progress' },
         { path: '/components/skeleton', label: 'Skeleton' },
+        { path: '/components/timeline', label: 'Timeline' },
         { path: '/components/spinner', label: 'Spinner' },
       ],
     },
@@ -305,7 +310,9 @@ export default class HomePage {
     {
       title: 'Điều hướng',
       links: [
+        { path: '/components/accordion', label: 'Accordion' },
         { path: '/components/breadcrumb', label: 'Breadcrumb' },
+        { path: '/components/dock-menu', label: 'Dock Menu' },
         { path: '/components/link', label: 'Link' },
         { path: '/components/menu', label: 'Menu' },
         { path: '/components/pagination', label: 'Pagination' },
@@ -322,6 +329,7 @@ export default class HomePage {
         { path: '/components/grid', label: 'Grid' },
         { path: '/components/stack', label: 'Stack' },
         { path: '/components/layout', label: 'Layout' },
+        { path: '/components/scroll-panel', label: 'Scroll Panel' },
       ],
     },
     {

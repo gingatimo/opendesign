@@ -178,6 +178,46 @@ export const routes: Routes = [
     title: 'Table — OpenDesign',
   },
   {
+    path: 'components/scroll-panel',
+    loadComponent: () => import('./pages/scroll-panel.page'),
+    title: 'Scroll Panel — OpenDesign',
+  },
+  {
+    path: 'components/timeline',
+    loadComponent: () => import('./pages/timeline.page'),
+    title: 'Timeline — OpenDesign',
+  },
+  {
+    path: 'components/accordion',
+    loadComponent: () => import('./pages/accordion.page'),
+    title: 'Accordion — OpenDesign',
+  },
+  {
+    path: 'components/input-otp',
+    loadComponent: () => import('./pages/input-otp.page'),
+    title: 'Input OTP — OpenDesign',
+  },
+  {
+    path: 'components/chips',
+    loadComponent: () => import('./pages/chips.page'),
+    title: 'Chips — OpenDesign',
+  },
+  {
+    path: 'components/cascade-select',
+    loadComponent: () => import('./pages/cascade-select.page'),
+    title: 'Cascade Select — OpenDesign',
+  },
+  {
+    path: 'components/tree-select',
+    loadComponent: () => import('./pages/tree-select.page'),
+    title: 'Tree Select — OpenDesign',
+  },
+  {
+    path: 'components/dock-menu',
+    loadComponent: () => import('./pages/dock-menu.page'),
+    title: 'Dock Menu — OpenDesign',
+  },
+  {
     path: 'components/image-preview',
     loadComponent: () => import('./pages/image-preview.page'),
     title: 'Image Preview — OpenDesign',
