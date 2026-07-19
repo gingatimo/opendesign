@@ -1,43 +1,18 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GIconButton } from 'ngx-opendesign';
+import { GIcon, GIconButton, gIconPlus, gIconSearch, gIconX } from 'ngx-opendesign';
 
 @Component({
   selector: 'docs-icon-button-basic-demo',
-  imports: [GIconButton],
+  imports: [GIconButton, GIcon],
   template: `
     <button g-icon-button aria-label="Thêm mới">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-      >
-        <path d="M12 5v14M5 12h14" />
-      </svg>
+      <g-icon [icon]="iconPlus" />
     </button>
     <button g-icon-button variant="primary" aria-label="Tìm kiếm">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-      >
-        <circle cx="11" cy="11" r="7" />
-        <path d="m21 21-4.3-4.3" />
-      </svg>
+      <g-icon [icon]="iconSearch" />
     </button>
     <button g-icon-button variant="outline" size="lg" aria-label="Đóng">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-      >
-        <path d="M18 6 6 18M6 6l12 12" />
-      </svg>
+      <g-icon [icon]="iconX" size="lg" />
     </button>
   `,
   styles: `
@@ -49,4 +24,8 @@ import { GIconButton } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconButtonBasicDemo {}
+export class IconButtonBasicDemo {
+  protected readonly iconPlus = gIconPlus;
+  protected readonly iconSearch = gIconSearch;
+  protected readonly iconX = gIconX;
+}

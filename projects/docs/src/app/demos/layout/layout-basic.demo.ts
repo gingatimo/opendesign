@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
+  GIcon,
   GIconButton,
+  gIconSettings,
   GLayout,
   GSidebar,
   GSidebarItem,
@@ -10,6 +12,7 @@ import {
   GTopbarEnd,
   GTopbarStart,
 } from 'ngx-opendesign';
+import { iconBell, iconHomeAlt, iconReport } from '../../core/demo-icons';
 
 @Component({
   selector: 'docs-layout-basic-demo',
@@ -23,6 +26,7 @@ import {
     GSidebarItemIcon,
     GSidebarItemLabel,
     GIconButton,
+    GIcon,
   ],
   template: `
     <g-layout>
@@ -30,63 +34,22 @@ import {
         <div gTopbarStart class="brand">Ứng dụng</div>
         <div gTopbarEnd>
           <button g-icon-button aria-label="Thông báo">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.7 21a2 2 0 0 1-3.4 0" />
-            </svg>
+            <g-icon [icon]="iconBell" />
           </button>
         </div>
       </g-topbar>
 
       <g-sidebar>
         <a g-sidebar-item href="#" class="g-active" aria-current="page">
-          <svg
-            gSidebarItemIcon
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-          >
-            <path d="M3 11 12 3l9 8" />
-            <path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10" />
-          </svg>
+          <g-icon gSidebarItemIcon [icon]="iconHome" />
           <span gSidebarItemLabel>Trang chủ</span>
         </a>
         <a g-sidebar-item href="#">
-          <svg
-            gSidebarItemIcon
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-          >
-            <rect x="3" y="10" width="18" height="4" rx="2" />
-            <path d="M3 12h10" />
-          </svg>
+          <g-icon gSidebarItemIcon [icon]="iconReport" />
           <span gSidebarItemLabel>Báo cáo</span>
         </a>
         <a g-sidebar-item href="#">
-          <svg
-            gSidebarItemIcon
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"
-            />
-          </svg>
+          <g-icon gSidebarItemIcon [icon]="iconSettings" />
           <span gSidebarItemLabel>Cài đặt</span>
         </a>
       </g-sidebar>
@@ -155,4 +118,9 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayoutBasicDemo {}
+export class LayoutBasicDemo {
+  protected readonly iconBell = iconBell;
+  protected readonly iconHome = iconHomeAlt;
+  protected readonly iconReport = iconReport;
+  protected readonly iconSettings = gIconSettings;
+}

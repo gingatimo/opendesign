@@ -9,6 +9,8 @@ import { GAvatar } from 'ngx-opendesign';
     <g-avatar name="Trần Thị Bình" />
     <g-avatar name="Lê Hoàng Cường" size="lg" />
     <g-avatar name="Ảnh lỗi" src="/khong-ton-tai.jpg" />
+    <g-avatar name="Phạm Vuông" shape="square" />
+    <g-avatar name="Đỗ Vuông Lớn" shape="square" size="lg" />
   `,
   styles: `
     :host {

@@ -3,7 +3,13 @@ import {
   GBadge,
   GCard,
   GCardHeader,
+  GIcon,
   GIconButton,
+  gIconCart,
+  gIconMenu,
+  gIconPanelLeftClose,
+  gIconPanelLeftOpen,
+  gIconUser,
   GProgress,
   GSidebar,
   GSidebarItem,
@@ -13,6 +19,7 @@ import {
   GTopbarEnd,
   GTopbarStart,
 } from 'ngx-opendesign';
+import { iconBell } from '../../core/demo-icons';
 
 @Component({
   selector: 'docs-dashboard-layout-demo',
@@ -25,6 +32,7 @@ import {
     GSidebarItemIcon,
     GSidebarItemLabel,
     GIconButton,
+    GIcon,
     GCard,
     GCardHeader,
     GBadge,
@@ -41,36 +49,13 @@ import {
             [attr.aria-label]="collapsed() ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên'"
             (click)="collapsed.set(!collapsed())"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <path d="M9 3v18" />
-              @if (collapsed()) {
-                <path d="M14 9l3 3-3 3" />
-              } @else {
-                <path d="M16 15l-3-3 3-3" />
-              }
-            </svg>
+            <g-icon [icon]="collapsed() ? iconPanelOpen : iconPanelClose" size="sm" />
           </button>
           <span class="dashboard-layout-demo__brand">Acme Inc.</span>
         </div>
         <div gTopbarEnd>
           <button g-icon-button aria-label="Thông báo" size="sm">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.7 21a2 2 0 0 1-3.4 0" />
-            </svg>
+            <g-icon [icon]="iconBell" size="sm" />
           </button>
         </div>
       </g-topbar>
@@ -78,45 +63,15 @@ import {
       <div class="dashboard-layout-demo__body">
         <g-sidebar [(collapsed)]="collapsed">
           <a g-sidebar-item href="#" class="g-active" aria-current="page">
-            <svg
-              gSidebarItemIcon
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M3 12h18M3 6h18M3 18h18" />
-            </svg>
+            <g-icon gSidebarItemIcon [icon]="iconMenu" />
             <span gSidebarItemLabel>Tổng quan</span>
           </a>
           <a g-sidebar-item href="#">
-            <svg
-              gSidebarItemIcon
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <circle cx="9" cy="21" r="1" />
-              <circle cx="20" cy="21" r="1" />
-              <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-            </svg>
+            <g-icon gSidebarItemIcon [icon]="iconCart" />
             <span gSidebarItemLabel>Đơn hàng</span>
           </a>
           <a g-sidebar-item href="#">
-            <svg
-              gSidebarItemIcon
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M20 21a8 8 0 1 0-16 0" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+            <g-icon gSidebarItemIcon [icon]="iconUser" />
             <span gSidebarItemLabel>Khách hàng</span>
           </a>
         </g-sidebar>
@@ -198,4 +153,10 @@ import {
 })
 export class DashboardLayoutDemo {
   protected readonly collapsed = signal(false);
+  protected readonly iconPanelOpen = gIconPanelLeftOpen;
+  protected readonly iconPanelClose = gIconPanelLeftClose;
+  protected readonly iconBell = iconBell;
+  protected readonly iconMenu = gIconMenu;
+  protected readonly iconCart = gIconCart;
+  protected readonly iconUser = gIconUser;
 }
