@@ -8,9 +8,12 @@ import {
   GIcon,
   GIconButton,
   GInput,
+  GInputGroup,
+  GInputSuffix,
   GPagination,
   GSortHeader,
   GTable,
+  GTableContainer,
   gIconEdit,
   gIconSearch,
   gIconTrash,
@@ -59,8 +62,11 @@ const PAGE_SIZE = 5;
   selector: 'docs-list-page-demo',
   imports: [
     GInput,
+    GInputGroup,
+    GInputSuffix,
     GBadge,
     GTable,
+    GTableContainer,
     GSortHeader,
     GFreezeColumn,
     GFreezeRow,
@@ -71,8 +77,7 @@ const PAGE_SIZE = 5;
   ],
   template: `
     <div class="list-page-demo__toolbar">
-      <div class="list-page-demo__search">
-        <g-icon [icon]="iconSearch" size="sm" />
+      <g-input-group class="list-page-demo__search">
         <input
           gInput
           type="text"
@@ -80,7 +85,8 @@ const PAGE_SIZE = 5;
           [value]="search()"
           (input)="search.set($any($event.target).value)"
         />
-      </div>
+        <g-icon gInputSuffix [icon]="iconSearch" size="sm" />
+      </g-input-group>
 
       <div class="list-page-demo__status-filter" role="group" aria-label="Lọc theo trạng thái">
         <button
@@ -122,9 +128,7 @@ const PAGE_SIZE = 5;
       </div>
     </div>
 
-    <div
-      style="overflow: auto; border: 1px solid var(--g-border); border-radius: var(--g-radius-md)"
-    >
+    <g-table-container [minRows]="pageSize">
       <table gTable [striped]="true">
         <thead>
           <tr gFreezeRow>
@@ -164,7 +168,7 @@ const PAGE_SIZE = 5;
           }
         </tbody>
       </table>
-    </div>
+    </g-table-container>
 
     <div class="list-page-demo__pagination">
       <g-pagination [(page)]="page" [pageCount]="pageCount()" />
@@ -182,15 +186,13 @@ const PAGE_SIZE = 5;
       margin-bottom: var(--g-space-3);
     }
     .list-page-demo__search {
-      display: flex;
-      align-items: center;
-      gap: var(--g-space-2);
       flex: 1;
       min-width: 200px;
-      color: var(--g-text-muted);
     }
-    .list-page-demo__search input {
-      flex: 1;
+    /* Icon kính lúp ở suffix là trang trí -> tô nhạt như placeholder (GInputGroup chỉ tự làm mờ
+       prefix, giả định suffix là nút tự quản màu). */
+    .list-page-demo__search [gInputSuffix] {
+      color: var(--g-text-muted);
     }
     .list-page-demo__status-filter {
       display: flex;
@@ -238,6 +240,7 @@ export class ListPageDemo {
   protected readonly sortDir = signal<'asc' | 'desc' | null>(null);
   protected readonly page = signal(1);
 
+  protected readonly pageSize = PAGE_SIZE;
   protected readonly iconEdit = gIconEdit;
   protected readonly iconTrash = gIconTrash;
   protected readonly iconSearch = gIconSearch;

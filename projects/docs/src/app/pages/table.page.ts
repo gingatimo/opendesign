@@ -4,9 +4,17 @@ import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { TableAdvancedDemo } from '../demos/table/table-advanced.demo';
 import { TableBasicDemo } from '../demos/table/table-basic.demo';
+import { TableContainerDemo } from '../demos/table/table-container.demo';
 
 @Component({
-  imports: [TableBasicDemo, TableAdvancedDemo, CodeBlock, ApiTable, DemoSection],
+  imports: [
+    TableBasicDemo,
+    TableAdvancedDemo,
+    TableContainerDemo,
+    CodeBlock,
+    ApiTable,
+    DemoSection,
+  ],
   template: `
     <h1>Table</h1>
     <p>
@@ -52,8 +60,41 @@ import { TableBasicDemo } from '../demos/table/table-basic.demo';
 
     <docs-code-block src="demo-sources/table/table-advanced.demo.ts" />
 
+    <h2>Vùng cuộn — chiều cao theo số hàng</h2>
+    <p>
+      Bọc <code>&lt;table gTable&gt;</code> trong <code>&lt;g-table-container&gt;</code> để có sẵn
+      viền, bo góc và vùng cuộn, đồng thời ràng buộc chiều cao theo <b>số hàng</b> thay vì px thủ
+      công:
+    </p>
+    <ul>
+      <li>
+        <code>[minRows]</code> — giữ tối thiểu bấy nhiêu hàng chiều cao. Danh sách lọc/phân trang có
+        lúc ngắn hơn một trang; đặt <code>minRows</code> bằng số hàng mỗi trang thì bảng
+        <b>không co giật</b> khi kết quả ngắn lại (kể cả khi rỗng).
+      </li>
+      <li>
+        <code>[maxRows]</code> — vượt quá bấy nhiêu hàng thì <b>tự cuộn dọc</b>. Kết hợp
+        <code>[stickyHeader]</code> của <code>gTable</code> để giữ hàng tiêu đề khi cuộn (như demo
+        dưới).
+      </li>
+    </ul>
+    <p>
+      Số hàng được quy ra chiều cao thực bằng cách đo lúc chạy (chiều cao
+      <code>&lt;thead&gt;</code> + N × chiều cao một hàng) và đo lại khi resize hoặc đổi nội dung —
+      nên hàng cao thấp khác nhau vẫn ra đúng.
+    </p>
+
+    <docs-demo-section>
+      <docs-table-container-demo />
+    </docs-demo-section>
+
+    <docs-code-block src="demo-sources/table/table-container.demo.ts" />
+
     <h2>API — GTable</h2>
     <docs-api-table [rows]="apiRows" />
+
+    <h2>API — GTableContainer</h2>
+    <docs-api-table [rows]="containerApiRows" />
 
     <h2>Accessibility</h2>
     <p>
@@ -103,6 +144,22 @@ export default class TablePage {
       type: 'marker',
       default: '—',
       description: 'Đặt trên một <tr>: các hàng từ đỉnh tới hàng đó dính (sticky) khi cuộn dọc.',
+    },
+  ];
+
+  protected readonly containerApiRows: ApiRow[] = [
+    {
+      name: 'minRows',
+      type: 'number',
+      default: '0',
+      description:
+        'Giữ tối thiểu bấy nhiêu hàng chiều cao (0 = không đặt) — chống giật khi kết quả ngắn lại.',
+    },
+    {
+      name: 'maxRows',
+      type: 'number',
+      default: '0',
+      description: 'Tối đa bấy nhiêu hàng; vượt quá thì cuộn dọc (0 = không giới hạn).',
     },
   ];
 }

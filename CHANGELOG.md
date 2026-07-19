@@ -18,6 +18,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Điều hướng**: `GAccordion` + `GAccordionPanel` (panel gập/mở — single-open hoặc `multiple`, animate, ARIA).
 - **Điều hướng**: `GDockMenu` (thanh dock kiểu macOS — icon phóng to khi hover, tooltip, `position` bottom/static).
 - **Cấu trúc**: `GScrollPanel` (vùng cuộn thanh cuộn mảnh theo theme).
+- **Cấu trúc**: `GTableContainer` (vùng cuộn bao `<table gTable>` — viền/bo góc + `minRows`/`maxRows`
+  quy chiều cao theo số hàng: `minRows` chống giật khi kết quả ngắn lại, `maxRows` tự cuộn khi dài).
 
 ### Changed
 
