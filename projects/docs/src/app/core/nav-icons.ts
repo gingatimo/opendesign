@@ -1,4 +1,11 @@
-import type { GIconGlyph } from 'ngx-opendesign';
+import {
+  type GIconGlyph,
+  gIconGrid,
+  gIconImage,
+  gIconLayout,
+  gIconLink,
+  gIconTable,
+} from 'ngx-opendesign';
 
 // Kiểu icon nav — định nghĩa ở đây để nav-icons.ts và app.ts dùng chung (tránh vòng import).
 export type NavIcon =
@@ -110,12 +117,7 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   avatar: { viewBox: VB, paths: ['M20 21a8 8 0 1 0-16 0'], circles: [{ cx: 12, cy: 7, r: 4 }] },
   card: { viewBox: VB, paths: ['M3 10h18'], rects: [{ x: 3, y: 5, width: 18, height: 14, rx: 2 }] },
   icon: { viewBox: VB, paths: ['M12 2l2 7 7 2-7 2-2 7-2-7-7-2 7-2z'] },
-  'image-preview': {
-    viewBox: VB,
-    paths: ['M21 15l-5-5L5 21'],
-    circles: [{ cx: 8.5, cy: 8.5, r: 1.5 }],
-    rects: [{ x: 3, y: 3, width: 18, height: 18, rx: 2 }],
-  },
+  'image-preview': gIconImage,
   'image-slider': {
     viewBox: VB,
     paths: ['M7 10l-2 2 2 2', 'M17 10l2 2-2 2'],
@@ -123,15 +125,7 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   },
   divider: { viewBox: VB, paths: ['M3 12h18', 'M6 7h4', 'M14 17h4'] },
   fab: { viewBox: VB, paths: ['M12 8v8M8 12h8'], circles: [{ cx: 12, cy: 12, r: 9 }] },
-  grid: {
-    viewBox: VB,
-    rects: [
-      { x: 3, y: 3, width: 7, height: 7, rx: 1 },
-      { x: 14, y: 3, width: 7, height: 7, rx: 1 },
-      { x: 3, y: 14, width: 7, height: 7, rx: 1 },
-      { x: 14, y: 14, width: 7, height: 7, rx: 1 },
-    ],
-  },
+  grid: gIconGrid,
   datepicker: {
     viewBox: VB,
     paths: ['M16 2v4M8 2v4M3 10h18'],
@@ -175,13 +169,7 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     paths: ['M10 4v16'],
     rects: [{ x: 4, y: 4, width: 16, height: 16, rx: 2 }],
   },
-  link: {
-    viewBox: VB,
-    paths: [
-      'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71',
-      'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
-    ],
-  },
+  link: gIconLink,
   pagination: { viewBox: VB, paths: ['M4 12h2m4 0h2m4 0h2', 'M5 8l-3 4 3 4M19 8l3 4-3 4'] },
   container: {
     viewBox: VB,
@@ -198,16 +186,8 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { x: 4, y: 17, width: 16, height: 4, rx: 1 },
     ],
   },
-  layout: {
-    viewBox: VB,
-    paths: ['M3 9h18', 'M9 9v12'],
-    rects: [{ x: 3, y: 3, width: 18, height: 18, rx: 2 }],
-  },
-  table: {
-    viewBox: VB,
-    paths: ['M3 10h18M9 10v10'],
-    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
-  },
+  layout: gIconLayout,
+  table: gIconTable,
   playbook: {
     viewBox: VB,
     rects: [

@@ -10,13 +10,19 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 ### Added
 
 - **Hiển thị**: `GAvatar` thêm `shape: 'circle' | 'square'` (vuông bo góc nhẹ `--g-radius-md`).
+- **Overlay**: `GToast` thêm `title` tuỳ chọn (hiển thị đậm trên message; screen reader đọc cả hai).
+- **Icon**: thêm 7 icon vào bộ public (32 → 39): `gIconBell`, `gIconCopy`, `gIconLink`, `gIconImage`,
+  `gIconGrid`, `gIconLayout`, `gIconTable`.
 
 ### Changed
 
+- **GButton**: variant `danger` nay là **outline mặc định**, hover mới tô đặc (nhẹ nhàng hơn cho hành
+  động phá huỷ).
 - **GFileInput**: khi chỉ có 1 tệp trong danh sách, gom dòng sát trái để nút xoá nằm cạnh tên (nhiều
   tệp vẫn dàn đều).
 - **Docs**: mọi icon trong docs (nav sidebar + demo) chuyển sang dùng `<g-icon>` với glyph docs-local
-  (`core/nav-icons.ts`, `core/demo-icons.ts`) thay cho inline `<svg>` — dogfood chính `GIcon`.
+  (`core/nav-icons.ts`, `core/demo-icons.ts`) thay cho inline `<svg>` — dogfood chính `GIcon`. Trang
+  Icon: bấm vào ô để copy tên hằng.
 
 ## [0.5.0] — 2026-07-19
 
