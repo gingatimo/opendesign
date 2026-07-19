@@ -27,11 +27,7 @@ const POSITIONS: ConnectedPosition[] = [
 
 // Bỏ dấu tiếng Việt để tìm không dấu-nhạy: "cam" khớp "Cam", "da" khớp "Đà".
 function normalize(s: string): string {
-  return s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/đ/g, 'd');
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
 }
 
 @Component({
@@ -40,7 +36,7 @@ function normalize(s: string): string {
   template: `
     <div class="g-select__trigger-content">
       @if (multiple() && selectedOptions().length > 0) {
-        <span class="g-select__chips" (click)="$event.stopPropagation()">
+        <span class="g-select__chips">
           @for (opt of selectedOptions(); track opt.id) {
             <g-chip removable [removeLabel]="'Bỏ ' + opt.getLabel()" (removed)="removeChip(opt)">
               {{ opt.getLabel() }}
@@ -106,7 +102,7 @@ function normalize(s: string): string {
     '[class.g-select--disabled]': 'disabled()',
     '[class.g-select--open]': 'open()',
     '[class.g-select--multiple]': 'multiple()',
-    '(click)': 'onTriggerClick()',
+    '(click)': 'onTriggerClick($event)',
     '(keydown)': 'onKeydown($event)',
     '(blur)': 'onTouchedFn()',
   },
@@ -232,8 +228,10 @@ export class GSelect implements ControlValueAccessor {
     this.elementRef.nativeElement.focus();
   }
 
-  protected onTriggerClick(): void {
+  protected onTriggerClick(event: MouseEvent): void {
     if (this.disabled()) return;
+    // Click vào vùng chips (kể cả nút bỏ chip) không mở/đóng panel — để nút × của GChip xử lý riêng.
+    if ((event.target as HTMLElement).closest('.g-select__chips')) return;
     if (this.open()) {
       this.close();
     } else {
