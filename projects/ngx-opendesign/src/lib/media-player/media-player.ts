@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
+import { GSlider } from '../slider/slider';
 import {
   gIconMaximize,
   gIconPause,
@@ -25,7 +26,7 @@ export type GMediaType = 'audio' | 'video';
 // brand — play/pause, thời gian, thanh seek, mute + volume, fullscreen (chỉ video). Consumer cấp src.
 @Component({
   selector: 'g-media-player',
-  imports: [GIcon],
+  imports: [GIcon, GSlider],
   template: `
     <div class="g-media-player__stage">
       @if (type() === 'video') {
@@ -93,15 +94,14 @@ export type GMediaType = 'audio' | 'video';
         <g-icon [icon]="isMuted() ? iconVolumeMute : iconVolume" size="sm" />
       </button>
 
-      <input
-        type="range"
+      <g-slider
         class="g-media-player__volume"
         min="0"
         max="1"
         step="0.05"
         [value]="isMuted() ? 0 : volume()"
-        aria-label="Âm lượng"
-        (input)="onVolumeInput($event)"
+        ariaLabel="Âm lượng"
+        (valueChange)="onVolume($event)"
       />
 
       @if (type() === 'video') {
@@ -173,10 +173,9 @@ export class GMediaPlayer {
     if (el) el.muted = !el.muted;
   }
 
-  protected onVolumeInput(event: Event): void {
+  protected onVolume(v: number): void {
     const el = this.media()?.nativeElement;
     if (!el) return;
-    const v = (event.target as HTMLInputElement).valueAsNumber;
     el.volume = v;
     el.muted = v === 0;
   }

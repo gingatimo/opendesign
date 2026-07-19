@@ -47,12 +47,13 @@ describe('GMediaPlayer', () => {
     expect(playBtn.getAttribute('aria-label')).toBe('Phát');
   });
 
-  it('có thanh seek + volume với aria-label', () => {
+  it('có thanh seek + volume (GSlider) với aria-label', () => {
     const { hostEl } = setup('audio');
     const seek = hostEl.querySelector('.g-media-player__seek');
-    const volume = hostEl.querySelector('.g-media-player__volume');
+    // Âm lượng nay là <g-slider>; nhãn nằm trên input bên trong.
+    const volumeInput = hostEl.querySelector('.g-media-player__volume .g-slider__input');
     expect(seek?.getAttribute('aria-label')).toBe('Tua');
-    expect(volume?.getAttribute('aria-label')).toBe('Âm lượng');
+    expect(volumeInput?.getAttribute('aria-label')).toBe('Âm lượng');
   });
 
   it('thời gian hiển thị 0:00 / 0:00 khi mới tải', () => {

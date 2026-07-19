@@ -61,21 +61,16 @@
   }
 }
 
-// ----- thanh trượt (seek + volume) -----
-.g-media-player__seek,
-.g-media-player__volume {
+// ----- thanh tua (seek) — input[type=range] riêng vì có fill % theo currentTime -----
+.g-media-player__seek {
   appearance: none;
   -webkit-appearance: none;
-  height: 6px;
-  border-radius: var(--g-radius-pill);
-  background: var(--g-border);
-  cursor: pointer;
-  outline: none;
-}
-
-.g-media-player__seek {
   flex: 1;
   min-width: 80px;
+  height: 6px;
+  border-radius: var(--g-radius-pill);
+  cursor: pointer;
+  outline: none;
   // Tô phần đã phát bằng gradient hai chặng tại --g-seek-fill (binding từ component).
   background: linear-gradient(
     to right,
@@ -84,13 +79,7 @@
   );
 }
 
-.g-media-player__volume {
-  flex: none;
-  width: 72px;
-}
-
-.g-media-player__seek::-webkit-slider-thumb,
-.g-media-player__volume::-webkit-slider-thumb {
+.g-media-player__seek::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
   width: 14px;
@@ -100,8 +89,7 @@
   border: 2px solid var(--g-surface-raised);
   cursor: pointer;
 }
-.g-media-player__seek::-moz-range-thumb,
-.g-media-player__volume::-moz-range-thumb {
+.g-media-player__seek::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border: 2px solid var(--g-surface-raised);
@@ -109,10 +97,14 @@
   background: var(--g-primary);
   cursor: pointer;
 }
-
-.g-media-player__seek:focus-visible,
-.g-media-player__volume:focus-visible {
+.g-media-player__seek:focus-visible {
   box-shadow: var(--g-focus-ring);
+}
+
+// ----- âm lượng: nay là <g-slider>, chỉ cần định chiều rộng -----
+.g-media-player__volume {
+  flex: none;
+  width: 72px;
 }
 
 // ----- fullscreen (chỉ video): host là phần tử fullscreen, giữ control bar tuỳ biến hiển thị -----
