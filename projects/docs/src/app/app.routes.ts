@@ -178,6 +178,26 @@ export const routes: Routes = [
     title: 'Image Slider — OpenDesign',
   },
   {
+    path: 'components/divider',
+    loadComponent: () => import('./pages/divider.page'),
+    title: 'Divider — OpenDesign',
+  },
+  {
+    path: 'components/fab',
+    loadComponent: () => import('./pages/fab.page'),
+    title: 'Fab — OpenDesign',
+  },
+  {
+    path: 'components/grid',
+    loadComponent: () => import('./pages/grid.page'),
+    title: 'Grid — OpenDesign',
+  },
+  {
+    path: 'components/datepicker',
+    loadComponent: () => import('./pages/datepicker.page'),
+    title: 'Datepicker — OpenDesign',
+  },
+  {
     path: 'playbook',
     loadComponent: () => import('./pages/playbook.page'),
     title: 'Playbook — OpenDesign',

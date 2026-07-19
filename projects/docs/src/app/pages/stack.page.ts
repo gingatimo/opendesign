@@ -3,9 +3,10 @@ import { ApiRow, ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { StackBasicDemo } from '../demos/layout/stack-basic.demo';
+import { StackWrapDemo } from '../demos/layout/stack-wrap.demo';
 
 @Component({
-  imports: [StackBasicDemo, CodeBlock, ApiTable, DemoSection],
+  imports: [StackBasicDemo, StackWrapDemo, CodeBlock, ApiTable, DemoSection],
   template: `
     <h1>Stack</h1>
     <p>
@@ -19,6 +20,16 @@ import { StackBasicDemo } from '../demos/layout/stack-basic.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/layout/stack-basic.demo.ts" />
+
+    <h2>Wrap &amp; căn chỉnh</h2>
+    <p>
+      Xếp ngang với <code>[wrap]="true"</code> để các phần tử tự xuống dòng khi hết chỗ; kết hợp
+      <code>align</code>/<code>justify</code> để căn theo hai trục.
+    </p>
+    <docs-demo-section>
+      <docs-stack-wrap-demo />
+    </docs-demo-section>
+    <docs-code-block src="demo-sources/layout/stack-wrap.demo.ts" />
 
     <h2>API — GStack</h2>
     <docs-api-table [rows]="apiRows" />
@@ -56,6 +67,12 @@ export default class StackPage {
       type: 'string',
       default: '—',
       description: 'Giá trị CSS justify-content tuỳ chọn.',
+    },
+    {
+      name: 'wrap',
+      type: 'boolean',
+      default: 'false',
+      description: 'Cho phép xuống dòng (flex-wrap: wrap) khi các phần tử tràn khỏi trục chính.',
     },
   ];
 }

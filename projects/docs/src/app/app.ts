@@ -38,6 +38,10 @@ type NavIcon =
   | 'icon'
   | 'image-preview'
   | 'image-slider'
+  | 'divider'
+  | 'fab'
+  | 'grid'
+  | 'datepicker'
   | 'dialog'
   | 'tooltip'
   | 'toast'
@@ -110,6 +114,7 @@ export class App {
       links: sortByLabel([
         { path: '/components/button', label: 'Button', icon: 'button' },
         { path: '/components/icon-button', label: 'Icon Button', icon: 'icon-button' },
+        { path: '/components/fab', label: 'Fab', icon: 'fab' },
       ]),
     },
     {
@@ -122,6 +127,7 @@ export class App {
         { path: '/components/radio', label: 'Radio', icon: 'radio' },
         { path: '/components/select', label: 'Select', icon: 'select' },
         { path: '/components/file-input', label: 'File Input', icon: 'file-input' },
+        { path: '/components/datepicker', label: 'Datepicker', icon: 'datepicker' },
       ]),
     },
     {
@@ -136,6 +142,7 @@ export class App {
         { path: '/components/icon', label: 'Icon', icon: 'icon' },
         { path: '/components/image-preview', label: 'Image Preview', icon: 'image-preview' },
         { path: '/components/image-slider', label: 'Image Slider', icon: 'image-slider' },
+        { path: '/components/divider', label: 'Divider', icon: 'divider' },
       ]),
     },
     {
@@ -162,6 +169,7 @@ export class App {
       links: sortByLabel([
         { path: '/components/container', label: 'Container', icon: 'container' },
         { path: '/components/stack', label: 'Stack', icon: 'stack' },
+        { path: '/components/grid', label: 'Grid', icon: 'grid' },
         { path: '/components/layout', label: 'Layout', icon: 'layout' },
       ]),
     },

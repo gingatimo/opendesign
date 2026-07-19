@@ -3,9 +3,10 @@ import { ApiRow, ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { StepperBasicDemo } from '../demos/stepper/stepper-basic.demo';
+import { StepperVerticalDemo } from '../demos/stepper/stepper-vertical.demo';
 
 @Component({
-  imports: [StepperBasicDemo, CodeBlock, ApiTable, DemoSection],
+  imports: [StepperBasicDemo, StepperVerticalDemo, CodeBlock, ApiTable, DemoSection],
   template: `
     <h1>Stepper</h1>
     <p>
@@ -19,6 +20,16 @@ import { StepperBasicDemo } from '../demos/stepper/stepper-basic.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/stepper/stepper-basic.demo.ts" />
+
+    <h2>Dọc</h2>
+    <p>
+      Đặt <code>orientation="vertical"</code>: các bước xếp chồng dọc, có đường nối dọc giữa các
+      circle, nội dung bước đang chọn hiện ngay dưới header của bước đó.
+    </p>
+    <docs-demo-section>
+      <docs-stepper-vertical-demo />
+    </docs-demo-section>
+    <docs-code-block src="demo-sources/stepper/stepper-vertical.demo.ts" />
 
     <h2>API — GStepper, GStep</h2>
     <docs-api-table [rows]="apiRows" />
