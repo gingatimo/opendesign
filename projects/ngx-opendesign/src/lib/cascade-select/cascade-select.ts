@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -6,6 +7,7 @@ import {
   inject,
   input,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -105,7 +107,7 @@ function findPath(
     '[class.g-cascade-select--open]': 'open()',
     '(click)': 'onTriggerClick()',
     '(keydown)': 'onTriggerKeydown($event)',
-    '(blur)': 'onTouchedFn()',
+    '(blur)': 'onBlur($event)',
   },
   styleUrl: './cascade-select.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -132,8 +134,24 @@ export class GCascadeSelect implements ControlValueAccessor {
   private onChange: (value: unknown) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
 
+  // Ô cần focus sau lần render tới. Zoneless render ở macrotask nên KHÔNG dùng queueMicrotask (chạy
+  // trước render → panel/cột chưa tồn tại); dùng afterRenderEffect như GTreeSelect.
+  private readonly focusPending = signal<{ col: number; row: number } | null>(null);
+
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
+    afterRenderEffect(() => {
+      const target = this.focusPending();
+      if (!this.open() || !target) return;
+      untracked(() => {
+        this.focusCell(target.col, target.row);
+        this.focusPending.set(null);
+      });
+    });
+  }
+
+  private requestFocus(col: number, row: number): void {
+    this.focusPending.set({ col, row });
   }
 
   protected readonly columns = computed(() => {
@@ -163,8 +181,7 @@ export class GCascadeSelect implements ControlValueAccessor {
   protected onClick(ci: number, opt: GCascadeOption): void {
     if (opt.children?.length) {
       this.expand(ci, opt);
-      // focus item đầu cột con sau khi render
-      queueMicrotask(() => this.focusCell(ci + 1, 0));
+      this.requestFocus(ci + 1, 0); // focus item đầu cột con sau khi render
     } else {
       this.valueSignal.set(opt.value);
       this.onChange(opt.value);
@@ -183,7 +200,7 @@ export class GCascadeSelect implements ControlValueAccessor {
     if (!this.open() && (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown')) {
       event.preventDefault();
       this.openPanel();
-      queueMicrotask(() => this.focusCell(0, 0));
+      this.requestFocus(0, 0);
     } else if (event.key === 'Escape') {
       this.close();
     }
@@ -195,13 +212,19 @@ export class GCascadeSelect implements ControlValueAccessor {
       this.valueSignal() != null
         ? findPath(this.options(), this.valueSignal(), this.compareWith())
         : null;
-    this.path.set(p ? p.slice(0, -1) : []);
+    this.path.set(p ?? []);
     this.open.set(true);
   }
 
   close(): void {
     this.open.set(false);
     this.elementRef.nativeElement.focus({ preventScroll: true });
+  }
+
+  // Không đánh dấu touched khi focus chuyển vào panel (overlay) — chỉ khi rời hẳn control.
+  protected onBlur(event: FocusEvent): void {
+    if (this.panel()?.nativeElement.contains(event.relatedTarget as Node)) return;
+    this.onTouchedFn();
   }
 
   protected onKeydown(event: KeyboardEvent): void {
@@ -230,7 +253,7 @@ export class GCascadeSelect implements ControlValueAccessor {
         const opt = cols[col][row];
         if (opt.children?.length) {
           this.expand(col, opt);
-          queueMicrotask(() => this.focusCell(col + 1, 0));
+          this.requestFocus(col + 1, 0);
         }
         event.preventDefault();
         break;
@@ -238,7 +261,7 @@ export class GCascadeSelect implements ControlValueAccessor {
       case 'ArrowLeft':
         if (col > 0) {
           this.path.set(this.path().slice(0, col));
-          queueMicrotask(() => this.focusCell(col - 1, 0));
+          this.requestFocus(col - 1, 0);
         }
         event.preventDefault();
         break;

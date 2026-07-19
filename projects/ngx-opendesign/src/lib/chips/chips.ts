@@ -32,7 +32,7 @@ import { GChip } from '../chip/chip';
         type="text"
         class="g-chips__input"
         [placeholder]="chips().length ? '' : placeholder()"
-        [disabled]="disabled() || atMax()"
+        [disabled]="disabled()"
         aria-label="Thêm mục"
         (keydown)="onKeydown($event)"
         (blur)="onTouchedFn()"

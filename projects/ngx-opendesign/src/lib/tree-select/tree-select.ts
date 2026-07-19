@@ -116,7 +116,7 @@ function findLabel(
     '[class.g-tree-select--open]': 'open()',
     '(click)': 'onTriggerClick()',
     '(keydown)': 'onTriggerKeydown($event)',
-    '(blur)': 'onTouchedFn()',
+    '(blur)': 'onBlur($event)',
   },
   styleUrl: './tree-select.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -228,6 +228,12 @@ export class GTreeSelect implements ControlValueAccessor {
   close(): void {
     this.open.set(false);
     this.elementRef.nativeElement.focus({ preventScroll: true });
+  }
+
+  // Không đánh dấu touched khi focus chuyển vào panel (overlay) — chỉ khi rời hẳn control.
+  protected onBlur(event: FocusEvent): void {
+    if (this.panel()?.nativeElement.contains(event.relatedTarget as Node)) return;
+    this.onTouchedFn();
   }
 
   protected onKeydown(event: KeyboardEvent, idx: number, row: Row): void {
