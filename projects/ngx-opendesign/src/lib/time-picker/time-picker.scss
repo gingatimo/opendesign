@@ -1,0 +1,88 @@
+:host {
+  display: inline-block;
+}
+
+.g-timepicker__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--g-space-2);
+  min-width: 120px;
+  padding: var(--g-space-2) var(--g-space-3);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  cursor: pointer;
+
+  &:hover:not(:disabled):not(:focus-visible) {
+    border-color: var(--g-border-strong);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.g-timepicker__value--placeholder {
+  color: var(--g-text-muted);
+}
+
+.g-timepicker__panel {
+  display: flex;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-md);
+}
+
+.g-timepicker__col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 56px;
+  max-height: 208px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.g-timepicker__opt {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--g-radius-pill);
+  background: transparent;
+  color: var(--g-text);
+  font-size: var(--g-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--g-surface);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+.g-timepicker__opt--selected {
+  background: var(--g-primary);
+  color: var(--g-on-primary);
+
+  &:hover {
+    background: var(--g-primary-hover);
+  }
+}

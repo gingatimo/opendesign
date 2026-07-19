@@ -53,3 +53,4 @@ export * from './lib/menu/submenu';
 export * from './lib/drawer/drawer';
 export * from './lib/media-player/media-player';
 export * from './lib/slider/slider';
+export * from './lib/time-picker/time-picker';
