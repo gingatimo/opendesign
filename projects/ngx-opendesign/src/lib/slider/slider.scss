@@ -10,11 +10,16 @@
   border-radius: var(--g-radius-pill);
   cursor: pointer;
   outline: none;
-  // Tô phần đã chọn bằng gradient hai chặng tại --g-slider-fill (binding từ component).
-  background: linear-gradient(
-    to right,
-    var(--g-primary) var(--g-slider-fill, 0%),
-    var(--g-border) var(--g-slider-fill, 0%)
+  // Mặc định tô phần đã chọn bằng gradient hai chặng tại --g-slider-fill. Cho phép consumer thay
+  // hẳn nền track qua --g-slider-track (vd. GColorPicker đặt dải cầu vồng cho thanh Hue) — không đặt
+  // thì giữ nguyên hành vi fill.
+  background: var(
+    --g-slider-track,
+    linear-gradient(
+      to right,
+      var(--g-primary) var(--g-slider-fill, 0%),
+      var(--g-border) var(--g-slider-fill, 0%)
+    )
   );
 
   &:disabled {

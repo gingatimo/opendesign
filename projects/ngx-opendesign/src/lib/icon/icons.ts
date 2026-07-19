@@ -314,3 +314,10 @@ export const gIconMaximize: GIconGlyph = {
     'M16 21h3a2 2 0 0 0 2-2v-3',
   ],
 };
+
+// Đồng hồ — vòng tròn + 2 kim (dùng cho GTimePicker).
+export const gIconClock: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M12 7v5l3 2'],
+  circles: [{ cx: 12, cy: 12, r: 9 }],
+};

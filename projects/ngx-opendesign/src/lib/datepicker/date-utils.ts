@@ -48,6 +48,14 @@ export function inRange(d: Date, min?: Date, max?: Date): boolean {
   return true;
 }
 
+// d nằm HẲN GIỮA a và b theo ngày (không tính hai biên). Dùng cho tô dải date-range. a/b null → false.
+export function isBetween(d: Date, a: Date | null, b: Date | null): boolean {
+  if (!a || !b) return false;
+  const lo = isBeforeDay(a, b) ? a : b;
+  const hi = isBeforeDay(a, b) ? b : a;
+  return isBeforeDay(lo, d) && isBeforeDay(d, hi);
+}
+
 // Lưới 6 tuần (42 ô) bắt đầu từ Thứ Hai của tuần chứa ngày 1 của tháng.
 export function buildMonthGrid(month: Date): Date[] {
   const first = startOfMonth(month);
