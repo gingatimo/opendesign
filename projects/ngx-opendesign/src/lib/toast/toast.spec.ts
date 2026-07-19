@@ -28,6 +28,21 @@ describe('GToastService', () => {
     expect(document.body.textContent).toContain('Đã lưu thay đổi');
   });
 
+  it('title: render .g-toast__title + LiveAnnouncer đọc cả title lẫn message', () => {
+    const announceSpy = vi.spyOn(announcer, 'announce');
+    service.show({ title: 'Đã lưu', message: 'Thay đổi đã được lưu', duration: 0 });
+    TestBed.tick();
+    expect(document.querySelector('.g-toast__title')?.textContent?.trim()).toBe('Đã lưu');
+    expect(document.body.textContent).toContain('Thay đổi đã được lưu');
+    expect(announceSpy).toHaveBeenCalledWith('Đã lưu. Thay đổi đã được lưu', 'polite');
+  });
+
+  it('không có title: không render .g-toast__title', () => {
+    service.show({ message: 'x', duration: 0 });
+    TestBed.tick();
+    expect(document.querySelector('.g-toast__title')).toBeNull();
+  });
+
   it('show(): thông báo qua LiveAnnouncer với politeness polite (mặc định)', () => {
     const announceSpy = vi.spyOn(announcer, 'announce');
     service.show({ message: 'Đã lưu thay đổi' });

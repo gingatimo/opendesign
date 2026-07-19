@@ -20,6 +20,8 @@ export type GToastPosition =
 export interface GToastConfig {
   /** Nội dung thông báo. */
   message: string;
+  /** Tiêu đề tuỳ chọn — hiển thị đậm phía trên message. */
+  title?: string;
   /** Mặc định 'neutral'. */
   variant?: GToastVariant;
   /** Thời gian (ms) trước khi tự đóng. Mặc định 4000. 0 = không tự đóng. */
@@ -28,6 +30,7 @@ export interface GToastConfig {
 
 interface GToastEntry {
   id: string;
+  title?: string;
   message: string;
   variant: GToastVariant;
 }
@@ -45,7 +48,12 @@ const DEFAULT_DURATION = 4000;
   template: `
     @for (toast of toastService.toasts(); track toast.id) {
       <div class="g-toast" [class]="'g-toast--' + toast.variant">
-        <span class="g-toast__message">{{ toast.message }}</span>
+        <div class="g-toast__body">
+          @if (toast.title) {
+            <span class="g-toast__title">{{ toast.title }}</span>
+          }
+          <span class="g-toast__message">{{ toast.message }}</span>
+        </div>
         <button
           type="button"
           class="g-toast__close"
@@ -129,10 +137,15 @@ export class GToastService {
     const duration = config.duration ?? DEFAULT_DURATION;
 
     this.ensureContainer();
-    this.toasts.update((list) => [...list, { id, message: config.message, variant }]);
+    this.toasts.update((list) => [
+      ...list,
+      { id, title: config.title, message: config.message, variant },
+    ]);
 
     const politeness: AriaLivePoliteness = variant === 'danger' ? 'assertive' : 'polite';
-    void this.liveAnnouncer.announce(config.message, politeness);
+    // Đọc cả title (nếu có) rồi tới message để screen reader nghe đủ ngữ cảnh.
+    const announce = config.title ? `${config.title}. ${config.message}` : config.message;
+    void this.liveAnnouncer.announce(announce, politeness);
 
     if (duration > 0) {
       this.timers.set(
