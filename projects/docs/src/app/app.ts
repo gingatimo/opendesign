@@ -1,7 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import {
+  GIcon,
   GIconButton,
+  GIconGlyph,
+  gIconMoon,
+  gIconSun,
   GSidebar,
   GSidebarHeader,
   GSidebarItem,
@@ -10,52 +14,7 @@ import {
   GSidebarToggle,
 } from 'ngx-opendesign';
 import { ThemeService } from './core/theme.service';
-
-// Task 9 (spec 2c mục 3): icon RIÊNG cho từng LINK, không còn dùng chung icon của cả nhóm — thu
-// gọn sidebar mới phân biệt được item nào với item nào (trước đó @switch (group.icon) khiến 4
-// item "Nền tảng" hiện cùng một icon con mắt, 6 item "Form" hiện cùng một icon gạch ngang).
-type NavIcon =
-  | 'home'
-  | 'mau-sac'
-  | 'typography'
-  | 'radius-spacing'
-  | 'dark-mode'
-  | 'button'
-  | 'icon-button'
-  | 'input'
-  | 'textarea'
-  | 'checkbox'
-  | 'toggle'
-  | 'radio'
-  | 'select'
-  | 'file-input'
-  | 'badge'
-  | 'spinner'
-  | 'progress'
-  | 'chip'
-  | 'avatar'
-  | 'card'
-  | 'icon'
-  | 'image-preview'
-  | 'image-slider'
-  | 'divider'
-  | 'fab'
-  | 'grid'
-  | 'datepicker'
-  | 'dialog'
-  | 'tooltip'
-  | 'toast'
-  | 'tabs'
-  | 'stepper'
-  | 'topbar'
-  | 'sidebar'
-  | 'link'
-  | 'pagination'
-  | 'container'
-  | 'stack'
-  | 'layout'
-  | 'table'
-  | 'playbook';
+import { NAV_ICON_GLYPHS, NavIcon } from './core/nav-icons';
 
 interface NavLink {
   path: string;
@@ -80,6 +39,7 @@ function sortByLabel(links: NavLink[]): NavLink[] {
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
+    GIcon,
     GIconButton,
     GSidebar,
     GSidebarHeader,
@@ -94,6 +54,13 @@ function sortByLabel(links: NavLink[]): NavLink[] {
 })
 export class App {
   protected readonly themeService = inject(ThemeService);
+  protected readonly iconMoon = gIconMoon;
+  protected readonly iconSun = gIconSun;
+
+  /** Glyph docs-local cho icon nav (xem core/nav-icons.ts) — dùng với <g-icon>. */
+  protected navGlyph(icon: NavIcon): GIconGlyph {
+    return NAV_ICON_GLYPHS[icon];
+  }
 
   protected readonly navGroups: NavGroup[] = [
     {
