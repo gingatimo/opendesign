@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.g-slider__input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--g-radius-pill);
+  cursor: pointer;
+  outline: none;
+  // Tô phần đã chọn bằng gradient hai chặng tại --g-slider-fill (binding từ component).
+  background: linear-gradient(
+    to right,
+    var(--g-primary) var(--g-slider-fill, 0%),
+    var(--g-border) var(--g-slider-fill, 0%)
+  );
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  &:focus-visible {
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+.g-slider__input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--g-primary);
+  border: 2px solid var(--g-surface-raised);
+  cursor: pointer;
+}
+.g-slider__input::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--g-surface-raised);
+  border-radius: 50%;
+  background: var(--g-primary);
+  cursor: pointer;
+}
