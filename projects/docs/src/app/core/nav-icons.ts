@@ -33,12 +33,14 @@ export type NavIcon =
   | 'icon'
   | 'image-preview'
   | 'image-slider'
+  | 'media-player'
   | 'divider'
   | 'fab'
   | 'grid'
   | 'dialog'
   | 'tooltip'
   | 'toast'
+  | 'drawer'
   | 'tabs'
   | 'stepper'
   | 'topbar'
@@ -125,6 +127,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     paths: ['M7 10l-2 2 2 2', 'M17 10l2 2-2 2'],
     rects: [{ x: 3, y: 6, width: 18, height: 12, rx: 2 }],
   },
+  'media-player': {
+    viewBox: VB,
+    paths: ['M10 9l5 3-5 3z'],
+    rects: [{ x: 3, y: 5, width: 18, height: 14, rx: 2 }],
+  },
   divider: { viewBox: VB, paths: ['M3 12h18', 'M6 7h4', 'M14 17h4'] },
   fab: { viewBox: VB, paths: ['M12 8v8M8 12h8'], circles: [{ cx: 12, cy: 12, r: 9 }] },
   grid: gIconGrid,
@@ -147,6 +154,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   toast: {
     viewBox: VB,
     paths: ['M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9', 'M13.73 21a2 2 0 0 1-3.46 0'],
+  },
+  drawer: {
+    viewBox: VB,
+    paths: ['M15 4v16'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
   },
   tabs: {
     viewBox: VB,

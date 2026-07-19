@@ -118,6 +118,11 @@ export const routes: Routes = [
     title: 'Toast — OpenDesign',
   },
   {
+    path: 'components/drawer',
+    loadComponent: () => import('./pages/drawer.page'),
+    title: 'Drawer — OpenDesign',
+  },
+  {
     path: 'components/tabs',
     loadComponent: () => import('./pages/tabs.page'),
     title: 'Tabs — OpenDesign',
@@ -176,6 +181,11 @@ export const routes: Routes = [
     path: 'components/image-slider',
     loadComponent: () => import('./pages/image-slider.page'),
     title: 'Image Slider — OpenDesign',
+  },
+  {
+    path: 'components/media-player',
+    loadComponent: () => import('./pages/media-player.page'),
+    title: 'Media Player — OpenDesign',
   },
   {
     path: 'components/divider',

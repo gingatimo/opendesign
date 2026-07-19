@@ -5,6 +5,22 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Overlay**: `GDrawer` (bottom sheet + side panel hợp nhất — `side="bottom|left|right|top"`, mở/đóng
+  hai chiều `[(open)]`, trượt từ mép + nền mờ, focus trap, `Esc`/click nền đóng, khoá scroll body,
+  `size` tuỳ chỉnh rộng/cao).
+- **Hiển thị**: `GMediaPlayer` (trình phát audio/video — bọc `<audio>`/`<video>` native, control bar
+  tuỳ biến: play/pause, thời gian, thanh tua, mute + âm lượng, toàn màn hình cho video).
+- **Icon**: thêm 5 icon media vào bộ public (39 → 44): `gIconPlay`, `gIconPause`, `gIconVolume`,
+  `gIconVolumeMute`, `gIconMaximize`.
+
+### Changed
+
+- **GSidebar**: thanh cuộn chỉ hiện khi rê chuột vào vùng sidebar (ẩn thumb mặc định).
+
 ## [0.6.0] — 2026-07-19
 
 ### Added

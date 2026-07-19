@@ -109,6 +109,7 @@ export class App {
         { path: '/components/icon', label: 'Icon', icon: 'icon' },
         { path: '/components/image-preview', label: 'Image Preview', icon: 'image-preview' },
         { path: '/components/image-slider', label: 'Image Slider', icon: 'image-slider' },
+        { path: '/components/media-player', label: 'Media Player', icon: 'media-player' },
         { path: '/components/divider', label: 'Divider', icon: 'divider' },
       ]),
     },
@@ -118,6 +119,7 @@ export class App {
         { path: '/components/dialog', label: 'Dialog', icon: 'dialog' },
         { path: '/components/tooltip', label: 'Tooltip', icon: 'tooltip' },
         { path: '/components/toast', label: 'Toast', icon: 'toast' },
+        { path: '/components/drawer', label: 'Drawer', icon: 'drawer' },
       ]),
     },
     {
