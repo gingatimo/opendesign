@@ -162,7 +162,8 @@ export class IconBasicDemo {
   private timer?: ReturnType<typeof setTimeout>;
 
   protected copy(name: string): void {
-    void navigator.clipboard?.writeText(name);
+    // ?.catch nuốt reject (clipboard bị chặn quyền / mất focus) để không sinh unhandled rejection.
+    void navigator.clipboard?.writeText(name)?.catch(() => {});
     this.copied.set(name);
     clearTimeout(this.timer);
     this.timer = setTimeout(() => this.copied.set(null), 1200);
