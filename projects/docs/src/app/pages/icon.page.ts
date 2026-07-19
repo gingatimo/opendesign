@@ -9,7 +9,7 @@ import { IconBasicDemo } from '../demos/icon/icon-basic.demo';
   template: `
     <h1>Icon</h1>
     <p>
-      <code>g-icon</code> render icon set có sẵn của OpenDesign — 32 icon. Mỗi icon là dữ liệu hình
+      <code>g-icon</code> render icon set có sẵn của OpenDesign — 39 icon. Mỗi icon là dữ liệu hình
       học có cấu trúc (<code>{{ '{ viewBox, paths?, circles?, rects? }' }}</code
       >), không phải chuỗi HTML/SVG thô hay font icon — <code>GIcon</code> vẽ bằng binding thường
       (<code>[attr.d]</code>...), không dùng <code>innerHTML</code> hay
@@ -17,7 +17,10 @@ import { IconBasicDemo } from '../demos/icon/icon-basic.demo';
     </p>
 
     <h2>Toàn bộ icon set</h2>
-    <p>Tên bên dưới mỗi icon là hằng cần import từ <code>ngx-opendesign</code>.</p>
+    <p>
+      Tên bên dưới mỗi icon là hằng cần import từ <code>ngx-opendesign</code> —
+      <b>bấm vào ô để copy tên</b>.
+    </p>
 
     <docs-demo-section>
       <docs-icon-basic-demo />
@@ -110,18 +113,19 @@ export class ViDuComponent {
 import { GIcon, GIconGlyph } from 'ngx-opendesign';
 
 // Icon ngoài set OpenDesign: tự định nghĩa glyph (dữ liệu hình học, không phải SVG thô)
-const iconChuong: GIconGlyph = {
+const iconDongHo: GIconGlyph = {
   viewBox: '0 0 24 24',
-  paths: ['M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9', 'M13.7 21a2 2 0 0 1-3.4 0'],
+  paths: ['M12 7v5l3 2'],
+  circles: [{ cx: 12, cy: 12, r: 9 }],
 };
 
 @Component({
   selector: 'app-vi-du',
   imports: [GIcon],
-  template: \`<g-icon [icon]="iconChuong" />\`,
+  template: \`<g-icon [icon]="iconDongHo" />\`,
 })
 export class ViDuComponent {
-  protected readonly iconChuong = iconChuong;
+  protected readonly iconDongHo = iconDongHo;
 }`;
 
   protected readonly apiRows: ApiRow[] = [
