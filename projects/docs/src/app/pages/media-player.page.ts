@@ -9,9 +9,9 @@ import { MediaPlayerBasicDemo } from '../demos/media-player/media-player-basic.d
   template: `
     <h1>Media Player</h1>
     <p>
-      Trình phát bọc <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> native (ẩn control gốc) và
-      dựng control bar riêng theo brand: play/pause, thời gian, thanh tua, mute + âm lượng, và nút
-      toàn màn hình cho video. Chọn loại bằng <code>type</code>, nguồn qua <code>src</code>.
+      Trình phát bọc <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> native (ẩn control gốc)
+      và dựng control bar riêng theo brand: play/pause, thời gian, thanh tua, mute + âm lượng, và
+      nút toàn màn hình cho video. Chọn loại bằng <code>type</code>, nguồn qua <code>src</code>.
     </p>
 
     <docs-demo-section>
@@ -26,8 +26,8 @@ import { MediaPlayerBasicDemo } from '../demos/media-player/media-player-basic.d
     <h2>Accessibility</h2>
     <ul>
       <li>
-        Mỗi nút điều khiển có <code>aria-label</code> tiếng Việt và đổi theo trạng thái
-        (Phát/Tạm dừng, Tắt tiếng/Bật tiếng, Toàn màn hình/Thoát toàn màn hình).
+        Mỗi nút điều khiển có <code>aria-label</code> tiếng Việt và đổi theo trạng thái (Phát/Tạm
+        dừng, Tắt tiếng/Bật tiếng, Toàn màn hình/Thoát toàn màn hình).
       </li>
       <li>
         Thanh tua và thanh âm lượng là <code>input[type="range"]</code> gốc nên điều khiển được bằng

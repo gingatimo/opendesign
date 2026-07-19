@@ -11,7 +11,9 @@ import { DrawerBasicDemo } from '../demos/drawer/drawer-basic.demo';
     <p>
       Panel trượt từ mép màn hình kèm nền mờ — gộp <strong>bottom sheet</strong> và
       <strong>side panel</strong> vào một component. Chọn mép bằng <code>side</code>:
-      <code>bottom</code> là bottom sheet (bo góc trên, có thanh grab), <code>left</code>/<code>right</code>
+      <code>bottom</code> là bottom sheet (bo góc trên, có thanh grab), <code>left</code>/<code
+        >right</code
+      >
       là side panel cao hết màn hình, <code>top</code> là sheet trên. Mở/đóng hai chiều qua
       <code>[(open)]</code> — consumer tự đặt nút đóng trong nội dung.
     </p>
@@ -32,8 +34,8 @@ import { DrawerBasicDemo } from '../demos/drawer/drawer-basic.demo';
         <code>ariaLabel</code>.
       </li>
       <li>
-        Focus bị giữ trong panel khi mở (CDK focus trap); mở thì focus phần tử focusable đầu, đóng thì
-        trả focus về nơi vừa rời (thường là nút đã mở).
+        Focus bị giữ trong panel khi mở (CDK focus trap); mở thì focus phần tử focusable đầu, đóng
+        thì trả focus về nơi vừa rời (thường là nút đã mở).
       </li>
       <li>
         <code>Esc</code> và bấm nền đóng drawer (trừ khi <code>disableClose</code>). Panel bị
@@ -44,9 +46,11 @@ import { DrawerBasicDemo } from '../demos/drawer/drawer-basic.demo';
 
     <h2>Lưu ý khi đặt</h2>
     <p>
-      Panel dùng <code>position: fixed</code> neo theo viewport — đặt <code>&lt;g-drawer&gt;</code> ở
-      nhánh DOM không có tổ tiên bị <code>transform</code>/<code>filter</code> (thường là gần gốc app),
-      nếu không mép neo sẽ lệch.
+      Panel dùng <code>position: fixed</code> neo theo viewport — đặt
+      <code>&lt;g-drawer&gt;</code> ở nhánh DOM không có tổ tiên bị <code>transform</code>/<code
+        >filter</code
+      >
+      (thường là gần gốc app), nếu không mép neo sẽ lệch.
     </p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

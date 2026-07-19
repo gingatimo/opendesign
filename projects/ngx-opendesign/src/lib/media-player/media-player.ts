@@ -12,13 +12,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { GSlider } from '../slider/slider';
-import {
-  gIconMaximize,
-  gIconPause,
-  gIconPlay,
-  gIconVolume,
-  gIconVolumeMute,
-} from '../icon/icons';
+import { gIconMaximize, gIconPause, gIconPlay, gIconVolume, gIconVolumeMute } from '../icon/icons';
 
 export type GMediaType = 'audio' | 'video';
 

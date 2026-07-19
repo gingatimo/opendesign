@@ -17,8 +17,7 @@ import {
 
 export type GDrawerSide = 'bottom' | 'left' | 'right' | 'top';
 
-const FOCUSABLE =
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 // Drawer hợp nhất: panel position:fixed neo mép + backdrop, trượt vào/ra. side='bottom' = bottom
 // sheet (bo góc trên + thanh grab), left/right = side panel full-height, top = sheet trên. Mở/đóng

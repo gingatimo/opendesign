@@ -10,8 +10,9 @@ import { SliderBasicDemo } from '../demos/slider/slider-basic.demo';
     <h1>Slider</h1>
     <p>
       Thanh trượt chọn một giá trị số trong khoảng <code>min</code>–<code>max</code> theo bước
-      <code>step</code>. Bọc <code>input[type="range"]</code> gốc nên điều khiển được bằng chuột, chạm
-      và bàn phím. Giá trị hai chiều qua <code>[(value)]</code>; phần đã chọn được tô màu chính.
+      <code>step</code>. Bọc <code>input[type="range"]</code> gốc nên điều khiển được bằng chuột,
+      chạm và bàn phím. Giá trị hai chiều qua <code>[(value)]</code>; phần đã chọn được tô màu
+      chính.
     </p>
 
     <docs-demo-section>
@@ -27,8 +28,8 @@ import { SliderBasicDemo } from '../demos/slider/slider-basic.demo';
     <ul>
       <li>
         Dùng <code>input[type="range"]</code> gốc nên có sẵn <code>role="slider"</code>,
-        <code>aria-valuenow/min/max</code> và điều hướng bàn phím (<code>←→</code>, <code>Home</code>,
-        <code>End</code>).
+        <code>aria-valuenow/min/max</code> và điều hướng bàn phím (<code>←→</code>,
+        <code>Home</code>, <code>End</code>).
       </li>
       <li>Cấp tên qua <code>ariaLabel</code> (hoặc liên kết nhãn ngoài).</li>
     </ul>
