@@ -67,7 +67,14 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
       (backdropClick)="close()"
       (detach)="close()"
     >
-      <div class="g-color-picker__panel" role="dialog" aria-label="Chọn màu" cdkTrapFocus>
+      <div
+        class="g-color-picker__panel"
+        role="dialog"
+        aria-label="Chọn màu"
+        cdkTrapFocus
+        [cdkTrapFocusAutoCapture]="true"
+        (keydown)="onPanelKey($event)"
+      >
         <div
           class="g-color-picker__sv"
           role="slider"
@@ -81,6 +88,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
           (pointerdown)="onSvDown($event)"
           (pointermove)="onSvMove($event)"
           (pointerup)="onSvUp()"
+          (pointercancel)="onSvUp()"
           (keydown)="onSvKey($event)"
         >
           <span
@@ -185,6 +193,14 @@ export class GColorPicker {
     this.open.set(false);
   }
 
+  // Escape đóng panel; cdkTrapFocusAutoCapture tự trả focus về trigger khi overlay huỷ.
+  protected onPanelKey(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.close();
+      event.preventDefault();
+    }
+  }
+
   protected onHue(h: number): void {
     this.hue.set(h);
     this.commit();
@@ -197,8 +213,13 @@ export class GColorPicker {
   protected onHexInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const rgb = hexToRgb(input.value);
-    if (rgb) this.value.set(rgbToHex(rgb.r, rgb.g, rgb.b));
-    else input.value = this.value(); // hoàn nguyên khi nhập sai
+    if (rgb) {
+      const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+      this.value.set(hex);
+      input.value = hex; // đồng bộ ô nhập về dạng chuẩn (kể cả khi model no-op với hex viết hoa)
+    } else {
+      input.value = this.value(); // hoàn nguyên khi nhập sai
+    }
   }
 
   // ----- vùng SV: pointer -----

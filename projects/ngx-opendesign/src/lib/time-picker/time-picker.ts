@@ -167,7 +167,13 @@ export class GTimePicker {
   }
   protected openPanel(): void {
     this.focusedHour.set(this.hour() ?? 0);
-    this.focusedMinute.set(this.minute() ?? 0);
+    // Snap về option phút gần nhất trong danh sách: nếu value có phút lệch minuteStep (vd 05 với
+    // step 15) thì vẫn có đúng một ô phút mang tabindex=0 để bàn phím tới được cột phút.
+    const m = this.minute() ?? 0;
+    const opts = this.minutes();
+    this.focusedMinute.set(
+      opts.reduce((best, o) => (Math.abs(o - m) < Math.abs(best - m) ? o : best), opts[0]),
+    );
     this.pendingFocusCol = 'hour';
     this.focusPending.set(true);
     this.open.set(true);
