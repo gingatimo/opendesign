@@ -27,8 +27,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   `bottom-right`.
 - **Pill shape**: item của `GSelect` (option), `GTreeSelect` và `GCascadeSelect` cùng ô bao ngoài của
   `GChips` nay bo dạng viên (pill) cho nhất quán.
-- **GDockMenu**: bỏ tô nền đặc màu chính khi hover (icon phóng to lộ ô đặc lớn nhô khỏi thanh trông
-  vỡ) — nay chỉ nền nhẹ, icon nổi trực tiếp trên thanh.
+- **GDockMenu**: hover giờ chỉ phóng to ICON và cho icon trồi lên trên thanh (không tô nền, không
+  phóng các item hàng xóm) — bỏ hẳn lỗi ô nền nhô/tràn mép thanh. Đơn giản hoá: bỏ luôn phần JS theo
+  dõi chuột, hover thuần bằng CSS.
 
 ## [0.9.0] — 2026-07-19
 

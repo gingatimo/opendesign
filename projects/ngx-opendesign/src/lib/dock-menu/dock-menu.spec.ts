@@ -1,13 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { GDockMenu, GDockItem } from './dock-menu';
 import { gIconBell, gIconCopy, gIconLink } from '../icon/icons';
-
-interface DockApi {
-  hovered: { set: (n: number) => void };
-  scaleFor: (i: number) => number;
-}
 
 @Component({
   imports: [GDockMenu],
@@ -45,15 +39,6 @@ describe('GDockMenu', () => {
     expect(f.componentInstance.clicked).toBe('bell');
   });
 
-  it('scaleFor: hover item phóng to, hàng xóm vơi dần', () => {
-    const { f } = setup();
-    const dock = f.debugElement.query(By.directive(GDockMenu))
-      .componentInstance as unknown as DockApi;
-    dock.hovered.set(1);
-    expect(dock.scaleFor(1)).toBe(1.5);
-    expect(dock.scaleFor(0)).toBe(1.3);
-    expect(dock.scaleFor(2)).toBe(1.3);
-    dock.hovered.set(-1); // không hover → tất cả về 1
-    expect(dock.scaleFor(0)).toBe(1);
-  });
+  // Phóng to icon khi hover là hiệu ứng CSS thuần (transform trên g-icon) — kiểm bằng trình duyệt
+  // thật, jsdom không tính layout/hover nên không phủ ở đây.
 });

@@ -25,9 +25,6 @@
 
 .g-dock-menu__item {
   position: relative;
-  transform: scale(var(--g-dock-scale, 1));
-  transform-origin: bottom center;
-  transition: transform var(--g-duration-fast) var(--g-ease);
 }
 
 .g-dock-menu__btn {
@@ -39,25 +36,34 @@
   padding: 0;
   border: none;
   border-radius: var(--g-radius-md);
-  // Icon nổi thẳng trên thanh dock; phóng to khi hover là phản hồi chính. KHÔNG tô nền đặc màu
-  // chính khi hover — khi phóng 1.5x, ô đặc lớn nhô khỏi thanh trông vỡ. Chỉ nền nhẹ.
+  // Nút KHÔNG tô nền và KHÔNG tự phóng to — khi hover chỉ ICON phóng + trồi lên (xem quy tắc g-icon
+  // bên dưới). Trước đây tô nền + phóng cả ô khiến ô nền nhô khỏi thanh (nhất là item mép trái) trông vỡ.
   background: transparent;
   color: var(--g-text);
   cursor: pointer;
 
-  &:hover {
-    background: var(--g-surface);
-  }
   &:focus-visible {
     outline: none;
     box-shadow: var(--g-focus-ring);
   }
 }
 
-// Nhãn nổi phía trên item, hiện khi hover.
+// Chỉ ICON phóng to + trồi lên trên thanh khi hover: transform-origin đáy nên lớn dần LÊN TRÊN, còn
+// translateY nâng nó vượt hẳn qua mép trên thanh dock. Icon phóng vẫn gọn trong bề rộng nút nên
+// không nhô ngang, hết lỗi ô nền tràn trái.
+.g-dock-menu__btn g-icon {
+  transform-origin: bottom center;
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+.g-dock-menu__item:hover .g-dock-menu__btn g-icon {
+  transform: translateY(-18px) scale(1.8);
+}
+
+// Nhãn nổi phía trên item, hiện khi hover. Offset đủ lớn (space-7) để nằm TRÊN icon đã phóng+trồi
+// lên — icon lúc hover cao ~1.8x và dịch lên qua mép thanh nên nếu để sát item sẽ bị icon đè.
 .g-dock-menu__tooltip {
   position: absolute;
-  bottom: calc(100% + var(--g-space-2));
+  bottom: calc(100% + var(--g-space-7));
   left: 50%;
   transform: translateX(-50%);
   padding: 2px var(--g-space-2);
@@ -76,9 +82,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .g-dock-menu__item {
-    transform: none;
+  .g-dock-menu__btn g-icon {
     transition: none;
+  }
+  .g-dock-menu__item:hover .g-dock-menu__btn g-icon {
+    transform: none;
   }
   .g-dock-menu__tooltip {
     transition: none;

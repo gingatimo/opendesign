@@ -9,8 +9,9 @@ import { DockMenuBasicDemo } from '../demos/dock-menu/dock-menu-basic.demo';
   template: `
     <h1>Dock Menu</h1>
     <p>
-      Thanh menu kiểu macOS dock: hàng icon mà mục đang hover phóng to, các mục lân cận phóng vơi
-      dần theo khoảng cách. Đặt <code>position="bottom"</code> để cố định giữa dưới màn hình.
+      Thanh menu kiểu macOS dock: hàng icon, mục đang hover phóng to icon và cho icon trồi lên trên
+      thanh (không tô nền, không phóng các mục lân cận). Đặt <code>position="bottom"</code> để cố
+      định giữa dưới màn hình.
     </p>
 
     <docs-demo-section>
@@ -29,9 +30,9 @@ import { DockMenuBasicDemo } from '../demos/dock-menu/dock-menu-basic.demo';
         <code>label</code>; nhãn cũng hiển thị dạng tooltip khi hover.
       </li>
       <li>
-        Hiệu ứng phóng to chỉ kích hoạt qua <code>mouseenter</code>/<code>mouseleave</code> (thị
-        giác); các mục vẫn dùng được đầy đủ bằng bàn phím (<code>Tab</code> + <code>Enter</code>) mà
-        không phụ thuộc hiệu ứng đó.
+        Hiệu ứng phóng to icon chỉ là <code>:hover</code> thuần CSS (thị giác); các mục vẫn dùng
+        được đầy đủ bằng bàn phím (<code>Tab</code> + <code>Enter</code>) mà không phụ thuộc hiệu
+        ứng đó.
       </li>
     </ul>
   `,
