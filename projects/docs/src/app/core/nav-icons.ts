@@ -32,6 +32,7 @@ export type NavIcon =
   | 'badge'
   | 'spinner'
   | 'progress'
+  | 'skeleton'
   | 'chip'
   | 'avatar'
   | 'card'
@@ -113,6 +114,7 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     circles: [{ cx: 18, cy: 6, r: 3 }],
   },
   spinner: { viewBox: VB, paths: ['M21 12a9 9 0 1 1-9-9'] },
+  skeleton: { viewBox: VB, paths: ['M4 7h16', 'M4 12h16', 'M4 17h10'] },
   progress: {
     viewBox: VB,
     paths: ['M3 12h10'],

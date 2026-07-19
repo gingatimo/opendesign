@@ -88,6 +88,11 @@ export const routes: Routes = [
     title: 'Progress — OpenDesign',
   },
   {
+    path: 'components/skeleton',
+    loadComponent: () => import('./pages/skeleton.page'),
+    title: 'Skeleton — OpenDesign',
+  },
+  {
     path: 'components/chip',
     loadComponent: () => import('./pages/chip.page'),
     title: 'Chip — OpenDesign',

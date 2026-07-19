@@ -3,9 +3,18 @@ import { ApiRow, ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { SelectBasicDemo } from '../demos/select/select-basic.demo';
+import { SelectSearchDemo } from '../demos/select/select-search.demo';
+import { SelectMultipleDemo } from '../demos/select/select-multiple.demo';
 
 @Component({
-  imports: [SelectBasicDemo, CodeBlock, ApiTable, DemoSection],
+  imports: [
+    SelectBasicDemo,
+    SelectSearchDemo,
+    SelectMultipleDemo,
+    CodeBlock,
+    ApiTable,
+    DemoSection,
+  ],
   template: `
     <h1>Select</h1>
     <p>Trigger dạng pill, panel nổi bằng CDK Overlay, hỗ trợ điều hướng bàn phím đầy đủ.</p>
@@ -15,6 +24,26 @@ import { SelectBasicDemo } from '../demos/select/select-basic.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/select/select-basic.demo.ts" />
+
+    <h2>Tìm kiếm</h2>
+    <p>
+      Thêm <code>searchable</code> để lọc option bằng ô tìm kiếm trong panel. Lọc không phân biệt
+      dấu tiếng Việt (gõ <code>chuoi</code> khớp <code>Chuối</code>).
+    </p>
+    <docs-demo-section>
+      <docs-select-search-demo />
+    </docs-demo-section>
+    <docs-code-block src="demo-sources/select/select-search.demo.ts" />
+
+    <h2>Chọn nhiều</h2>
+    <p>
+      Thêm <code>multiple</code> để chọn nhiều mục — giá trị là mảng, panel giữ mở, mỗi mục đã chọn
+      hiển thị dạng chip có nút bỏ. Ghép được với <code>searchable</code>.
+    </p>
+    <docs-demo-section>
+      <docs-select-multiple-demo />
+    </docs-demo-section>
+    <docs-code-block src="demo-sources/select/select-multiple.demo.ts" />
 
     <h2>API — GSelect</h2>
     <docs-api-table [rows]="selectApiRows" />
@@ -46,6 +75,24 @@ export default class SelectPage {
       type: 'string',
       default: "''",
       description: 'Chữ hiển thị khi chưa chọn.',
+    },
+    {
+      name: 'searchable',
+      type: 'boolean',
+      default: 'false',
+      description: 'Hiện ô tìm kiếm trong panel để lọc option (không phân biệt dấu).',
+    },
+    {
+      name: 'multiple',
+      type: 'boolean',
+      default: 'false',
+      description: 'Cho chọn nhiều mục; giá trị trở thành mảng, hiển thị dạng chip trên trigger.',
+    },
+    {
+      name: 'searchPlaceholder',
+      type: 'string',
+      default: "'Tìm...'",
+      description: 'Chữ mờ của ô tìm kiếm (khi searchable).',
     },
     {
       name: 'compareWith',

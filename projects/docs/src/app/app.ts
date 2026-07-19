@@ -111,6 +111,7 @@ export class App {
         { path: '/components/badge', label: 'Badge', icon: 'badge' },
         { path: '/components/spinner', label: 'Spinner', icon: 'spinner' },
         { path: '/components/progress', label: 'Progress', icon: 'progress' },
+        { path: '/components/skeleton', label: 'Skeleton', icon: 'skeleton' },
         { path: '/components/chip', label: 'Chip', icon: 'chip' },
         { path: '/components/avatar', label: 'Avatar', icon: 'avatar' },
         { path: '/components/card', label: 'Card', icon: 'card' },

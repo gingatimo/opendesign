@@ -5,6 +5,19 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Hiển thị**: `GSkeleton` (khối placeholder loading — variant `text`/`circular`/`rectangular`,
+  `width`/`height`, `lines` cho text nhiều dòng; hiệu ứng shimmer, `prefers-reduced-motion` tắt).
+
+### Changed
+
+- **GSelect**: thêm `searchable` (ô tìm kiếm trong panel, lọc option không phân biệt dấu tiếng Việt)
+  và `multiple` (chọn nhiều — giá trị mảng, hiển thị chip có nút bỏ, panel giữ mở, dấu check ở option
+  đã chọn); ghép được với nhau. Tương thích ngược (mặc định single, non-searchable).
+
 ## [0.8.0] — 2026-07-19
 
 ### Added

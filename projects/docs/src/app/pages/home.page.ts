@@ -221,7 +221,7 @@ interface ComponentGroup {
 export default class HomePage {
   protected readonly version = '0.8.0';
   protected readonly angularVersion = 22;
-  protected readonly componentCount = 43;
+  protected readonly componentCount = 44;
 
   protected readonly features: FeatureCard[] = [
     {
@@ -289,6 +289,7 @@ export default class HomePage {
         { path: '/components/image-slider', label: 'Image Slider' },
         { path: '/components/media-player', label: 'Media Player' },
         { path: '/components/progress', label: 'Progress' },
+        { path: '/components/skeleton', label: 'Skeleton' },
         { path: '/components/spinner', label: 'Spinner' },
       ],
     },
