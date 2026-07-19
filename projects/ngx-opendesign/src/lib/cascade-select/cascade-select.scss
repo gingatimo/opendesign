@@ -1,0 +1,107 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 200px;
+  height: var(--g-control-md);
+  padding: 0 var(--g-space-4);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  cursor: pointer;
+
+  &:hover:not(.g-cascade-select--disabled):not(:focus-visible) {
+    border-color: var(--g-border-strong);
+  }
+  &:focus-visible {
+    outline: none;
+    border-color: var(--g-primary);
+    box-shadow: var(--g-focus-ring);
+  }
+}
+:host(.g-cascade-select--disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.g-cascade-select__value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.g-cascade-select__value--placeholder {
+  color: var(--g-text-muted);
+}
+.g-cascade-select__arrow {
+  flex-shrink: 0;
+  margin-left: var(--g-space-2);
+  color: var(--g-text-muted);
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+:host(.g-cascade-select--open) .g-cascade-select__arrow {
+  transform: rotate(180deg);
+}
+
+.g-cascade-select__panel {
+  display: flex;
+  max-height: 280px;
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-md);
+  overflow: hidden;
+}
+
+.g-cascade-select__col {
+  min-width: 168px;
+  max-height: 280px;
+  margin: 0;
+  padding: var(--g-space-1);
+  list-style: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+
+  & + & {
+    border-left: 1px solid var(--g-border);
+  }
+}
+
+.g-cascade-select__opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--g-space-3);
+  width: 100%;
+  padding: var(--g-space-2) var(--g-space-3);
+  border: none;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: var(--g-text);
+  font-family: inherit;
+  font-size: var(--g-font-size-md);
+  text-align: left;
+  cursor: pointer;
+
+  &:hover,
+  &.g-cascade-select__opt--active {
+    background: var(--g-surface);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+  & g-icon {
+    flex: none;
+    color: var(--g-text-muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-cascade-select__arrow {
+    transition: none;
+  }
+}
