@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 50%; // mặc định tròn; shape="square" ghi đè bằng bo góc nhẹ
   background: var(--g-secondary-bg);
   color: var(--g-secondary-text);
   font-family: var(--g-font-family);
@@ -28,6 +28,10 @@
   width: var(--g-control-lg);
   height: var(--g-control-lg);
   font-size: var(--g-font-size-lg);
+}
+
+:host(.g-avatar--square) {
+  border-radius: var(--g-radius-md);
 }
 
 .g-avatar__image {

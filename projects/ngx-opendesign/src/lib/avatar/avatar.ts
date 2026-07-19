@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, linkedSignal } from '@angular/core';
 
 export type GAvatarSize = 'sm' | 'md' | 'lg';
+export type GAvatarShape = 'circle' | 'square';
 
 @Component({
   selector: 'g-avatar',
@@ -20,12 +21,14 @@ export type GAvatarSize = 'sm' | 'md' | 'lg';
     '[class.g-avatar--sm]': 'size() === "sm"',
     '[class.g-avatar--md]': 'size() === "md"',
     '[class.g-avatar--lg]': 'size() === "lg"',
+    '[class.g-avatar--square]': 'shape() === "square"',
   },
 })
 export class GAvatar {
   readonly src = input<string | undefined>(undefined);
   readonly name = input.required<string>();
   readonly size = input<GAvatarSize>('md');
+  readonly shape = input<GAvatarShape>('circle');
 
   protected readonly imageFailed = linkedSignal({ source: this.src, computation: () => false });
 

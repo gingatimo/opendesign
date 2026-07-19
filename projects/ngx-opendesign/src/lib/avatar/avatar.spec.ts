@@ -73,6 +73,23 @@ describe('GAvatar', () => {
     expect(host.getAttribute('aria-label')).toBe('Nguyễn Văn An');
   });
 
+  it('shape mặc định circle: không có class square; shape="square" → thêm class', () => {
+    @Component({
+      imports: [GAvatar],
+      template: `<g-avatar name="An" [shape]="shape()" />`,
+    })
+    class ShapeHost {
+      readonly shape = signal<'circle' | 'square'>('circle');
+    }
+    const fixture = TestBed.createComponent(ShapeHost);
+    fixture.detectChanges();
+    const host: HTMLElement = fixture.debugElement.query(By.directive(GAvatar)).nativeElement;
+    expect(host.classList.contains('g-avatar--square')).toBe(false);
+    fixture.componentInstance.shape.set('square');
+    fixture.detectChanges();
+    expect(host.classList.contains('g-avatar--square')).toBe(true);
+  });
+
   it('tên một chữ: chỉ lấy một chữ cái đầu', () => {
     @Component({
       imports: [GAvatar],
