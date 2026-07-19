@@ -73,6 +73,9 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
           role="slider"
           tabindex="0"
           aria-label="Độ bão hoà và độ sáng"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [attr.aria-valuenow]="svValueNow()"
           [attr.aria-valuetext]="value()"
           [style.--g-cp-hue]="hue()"
           (pointerdown)="onSvDown($event)"
@@ -141,6 +144,10 @@ export class GColorPicker {
   protected readonly sat = signal(0);
   protected readonly val = signal(0);
   private dragging = false;
+
+  // aria-valuenow cho vùng SV (role=slider): lấy độ bão hoà làm trục số chính (0–100); màu đầy đủ đọc
+  // qua aria-valuetext = hex.
+  protected readonly svValueNow = computed(() => Math.round(this.sat() * 100));
 
   // Hex suy từ HSV nội bộ.
   private readonly hex = computed(() => {
