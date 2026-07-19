@@ -70,6 +70,18 @@
   gap: var(--g-space-1);
   overflow-y: auto;
   scrollbar-gutter: stable;
+  // Thanh cuộn chỉ lộ khi chuột vào vùng sidebar: ẩn thumb (transparent) mặc định, hiện ở
+  // :host(:hover) bên dưới. Chỉ đổi MÀU — giữ nguyên scrollbar-width mặc định (auto) nên gutter
+  // (stable) vẫn rộng đúng như .g-sidebar__top dành sẵn, không phá canh lề toggle↔nav icon (xem
+  // chú thích .g-sidebar__top). Dùng property chuẩn scrollbar-color: nơi chưa hỗ trợ thì thoái
+  // lui về thanh cuộn hiện thường xuyên như cũ — vô hại.
+  scrollbar-color: transparent transparent;
+}
+
+// Chuột vào bất kỳ đâu trong sidebar (không riêng vùng body) là hiện thumb — "vùng sidebar" theo
+// đúng yêu cầu. Track vẫn trong suốt (gutter đã giữ chỗ, không cần nền).
+:host(:hover) .g-sidebar__body {
+  scrollbar-color: var(--g-border-strong) transparent;
 }
 
 // Sidebar trượt khi thu/mở là chuyển động theo tương tác, không phải indicator liên tục
