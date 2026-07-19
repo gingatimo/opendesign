@@ -1,0 +1,61 @@
+:host {
+  display: block;
+}
+// Toggle style nền lấy từ .g-menu-item global; ở đây chỉ thêm dàn ngang nhãn ↔ chevron + full-width (dọc).
+.g-submenu__toggle {
+  width: 100%;
+  justify-content: space-between;
+}
+.g-submenu__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.g-submenu__chevron {
+  flex-shrink: 0;
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+:host(.g-submenu--open) .g-submenu__chevron {
+  transform: rotate(180deg);
+}
+
+// Vertical (mặc định): panel inline, thụt lề, ẩn khi đóng.
+.g-submenu__panel {
+  display: none;
+  flex-direction: column;
+  gap: var(--g-space-1);
+  padding-left: var(--g-space-4);
+  margin-top: var(--g-space-1);
+}
+:host(.g-submenu--open) .g-submenu__panel {
+  display: flex;
+}
+
+// Horizontal: submenu relative, toggle co lại, panel dropdown nổi position:absolute.
+:host(.g-submenu--horizontal) {
+  position: relative;
+  display: inline-block;
+}
+:host(.g-submenu--horizontal) .g-submenu__toggle {
+  width: auto;
+}
+:host(.g-submenu--horizontal) .g-submenu__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  min-width: 180px;
+  padding: var(--g-space-1);
+  padding-left: var(--g-space-1);
+  margin-top: var(--g-space-1);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-submenu__chevron {
+    transition: none;
+  }
+}

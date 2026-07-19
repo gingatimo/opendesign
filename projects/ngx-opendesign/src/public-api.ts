@@ -47,3 +47,6 @@ export * from './lib/image-slider/image-slider';
 export * from './lib/divider/divider';
 export * from './lib/fab/fab';
 export * from './lib/datepicker/datepicker';
+export * from './lib/breadcrumb/breadcrumb';
+export * from './lib/menu/menu';
+export * from './lib/menu/submenu';

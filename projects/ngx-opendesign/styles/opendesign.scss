@@ -867,3 +867,59 @@ body {
   background-color: var(--g-text);
   --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E");
 }
+
+// Menu item (GMenuItem + nút toggle của GSubmenu) — GLOBAL vì áp cho cả mục chiếu vào GMenu lẫn nút
+// toggle trong template GSubmenu; scss scoped của từng component không với tới được mục chiếu vào.
+.g-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2) var(--g-space-3);
+  border: none;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.g-menu-item:hover {
+  background: var(--g-surface);
+}
+.g-menu-item:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+.g-menu-item.g-active {
+  background: var(--g-surface);
+  font-weight: 600;
+}
+
+// Breadcrumb — GLOBAL vì dấu phân cách › cần quan hệ anh-em của các mục chiếu vào <nav g-breadcrumb>.
+.g-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--g-space-2);
+  font-size: var(--g-font-size-sm);
+}
+.g-breadcrumb-item {
+  color: var(--g-text-muted);
+  text-decoration: none;
+}
+a.g-breadcrumb-item:hover {
+  color: var(--g-text);
+  text-decoration: underline;
+}
+.g-breadcrumb-item[aria-current] {
+  color: var(--g-text);
+  font-weight: 500;
+}
+.g-breadcrumb-item:not(:first-child)::before {
+  content: '›';
+  margin-right: var(--g-space-2);
+  color: var(--g-text-muted);
+  font-weight: 400;
+}
