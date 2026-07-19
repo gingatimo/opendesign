@@ -69,12 +69,62 @@
   }
 }
 
+// ----- multiple: trigger cao co giãn theo chips (không giữ height cố định) -----
+:host(.g-select--multiple) {
+  height: auto;
+  min-height: var(--g-control-md);
+  padding-top: var(--g-space-1);
+  padding-bottom: var(--g-space-1);
+}
+:host(.g-select--multiple) .g-select__trigger-content {
+  overflow: visible;
+  white-space: normal;
+}
+.g-select__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--g-space-1);
+}
+
 .g-select__panel {
+  display: flex;
+  flex-direction: column;
   max-height: 280px;
-  overflow-y: auto;
-  padding: var(--g-space-2);
   border-radius: var(--g-radius-md);
   background: var(--g-surface-raised);
   box-shadow: var(--g-shadow-md);
   border: 1px solid var(--g-border);
+  overflow: hidden;
+}
+
+// Ô tìm kiếm cố định trên đầu, danh sách option cuộn bên dưới.
+.g-select__search {
+  flex: none;
+  margin: var(--g-space-2) var(--g-space-2) 0;
+  padding: var(--g-space-2) var(--g-space-3);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-bg);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--g-primary);
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+.g-select__options {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--g-space-2);
+}
+
+.g-select__empty {
+  padding: var(--g-space-3);
+  text-align: center;
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-sm);
 }
