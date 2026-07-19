@@ -13,20 +13,35 @@
   align-items: center;
 }
 
+// Màu marker theo trạng thái (default = màu chính). color để icon chiếu (currentColor) đổi theo.
+:host {
+  --g-timeline-marker: var(--g-primary);
+}
+:host(.g-timeline-item--success) {
+  --g-timeline-marker: var(--g-success-solid);
+}
+:host(.g-timeline-item--warning) {
+  --g-timeline-marker: var(--g-warning-solid);
+}
+:host(.g-timeline-item--danger) {
+  --g-timeline-marker: var(--g-danger-solid);
+}
+
 .g-timeline-item__marker {
   z-index: 1;
   flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--g-timeline-marker);
 }
-// Marker mặc định (không chiếu gì) = chấm tròn màu chính.
+// Marker mặc định (không chiếu gì) = chấm tròn tô theo trạng thái.
 .g-timeline-item__marker:empty {
   width: 12px;
   height: 12px;
   margin-top: 4px;
   border-radius: 50%;
-  background: var(--g-primary);
+  background: var(--g-timeline-marker);
 }
 
 // Đường nối dọc chạy từ dưới marker xuống item kế.

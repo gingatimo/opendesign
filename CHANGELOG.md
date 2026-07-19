@@ -13,7 +13,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Form**: `GTreeSelect` (chọn một node từ cây — overlay cây gập/mở, chọn node bất kỳ; CVA).
 - **Form**: `GChips` (nhập nhiều giá trị dạng chip — Enter/dấu phẩy thêm, ×/Backspace xoá, chống trùng; CVA `string[]`).
 - **Form**: `GInputOtp` (nhập mã OTP/PIN — N ô một ký tự, tự nhảy, dán rải, `integerOnly`/`mask`; CVA).
-- **Hiển thị**: `GTimeline` + `GTimelineItem` (dòng thời gian dọc — marker + đường nối, marker tuỳ biến).
+- **Hiển thị**: `GTimeline` + `GTimelineItem` (dòng thời gian dọc — marker + đường nối, marker tuỳ biến;
+  `status: 'default' | 'success' | 'warning' | 'danger'` tô màu marker theo trạng thái).
 - **Điều hướng**: `GAccordion` + `GAccordionPanel` (panel gập/mở — single-open hoặc `multiple`, animate, ARIA).
 - **Điều hướng**: `GDockMenu` (thanh dock kiểu macOS — icon phóng to khi hover, tooltip, `position` bottom/static).
 - **Cấu trúc**: `GScrollPanel` (vùng cuộn thanh cuộn mảnh theo theme).

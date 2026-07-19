@@ -53,6 +53,13 @@ export default class TimelinePage {
       description: 'Một mốc thời gian: cột marker + đường nối, cùng nội dung chiếu.',
     },
     {
+      name: 'status (item)',
+      type: `'default' | 'success' | 'warning' | 'danger'`,
+      default: `'default'`,
+      description:
+        'Trạng thái mốc — tô màu marker (default = màu chính, còn lại theo màu ngữ nghĩa).',
+    },
+    {
       name: '[gTimelineMarker]',
       type: '(projection)',
       default: '—',
