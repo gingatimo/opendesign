@@ -12,6 +12,7 @@ import { GButton, GToastService } from 'ngx-opendesign';
     <button g-button variant="outline" (click)="show('Lưu thất bại, thử lại sau', 'danger')">
       Lỗi
     </button>
+    <button g-button variant="outline" (click)="showWithTitle()">Có tiêu đề</button>
     <button g-button variant="outline" (click)="showPersistent()">Không tự đóng</button>
   `,
   styles: `
@@ -28,6 +29,14 @@ export class ToastBasicDemo {
 
   protected show(message: string, variant?: 'success' | 'danger'): void {
     this.toast.show({ message, variant });
+  }
+
+  protected showWithTitle(): void {
+    this.toast.show({
+      title: 'Đã lưu đơn hàng',
+      message: 'Đơn #1234 đã được lưu và gửi email xác nhận.',
+      variant: 'success',
+    });
   }
 
   protected showPersistent(): void {

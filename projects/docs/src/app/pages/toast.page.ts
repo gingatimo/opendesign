@@ -107,6 +107,12 @@ export default class ToastPage {
       description: 'Nội dung thông báo.',
     },
     {
+      name: 'GToastConfig.title',
+      type: 'string',
+      default: '—',
+      description: 'Tiêu đề tuỳ chọn, hiển thị đậm phía trên message; screen reader đọc cả hai.',
+    },
+    {
       name: 'GToastConfig.variant',
       type: "'neutral' | 'success' | 'warning' | 'danger'",
       default: "'neutral'",
