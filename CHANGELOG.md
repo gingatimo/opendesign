@@ -5,6 +5,19 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [0.6.0] — chưa phát hành
+
+### Added
+
+- **Hiển thị**: `GAvatar` thêm `shape: 'circle' | 'square'` (vuông bo góc nhẹ `--g-radius-md`).
+
+### Changed
+
+- **GFileInput**: khi chỉ có 1 tệp trong danh sách, gom dòng sát trái để nút xoá nằm cạnh tên (nhiều
+  tệp vẫn dàn đều).
+- **Docs**: mọi icon trong docs (nav sidebar + demo) chuyển sang dùng `<g-icon>` với glyph docs-local
+  (`core/nav-icons.ts`, `core/demo-icons.ts`) thay cho inline `<svg>` — dogfood chính `GIcon`.
+
 ## [0.5.0] — 2026-07-19
 
 ### Added

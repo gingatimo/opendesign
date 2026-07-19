@@ -65,5 +65,11 @@ export default class AvatarPage {
       default: "'md'",
       description: 'Cỡ avatar.',
     },
+    {
+      name: 'shape',
+      type: "'circle' | 'square'",
+      default: "'circle'",
+      description: 'Hình dạng: tròn (mặc định) hoặc vuông bo góc nhẹ.',
+    },
   ];
 }

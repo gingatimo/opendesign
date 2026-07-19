@@ -34,14 +34,17 @@ import { IconBasicDemo } from '../demos/icon/icon-basic.demo';
     </p>
     <docs-code-block [code]="fromSetSnippet" language="typescript" />
 
-    <h3>2. SVG tự truyền vào</h3>
+    <h3>2. Icon ngoài set: tự định nghĩa glyph</h3>
     <p>
-      Với icon không có trong set, đừng cố ép vào <code>&lt;g-icon&gt;</code> (input
-      <code>icon</code> chỉ nhận đúng dữ liệu hằng <code>gIconXxx</code>) — viết thẳng
-      <code>&lt;svg&gt;</code> của bạn, đúng cách toàn bộ demo khác trong docs này vẫn đang làm cho
-      icon ngoài set (vd. trang Icon Button):
+      Với icon không có trong set, tự định nghĩa một hằng <code>GIconGlyph</code> (<code>{{
+        '{ viewBox, paths?, circles?, rects? }'
+      }}</code
+      >) rồi truyền vào <code>&lt;g-icon [icon]&gt;</code> — đây là cách docs này dùng cho toàn bộ
+      icon nav và demo (xem <code>core/nav-icons.ts</code>, <code>core/demo-icons.ts</code>). Giữ
+      mọi icon đi qua cùng một component <code>&lt;g-icon&gt;</code>, thừa hưởng
+      cỡ/theme/an-toàn-XSS đồng nhất:
     </p>
-    <docs-code-block [code]="customSvgSnippet" language="xml" />
+    <docs-code-block [code]="customGlyphSnippet" language="typescript" />
 
     <h2>API — GIcon</h2>
     <docs-api-table [rows]="apiRows" />
@@ -103,17 +106,31 @@ export class ViDuComponent {
   protected readonly gIconSearch = gIconSearch;
 }`;
 
-  protected readonly customSvgSnippet = `<!-- Icon không có trong set OpenDesign: viết SVG tay -->
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-  <path d="M12 2 2 7l10 5 10-5-10-5z" />
-</svg>`;
+  protected readonly customGlyphSnippet = `import { Component } from '@angular/core';
+import { GIcon, GIconGlyph } from 'ngx-opendesign';
+
+// Icon ngoài set OpenDesign: tự định nghĩa glyph (dữ liệu hình học, không phải SVG thô)
+const iconChuong: GIconGlyph = {
+  viewBox: '0 0 24 24',
+  paths: ['M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9', 'M13.7 21a2 2 0 0 1-3.4 0'],
+};
+
+@Component({
+  selector: 'app-vi-du',
+  imports: [GIcon],
+  template: \`<g-icon [icon]="iconChuong" />\`,
+})
+export class ViDuComponent {
+  protected readonly iconChuong = iconChuong;
+}`;
 
   protected readonly apiRows: ApiRow[] = [
     {
       name: 'icon',
       type: 'GIconGlyph',
       default: '—',
-      description: 'Bắt buộc. Một trong các hằng gIconXxx export từ ngx-opendesign.',
+      description:
+        'Bắt buộc. Hằng gIconXxx từ ngx-opendesign, hoặc glyph { viewBox, paths?, circles?, rects? } tự định nghĩa.',
     },
     {
       name: 'size',
