@@ -208,6 +208,11 @@ export const routes: Routes = [
     title: 'Datepicker — OpenDesign',
   },
   {
+    path: 'components/slider',
+    loadComponent: () => import('./pages/slider.page'),
+    title: 'Slider — OpenDesign',
+  },
+  {
     path: 'components/menu',
     loadComponent: () => import('./pages/menu.page'),
     title: 'Menu — OpenDesign',

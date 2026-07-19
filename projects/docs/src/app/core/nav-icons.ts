@@ -24,6 +24,7 @@ export type NavIcon =
   | 'select'
   | 'file-input'
   | 'datepicker'
+  | 'slider'
   | 'badge'
   | 'spinner'
   | 'progress'
@@ -140,6 +141,7 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     paths: ['M16 2v4M8 2v4M3 10h18'],
     rects: [{ x: 3, y: 4, width: 18, height: 18, rx: 2 }],
   },
+  slider: { viewBox: VB, paths: ['M3 12h18'], circles: [{ cx: 9, cy: 12, r: 3 }] },
   dialog: {
     viewBox: VB,
     rects: [

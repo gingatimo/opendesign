@@ -95,6 +95,7 @@ export class App {
         { path: '/components/select', label: 'Select', icon: 'select' },
         { path: '/components/file-input', label: 'File Input', icon: 'file-input' },
         { path: '/components/datepicker', label: 'Datepicker', icon: 'datepicker' },
+        { path: '/components/slider', label: 'Slider', icon: 'slider' },
       ]),
     },
     {

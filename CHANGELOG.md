@@ -14,6 +14,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   `size` tuỳ chỉnh rộng/cao).
 - **Hiển thị**: `GMediaPlayer` (trình phát audio/video — bọc `<audio>`/`<video>` native, control bar
   tuỳ biến: play/pause, thời gian, thanh tua, mute + âm lượng, toàn màn hình cho video).
+- **Form**: `GSlider` (thanh trượt chọn giá trị số — bọc `input[type=range]` native, `[(value)]`,
+  `min`/`max`/`step`/`disabled`, phần đã chọn tô màu chính).
 - **Icon**: thêm 5 icon media vào bộ public (39 → 44): `gIconPlay`, `gIconPause`, `gIconVolume`,
   `gIconVolumeMute`, `gIconMaximize`.
 
