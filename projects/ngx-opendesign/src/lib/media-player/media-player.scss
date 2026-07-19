@@ -1,0 +1,129 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-2);
+  font-family: var(--g-font-family);
+  color: var(--g-text);
+}
+
+// Audio không có phần hình → ẩn stage, chỉ còn control bar.
+:host(.g-media-player--audio) .g-media-player__stage {
+  display: none;
+}
+
+.g-media-player__media {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: var(--g-radius-md);
+  background: #000;
+}
+
+// Control bar dạng viên (pill) — nhất quán ngôn ngữ thiết kế.
+.g-media-player__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2) var(--g-space-3);
+  background: var(--g-surface);
+  border-radius: var(--g-radius-pill);
+}
+
+.g-media-player__time {
+  flex: none;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--g-text-muted);
+  white-space: nowrap;
+}
+
+.g-media-player__btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: var(--g-radius-pill);
+  background: transparent;
+  color: var(--g-text);
+  cursor: pointer;
+  transition: background var(--g-duration-fast) var(--g-ease);
+
+  &:hover {
+    background: var(--g-surface-raised);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+// ----- thanh trượt (seek + volume) -----
+.g-media-player__seek,
+.g-media-player__volume {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: var(--g-radius-pill);
+  background: var(--g-border);
+  cursor: pointer;
+  outline: none;
+}
+
+.g-media-player__seek {
+  flex: 1;
+  min-width: 80px;
+  // Tô phần đã phát bằng gradient hai chặng tại --g-seek-fill (binding từ component).
+  background: linear-gradient(
+    to right,
+    var(--g-primary) var(--g-seek-fill, 0%),
+    var(--g-border) var(--g-seek-fill, 0%)
+  );
+}
+
+.g-media-player__volume {
+  flex: none;
+  width: 72px;
+}
+
+.g-media-player__seek::-webkit-slider-thumb,
+.g-media-player__volume::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--g-primary);
+  border: 2px solid var(--g-surface-raised);
+  cursor: pointer;
+}
+.g-media-player__seek::-moz-range-thumb,
+.g-media-player__volume::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--g-surface-raised);
+  border-radius: 50%;
+  background: var(--g-primary);
+  cursor: pointer;
+}
+
+.g-media-player__seek:focus-visible,
+.g-media-player__volume:focus-visible {
+  box-shadow: var(--g-focus-ring);
+}
+
+// ----- fullscreen (chỉ video): host là phần tử fullscreen, giữ control bar tuỳ biến hiển thị -----
+:host(:fullscreen) {
+  justify-content: center;
+  padding: var(--g-space-4);
+  background: #000;
+}
+:host(:fullscreen) .g-media-player__media {
+  max-height: calc(100vh - 96px);
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
