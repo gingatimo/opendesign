@@ -163,7 +163,7 @@ export class IconBasicDemo {
 
   protected copy(name: string): void {
     // ?.catch nuốt reject (clipboard bị chặn quyền / mất focus) để không sinh unhandled rejection.
-    void navigator.clipboard?.writeText(name)?.catch(() => {});
+    void navigator.clipboard?.writeText(name)?.catch(() => undefined);
     this.copied.set(name);
     clearTimeout(this.timer);
     this.timer = setTimeout(() => this.copied.set(null), 1200);
