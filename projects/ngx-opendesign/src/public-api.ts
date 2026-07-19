@@ -1,4 +1,4 @@
-export const OPENDESIGN_VERSION = '0.5.0';
+export const OPENDESIGN_VERSION = '0.6.0';
 export * from './lib/core/dev-warning';
 export * from './lib/core/id-generator';
 export * from './lib/button/button';
