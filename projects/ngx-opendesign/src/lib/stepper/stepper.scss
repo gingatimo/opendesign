@@ -45,9 +45,27 @@
   flex: none;
   display: block;
 
+  // Đường nối DỌC: từ dưới circle (28px) chạy xuống, kéo qua gap tới circle bước sau (ghi đè rule
+  // ngang top:14px/left:50%/width:100%/height:2px ở trên).
   &::after {
+    display: block;
+    top: 28px;
+    bottom: calc(-1 * var(--g-space-2));
+    left: 13px; // tâm circle 28px (=14) trừ nửa bề rộng 2px
+    width: 2px;
+    height: auto;
+    background: var(--g-border);
+  }
+  &:last-child::after {
     display: none;
   }
+}
+:host(.g-stepper--vertical) .g-stepper__step--completed:not(:last-child)::after {
+  background: var(--g-primary);
+}
+// Panel dọc thụt phải để nội dung nằm dưới nhãn, không đè đường nối.
+:host(.g-stepper--vertical) .g-stepper__panel {
+  padding-left: calc(28px + var(--g-space-2));
 }
 
 // Dọc: header xếp NGANG lại (circle bên trái, nhãn bên phải) — chỉ chế độ ngang mới đặt nhãn dưới circle.
