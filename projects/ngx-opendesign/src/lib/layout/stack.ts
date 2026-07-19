@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -18,6 +19,7 @@ import {
     '[style.gap]': 'gapStyle()',
     '[style.alignItems]': 'align() || null',
     '[style.justifyContent]': 'justify() || null',
+    '[style.flexWrap]': 'wrap() ? "wrap" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -26,6 +28,7 @@ export class GStack {
   readonly gap = input(4, { transform: numberAttribute });
   readonly align = input<string>();
   readonly justify = input<string>();
+  readonly wrap = input(false, { transform: booleanAttribute });
 
   protected readonly gapStyle = computed(() => {
     const g = this.gap();

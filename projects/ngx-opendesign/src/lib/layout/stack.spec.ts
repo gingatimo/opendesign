@@ -4,11 +4,12 @@ import { GStack } from './stack';
 
 @Component({
   imports: [GStack],
-  template: `<g-stack id="s" [direction]="dir()" [gap]="gap()">a</g-stack>`,
+  template: `<g-stack id="s" [direction]="dir()" [gap]="gap()" [wrap]="wrap()">a</g-stack>`,
 })
 class Host {
   dir = signal<'vertical' | 'horizontal'>('vertical');
   gap = signal(4);
+  wrap = signal(false);
 }
 
 describe('GStack', () => {
@@ -33,5 +34,14 @@ describe('GStack', () => {
     f.detectChanges();
     const el = f.nativeElement.querySelector('#s') as HTMLElement;
     expect(el.style.gap).toBe('0px');
+  });
+  it('wrap=true → flex-wrap wrap; mặc định không set', () => {
+    const f = TestBed.createComponent(Host);
+    f.detectChanges();
+    const el = f.nativeElement.querySelector('#s') as HTMLElement;
+    expect(el.style.flexWrap).toBe('');
+    f.componentInstance.wrap.set(true);
+    f.detectChanges();
+    expect(el.style.flexWrap).toBe('wrap');
   });
 });

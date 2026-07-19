@@ -206,6 +206,12 @@ export const gIconFile: GIconGlyph = {
   paths: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6'],
 };
 
+export const gIconCalendar: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M16 2v4', 'M8 2v4', 'M3 10h18'],
+  rects: [{ x: 3, y: 4, width: 18, height: 18, rx: 2 }],
+};
+
 /**
  * Khung ngoài + vạch dọc dùng chung cho panelLeftClose/panelLeftOpen — bo góc thật qua <rect rx>
  * (không quy về path), xem lý do ở JSDoc GIconGlyph phía trên.
