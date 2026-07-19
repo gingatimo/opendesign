@@ -38,7 +38,7 @@ import { gIconFile, gIconUpload, gIconX } from '../icon/icons';
       </div>
 
       @if (multiple() && showFileList() && files().length) {
-        <ul class="g-file-input__list">
+        <ul class="g-file-input__list" [class.g-file-input__list--single]="files().length === 1">
           @for (file of files(); track file.name + file.size; let i = $index) {
             <li class="g-file-input__item">
               <g-icon class="g-file-input__file-icon" [icon]="iconFile" size="sm" />

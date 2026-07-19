@@ -80,6 +80,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+// Tệp đơn: tên không giãn → cả dòng gom sát trái, dung lượng + nút xoá nằm ngay cạnh tên thay vì trôi
+// ra mép phải (nhiều tệp giữ tên flex:1 để xoá/dung lượng dàn đều theo cột).
+.g-file-input__list--single .g-file-input__item-name {
+  flex: 0 1 auto;
+}
 .g-file-input__item-size {
   flex-shrink: 0;
   color: var(--g-text-muted);
