@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconChevronDown } from '../icon/icons';
-import { GMenu } from './menu';
+import { GMenu, GSubmenuEntry } from './menu';
 
 // Mục cha của menu — chứa các mục con (chiếu vào). Đọc orientation từ GMenu cha (inject): dọc → mở/gập
 // inline thụt lề (accordion); ngang → dropdown position:absolute. Đóng dropdown: click ra ngoài / Esc.
@@ -46,13 +46,28 @@ export class GSubmenu {
   protected readonly open = signal(false);
   protected readonly isHorizontal = computed(() => this.menu.orientation() === 'horizontal');
 
+  // Đăng ký với GMenu để nó điều phối single-open (dropdown ngang). close() cũng gỡ đăng ký.
+  private readonly entry: GSubmenuEntry = {
+    el: this.elementRef.nativeElement,
+    close: () => {
+      this.open.set(false);
+      this.menu.closeSubmenu(this.entry);
+    },
+  };
+
   protected onToggle(event: MouseEvent): void {
     // Chặn bubble để click MỞ không lọt tới document listener khiến đóng lại ngay lập tức.
     event.stopPropagation();
-    this.open.update((o) => !o);
+    if (this.open()) {
+      this.close();
+    } else {
+      this.open.set(true);
+      // Ngang: đăng ký để GMenu đóng các submenu anh-em đang mở. Dọc (accordion): cho phép nhiều mục mở.
+      if (this.isHorizontal()) this.menu.openSubmenu(this.entry);
+    }
   }
   protected close(): void {
-    this.open.set(false);
+    this.entry.close();
   }
 
   // Chỉ dropdown NGANG mới đóng khi click ra ngoài (hoặc vào mục con → điều hướng). Accordion DỌC giữ

@@ -19,6 +19,19 @@ class Host {
   orientation: 'vertical' | 'horizontal' = 'vertical';
 }
 
+@Component({
+  imports: [GMenu, GMenuItem, GSubmenu],
+  template: `
+    <g-menu [orientation]="orientation">
+      <g-submenu label="A"><a g-menu-item href="#">a1</a></g-submenu>
+      <g-submenu label="B"><a g-menu-item href="#">b1</a></g-submenu>
+    </g-menu>
+  `,
+})
+class HostTwo {
+  orientation: 'vertical' | 'horizontal' = 'horizontal';
+}
+
 function setup(orientation: 'vertical' | 'horizontal' = 'vertical') {
   const f = TestBed.createComponent(Host);
   f.componentInstance.orientation = orientation;
@@ -71,5 +84,31 @@ describe('GMenu / GSubmenu', () => {
     document.body.click();
     f.detectChanges();
     expect(submenu.classList.contains('g-submenu--open')).toBe(true);
+  });
+
+  it('horizontal single-open: mở submenu anh-em đóng submenu đang mở', () => {
+    const f = TestBed.createComponent(HostTwo);
+    f.detectChanges();
+    const [subA, subB] = [...f.nativeElement.querySelectorAll('g-submenu')] as HTMLElement[];
+    (subA.querySelector('.g-submenu__toggle') as HTMLButtonElement).click();
+    f.detectChanges();
+    expect(subA.classList.contains('g-submenu--open')).toBe(true);
+
+    (subB.querySelector('.g-submenu__toggle') as HTMLButtonElement).click();
+    f.detectChanges();
+    expect(subB.classList.contains('g-submenu--open')).toBe(true);
+    expect(subA.classList.contains('g-submenu--open')).toBe(false);
+  });
+
+  it('vertical accordion: nhiều mục con cùng mở được (không single-open)', () => {
+    const f = TestBed.createComponent(HostTwo);
+    f.componentInstance.orientation = 'vertical';
+    f.detectChanges();
+    const [subA, subB] = [...f.nativeElement.querySelectorAll('g-submenu')] as HTMLElement[];
+    (subA.querySelector('.g-submenu__toggle') as HTMLButtonElement).click();
+    (subB.querySelector('.g-submenu__toggle') as HTMLButtonElement).click();
+    f.detectChanges();
+    expect(subA.classList.contains('g-submenu--open')).toBe(true);
+    expect(subB.classList.contains('g-submenu--open')).toBe(true);
   });
 });
