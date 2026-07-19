@@ -876,7 +876,7 @@ body {
   gap: var(--g-space-2);
   padding: var(--g-space-2) var(--g-space-3);
   border: none;
-  border-radius: var(--g-radius-sm);
+  border-radius: var(--g-radius-pill); // pill như .g-sidebar-item — nhất quán ngôn ngữ pill của hệ
   background: transparent;
   color: var(--g-text);
   font-family: var(--g-font-family);
