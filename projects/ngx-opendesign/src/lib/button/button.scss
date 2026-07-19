@@ -73,11 +73,14 @@
     background: var(--g-surface);
   }
 }
+// Danger: outline mặc định (nhẹ nhàng hơn cho hành động phá huỷ), hover mới tô đặc.
 :host(.g-button--danger) {
-  background: var(--g-danger-solid);
-  color: #ffffff;
+  background: transparent;
+  color: var(--g-danger-solid);
+  border-color: var(--g-danger-solid);
   &:hover:not(:disabled) {
-    filter: brightness(0.92);
+    background: var(--g-danger-solid);
+    color: #ffffff;
   }
 }
 
