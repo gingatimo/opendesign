@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input, numberAttribute } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  numberAttribute,
+} from '@angular/core';
 
 export type GSkeletonVariant = 'text' | 'circular' | 'rectangular';
 
