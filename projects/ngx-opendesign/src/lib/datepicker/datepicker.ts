@@ -1,3 +1,4 @@
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
 import {
   afterRenderEffect,
@@ -10,6 +11,7 @@ import {
   input,
   model,
   signal,
+  untracked,
   viewChildren,
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
@@ -17,6 +19,7 @@ import { gIconCalendar, gIconChevronLeft, gIconChevronRight } from '../icon/icon
 import {
   addDays,
   addMonths,
+  addMonthsClamped,
   buildMonthGrid,
   formatDate,
   inRange,
@@ -34,7 +37,7 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 // ←→↑↓ / Enter / Esc / PageUp-Down, min/max. value = model<Date|null>. Định dạng dd/MM/yyyy.
 @Component({
   selector: 'g-datepicker',
-  imports: [CdkConnectedOverlay, GIcon],
+  imports: [CdkConnectedOverlay, CdkTrapFocus, GIcon],
   template: `
     <button
       type="button"
@@ -64,6 +67,7 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
         class="g-datepicker__panel"
         role="dialog"
         aria-label="Chọn ngày"
+        cdkTrapFocus
         (keydown)="onKeydown($event)"
       >
         <div class="g-datepicker__header">
@@ -101,7 +105,7 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
               [class.g-datepicker__day--outside]="day.getMonth() !== viewMonth().getMonth()"
               [class.g-datepicker__day--today]="isToday(day)"
               [class.g-datepicker__day--selected]="isSelected(day)"
-              [disabled]="!inRangeDay(day)"
+              [attr.aria-disabled]="!inRangeDay(day) ? 'true' : null"
               [attr.tabindex]="isFocused(day) ? 0 : -1"
               [attr.aria-current]="isToday(day) ? 'date' : null"
               [attr.aria-pressed]="isSelected(day)"
@@ -135,6 +139,9 @@ export class GDatepicker {
   protected readonly open = signal(false);
   protected readonly viewMonth = signal(startOfMonth(new Date()));
   protected readonly focusedDate = signal(new Date());
+  // Bật khi cần dời focus bàn phím tới ô ngày (mở panel / phím điều hướng). KHÔNG bật khi bấm chuột
+  // đổi tháng — để nút chuyển tháng giữ focus, tránh giật.
+  private readonly focusPending = signal(false);
 
   private readonly dayButtons = viewChildren<ElementRef<HTMLButtonElement>>('dayBtn');
 
@@ -145,15 +152,14 @@ export class GDatepicker {
   protected readonly grid = computed(() => buildMonthGrid(this.viewMonth()));
 
   constructor() {
-    // Roving focus: khi mở hoặc focusedDate đổi, focus nút ngày có tabindex=0. afterRenderEffect để DOM
-    // (tabindex) đã cập nhật; đọc open()/focusedDate() để effect chạy lại đúng lúc.
+    // Roving focus: chỉ focus ô ngày (tabindex=0) khi focusPending — sau render để tabindex đã cập nhật.
+    // Dùng aria-disabled (không phải thuộc tính disabled) nên ô ngoài min/max vẫn focus được → không rớt
+    // focus về body khi mũi tên đi qua ngày bị chặn. untracked khi tắt cờ để không tự kích lại effect.
     afterRenderEffect(() => {
-      if (!this.open()) return;
-      this.focusedDate();
-      const active = this.dayButtons().find(
-        (r) => r.nativeElement.tabIndex === 0 && !r.nativeElement.disabled,
-      );
+      if (!this.open() || !this.focusPending()) return;
+      const active = this.dayButtons().find((r) => r.nativeElement.tabIndex === 0);
       active?.nativeElement.focus();
+      untracked(() => this.focusPending.set(false));
     });
   }
 
@@ -164,6 +170,7 @@ export class GDatepicker {
   protected openPanel(): void {
     this.viewMonth.set(startOfMonth(this.value() ?? new Date()));
     this.focusedDate.set(this.value() ?? new Date());
+    this.focusPending.set(true);
     this.open.set(true);
   }
   protected close(): void {
@@ -172,6 +179,9 @@ export class GDatepicker {
 
   protected shiftMonth(n: number): void {
     this.viewMonth.set(addMonths(this.viewMonth(), n));
+    // Dời ngày focus theo tháng (kẹp cuối tháng) để bàn phím tiếp tục đúng chỗ sau khi bấm chuột đổi
+    // tháng; KHÔNG focusPending để nút chuyển tháng giữ focus.
+    this.focusedDate.set(addMonthsClamped(this.focusedDate(), n));
   }
 
   protected select(day: Date): void {
@@ -182,6 +192,17 @@ export class GDatepicker {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
+    // Escape đóng từ bất cứ đâu trong panel (kể cả khi focus đang ở nút chuyển tháng).
+    if (event.key === 'Escape') {
+      this.close();
+      this.focusTrigger();
+      event.preventDefault();
+      return;
+    }
+    // Phím điều hướng lưới CHỈ xử khi focus đang ở một ô ngày — không nuốt Enter/Space/mũi tên của
+    // nút chuyển tháng (chúng vẫn hoạt động native).
+    if (!(event.target as HTMLElement).classList.contains('g-datepicker__day')) return;
+
     const move = (n: number) => {
       const next = addDays(this.focusedDate(), n);
       this.focusedDate.set(next);
@@ -191,6 +212,14 @@ export class GDatepicker {
       ) {
         this.viewMonth.set(startOfMonth(next));
       }
+      this.focusPending.set(true);
+      event.preventDefault();
+    };
+    const jumpMonth = (n: number) => {
+      const next = addMonthsClamped(this.focusedDate(), n);
+      this.focusedDate.set(next);
+      this.viewMonth.set(startOfMonth(next));
+      this.focusPending.set(true);
       event.preventDefault();
     };
     switch (event.key) {
@@ -207,23 +236,14 @@ export class GDatepicker {
         move(7);
         break;
       case 'PageUp':
-        this.focusedDate.set(addMonths(this.focusedDate(), -1));
-        this.shiftMonth(-1);
-        event.preventDefault();
+        jumpMonth(-1);
         break;
       case 'PageDown':
-        this.focusedDate.set(addMonths(this.focusedDate(), 1));
-        this.shiftMonth(1);
-        event.preventDefault();
+        jumpMonth(1);
         break;
       case 'Enter':
       case ' ':
         this.select(this.focusedDate());
-        event.preventDefault();
-        break;
-      case 'Escape':
-        this.close();
-        this.focusTrigger();
         event.preventDefault();
         break;
     }

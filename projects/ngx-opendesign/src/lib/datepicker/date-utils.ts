@@ -22,6 +22,14 @@ export function addMonths(d: Date, n: number): Date {
   return new Date(d.getFullYear(), d.getMonth() + n, d.getDate());
 }
 
+// addMonths nhưng KẸP ngày về ngày cuối tháng đích (tránh tràn: 31/8 +1 tháng = 30/9, KHÔNG phải 1/10).
+export function addMonthsClamped(d: Date, n: number): Date {
+  const y = d.getFullYear();
+  const m = d.getMonth() + n;
+  const lastDay = new Date(y, m + 1, 0).getDate();
+  return new Date(y, m, Math.min(d.getDate(), lastDay));
+}
+
 export function addDays(d: Date, n: number): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
 }

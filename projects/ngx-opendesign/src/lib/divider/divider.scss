@@ -27,3 +27,6 @@
   height: auto;
   flex: 1;
 }
+.g-divider--vertical .g-divider__label {
+  padding: var(--g-space-3) 0;
+}

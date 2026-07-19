@@ -1,6 +1,7 @@
 import {
   addDays,
   addMonths,
+  addMonthsClamped,
   buildMonthGrid,
   formatDate,
   inRange,
@@ -26,6 +27,17 @@ describe('date-utils', () => {
   it('addMonths / addDays vượt biên tháng', () => {
     expect(formatDate(addMonths(new Date(2026, 6, 15), 1))).toBe('15/08/2026');
     expect(formatDate(addDays(new Date(2026, 6, 31), 1))).toBe('01/08/2026');
+  });
+
+  it('addMonthsClamped kẹp ngày cuối tháng, không tràn', () => {
+    // 31/8 + 1 tháng → 30/9 (không phải 1/10 như addMonths thường)
+    expect(formatDate(addMonthsClamped(new Date(2026, 7, 31), 1))).toBe('30/09/2026');
+    // 31/1 + 1 tháng → 28/2/2026 (2026 không nhuận)
+    expect(formatDate(addMonthsClamped(new Date(2026, 0, 31), 1))).toBe('28/02/2026');
+    // ngày trong biên giữ nguyên
+    expect(formatDate(addMonthsClamped(new Date(2026, 6, 15), 1))).toBe('15/08/2026');
+    // lùi tháng
+    expect(formatDate(addMonthsClamped(new Date(2026, 2, 31), -1))).toBe('28/02/2026');
   });
 
   it('isBeforeDay / inRange', () => {

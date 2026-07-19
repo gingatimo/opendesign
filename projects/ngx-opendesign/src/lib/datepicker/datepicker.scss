@@ -98,14 +98,14 @@
   font-size: var(--g-font-size-sm);
   cursor: pointer;
 
-  &:hover:not(:disabled) {
+  &:hover:not([aria-disabled='true']) {
     background: var(--g-surface);
   }
   &:focus-visible {
     outline: none;
     box-shadow: var(--g-focus-ring);
   }
-  &:disabled {
+  &[aria-disabled='true'] {
     color: var(--g-text-muted);
     opacity: 0.4;
     cursor: default;
