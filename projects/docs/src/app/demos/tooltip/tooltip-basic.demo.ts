@@ -12,10 +12,23 @@ import { GButton, GIcon, GIconButton, gIconSettings, GTooltip } from 'ngx-opende
     <button g-icon-button aria-label="Cài đặt" gTooltip="Mở cài đặt">
       <g-icon [icon]="iconSettings" />
     </button>
+    <button g-button variant="outline" gTooltip="Góc trên trái" gTooltipPosition="top-left">
+      Trên-trái
+    </button>
+    <button g-button variant="outline" gTooltip="Góc trên phải" gTooltipPosition="top-right">
+      Trên-phải
+    </button>
+    <button g-button variant="outline" gTooltip="Góc dưới trái" gTooltipPosition="bottom-left">
+      Dưới-trái
+    </button>
+    <button g-button variant="outline" gTooltip="Góc dưới phải" gTooltipPosition="bottom-right">
+      Dưới-phải
+    </button>
   `,
   styles: `
     :host {
       display: flex;
+      flex-wrap: wrap;
       gap: var(--g-space-3);
       align-items: center;
     }

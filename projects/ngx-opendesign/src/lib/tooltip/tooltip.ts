@@ -14,7 +14,8 @@ import {
 } from '@angular/core';
 import { gNextId } from '../core/id-generator';
 
-export type GTooltipPosition = 'top' | 'bottom' | 'left' | 'right';
+export type GTooltipPosition =
+  'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 /** Khoảng cách (px) giữa tooltip và trigger. */
 const TOOLTIP_OFFSET = 8;
@@ -48,6 +49,35 @@ const POSITIONS_BY_DIRECTION: Record<GTooltipPosition, ConnectedPosition> = {
     overlayX: 'start',
     overlayY: 'center',
     offsetX: TOOLTIP_OFFSET,
+  },
+  // Góc: tooltip nằm trên/dưới, canh mép trái/phải với trigger.
+  'top-left': {
+    originX: 'start',
+    originY: 'top',
+    overlayX: 'start',
+    overlayY: 'bottom',
+    offsetY: -TOOLTIP_OFFSET,
+  },
+  'top-right': {
+    originX: 'end',
+    originY: 'top',
+    overlayX: 'end',
+    overlayY: 'bottom',
+    offsetY: -TOOLTIP_OFFSET,
+  },
+  'bottom-left': {
+    originX: 'start',
+    originY: 'bottom',
+    overlayX: 'start',
+    overlayY: 'top',
+    offsetY: TOOLTIP_OFFSET,
+  },
+  'bottom-right': {
+    originX: 'end',
+    originY: 'bottom',
+    overlayX: 'end',
+    overlayY: 'top',
+    offsetY: TOOLTIP_OFFSET,
   },
 };
 

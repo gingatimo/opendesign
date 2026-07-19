@@ -19,6 +19,15 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Điều hướng**: `GDockMenu` (thanh dock kiểu macOS — icon phóng to khi hover, tooltip, `position` bottom/static).
 - **Cấu trúc**: `GScrollPanel` (vùng cuộn thanh cuộn mảnh theo theme).
 
+### Changed
+
+- **GTooltip**: `gTooltipPosition` thêm 4 vị trí góc — `top-left`, `top-right`, `bottom-left`,
+  `bottom-right`.
+- **Pill shape**: item của `GSelect` (option), `GTreeSelect` và `GCascadeSelect` cùng ô bao ngoài của
+  `GChips` nay bo dạng viên (pill) cho nhất quán.
+- **GDockMenu**: bỏ tô nền đặc màu chính khi hover (icon phóng to lộ ô đặc lớn nhô khỏi thanh trông
+  vỡ) — nay chỉ nền nhẹ, icon nổi trực tiếp trên thanh.
+
 ## [0.9.0] — 2026-07-19
 
 ### Added

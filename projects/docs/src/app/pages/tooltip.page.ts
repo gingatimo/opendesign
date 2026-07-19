@@ -89,9 +89,9 @@ export default class TooltipPage {
     },
     {
       name: 'gTooltipPosition',
-      type: "'top' | 'bottom' | 'left' | 'right'",
+      type: "'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'",
       default: "'top'",
-      description: 'Hướng ưu tiên; CDK tự chuyển sang hướng khác nếu không đủ chỗ.',
+      description: 'Hướng ưu tiên (gồm 4 góc); CDK tự chuyển sang hướng khác nếu không đủ chỗ.',
     },
   ];
 }

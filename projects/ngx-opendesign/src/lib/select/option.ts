@@ -31,7 +31,7 @@ import { GSelect } from './select';
       align-items: center;
       gap: var(--g-space-2);
       padding: var(--g-space-2) var(--g-space-3);
-      border-radius: var(--g-radius-sm);
+      border-radius: var(--g-radius-pill);
       font-family: var(--g-font-family);
       font-size: var(--g-font-size-md);
       color: var(--g-text);

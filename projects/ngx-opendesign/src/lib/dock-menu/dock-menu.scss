@@ -39,13 +39,14 @@
   padding: 0;
   border: none;
   border-radius: var(--g-radius-md);
-  background: var(--g-surface);
+  // Icon nổi thẳng trên thanh dock; phóng to khi hover là phản hồi chính. KHÔNG tô nền đặc màu
+  // chính khi hover — khi phóng 1.5x, ô đặc lớn nhô khỏi thanh trông vỡ. Chỉ nền nhẹ.
+  background: transparent;
   color: var(--g-text);
   cursor: pointer;
 
   &:hover {
-    background: var(--g-primary);
-    color: var(--g-on-primary);
+    background: var(--g-surface);
   }
   &:focus-visible {
     outline: none;
