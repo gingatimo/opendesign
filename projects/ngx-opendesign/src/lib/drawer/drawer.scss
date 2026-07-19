@@ -1,7 +1,10 @@
-// Host không tạo box riêng — hai con position:fixed neo theo viewport bất kể host. display:contents
-// để host không chiếm chỗ inline thừa trong layout của consumer.
+// Host là block cao 0 (con position:fixed đều out-of-flow nên host không chiếm chỗ nhìn thấy).
+// KHÔNG dùng display:contents: Chromium có lỗi style-invalidation — đổi class (.g-drawer--open) trên
+// một phần tử display:contents KHÔNG restyle descendant, nên rule :host(.g-drawer--open) .panel khớp
+// selector nhưng cascade vẫn giữ giá trị đóng (panel kẹt ngoài màn hình, backdrop không hiện). Kiểm
+// bằng Chromium thật. display:block tránh hẳn lỗi này và cũng không tạo containing block cho fixed.
 :host {
-  display: contents;
+  display: block;
 }
 
 // z-index 1000: đủ nổi trên nội dung app thường. (Không vượt CDK overlay/dialog ~1000 — drawer và
