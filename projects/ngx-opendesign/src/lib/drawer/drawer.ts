@@ -80,29 +80,35 @@ export class GDrawer {
   });
 
   // Lưu overflow cũ của body để khôi phục đúng (không đè '' cứng); phần tử có focus trước khi mở để
-  // trả focus về khi đóng.
+  // trả focus về khi đóng. Cờ locked đặt ĐỒNG BỘ trong effect để chỉ ghi body khi thực sự chuyển
+  // trạng thái — tránh ghi đè lúc mount (open=false) và tránh race với onDestroy.
   private savedBodyOverflow = '';
+  private locked = false;
   private previouslyFocused: HTMLElement | null = null;
   private wasOpen = false;
 
   constructor() {
-    // Khoá scroll body khi mở, khôi phục khi đóng. Guard document cho SSR.
+    // Khoá scroll body khi mở, khôi phục khi đóng. Chỉ hành động khi CHUYỂN trạng thái (locked) nên
+    // drawer đứng yên / mới mount không đụng tới body.style.overflow của consumer. Guard document cho SSR.
     effect(() => {
       const isOpen = this.open();
       if (typeof document === 'undefined') return;
       untracked(() => {
-        if (isOpen) {
+        if (isOpen && !this.locked) {
           this.savedBodyOverflow = document.body.style.overflow;
           document.body.style.overflow = 'hidden';
-        } else {
+          this.locked = true;
+        } else if (!isOpen && this.locked) {
           document.body.style.overflow = this.savedBodyOverflow;
+          this.locked = false;
         }
       });
     });
 
-    // Nếu bị huỷ khi đang mở, trả scroll lại cho body (tránh khoá vĩnh viễn).
+    // Nếu bị huỷ khi đang khoá, trả scroll lại cho body (tránh khoá vĩnh viễn). Dùng locked (đặt đồng
+    // bộ trong effect) chứ không phải wasOpen (đặt ở afterRenderEffect, chạy sau render → có thể lệch).
     inject(DestroyRef).onDestroy(() => {
-      if (this.wasOpen && typeof document !== 'undefined') {
+      if (this.locked && typeof document !== 'undefined') {
         document.body.style.overflow = this.savedBodyOverflow;
       }
     });

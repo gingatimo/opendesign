@@ -157,7 +157,9 @@ export class GMediaPlayer {
   protected togglePlay(): void {
     const el = this.media()?.nativeElement;
     if (!el) return;
-    if (el.paused) void el.play();
+    // play() trả Promise có thể reject (AbortError khi play rồi pause nhanh, src lỗi...) — nuốt để
+    // không sinh unhandled rejection. () => undefined thay vì {} vì repo cấm no-empty-function.
+    if (el.paused) void el.play().catch(() => undefined);
     else el.pause();
   }
 
