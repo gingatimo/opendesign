@@ -1,4 +1,6 @@
-.g-divider {
+// Host là <g-divider> → phải dùng :host (không phải .g-divider): class .g-divider bị ViewEncapsulation
+// scope thành [_ngcontent] mà host chỉ mang [_nghost] nên rule không áp, host không flex → line co về 0.
+:host {
   display: flex;
   align-items: center;
   width: 100%;
@@ -16,17 +18,17 @@
 .g-divider__label:empty {
   display: none;
 }
-.g-divider--vertical {
+:host(.g-divider--vertical) {
   display: inline-flex;
   flex-direction: column;
   width: auto;
   align-self: stretch;
 }
-.g-divider--vertical .g-divider__line {
+:host(.g-divider--vertical) .g-divider__line {
   width: 1px;
   height: auto;
   flex: 1;
 }
-.g-divider--vertical .g-divider__label {
+:host(.g-divider--vertical) .g-divider__label {
   padding: var(--g-space-3) 0;
 }
