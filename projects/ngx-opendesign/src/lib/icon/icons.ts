@@ -212,6 +212,54 @@ export const gIconCalendar: GIconGlyph = {
   rects: [{ x: 3, y: 4, width: 18, height: 18, rx: 2 }],
 };
 
+export const gIconBell: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9', 'M13.73 21a2 2 0 0 1-3.46 0'],
+};
+
+export const gIconCopy: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2'],
+  rects: [{ x: 8, y: 8, width: 14, height: 14, rx: 2 }],
+};
+
+export const gIconLink: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71',
+    'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
+  ],
+};
+
+export const gIconImage: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M21 15l-5-5L5 21'],
+  circles: [{ cx: 8.5, cy: 8.5, r: 1.5 }],
+  rects: [{ x: 3, y: 3, width: 18, height: 18, rx: 2 }],
+};
+
+export const gIconGrid: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [
+    { x: 3, y: 3, width: 7, height: 7, rx: 1 },
+    { x: 14, y: 3, width: 7, height: 7, rx: 1 },
+    { x: 3, y: 14, width: 7, height: 7, rx: 1 },
+    { x: 14, y: 14, width: 7, height: 7, rx: 1 },
+  ],
+};
+
+export const gIconLayout: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M3 9h18', 'M9 9v12'],
+  rects: [{ x: 3, y: 3, width: 18, height: 18, rx: 2 }],
+};
+
+export const gIconTable: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M3 10h18M9 10v10'],
+  rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
+};
+
 /**
  * Khung ngoài + vạch dọc dùng chung cho panelLeftClose/panelLeftOpen — bo góc thật qua <rect rx>
  * (không quy về path), xem lý do ở JSDoc GIconGlyph phía trên.
