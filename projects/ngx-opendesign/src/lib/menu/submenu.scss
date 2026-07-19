@@ -15,7 +15,9 @@
   flex-shrink: 0;
   transition: transform var(--g-duration-fast) var(--g-ease);
 }
-:host(.g-submenu--open) .g-submenu__chevron {
+// DÙNG > (con trực tiếp): submenu lồng nhau → panel/chevron của submenu CON cũng là descendant của
+// host CHA, nếu dùng selector descendant thì cha mở sẽ hiện luôn cả con (bug đã thấy trên Chromium).
+:host(.g-submenu--open) > .g-submenu__toggle .g-submenu__chevron {
   transform: rotate(180deg);
 }
 
@@ -27,7 +29,7 @@
   padding-left: var(--g-space-4);
   margin-top: var(--g-space-1);
 }
-:host(.g-submenu--open) .g-submenu__panel {
+:host(.g-submenu--open) > .g-submenu__panel {
   display: flex;
 }
 
@@ -36,10 +38,10 @@
   position: relative;
   display: inline-block;
 }
-:host(.g-submenu--horizontal) .g-submenu__toggle {
+:host(.g-submenu--horizontal) > .g-submenu__toggle {
   width: auto;
 }
-:host(.g-submenu--horizontal) .g-submenu__panel {
+:host(.g-submenu--horizontal) > .g-submenu__panel {
   position: absolute;
   top: 100%;
   left: 0;
