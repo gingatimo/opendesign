@@ -120,7 +120,9 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
                 #dayBtn
                 type="button"
                 class="g-date-range-picker__day"
-                [class.g-date-range-picker__day--outside]="day.getMonth() !== viewMonth().getMonth()"
+                [class.g-date-range-picker__day--outside]="
+                  day.getMonth() !== viewMonth().getMonth()
+                "
                 [class.g-date-range-picker__day--today]="isToday(day)"
                 [class.g-date-range-picker__day--endpoint]="isStart(day) || isEnd(day)"
                 [attr.aria-disabled]="!inRangeDay(day) ? 'true' : null"

@@ -62,8 +62,7 @@
   cursor: crosshair;
   touch-action: none;
   background:
-    linear-gradient(to top, #000, transparent),
-    linear-gradient(to right, #fff, transparent),
+    linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent),
     hsl(var(--g-cp-hue, 0) 100% 50%);
 
   &:focus-visible {
