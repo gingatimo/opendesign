@@ -1,0 +1,113 @@
+// Host không tạo box riêng — hai con position:fixed neo theo viewport bất kể host. display:contents
+// để host không chiếm chỗ inline thừa trong layout của consumer.
+:host {
+  display: contents;
+}
+
+// z-index 1000: đủ nổi trên nội dung app thường. (Không vượt CDK overlay/dialog ~1000 — drawer và
+// dialog chồng nhau là hiếm; nếu cần, consumer tự nâng.) Panel đứng SAU backdrop trong DOM nên cùng
+// z-index vẫn nổi trên backdrop.
+.g-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgb(0 0 0 / 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--g-duration-base) var(--g-ease);
+}
+
+:host(.g-drawer--open) .g-drawer__backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.g-drawer__panel {
+  position: fixed;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-2);
+  padding: var(--g-space-4);
+  overflow: auto;
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  box-shadow: var(--g-shadow-lg);
+  transition: transform var(--g-duration-base) var(--g-ease);
+
+  // Panel là vùng chứa, không phải control tương tác — focus lập trình (mở drawer) không cần vòng focus.
+  &:focus {
+    outline: none;
+  }
+}
+
+// Thanh grab của bottom sheet — thuần trang trí (aria-hidden).
+.g-drawer__handle {
+  flex: none;
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  margin-bottom: var(--g-space-2);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-border-strong);
+}
+
+// ----- left / right: side panel full-height, bo góc phía trong -----
+:host(.g-drawer--right) .g-drawer__panel {
+  top: 0;
+  right: 0;
+  width: min(360px, 90vw);
+  height: 100%;
+  border-top-left-radius: var(--g-radius-md);
+  border-bottom-left-radius: var(--g-radius-md);
+  transform: translateX(100%);
+}
+:host(.g-drawer--left) .g-drawer__panel {
+  top: 0;
+  left: 0;
+  width: min(360px, 90vw);
+  height: 100%;
+  border-top-right-radius: var(--g-radius-md);
+  border-bottom-right-radius: var(--g-radius-md);
+  transform: translateX(-100%);
+}
+
+// ----- bottom / top: sheet ngang, bo góc phía trong -----
+:host(.g-drawer--bottom) .g-drawer__panel {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-height: 85vh;
+  border-top-left-radius: var(--g-radius-md);
+  border-top-right-radius: var(--g-radius-md);
+  transform: translateY(100%);
+}
+:host(.g-drawer--top) .g-drawer__panel {
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  max-height: 85vh;
+  border-bottom-left-radius: var(--g-radius-md);
+  border-bottom-right-radius: var(--g-radius-md);
+  transform: translateY(-100%);
+}
+
+// ----- mở: trượt về đúng vị trí -----
+:host(.g-drawer--open.g-drawer--right) .g-drawer__panel,
+:host(.g-drawer--open.g-drawer--left) .g-drawer__panel,
+:host(.g-drawer--open.g-drawer--bottom) .g-drawer__panel,
+:host(.g-drawer--open.g-drawer--top) .g-drawer__panel {
+  transform: translate(0, 0);
+}
+
+// Trượt là chuyển động theo tương tác — giảm chuyển động thì bỏ hẳn transition (trạng thái cuối
+// vẫn hiện đủ, không mất thông tin).
+@media (prefers-reduced-motion: reduce) {
+  .g-drawer__backdrop,
+  .g-drawer__panel {
+    transition: none;
+  }
+}
