@@ -3,15 +3,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
+  OnInit,
   signal,
   untracked,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
+import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconChevronDown, gIconChevronRight } from '../icon/icons';
 
@@ -104,6 +107,7 @@ function findPath(
     '[attr.aria-expanded]': 'open()',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[class.g-cascade-select--disabled]': 'disabled()',
+    '[class.g-cascade-select--invalid]': 'invalid()',
     '[class.g-cascade-select--open]': 'open()',
     '(click)': 'onTriggerClick()',
     '(keydown)': 'onTriggerKeydown($event)',
@@ -112,13 +116,14 @@ function findPath(
   styleUrl: './cascade-select.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GCascadeSelect implements ControlValueAccessor {
+export class GCascadeSelect implements ControlValueAccessor, OnInit {
   readonly options = input<GCascadeOption[]>([]);
   readonly placeholder = input('');
   readonly compareWith = input<(a: unknown, b: unknown) => boolean>((a, b) => a === b);
 
   protected readonly open = signal(false);
   protected readonly disabled = signal(false);
+  protected readonly invalid = signal(false);
   protected readonly positions = POSITIONS;
   protected readonly iconDown = gIconChevronDown;
   protected readonly iconRight = gIconChevronRight;
@@ -130,9 +135,14 @@ export class GCascadeSelect implements ControlValueAccessor {
 
   protected readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
 
   private onChange: (value: unknown) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
+  }
 
   // Ô cần focus sau lần render tới. Zoneless render ở macrotask nên KHÔNG dùng queueMicrotask (chạy
   // trước render → panel/cột chưa tồn tại); dùng afterRenderEffect như GTreeSelect.

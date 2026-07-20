@@ -4,15 +4,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
+  OnInit,
   signal,
   untracked,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
+import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconCheck, gIconChevronDown, gIconChevronRight, gIconMinus } from '../icon/icons';
 
@@ -163,6 +166,7 @@ function leafValues(node: GTreeNode): unknown[] {
     '[attr.aria-expanded]': 'open()',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[class.g-tree-select--disabled]': 'disabled()',
+    '[class.g-tree-select--invalid]': 'invalid()',
     '[class.g-tree-select--open]': 'open()',
     '[class.g-tree-select--multiple]': 'multiple()',
     '(click)': 'onTriggerClick()',
@@ -172,7 +176,7 @@ function leafValues(node: GTreeNode): unknown[] {
   styleUrl: './tree-select.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GTreeSelect implements ControlValueAccessor {
+export class GTreeSelect implements ControlValueAccessor, OnInit {
   readonly options = input<GTreeNode[]>([]);
   readonly placeholder = input('');
   readonly multiple = input(false, { transform: booleanAttribute });
@@ -180,6 +184,7 @@ export class GTreeSelect implements ControlValueAccessor {
 
   protected readonly open = signal(false);
   protected readonly disabled = signal(false);
+  protected readonly invalid = signal(false);
   protected readonly triggerWidth = signal(0);
   protected readonly positions = POSITIONS;
   protected readonly iconDown = gIconChevronDown;
@@ -195,9 +200,14 @@ export class GTreeSelect implements ControlValueAccessor {
   protected readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
 
   private onChange: (value: unknown) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
+  }
 
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;

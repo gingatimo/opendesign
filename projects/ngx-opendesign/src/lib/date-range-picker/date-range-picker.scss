@@ -30,6 +30,11 @@
   }
 }
 
+// Viền đỏ khi control invalid + touched/dirty (giống .g-input). Xem trackControlInvalid.
+:host(.g-date-range-picker--invalid) .g-date-range-picker__trigger {
+  border-color: var(--g-danger-solid);
+}
+
 .g-date-range-picker__value--placeholder {
   color: var(--g-text-muted);
 }

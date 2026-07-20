@@ -1,4 +1,7 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { GDatepicker } from './datepicker';
 import { formatDate } from './date-utils';
 
@@ -63,5 +66,55 @@ describe('GDatepicker', () => {
     const { f } = make();
     const el = f.nativeElement.querySelector('.g-datepicker__value') as HTMLElement;
     expect(el.textContent!.trim()).toBe('dd/MM/yyyy');
+  });
+});
+
+// GDatepicker nay là ControlValueAccessor: dùng được formControlName, đồng thời GIỮ [(value)].
+@Component({
+  imports: [GDatepicker, ReactiveFormsModule],
+  template: `<g-datepicker [formControl]="control" />`,
+})
+class DpHost {
+  readonly control = new FormControl<Date | null>(null);
+}
+
+describe('GDatepicker (CVA)', () => {
+  function setup() {
+    const f = TestBed.createComponent(DpHost);
+    f.detectChanges();
+    const host: HTMLElement = f.debugElement.query(By.directive(GDatepicker)).nativeElement;
+    const cmp = f.debugElement.query(By.directive(GDatepicker)).componentInstance as unknown as Dp;
+    return { f, host, cmp };
+  }
+
+  it('setValue của FormControl hiển thị lên trigger (writeValue)', () => {
+    const { f, host } = setup();
+    f.componentInstance.control.setValue(new Date(2026, 6, 20));
+    f.detectChanges();
+    expect(host.querySelector('.g-datepicker__value')!.textContent!.trim()).toBe('20/07/2026');
+  });
+
+  it('chọn ngày cập nhật FormControl (onChange)', () => {
+    const { f, cmp } = setup();
+    cmp.openPanel();
+    cmp.select(new Date(2026, 6, 20));
+    expect(formatDate(f.componentInstance.control.value!)).toBe('20/07/2026');
+  });
+
+  it('invalid + markAsTouched: có class g-datepicker--invalid', () => {
+    const { f, host } = setup();
+    f.componentInstance.control.setValidators(() => ({ required: true }));
+    f.componentInstance.control.updateValueAndValidity();
+    f.componentInstance.control.markAsTouched();
+    f.detectChanges();
+    expect(host.classList).toContain('g-datepicker--invalid');
+  });
+
+  it('control.disable() vô hiệu hóa trigger (setDisabledState)', () => {
+    const { f, host } = setup();
+    f.componentInstance.control.disable();
+    f.detectChanges();
+    const btn = host.querySelector('.g-datepicker__trigger') as HTMLButtonElement;
+    expect(btn.disabled).toBe(true);
   });
 });

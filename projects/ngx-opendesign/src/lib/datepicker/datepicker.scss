@@ -28,6 +28,12 @@
     cursor: default;
   }
 }
+
+// Viền đỏ khi control invalid + touched/dirty (giống .g-input). Xem trackControlInvalid.
+:host(.g-datepicker--invalid) .g-datepicker__trigger {
+  border-color: var(--g-danger-solid);
+}
+
 .g-datepicker__value--placeholder {
   color: var(--g-text-muted);
 }

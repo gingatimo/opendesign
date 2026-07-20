@@ -38,6 +38,12 @@
   cursor: not-allowed;
 }
 
+// Viền đỏ khi control invalid + đã touched/dirty (giống .g-input) — invalid signal do NgControl
+// điều khiển, xem trackControlInvalid.
+:host(.g-select--invalid) {
+  border-color: var(--g-danger-solid);
+}
+
 .g-select__trigger-content {
   flex: 1;
   overflow: hidden;

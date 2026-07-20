@@ -31,6 +31,11 @@
   cursor: not-allowed;
 }
 
+// Viền đỏ khi control invalid + touched/dirty (giống .g-input). Xem trackControlInvalid.
+:host(.g-chips--invalid) .g-chips__field {
+  border-color: var(--g-danger-solid);
+}
+
 .g-chips__input {
   flex: 1;
   min-width: 80px;

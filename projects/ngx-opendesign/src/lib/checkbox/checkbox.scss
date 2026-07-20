@@ -43,6 +43,12 @@
   border-color: var(--g-primary);
 }
 
+// Viền đỏ ô tick khi control invalid + touched (vd. checkbox "đồng ý điều khoản" bắt buộc chưa tick).
+// Xem trackControlInvalid.
+:host(.g-checkbox--invalid) .g-checkbox__box {
+  border-color: var(--g-danger-solid);
+}
+
 .g-checkbox__icon {
   width: 12px;
   height: 12px;

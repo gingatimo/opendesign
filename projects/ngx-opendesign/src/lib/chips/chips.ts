@@ -10,11 +10,13 @@ import {
   inject,
   input,
   numberAttribute,
+  OnInit,
   signal,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { GChip } from '../chip/chip';
+import { trackControlInvalid } from '../core/control-invalid';
 
 // Ô nhập nhiều giá trị dạng chip (tags input). Gõ + Enter/dấu phẩy để thêm, × hoặc Backspace (khi ô
 // rỗng) để xoá. value = string[] (CVA). Chống trùng trừ khi allowDuplicate; max giới hạn số chip.
@@ -47,18 +49,20 @@ import { GChip } from '../chip/chip';
   host: {
     class: 'g-chips',
     '[class.g-chips--disabled]': 'disabled()',
+    '[class.g-chips--invalid]': 'invalid()',
     '[class.g-chips--wrapped]': 'wrapped()',
   },
   styleUrl: './chips.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GChips implements ControlValueAccessor {
+export class GChips implements ControlValueAccessor, OnInit {
   readonly placeholder = input('');
   readonly max = input<number | undefined>(undefined, { transform: numberAttribute });
   readonly allowDuplicate = input(false, { transform: booleanAttribute });
 
   protected readonly chips = signal<string[]>([]);
   protected readonly disabled = signal(false);
+  protected readonly invalid = signal(false);
   protected readonly atMax = computed(() => {
     const m = this.max();
     return m != null && this.chips().length >= m;
@@ -90,6 +94,10 @@ export class GChips implements ControlValueAccessor {
       ro.observe(this.fieldRef().nativeElement);
       this.destroyRef.onDestroy(() => ro.disconnect());
     });
+  }
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
   }
 
   // Nhiều hàng khi các con (chip + ô nhập) không cùng một offsetTop.

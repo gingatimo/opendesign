@@ -32,3 +32,8 @@
     cursor: not-allowed;
   }
 }
+
+// Viền đỏ mọi ô khi control invalid + touched/dirty (giống .g-input). Xem trackControlInvalid.
+:host(.g-input-otp--invalid) .g-input-otp__box {
+  border-color: var(--g-danger-solid);
+}

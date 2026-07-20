@@ -51,6 +51,12 @@
   }
 }
 
+// Nhóm radio invalid + touched → viền đỏ nút tròn chưa chọn (nút đã chọn giữ màu primary). Trạng
+// thái invalid do GRadioGroup điều khiển, GRadio đọc lại qua group.isInvalid(). Xem trackControlInvalid.
+:host(.g-radio--invalid) .g-radio__dot:not(.g-radio__dot--checked) {
+  border-color: var(--g-danger-solid);
+}
+
 // Dot phóng to khi chọn là chuyển động theo tương tác, không phải indicator liên tục như
 // spinner/progress — nên khi người dùng yêu cầu giảm chuyển động thì TẮT hẳn, không làm
 // chậm: trạng thái cuối (dot hiện đủ khi checked) vẫn hiện đủ, không mất thông tin nào.

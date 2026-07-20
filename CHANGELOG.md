@@ -7,6 +7,15 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Added
+
+- **Forms — trạng thái invalid nhất quán**: mọi form control nay **tô viền đỏ** khi control invalid +
+  đã touched/dirty (trước chỉ `GInput`/`GTextarea` có): `GSelect`, `GCascadeSelect`, `GTreeSelect`,
+  `GChips`, `GInputOtp`, `GCheckbox`, `GRadioGroup` tự nhận qua `NgControl`.
+- **GDatepicker / GTimePicker / GDateRangePicker**: nay là **`ControlValueAccessor`** — dùng được
+  `formControlName`/`[formControl]` (kèm tô invalid tự động), đồng thời **giữ nguyên `[(value)]`** cho
+  dùng ngoài form (không breaking). `[disabled]` vẫn hoạt động, cộng thêm `formControl.disable()`.
+
 ### Changed
 
 - **GSelect**: panel dropdown nay rộng **tối thiểu bằng trigger** rồi tự nới theo nội dung option (thay

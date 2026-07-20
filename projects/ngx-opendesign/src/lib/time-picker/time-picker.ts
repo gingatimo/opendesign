@@ -6,15 +6,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
   model,
   numberAttribute,
+  OnInit,
   signal,
   untracked,
   viewChildren,
 } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconClock } from '../icon/icons';
 
@@ -102,20 +106,32 @@ function pad(n: number): string {
       </div>
     </ng-template>
   `,
-  host: { class: 'g-timepicker' },
+  host: {
+    class: 'g-timepicker',
+    '[class.g-timepicker--invalid]': 'invalid()',
+  },
   styleUrl: './time-picker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GTimePicker {
+export class GTimePicker implements ControlValueAccessor, OnInit {
   readonly value = model<string | null>(null);
   readonly minuteStep = input(1, { transform: numberAttribute });
   readonly placeholder = input('HH:mm');
-  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
+  private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly positions = POSITIONS;
   protected readonly iconClock = gIconClock;
   protected readonly pad = pad;
+
+  private readonly formDisabled = signal(false);
+  protected readonly disabled = computed(() => this.disabledInput() || this.formDisabled());
+  protected readonly invalid = signal(false);
+
+  private onChange: (value: string | null) => void = () => undefined;
+  private onTouchedFn: () => void = () => undefined;
 
   protected readonly open = signal(false);
   protected readonly hours = Array.from({ length: 24 }, (_, i) => i);
@@ -143,6 +159,7 @@ export class GTimePicker {
   private readonly minuteButtons = viewChildren<ElementRef<HTMLButtonElement>>('minuteBtn');
 
   constructor() {
+    if (this.ngControl) this.ngControl.valueAccessor = this;
     // Khi mở / điều hướng bàn phím: cuộn + focus ô đang focus của cột tương ứng. Sau render để
     // tabindex đã cập nhật. untracked khi tắt cờ để không tự kích lại.
     afterRenderEffect(() => {
@@ -180,15 +197,38 @@ export class GTimePicker {
   }
   protected close(): void {
     this.open.set(false);
+    // Đã tương tác rồi đóng → đánh dấu touched để validation hiện.
+    this.onTouchedFn();
+  }
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
   }
 
   protected selectHour(h: number): void {
-    this.value.set(`${pad(h)}:${pad(this.minute() ?? 0)}`);
+    const v = `${pad(h)}:${pad(this.minute() ?? 0)}`;
+    this.value.set(v);
+    this.onChange(v);
     this.focusedHour.set(h);
   }
   protected selectMinute(m: number): void {
-    this.value.set(`${pad(this.hour() ?? 0)}:${pad(m)}`);
+    const v = `${pad(this.hour() ?? 0)}:${pad(m)}`;
+    this.value.set(v);
+    this.onChange(v);
     this.focusedMinute.set(m);
+  }
+
+  writeValue(value: string | null): void {
+    this.value.set(value ?? null);
+  }
+  registerOnChange(fn: (value: string | null) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouchedFn = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.formDisabled.set(isDisabled);
   }
 
   protected onKeydown(event: KeyboardEvent): void {

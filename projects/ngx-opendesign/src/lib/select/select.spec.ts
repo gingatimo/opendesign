@@ -33,6 +33,23 @@ describe('GSelect + GOption', () => {
     expect(trigger.textContent).toContain('Chọn màu');
   });
 
+  it('invalid + markAsTouched (vd. form.markAllAsTouched lúc submit): có class g-select--invalid', () => {
+    const { fixture, trigger } = setup();
+    fixture.componentInstance.control.setValidators(() => ({ required: true }));
+    fixture.componentInstance.control.updateValueAndValidity();
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+    expect(trigger.classList).toContain('g-select--invalid');
+  });
+
+  it('invalid nhưng chưa touched: chưa có class g-select--invalid', () => {
+    const { fixture, trigger } = setup();
+    fixture.componentInstance.control.setValidators(() => ({ required: true }));
+    fixture.componentInstance.control.updateValueAndValidity();
+    fixture.detectChanges();
+    expect(trigger.classList).not.toContain('g-select--invalid');
+  });
+
   it('mặc định đóng panel', () => {
     const { fixture } = setup();
     expect(fixture.debugElement.query(By.css('[role="listbox"]'))).toBeNull();

@@ -5,15 +5,18 @@ import {
   Component,
   computed,
   contentChildren,
+  DestroyRef,
   ElementRef,
   inject,
   input,
+  OnInit,
   signal,
   untracked,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
+import { trackControlInvalid } from '../core/control-invalid';
 import { gNextId } from '../core/id-generator';
 import { GIcon } from '../icon/icon';
 import { gIconChevronDown } from '../icon/icons';
@@ -92,6 +95,7 @@ function normalize(s: string): string {
     '[attr.aria-controls]': 'listboxId',
     '[attr.aria-activedescendant]': 'activeDescendantId()',
     '[class.g-select--disabled]': 'disabled()',
+    '[class.g-select--invalid]': 'invalid()',
     '[class.g-select--open]': 'open()',
     '[class.g-select--multiple]': 'multiple()',
     '(click)': 'onTriggerClick()',
@@ -99,7 +103,7 @@ function normalize(s: string): string {
     '(blur)': 'onBlur($event)',
   },
 })
-export class GSelect implements ControlValueAccessor {
+export class GSelect implements ControlValueAccessor, OnInit {
   readonly placeholder = input('');
   readonly searchable = input(false, { transform: booleanAttribute });
   readonly multiple = input(false, { transform: booleanAttribute });
@@ -114,6 +118,7 @@ export class GSelect implements ControlValueAccessor {
   protected readonly triggerWidth = signal(0);
   protected readonly activeIndex = signal(-1);
   protected readonly disabled = signal(false);
+  protected readonly invalid = signal(false);
   protected readonly search = signal('');
   protected readonly positions = POSITIONS;
   protected readonly listboxId = gNextId('g-select-listbox');
@@ -132,6 +137,7 @@ export class GSelect implements ControlValueAccessor {
 
   protected readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     if (this.ngControl) {
@@ -148,6 +154,10 @@ export class GSelect implements ControlValueAccessor {
         this.prevOpen = isOpen;
       });
     });
+  }
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
   }
 
   // Option đang hiển thị (qua bộ lọc search). Điều hướng bàn phím chỉ chạy trên danh sách này.

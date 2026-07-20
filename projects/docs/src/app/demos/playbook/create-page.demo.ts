@@ -123,8 +123,8 @@ import {
           <span class="create-demo__label"
             >Ngày vào làm <span class="create-demo__req">*</span></span
           >
-          <g-datepicker [(value)]="startDate" aria-label="Ngày vào làm" />
-          @if (triedSubmit() && !startDate()) {
+          <g-datepicker formControlName="startDate" aria-label="Ngày vào làm" />
+          @if (invalid('startDate')) {
             <span class="create-demo__error">Vui lòng chọn ngày vào làm.</span>
           }
         </div>
@@ -230,9 +230,8 @@ export class CreatePageDemo {
 
   protected readonly iconUser = gIconUser;
 
-  // Datepicker và Slider dùng model [(value)] (không phải CVA), nên giữ ngoài form group rồi gộp
-  // lúc submit — vẫn là một màn "tạo bản ghi" hoàn chỉnh.
-  protected readonly startDate = signal<Date | null>(null);
+  // GDatepicker nay là CVA nên vào thẳng form group (formControlName) — invalid tự tô đỏ. GSlider vẫn
+  // dùng model [(value)] (required không áp cho thanh trượt) nên giữ ngoài form.
   protected readonly quota = signal(50);
   protected readonly avatar = signal<File[]>([]);
   protected readonly triedSubmit = signal(false);
@@ -242,6 +241,7 @@ export class CreatePageDemo {
     email: ['', [Validators.required, Validators.email]],
     department: ['', Validators.required],
     type: ['fulltime'],
+    startDate: [null as Date | null, Validators.required],
     tags: [[] as string[]],
     notes: [''],
     active: [true],
@@ -256,8 +256,7 @@ export class CreatePageDemo {
 
   protected submit(): void {
     this.triedSubmit.set(true);
-    const ok = this.form.valid && this.startDate() !== null;
-    if (!ok) {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.toast.show({ message: 'Vui lòng kiểm tra lại các trường bắt buộc.', variant: 'danger' });
       return;
@@ -269,8 +268,7 @@ export class CreatePageDemo {
   }
 
   protected reset(): void {
-    this.form.reset({ type: 'fulltime', tags: [], active: true });
-    this.startDate.set(null);
+    this.form.reset();
     this.quota.set(50);
     this.avatar.set([]);
     this.triedSubmit.set(false);

@@ -6,14 +6,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
   model,
+  OnInit,
   signal,
   untracked,
   viewChildren,
 } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconCalendar, gIconChevronLeft, gIconChevronRight } from '../icon/icons';
 import {
@@ -119,17 +123,30 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
       </div>
     </ng-template>
   `,
+  host: {
+    '[class.g-datepicker--invalid]': 'invalid()',
+  },
   styleUrl: './datepicker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GDatepicker {
+export class GDatepicker implements ControlValueAccessor, OnInit {
   readonly value = model<Date | null>(null);
   readonly min = input<Date>();
   readonly max = input<Date>();
   readonly placeholder = input('dd/MM/yyyy');
-  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
+  private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
+
+  // Disabled hợp nhất từ input [disabled] và setDisabledState của form (formControl.disable()).
+  private readonly formDisabled = signal(false);
+  protected readonly disabled = computed(() => this.disabledInput() || this.formDisabled());
+  protected readonly invalid = signal(false);
+
+  private onChange: (value: Date | null) => void = () => undefined;
+  private onTouchedFn: () => void = () => undefined;
   protected readonly positions = POSITIONS;
   protected readonly weekdays = WEEKDAYS;
   protected readonly iconCalendar = gIconCalendar;
@@ -152,6 +169,7 @@ export class GDatepicker {
   protected readonly grid = computed(() => buildMonthGrid(this.viewMonth()));
 
   constructor() {
+    if (this.ngControl) this.ngControl.valueAccessor = this;
     // Roving focus: chỉ focus ô ngày (tabindex=0) khi focusPending — sau render để tabindex đã cập nhật.
     // Dùng aria-disabled (không phải thuộc tính disabled) nên ô ngoài min/max vẫn focus được → không rớt
     // focus về body khi mũi tên đi qua ngày bị chặn. untracked khi tắt cờ để không tự kích lại effect.
@@ -175,6 +193,25 @@ export class GDatepicker {
   }
   protected close(): void {
     this.open.set(false);
+    // Đã tương tác rồi đóng (chọn ngày hoặc bỏ qua) → đánh dấu touched để validation hiện.
+    this.onTouchedFn();
+  }
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
+  }
+
+  writeValue(value: Date | null): void {
+    this.value.set(value ?? null);
+  }
+  registerOnChange(fn: (value: Date | null) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouchedFn = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.formDisabled.set(isDisabled);
   }
 
   protected shiftMonth(n: number): void {
@@ -187,6 +224,7 @@ export class GDatepicker {
   protected select(day: Date): void {
     if (!this.inRangeDay(day)) return;
     this.value.set(day);
+    this.onChange(day);
     this.close();
     this.focusTrigger();
   }

@@ -32,6 +32,15 @@ describe('GCheckbox', () => {
     expect(host.getAttribute('aria-checked')).toBe('false');
   });
 
+  it('invalid + markAsTouched (vd. requiredTrue chưa tick lúc submit): có class g-checkbox--invalid', () => {
+    const { fixture, host } = setup();
+    fixture.componentInstance.control.setValidators(() => ({ required: true }));
+    fixture.componentInstance.control.updateValueAndValidity();
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+    expect(host.classList).toContain('g-checkbox--invalid');
+  });
+
   it('click chuyển aria-checked + cập nhật FormControl', () => {
     const { fixture, host } = setup();
     host.click();

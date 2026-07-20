@@ -24,6 +24,7 @@ import { G_RADIO_GROUP, GRadioGroup } from './radio-group';
     '[attr.tabindex]': 'tabIndexValue()',
     '[attr.aria-disabled]': 'effectiveDisabled() ? "true" : null',
     '[class.g-radio--disabled]': 'effectiveDisabled()',
+    '[class.g-radio--invalid]': 'groupInvalid()',
     '(click)': 'select()',
     '(keydown.arrowright)': 'onArrow($event, 1)',
     '(keydown.arrowdown)': 'onArrow($event, 1)',
@@ -43,6 +44,8 @@ export class GRadio {
   protected readonly effectiveDisabled = computed(
     () => this.disabled() || this.group.isGroupDisabled(),
   );
+  // Nhóm invalid (bắt buộc chọn nhưng chưa chọn + đã touched) → tô đỏ mọi nút tròn cho tới khi chọn.
+  protected readonly groupInvalid = computed(() => this.group.isInvalid());
   protected readonly tabIndexValue = computed(() => {
     if (this.group.isGroupDisabled()) return -1;
     if (this.checked()) return 0;

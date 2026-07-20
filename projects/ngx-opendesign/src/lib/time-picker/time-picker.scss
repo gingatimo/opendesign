@@ -30,6 +30,11 @@
   }
 }
 
+// Viền đỏ khi control invalid + touched/dirty (giống .g-input). Xem trackControlInvalid.
+:host(.g-timepicker--invalid) .g-timepicker__trigger {
+  border-color: var(--g-danger-solid);
+}
+
 .g-timepicker__value--placeholder {
   color: var(--g-text-muted);
 }

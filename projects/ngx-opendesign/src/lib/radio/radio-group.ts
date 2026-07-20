@@ -2,11 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   contentChildren,
+  DestroyRef,
   inject,
   InjectionToken,
+  OnInit,
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { trackControlInvalid } from '../core/control-invalid';
 import { GRadio } from './radio';
 
 export const G_RADIO_GROUP = new InjectionToken<GRadioGroup>('G_RADIO_GROUP');
@@ -23,20 +26,26 @@ export const G_RADIO_GROUP = new InjectionToken<GRadioGroup>('G_RADIO_GROUP');
   },
   providers: [{ provide: G_RADIO_GROUP, useExisting: GRadioGroup }],
 })
-export class GRadioGroup implements ControlValueAccessor {
+export class GRadioGroup implements ControlValueAccessor, OnInit {
   private readonly value = signal<unknown>(undefined);
   private readonly disabledSignal = signal(false);
+  protected readonly invalid = signal(false);
   private readonly radios = contentChildren(GRadio);
 
   private onChange: (value: unknown) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
   }
 
   isSelected(value: unknown): boolean {
@@ -49,6 +58,10 @@ export class GRadioGroup implements ControlValueAccessor {
 
   isGroupDisabled(): boolean {
     return this.disabledSignal();
+  }
+
+  isInvalid(): boolean {
+    return this.invalid();
   }
 
   isFirst(radio: GRadio): boolean {

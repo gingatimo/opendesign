@@ -6,14 +6,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
   model,
+  OnInit,
   signal,
   untracked,
   viewChildren,
 } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconCalendar, gIconChevronLeft, gIconChevronRight } from '../icon/icons';
 import {
@@ -140,18 +144,31 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
       </div>
     </ng-template>
   `,
-  host: { class: 'g-date-range-picker' },
+  host: {
+    class: 'g-date-range-picker',
+    '[class.g-date-range-picker--invalid]': 'invalid()',
+  },
   styleUrl: './date-range-picker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GDateRangePicker {
+export class GDateRangePicker implements ControlValueAccessor, OnInit {
   readonly value = model<GDateRange>({ start: null, end: null });
   readonly min = input<Date>();
   readonly max = input<Date>();
   readonly placeholder = input('dd/MM/yyyy – dd/MM/yyyy');
-  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
+  private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly formDisabled = signal(false);
+  protected readonly disabled = computed(() => this.disabledInput() || this.formDisabled());
+  protected readonly invalid = signal(false);
+
+  private onChange: (value: GDateRange) => void = () => undefined;
+  private onTouchedFn: () => void = () => undefined;
+
   protected readonly positions = POSITIONS;
   protected readonly weekdays = WEEKDAYS;
   protected readonly iconCalendar = gIconCalendar;
@@ -181,12 +198,36 @@ export class GDateRangePicker {
   });
 
   constructor() {
+    if (this.ngControl) this.ngControl.valueAccessor = this;
     afterRenderEffect(() => {
       if (!this.open() || !this.focusPending()) return;
       const active = this.dayButtons().find((r) => r.nativeElement.tabIndex === 0);
       active?.nativeElement.focus();
       untracked(() => this.focusPending.set(false));
     });
+  }
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
+  }
+
+  // Đặt value đồng thời báo cho form (onChange). writeValue KHÔNG dùng hàm này (không được phát onChange).
+  private setRange(range: GDateRange): void {
+    this.value.set(range);
+    this.onChange(range);
+  }
+
+  writeValue(value: GDateRange | null): void {
+    this.value.set(value ?? { start: null, end: null });
+  }
+  registerOnChange(fn: (value: GDateRange) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouchedFn = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.formDisabled.set(isDisabled);
   }
 
   protected toggle(): void {
@@ -203,6 +244,8 @@ export class GDateRangePicker {
   protected close(): void {
     this.open.set(false);
     this.hovered.set(null);
+    // Đã tương tác rồi đóng → đánh dấu touched để validation hiện.
+    this.onTouchedFn();
   }
 
   protected shiftMonth(n: number): void {
@@ -215,13 +258,13 @@ export class GDateRangePicker {
     const { start, end } = this.value();
     if (!start || end) {
       // chưa có start, hoặc dải đã đủ → bắt đầu dải mới
-      this.value.set({ start: day, end: null });
+      this.setRange({ start: day, end: null });
     } else if (isBeforeDay(day, start)) {
       // click trước start → dời điểm đầu
-      this.value.set({ start: day, end: null });
+      this.setRange({ start: day, end: null });
     } else {
       // chốt end
-      this.value.set({ start, end: day });
+      this.setRange({ start, end: day });
       this.close();
       this.focusTrigger();
     }

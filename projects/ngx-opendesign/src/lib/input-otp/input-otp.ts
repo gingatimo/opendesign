@@ -3,16 +3,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   effect,
   inject,
   input,
   numberAttribute,
+  OnInit,
   signal,
   untracked,
   viewChildren,
   ElementRef,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { trackControlInvalid } from '../core/control-invalid';
 
 // Ô nhập mã OTP/PIN: length ô một ký tự, tự nhảy ô khi gõ, Backspace lùi, ←→ di chuyển, dán rải chuỗi
 // vào các ô. integerOnly chỉ nhận số, mask hiển thị dấu chấm. value = chuỗi ghép các ô (CVA).
@@ -38,16 +41,20 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
       />
     }
   `,
-  host: { class: 'g-input-otp' },
+  host: {
+    class: 'g-input-otp',
+    '[class.g-input-otp--invalid]': 'invalid()',
+  },
   styleUrl: './input-otp.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GInputOtp implements ControlValueAccessor {
+export class GInputOtp implements ControlValueAccessor, OnInit {
   readonly length = input(6, { transform: numberAttribute });
   readonly integerOnly = input(false, { transform: booleanAttribute });
   readonly mask = input(false, { transform: booleanAttribute });
 
   protected readonly disabled = signal(false);
+  protected readonly invalid = signal(false);
   protected readonly slots = computed(() => Array.from({ length: this.length() }, (_, i) => i));
 
   private readonly chars = signal<string[]>([]);
@@ -57,6 +64,11 @@ export class GInputOtp implements ControlValueAccessor {
   protected onTouchedFn: () => void = () => undefined;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
+
+  ngOnInit(): void {
+    trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);
+  }
 
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;

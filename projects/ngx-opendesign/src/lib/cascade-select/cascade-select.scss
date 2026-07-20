@@ -27,6 +27,11 @@
   cursor: not-allowed;
 }
 
+// Viền đỏ khi control invalid + touched/dirty (giống .g-input). Xem trackControlInvalid.
+:host(.g-cascade-select--invalid) {
+  border-color: var(--g-danger-solid);
+}
+
 .g-cascade-select__value {
   flex: 1;
   overflow: hidden;
