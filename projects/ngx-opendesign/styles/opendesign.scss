@@ -237,13 +237,15 @@ body {
     cursor: not-allowed;
   }
 
-  // <input gInput> bên trong nhóm: bỏ viền/nền/padding riêng của .g-input — group đã vẽ viền +
-  // focus ring bao quanh CẢ nhóm rồi, giữ nguyên .g-input sẽ ra hai lớp viền/ring chồng nhau.
+  // <input gInput> bên trong nhóm: bỏ viền/nền của .g-input — group đã vẽ viền + focus ring bao
+  // quanh CẢ nhóm rồi, giữ nguyên .g-input sẽ ra hai lớp viền/ring chồng nhau. Chừa padding ngang
+  // 2px (thay padding riêng của .g-input): input tự clip nội dung ở mép content-box, nên khi ô RỖNG
+  // con trỏ sát mép trái bị clip mất phần trái → trông bé/mảnh; 2px cho caret khoảng đệm.
   .g-input {
     flex: 1 1 auto;
     width: auto;
     height: 100%;
-    padding: 0;
+    padding: 0 2px;
     border: none;
     background: transparent;
 
