@@ -5,12 +5,14 @@ import { DemoSection } from '../shared/demo-section';
 import { TableAdvancedDemo } from '../demos/table/table-advanced.demo';
 import { TableBasicDemo } from '../demos/table/table-basic.demo';
 import { TableContainerDemo } from '../demos/table/table-container.demo';
+import { TableSelectDemo } from '../demos/table/table-select.demo';
 
 @Component({
   imports: [
     TableBasicDemo,
     TableAdvancedDemo,
     TableContainerDemo,
+    TableSelectDemo,
     CodeBlock,
     ApiTable,
     DemoSection,
@@ -59,6 +61,21 @@ import { TableContainerDemo } from '../demos/table/table-container.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/table/table-advanced.demo.ts" />
+
+    <h2>Chọn hàng</h2>
+    <p>
+      <code>gTable</code> thuần hiển thị nên <b>chọn hàng cũng do consumer quản lý</b> — đây là cách
+      ghép: cột checkbox <code>GCheckbox</code> mỗi hàng + ô tích ở <code>&lt;th&gt;</code> làm
+      <b>chọn tất cả</b> với trạng thái <code>indeterminate</code> (chọn một phần). Tập id đã chọn
+      giữ trong một <code>signal&lt;Set&gt;</code>; hàng đã chọn tô nền nhẹ. Bind checkbox một chiều
+      <code>[ngModel]</code> + <code>(ngModelChange)</code> (state là nguồn sự thật duy nhất).
+    </p>
+
+    <docs-demo-section>
+      <docs-table-select-demo />
+    </docs-demo-section>
+
+    <docs-code-block src="demo-sources/table/table-select.demo.ts" />
 
     <h2>Vùng cuộn — chiều cao theo số hàng</h2>
     <p>

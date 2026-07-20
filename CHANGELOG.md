@@ -16,6 +16,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Docs**: thêm màn **Chatbot** vào Playbook — khung chat tương tác (gõ/chip gợi ý → typing → bot trả
   lời mẫu; tự cuộn xuống đáy) ghép GCard + GScrollPanel + GAvatar + GChip + `GInputGroup` với nút
   suffix đổi icon `gIconMic` ↔ `gIconSend` theo có chữ chưa.
+- **Docs**: trang **Table** thêm mục **Chọn hàng** — ví dụ ghép cột `GCheckbox` + ô chọn-tất-cả
+  tri-state (`indeterminate` khi chọn một phần), tập id chọn giữ trong `signal<Set>`, hàng chọn tô nền.
 
 ## [0.13.0] — 2026-07-20
 

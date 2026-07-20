@@ -226,8 +226,12 @@ function botReply(text: string): string {
       outline: none;
       box-shadow: var(--g-focus-ring);
     }
-    /* .chatbot__input LÀ g-input-group — nó tự lo viền pill + bố cục input/suffix. Chỉ tô màu chính
-       cho icon gửi khi đã có chữ để nút nổi lên như hành động chính. */
+    /* .chatbot__input LÀ g-input-group — nó tự lo viền pill + bố cục input/suffix. Thu padding phải
+       để nút mic/gửi nép sát mép phải, đường bao pill bao quanh nút gần đồng tâm (song song viền). */
+    .chatbot__input {
+      padding-inline-end: var(--g-space-1);
+    }
+    /* Tô màu chính cho icon gửi khi đã có chữ để nút nổi lên như hành động chính. */
     .chatbot__send--active {
       color: var(--g-primary);
     }
