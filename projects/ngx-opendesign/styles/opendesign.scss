@@ -261,11 +261,14 @@ body {
   // riêng của nút là chỉ báo DUY NHẤT lúc đó, không lồng với ring của group nữa.
 }
 
-// Khi suffix là một NÚT (con mắt mật khẩu, gửi chat…): thu padding phải để nút nép sát mép phải,
-// đường bao pill bao quanh nút gần đồng tâm (khe phải ≈ khe trên/dưới) — thay vì lơ lửng cách mép
-// một khoảng space-4. Chỉ áp cho suffix là <button>: icon trang trí (kính lúp) không phải nút nên
-// giữ khoảng cách cũ, tránh trông chật.
-.g-input-group:has(button.g-input-group__suffix) {
+// Có prefix/suffix (icon kính lúp, nút con mắt, nút gửi chat…) thì thu padding bên đó xuống space-1
+// để adornment NÉP SÁT mép của nó — icon/nút ôm sát đầu bo pill, đường bao pill "song song" với
+// adornment thay vì lơ lửng cách mép một khoảng space-4 (khoảng padding vốn dành cho CHỮ). Áp cả hai
+// bên, cho icon lẫn nút.
+.g-input-group:has(.g-input-group__prefix) {
+  padding-inline-start: var(--g-space-1);
+}
+.g-input-group:has(.g-input-group__suffix) {
   padding-inline-end: var(--g-space-1);
 }
 

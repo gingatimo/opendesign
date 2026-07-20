@@ -21,9 +21,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Changed
 
-- **GInputGroup**: khi suffix là một `<button>` (nút con mắt mật khẩu, nút gửi chat…), thu padding
-  phải để nút **nép sát mép phải**, đường bao pill bao quanh nút gần đồng tâm (khe phải ≈ khe
-  trên/dưới) thay vì lơ lửng cách mép một khoảng. Icon trang trí ở suffix (không phải nút) giữ nguyên.
+- **GInputGroup**: prefix/suffix (icon kính lúp, nút con mắt mật khẩu, nút gửi chat…) nay **nép sát
+  mép** của nó — thu padding bên có adornment xuống, để icon/nút ôm sát đầu bo pill (đường bao pill
+  song song với adornment) thay vì lơ lửng cách mép một khoảng padding dành cho chữ. Áp cả hai bên,
+  cho cả icon lẫn nút.
 
 ## [0.13.0] — 2026-07-20
 
