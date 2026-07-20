@@ -29,6 +29,7 @@ export type NavIcon =
   | 'time-picker'
   | 'date-range-picker'
   | 'color-picker'
+  | 'alert'
   | 'badge'
   | 'spinner'
   | 'progress'
@@ -121,6 +122,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   'file-input': {
     viewBox: VB,
     paths: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'M17 8l-5-5-5 5', 'M12 3v12'],
+  },
+  alert: {
+    viewBox: VB,
+    circles: [{ cx: 12, cy: 12, r: 9 }],
+    paths: ['M12 16v-4', 'M12 8h.01'],
   },
   badge: {
     viewBox: VB,

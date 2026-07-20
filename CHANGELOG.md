@@ -9,6 +9,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
+- **`GAlert`** (`g-alert`): thông báo **inline** (callout) cho ghi chú/cảnh báo/lỗi — `variant`
+  `neutral | success | warning | danger` (màu + icon riêng), `heading` tuỳ chọn, `dismissible` +
+  hai chiều `[(open)]`, nội dung qua slot. Khác `GToast` (overlay tạm) và `GBadge` (nhãn nhỏ). Mức độ
+  truyền cho screen reader qua tiền tố ẩn.
 - **`GProgressCircle`** (`g-progress-circle`): tiến độ dạng **vòng tròn** — `[value]` 0–100 vẽ cung,
   `[size]`/`[stroke]` chỉnh đường kính/độ dày, nội dung chiếu vào **giữa** vòng qua `<ng-content>`
   (số đếm ngược, phần trăm…). Docs: trang Progress thêm mục "Vòng tròn (đếm ngược)" với demo hẹn giờ.

@@ -14,6 +14,7 @@ export * from './lib/select/select';
 export * from './lib/select/option';
 export * from './lib/search-field/search-field';
 export * from './lib/badge/badge';
+export * from './lib/alert/alert';
 export * from './lib/spinner/spinner';
 export * from './lib/progress/progress';
 export * from './lib/progress/progress-circle';

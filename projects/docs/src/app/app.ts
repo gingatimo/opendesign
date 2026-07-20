@@ -113,6 +113,7 @@ export class App {
     {
       title: 'Hiển thị',
       links: sortByLabel([
+        { path: '/components/alert', label: 'Alert', icon: 'alert' },
         { path: '/components/badge', label: 'Badge', icon: 'badge' },
         { path: '/components/spinner', label: 'Spinner', icon: 'spinner' },
         { path: '/components/progress', label: 'Progress', icon: 'progress' },

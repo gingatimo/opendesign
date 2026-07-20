@@ -83,6 +83,11 @@ export const routes: Routes = [
     title: 'Badge — OpenDesign',
   },
   {
+    path: 'components/alert',
+    loadComponent: () => import('./pages/alert.page'),
+    title: 'Alert — OpenDesign',
+  },
+  {
     path: 'components/spinner',
     loadComponent: () => import('./pages/spinner.page'),
     title: 'Spinner — OpenDesign',

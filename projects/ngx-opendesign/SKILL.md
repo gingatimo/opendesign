@@ -118,7 +118,9 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
 (`[(files)]`, `accept`, `multiple`) · `GSearchField` `g-search-field` (select trường + ô nhập,
 `(search)`).
 
-**Hiển thị:** `GBadge` `g-badge` (`variant`) · `GSpinner` `g-spinner` (`size` sm…2xl) · `GProgress`
+**Hiển thị:** `GAlert` `g-alert` (callout inline note/cảnh báo/lỗi; `variant`
+neutral|success|warning|danger, `heading`, `dismissible`, `[(open)]`, nội dung qua slot) ·
+`GBadge` `g-badge` (`variant`) · `GSpinner` `g-spinner` (`size` sm…2xl) · `GProgress`
 `g-progress` (thanh ngang) · `GProgressCircle` `g-progress-circle` (vòng tròn; `[value]`, `[size]`,
 `[stroke]`, nhãn giữa qua nội dung) · `GChip` `g-chip` (`removable`, `(removed)`) · `GAvatar` `g-avatar`
 (`[name]`, `shape`) · `GCard` `g-card` (+`gCardHeader`/`gCardFooter`) · `GIcon` `g-icon` (`[icon]`) ·
