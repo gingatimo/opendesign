@@ -170,7 +170,15 @@ export class App {
     // nhóm trên — không thuộc phân loại theo LOẠI component nào ở trên nên không gộp vào "Bắt đầu".
     {
       title: 'Playbook',
-      links: [{ path: '/playbook', label: 'Playbook', icon: 'playbook' }],
+      // Giữ THỨ TỰ luồng CRUD (đăng nhập → dashboard → danh sách → chi tiết → thêm mới), KHÔNG
+      // sortByLabel như các nhóm component — đọc theo hành trình dùng app tự nhiên hơn alphabet.
+      links: [
+        { path: '/playbook/dang-nhap', label: 'Đăng nhập', icon: 'pb-login' },
+        { path: '/playbook/dashboard', label: 'Dashboard', icon: 'pb-dashboard' },
+        { path: '/playbook/danh-sach', label: 'Danh sách', icon: 'pb-list' },
+        { path: '/playbook/chi-tiet', label: 'Chi tiết', icon: 'pb-detail' },
+        { path: '/playbook/them-moi', label: 'Thêm mới', icon: 'pb-create' },
+      ],
     },
   ];
 }

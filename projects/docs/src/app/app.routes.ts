@@ -287,9 +287,31 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/breadcrumb.page'),
     title: 'Breadcrumb — OpenDesign',
   },
+  // Playbook: mỗi view phổ biến một trang riêng. /playbook cũ redirect về trang đầu để link cũ không 404.
+  { path: 'playbook', pathMatch: 'full', redirectTo: 'playbook/dang-nhap' },
   {
-    path: 'playbook',
-    loadComponent: () => import('./pages/playbook.page'),
-    title: 'Playbook — OpenDesign',
+    path: 'playbook/dang-nhap',
+    loadComponent: () => import('./pages/playbook/login.page'),
+    title: 'Playbook · Đăng nhập — OpenDesign',
+  },
+  {
+    path: 'playbook/dashboard',
+    loadComponent: () => import('./pages/playbook/dashboard.page'),
+    title: 'Playbook · Dashboard — OpenDesign',
+  },
+  {
+    path: 'playbook/danh-sach',
+    loadComponent: () => import('./pages/playbook/list.page'),
+    title: 'Playbook · Danh sách — OpenDesign',
+  },
+  {
+    path: 'playbook/chi-tiet',
+    loadComponent: () => import('./pages/playbook/detail.page'),
+    title: 'Playbook · Chi tiết — OpenDesign',
+  },
+  {
+    path: 'playbook/them-moi',
+    loadComponent: () => import('./pages/playbook/create.page'),
+    title: 'Playbook · Thêm mới — OpenDesign',
   },
 ];

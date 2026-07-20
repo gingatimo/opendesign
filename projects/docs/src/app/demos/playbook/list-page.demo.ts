@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@a
 import {
   GBadge,
   GBadgeVariant,
+  GChip,
   GFreezeColumn,
   GFreezeRow,
   GIcon,
@@ -21,6 +22,7 @@ import {
 
 interface Row {
   name: string;
+  role: string;
   status: 'active' | 'invited' | 'inactive';
   updatedAt: Date;
 }
@@ -37,23 +39,105 @@ const STATUS_VARIANT: Record<Row['status'], GBadgeVariant> = {
   inactive: 'neutral',
 };
 
+const ROLES = ['Kỹ thuật', 'Thiết kế', 'Kinh doanh', 'Vận hành'] as const;
+
 const ROWS: Row[] = [
-  { name: 'Nguyễn Văn An', status: 'active', updatedAt: new Date(2026, 6, 15, 9, 30) },
-  { name: 'Trần Thị Bình', status: 'invited', updatedAt: new Date(2026, 6, 10, 14, 5) },
-  { name: 'Lê Hoàng Cường', status: 'active', updatedAt: new Date(2026, 5, 28, 8, 15) },
-  { name: 'Phạm Thu Hà', status: 'inactive', updatedAt: new Date(2026, 4, 2, 11, 40) },
-  { name: 'Đỗ Minh Khang', status: 'active', updatedAt: new Date(2026, 6, 1, 16, 20) },
-  { name: 'Vũ Lan Phương', status: 'invited', updatedAt: new Date(2026, 6, 12, 10, 0) },
-  { name: 'Hoàng Đức Mạnh', status: 'active', updatedAt: new Date(2026, 3, 18, 9, 0) },
-  { name: 'Bùi Thị Ngọc', status: 'inactive', updatedAt: new Date(2026, 2, 22, 13, 45) },
-  { name: 'Ngô Quốc Bảo', status: 'active', updatedAt: new Date(2026, 5, 5, 7, 50) },
-  { name: 'Đặng Thị Lan', status: 'invited', updatedAt: new Date(2026, 6, 16, 15, 30) },
-  { name: 'Trịnh Văn Đạt', status: 'active', updatedAt: new Date(2026, 1, 14, 9, 10) },
-  { name: 'Lý Thị Hồng', status: 'inactive', updatedAt: new Date(2026, 0, 29, 17, 0) },
-  { name: 'Phan Văn Hùng', status: 'active', updatedAt: new Date(2026, 4, 20, 10, 25) },
-  { name: 'Đinh Thị Kim', status: 'invited', updatedAt: new Date(2026, 5, 30, 12, 15) },
-  { name: 'Vương Minh Tuấn', status: 'active', updatedAt: new Date(2026, 6, 8, 8, 40) },
-  { name: 'Châu Thị Mai', status: 'inactive', updatedAt: new Date(2026, 3, 5, 14, 50) },
+  {
+    name: 'Nguyễn Văn An',
+    role: 'Kỹ thuật',
+    status: 'active',
+    updatedAt: new Date(2026, 6, 15, 9, 30),
+  },
+  {
+    name: 'Trần Thị Bình',
+    role: 'Thiết kế',
+    status: 'invited',
+    updatedAt: new Date(2026, 6, 10, 14, 5),
+  },
+  {
+    name: 'Lê Hoàng Cường',
+    role: 'Kinh doanh',
+    status: 'active',
+    updatedAt: new Date(2026, 5, 28, 8, 15),
+  },
+  {
+    name: 'Phạm Thu Hà',
+    role: 'Vận hành',
+    status: 'inactive',
+    updatedAt: new Date(2026, 4, 2, 11, 40),
+  },
+  {
+    name: 'Đỗ Minh Khang',
+    role: 'Kỹ thuật',
+    status: 'active',
+    updatedAt: new Date(2026, 6, 1, 16, 20),
+  },
+  {
+    name: 'Vũ Lan Phương',
+    role: 'Thiết kế',
+    status: 'invited',
+    updatedAt: new Date(2026, 6, 12, 10, 0),
+  },
+  {
+    name: 'Hoàng Đức Mạnh',
+    role: 'Kinh doanh',
+    status: 'active',
+    updatedAt: new Date(2026, 3, 18, 9, 0),
+  },
+  {
+    name: 'Bùi Thị Ngọc',
+    role: 'Vận hành',
+    status: 'inactive',
+    updatedAt: new Date(2026, 2, 22, 13, 45),
+  },
+  {
+    name: 'Ngô Quốc Bảo',
+    role: 'Kỹ thuật',
+    status: 'active',
+    updatedAt: new Date(2026, 5, 5, 7, 50),
+  },
+  {
+    name: 'Đặng Thị Lan',
+    role: 'Thiết kế',
+    status: 'invited',
+    updatedAt: new Date(2026, 6, 16, 15, 30),
+  },
+  {
+    name: 'Trịnh Văn Đạt',
+    role: 'Kinh doanh',
+    status: 'active',
+    updatedAt: new Date(2026, 1, 14, 9, 10),
+  },
+  {
+    name: 'Lý Thị Hồng',
+    role: 'Vận hành',
+    status: 'inactive',
+    updatedAt: new Date(2026, 0, 29, 17, 0),
+  },
+  {
+    name: 'Phan Văn Hùng',
+    role: 'Kỹ thuật',
+    status: 'active',
+    updatedAt: new Date(2026, 4, 20, 10, 25),
+  },
+  {
+    name: 'Đinh Thị Kim',
+    role: 'Thiết kế',
+    status: 'invited',
+    updatedAt: new Date(2026, 5, 30, 12, 15),
+  },
+  {
+    name: 'Vương Minh Tuấn',
+    role: 'Kinh doanh',
+    status: 'active',
+    updatedAt: new Date(2026, 6, 8, 8, 40),
+  },
+  {
+    name: 'Châu Thị Mai',
+    role: 'Vận hành',
+    status: 'inactive',
+    updatedAt: new Date(2026, 3, 5, 14, 50),
+  },
 ];
 
 const PAGE_SIZE = 5;
@@ -64,6 +148,7 @@ const PAGE_SIZE = 5;
     GInput,
     GInputGroup,
     GInputSuffix,
+    GChip,
     GBadge,
     GTable,
     GTableContainer,
@@ -128,6 +213,33 @@ const PAGE_SIZE = 5;
       </div>
     </div>
 
+    <div class="list-page-demo__roles" role="group" aria-label="Lọc theo vai trò">
+      @for (role of roles; track role) {
+        <g-chip
+          class="list-page-demo__chip"
+          [class.list-page-demo__chip--active]="activeRoles().has(role)"
+          role="button"
+          tabindex="0"
+          [attr.aria-pressed]="activeRoles().has(role)"
+          (click)="toggleRole(role)"
+          (keydown.enter)="toggleRole(role)"
+          (keydown.space)="onRoleSpace($event, role)"
+          >{{ role }}</g-chip
+        >
+      }
+    </div>
+
+    @if (activeRoles().size > 0) {
+      <div class="list-page-demo__applied">
+        <span class="list-page-demo__applied-label">Đang lọc vai trò:</span>
+        @for (role of activeRoles(); track role) {
+          <g-chip [removable]="true" [removeLabel]="'Bỏ lọc ' + role" (removed)="toggleRole(role)">
+            {{ role }}
+          </g-chip>
+        }
+      </div>
+    }
+
     <g-table-container [minRows]="pageSize">
       <table gTable [striped]="true">
         <thead>
@@ -137,6 +249,7 @@ const PAGE_SIZE = 5;
                 Tên
               </button>
             </th>
+            <th scope="col">Vai trò</th>
             <th scope="col">Trạng thái</th>
             <th scope="col">Cập nhật</th>
             <th scope="col">Hành động</th>
@@ -146,6 +259,7 @@ const PAGE_SIZE = 5;
           @for (row of pageRows(); track row.name) {
             <tr>
               <td>{{ row.name }}</td>
+              <td>{{ row.role }}</td>
               <td>
                 <g-badge [variant]="statusVariant(row.status)">{{
                   statusLabel(row.status)
@@ -163,7 +277,7 @@ const PAGE_SIZE = 5;
             </tr>
           } @empty {
             <tr>
-              <td colspan="4" class="list-page-demo__empty">Không có dữ liệu khớp bộ lọc.</td>
+              <td colspan="5" class="list-page-demo__empty">Không có dữ liệu khớp bộ lọc.</td>
             </tr>
           }
         </tbody>
@@ -215,6 +329,34 @@ const PAGE_SIZE = 5;
     .list-page-demo__status-btn--active {
       border-color: var(--g-primary);
     }
+    .list-page-demo__roles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--g-space-2);
+      margin-bottom: var(--g-space-3);
+    }
+    .list-page-demo__chip {
+      cursor: pointer;
+    }
+    .list-page-demo__chip:focus-visible {
+      outline: none;
+      box-shadow: var(--g-focus-ring);
+    }
+    .list-page-demo__chip.list-page-demo__chip--active {
+      background: var(--g-primary);
+      color: var(--g-on-primary);
+    }
+    .list-page-demo__applied {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--g-space-2);
+      margin-bottom: var(--g-space-3);
+    }
+    .list-page-demo__applied-label {
+      font-size: var(--g-font-size-sm);
+      color: var(--g-text-muted);
+    }
     .list-page-demo__sort-btn {
       background: none;
       border: none;
@@ -235,8 +377,11 @@ const PAGE_SIZE = 5;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListPageDemo {
+  protected readonly roles = ROLES;
+
   protected readonly search = signal('');
   protected readonly statusFilter = signal<Row['status'] | 'all'>('all');
+  protected readonly activeRoles = signal<ReadonlySet<string>>(new Set());
   protected readonly sortDir = signal<'asc' | 'desc' | null>(null);
   protected readonly page = signal(1);
 
@@ -248,10 +393,12 @@ export class ListPageDemo {
   private readonly filtered = computed(() => {
     const term = this.search().trim().toLowerCase();
     const status = this.statusFilter();
+    const roles = this.activeRoles();
     return ROWS.filter((row) => {
       const matchesTerm = !term || row.name.toLowerCase().includes(term);
       const matchesStatus = status === 'all' || row.status === status;
-      return matchesTerm && matchesStatus;
+      const matchesRole = roles.size === 0 || roles.has(row.role);
+      return matchesTerm && matchesStatus && matchesRole;
     });
   });
 
@@ -272,18 +419,38 @@ export class ListPageDemo {
   });
 
   constructor() {
-    // search/statusFilter đổi -> danh sách lọc ngắn lại, trang hiện tại có thể vượt quá pageCount
-    // mới. Quay về trang 1 để tránh bảng trống. Effect chỉ ĐỌC search/statusFilter, chỉ GHI page —
+    // search/statusFilter/activeRoles đổi -> danh sách lọc ngắn lại, trang hiện tại có thể vượt quá
+    // pageCount mới. Quay về trang 1 để tránh bảng trống. Effect chỉ ĐỌC bộ lọc, chỉ GHI page —
     // không đọc lại page() nên không tự kích hoạt lại chính nó (không vòng lặp).
     effect(() => {
       this.search();
       this.statusFilter();
+      this.activeRoles();
       this.page.set(1);
     });
   }
 
   protected toggleSort(): void {
     this.sortDir.update((dir) => (dir === 'asc' ? 'desc' : dir === 'desc' ? null : 'asc'));
+  }
+
+  protected toggleRole(role: string): void {
+    this.activeRoles.update((current) => {
+      const next = new Set(current);
+      if (next.has(role)) {
+        next.delete(role);
+      } else {
+        next.add(role);
+      }
+      return next;
+    });
+  }
+
+  // Space cuộn trang theo mặc định trên phần tử role="button" — chặn trước khi toggle, giống cách
+  // GCheckbox/GToggle của thư viện tự làm.
+  protected onRoleSpace(event: Event, role: string): void {
+    event.preventDefault();
+    this.toggleRole(role);
   }
 
   protected statusLabel(status: Row['status']): string {

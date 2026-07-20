@@ -68,7 +68,11 @@ export type NavIcon =
   | 'tree-select'
   | 'dock-menu'
   | 'search-field'
-  | 'playbook';
+  | 'pb-login'
+  | 'pb-dashboard'
+  | 'pb-list'
+  | 'pb-detail'
+  | 'pb-create';
 
 const VB = '0 0 24 24';
 
@@ -289,7 +293,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     paths: ['M20 20l-3.5-3.5'],
     circles: [{ cx: 10, cy: 10, r: 6 }],
   },
-  playbook: {
+  'pb-login': {
+    viewBox: VB,
+    paths: ['M15 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-4', 'M10 17l5-5-5-5', 'M15 12H3'],
+  },
+  'pb-dashboard': {
     viewBox: VB,
     rects: [
       { x: 3, y: 3, width: 7, height: 9, rx: 1 },
@@ -297,5 +305,24 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { x: 14, y: 12, width: 7, height: 9, rx: 1 },
       { x: 3, y: 16, width: 7, height: 5, rx: 1 },
     ],
+  },
+  'pb-list': {
+    viewBox: VB,
+    paths: ['M9 6h11', 'M9 12h11', 'M9 18h11'],
+    circles: [
+      { cx: 4, cy: 6, r: 1.5 },
+      { cx: 4, cy: 12, r: 1.5 },
+      { cx: 4, cy: 18, r: 1.5 },
+    ],
+  },
+  'pb-detail': {
+    viewBox: VB,
+    rects: [{ x: 5, y: 3, width: 14, height: 18, rx: 2 }],
+    paths: ['M8 8h8', 'M8 12h8', 'M8 16h5'],
+  },
+  'pb-create': {
+    viewBox: VB,
+    rects: [{ x: 4, y: 3, width: 16, height: 18, rx: 2 }],
+    paths: ['M12 9v6', 'M9 12h6'],
   },
 };
