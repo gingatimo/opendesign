@@ -15,6 +15,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Icon**: thêm `gIconZoomIn` / `gIconZoomOut` (kính lúp ±), `gIconMinimize` (bốn góc chụm vào —
   cặp với `gIconMaximize`), `gIconHeart` (favorite), `gIconThumbsUp` (like), `gIconThumbsDown`
   (dislike) vào bộ public.
+- **Docs**: thêm playbook **Chat + Terminal** — `GSplitter` chia đôi (khung chat bên trái, terminal
+  bên phải), kéo thanh giữa đổi tỉ lệ; cả hai panel tương tác + tự cuộn xuống đáy.
 - **`GReorderList`** (`g-reorder-list`): danh sách **kéo-thả để sắp xếp lại thứ tự** (CDK drag-drop).
   `[(items)]` hai chiều — thả xong tự cập nhật mảng. Mỗi hàng render bằng `<ng-template let-item
 let-i="index">`; có tay nắm (grip) để kéo, bản xem trước nổi + chỗ trống mờ khi kéo.

@@ -364,4 +364,9 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/playbook/chatbot.page'),
     title: 'Playbook · Chatbot — OpenDesign',
   },
+  {
+    path: 'playbook/workspace',
+    loadComponent: () => import('./pages/playbook/split-workspace.page'),
+    title: 'Playbook · Chat + Terminal — OpenDesign',
+  },
 ];

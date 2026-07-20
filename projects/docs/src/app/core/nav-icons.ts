@@ -82,7 +82,8 @@ export type NavIcon =
   | 'pb-list'
   | 'pb-detail'
   | 'pb-create'
-  | 'pb-chatbot';
+  | 'pb-chatbot'
+  | 'pb-split';
 
 const VB = '0 0 24 24';
 
@@ -416,5 +417,10 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { cx: 12, cy: 10, r: 1 },
       { cx: 15.5, cy: 10, r: 1 },
     ],
+  },
+  'pb-split': {
+    viewBox: VB,
+    paths: ['M12 4v16', 'M6 10l-2 2 2 2', 'M18 10l2 2-2 2'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
   },
 };
