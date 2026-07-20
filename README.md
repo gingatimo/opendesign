@@ -7,6 +7,20 @@ component, standalone và `OnPush`. Package npm: [`ngx-opendesign`](projects/ngx
 
 **Docs site (demo sống, code mẫu, bảng API):** https://gingatimo.github.io/opendesign/
 
+Một vài màn dựng hoàn toàn bằng OpenDesign (ảnh chụp từ chính docs site):
+
+**Dashboard** — `GTopbar` + `GSidebar` + thẻ số liệu ghép thành một layout hoàn chỉnh.
+
+![Dashboard dựng bằng OpenDesign](.github/screenshots/dashboard.png)
+
+**Trang danh sách** — tìm kiếm, lọc theo trạng thái (nút) và vai trò (chip), bảng đóng băng cột + phân trang.
+
+![Trang danh sách dựng bằng OpenDesign](.github/screenshots/list.png)
+
+**Form thêm mới** — gần đủ họ input với validation reactive (trường bắt buộc tô viền đỏ).
+
+![Form thêm mới dựng bằng OpenDesign](.github/screenshots/create.png)
+
 Repo này là source của cả thư viện lẫn docs site. Nếu bạn chỉ muốn _dùng_ OpenDesign trong dự án
 Angular của mình, xem [README của package](projects/ngx-opendesign/README.md) — hướng dẫn cài đặt
 dành cho người tiêu thụ npm. README này (ở gốc repo) dành cho người muốn phát triển/đóng góp cho

@@ -2,6 +2,10 @@
 
 Design system cho Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — standalone và OnPush.
 
+## Tài liệu
+
+Demo sống, code mẫu và bảng API cho từng component: https://gingatimo.github.io/opendesign/
+
 ## Cài đặt
 
 ```bash
@@ -73,10 +77,6 @@ Nút (Button, Fab, Icon Button) · Form (Input, Textarea, Checkbox, Toggle, Radi
 - Peer dependencies: `@angular/core`, `@angular/common`, `@angular/cdk` (overlay của Dialog,
   Tooltip, Toast, Select), `@angular/forms` (các control CVA: Input, Textarea, Checkbox, Toggle,
   Radio, Select).
-
-## Tài liệu
-
-Demo sống, code mẫu và bảng API cho từng component: https://gingatimo.github.io/opendesign/
 
 ## License
 
