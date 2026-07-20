@@ -6,8 +6,11 @@ import {
   contentChild,
   input,
   model,
+  signal,
   TemplateRef,
 } from '@angular/core';
+import { GIcon } from '../icon/icon';
+import { gIconMinus, gIconPlus } from '../icon/icons';
 
 // Một node trong sơ đồ tổ chức. `children` đệ quy cho cây nhiều tầng.
 export interface GOrgChartNode {
@@ -21,7 +24,7 @@ export interface GOrgChartNode {
 // muốn tuỳ biến (avatar, badge…) thì chiếu một <ng-template let-node> vào. Cây rộng thì cuộn ngang.
 @Component({
   selector: 'g-org-chart',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, GIcon],
   template: `
     <ul class="g-org-chart__level g-org-chart__level--root">
       @for (node of nodes(); track node) {
@@ -49,9 +52,21 @@ export interface GOrgChartNode {
               <span class="g-org-chart__sublabel">{{ node.sublabel }}</span>
             }
           }
+
+          @if (collapsible() && node.children?.length) {
+            <button
+              type="button"
+              class="g-org-chart__toggle"
+              [attr.aria-expanded]="!isCollapsed(node)"
+              aria-label="Thu gọn / mở nhánh con"
+              (click)="onToggleCollapse($event, node)"
+            >
+              <g-icon [icon]="isCollapsed(node) ? iconExpand : iconCollapse" size="sm" />
+            </button>
+          }
         </div>
 
-        @if (node.children?.length) {
+        @if (node.children?.length && !(collapsible() && isCollapsed(node))) {
           <ul class="g-org-chart__level">
             @for (child of node.children; track child) {
               <ng-container *ngTemplateOutlet="branch; context: { $implicit: child }" />
@@ -73,10 +88,33 @@ export class GOrgChart {
   readonly selectable = input(false, { transform: booleanAttribute });
   // Danh sách node đang chọn (two-way `[(selected)]`).
   readonly selected = model<readonly GOrgChartNode[]>([]);
+  // Cho THU GỌN/MỞ nhánh con: node có con hiện nút +/− để ẩn/hiện cả cây con bên dưới.
+  readonly collapsible = input(false, { transform: booleanAttribute });
 
   // Template tuỳ biến nội dung node (nếu consumer chiếu vào <ng-template let-node>). Không có thì dùng
   // mặc định label + sublabel.
   protected readonly nodeTemplate = contentChild(TemplateRef);
+
+  protected readonly iconExpand = gIconPlus;
+  protected readonly iconCollapse = gIconMinus;
+  // Tập node đang thu gọn (theo tham chiếu node).
+  private readonly collapsed = signal<ReadonlySet<GOrgChartNode>>(new Set());
+
+  protected isCollapsed(node: GOrgChartNode): boolean {
+    return this.collapsed().has(node);
+  }
+
+  protected onToggleCollapse(e: MouseEvent, node: GOrgChartNode): void {
+    // Chặn nổi bọt để không kích hoạt chọn node (khi selectable).
+    e.stopPropagation();
+    const next = new Set(this.collapsed());
+    if (next.has(node)) {
+      next.delete(node);
+    } else {
+      next.add(node);
+    }
+    this.collapsed.set(next);
+  }
 
   protected isSelected(node: GOrgChartNode): boolean {
     return this.selected().includes(node);

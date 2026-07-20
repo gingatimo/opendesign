@@ -28,8 +28,8 @@ const ORG: GOrgChartNode[] = [
   selector: 'docs-org-chart-basic-demo',
   imports: [GOrgChart, GAvatar],
   template: `
-    <p class="oc-demo__caption">Node mặc định — bấm để chọn (multi)</p>
-    <g-org-chart [nodes]="org" selectable [(selected)]="picked" />
+    <p class="oc-demo__caption">Node mặc định — bấm chọn (multi) + nút +/− thu gọn/mở nhánh</p>
+    <g-org-chart [nodes]="org" selectable collapsible [(selected)]="picked" />
     <p class="oc-demo__caption">
       Đã chọn: <b>{{ picked().length ? pickedLabels() : '(chưa chọn)' }}</b>
     </p>

@@ -14,7 +14,8 @@ import { OrgChartBasicDemo } from '../demos/org-chart/org-chart-basic.demo';
       đệ quy (<code>children</code>). Node mặc định hiện <code>label</code> + <code>sublabel</code>;
       muốn tuỳ biến (avatar, badge…) thì chiếu một <code>&lt;ng-template let-node&gt;</code> vào.
       Cây rộng hơn khung thì cuộn ngang. Bật <code>selectable</code> để bấm
-      <b>chọn node</b> (multi-select, hai chiều <code>[(selected)]</code>).
+      <b>chọn node</b> (multi-select, hai chiều <code>[(selected)]</code>); bật
+      <code>collapsible</code> để node có con hiện nút <b>+/−</b> thu gọn/mở nhánh con.
     </p>
 
     <docs-demo-section>
@@ -64,6 +65,12 @@ export default class OrgChartPage {
       type: 'GOrgChartNode[]',
       default: '[]',
       description: 'Danh sách node đang chọn (two-way `[(selected)]`).',
+    },
+    {
+      name: 'collapsible',
+      type: 'boolean',
+      default: 'false',
+      description: 'Node có con hiện nút +/− để thu gọn/mở nhánh con bên dưới.',
     },
   ];
 }

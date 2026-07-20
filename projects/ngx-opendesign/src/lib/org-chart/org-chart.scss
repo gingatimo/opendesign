@@ -97,6 +97,7 @@
 
 // Hộp node (card).
 .g-org-chart__box {
+  position: relative;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -108,6 +109,37 @@
   box-shadow: var(--g-shadow-sm);
   min-width: 88px;
   white-space: nowrap;
+}
+
+// Nút thu gọn/mở nhánh — nằm giữa đáy hộp, chồng lên đoạn nối xuống con.
+.g-org-chart__toggle {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--g-border-strong);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface);
+  color: var(--g-text-muted);
+  cursor: pointer;
+  transition:
+    color var(--g-duration-fast) var(--g-ease),
+    border-color var(--g-duration-fast) var(--g-ease);
+}
+.g-org-chart__toggle:hover {
+  color: var(--g-text);
+  border-color: var(--g-text-muted);
+}
+.g-org-chart__toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
 }
 // Chọn được (click) → con trỏ pointer, hover đậm viền, focus có ring, đang chọn thì viền + ring primary.
 .g-org-chart__box--selectable {
