@@ -7,6 +7,12 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Added
+
+- **`SKILL.md`** ship kèm npm package — hướng dẫn cho AI coding agent (pattern bắt buộc, form control
+  CVA, bẫy thường gặp, bảng tra component + selector). Agent trong dự án consumer đọc được ở
+  `node_modules/ngx-opendesign/SKILL.md`. README npm cũng đưa "Tài liệu" lên trước "Cài đặt".
+
 ## [0.13.0] — 2026-07-20
 
 ### Added

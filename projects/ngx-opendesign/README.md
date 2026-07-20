@@ -6,6 +6,12 @@ Design system cho Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn
 
 Demo sống, code mẫu và bảng API cho từng component: https://gingatimo.github.io/opendesign/
 
+## Cho AI coding agent
+
+Package kèm sẵn file [`SKILL.md`](./SKILL.md) — hướng dẫn ngắn gọn (pattern bắt buộc, form control
+CVA, các bẫy, bảng tra component + selector) để coding agent dùng ngx-opendesign đúng cách. Agent
+trong dự án của bạn đọc được ở `node_modules/ngx-opendesign/SKILL.md`.
+
 ## Cài đặt
 
 ```bash
