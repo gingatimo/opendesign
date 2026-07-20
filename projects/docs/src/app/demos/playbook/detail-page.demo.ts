@@ -99,6 +99,11 @@ const FIELDS: Field[] = [
     .detail-demo__card {
       max-width: 560px;
     }
+    /* GDivider không tự chừa margin dọc (host chỉ là 1px line) → chừa khoảng để header/tabs không
+       dán sát đường kẻ. */
+    .detail-demo__card g-divider {
+      margin-block: var(--g-space-4);
+    }
     .detail-demo__header {
       display: flex;
       align-items: center;

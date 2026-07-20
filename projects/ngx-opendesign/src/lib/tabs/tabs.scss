@@ -7,6 +7,9 @@
   gap: var(--g-space-1);
   padding: var(--g-space-1);
   border-radius: var(--g-radius-pill);
+  // Viền để segmented control luôn hiện rõ kể cả khi đặt trên nền cùng màu --g-surface (vd. trong
+  // GCard): nền track trùng nền cha nên vô hình, viền vẽ đường bao pill để vẫn nhận ra là bộ tab.
+  border: 1px solid var(--g-border);
   background: var(--g-surface);
 }
 
