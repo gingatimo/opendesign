@@ -7,6 +7,19 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Added
+
+- **Charts** (SVG thuần, 0 thư viện ngoài): **`GLineChart`** (`g-line-chart`, nối `straight`/`smooth`
+  Catmull-Rom, trục + gridline, responsive), **`GBarChart`** (`g-bar-chart`, `orientation`
+  vertical/horizontal, grouped), **`GPieChart`** (`g-pie-chart`), **`GDonutChart`** (`g-donut-chart`,
+  vành khuyên + tổng giữa + `GChartLegend` + **export** PNG/SVG). Kèm `chart-utils` (niceTicks,
+  linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
+- **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea
+  trong suốt đè lên `<pre>` tô màu regex `js/ts/json/css/html`, `highlighter` cắm được, gutter số
+  dòng, Tab=spaces; IME native), **`GRichTextEditor`** (`g-rich-text-editor`, contenteditable +
+  toolbar qua `document.execCommand`; dán plain-text, giá trị ngoài **sanitize** chống XSS, IME-safe).
+  Cả hai hỗ trợ `[(value)]` lẫn `formControlName` (CVA).
+
 ## [1.0.0] — 2026-07-20
 
 Bản **ổn định đầu tiên**: 64 component, 101 icon, API đã chốt (prefix `g`, token `--g-*`, theme

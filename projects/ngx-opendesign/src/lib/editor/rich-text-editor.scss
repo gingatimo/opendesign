@@ -1,0 +1,106 @@
+:host {
+  display: block;
+}
+
+.g-rte {
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  overflow: hidden;
+}
+.g-rte:focus-within {
+  border-color: var(--g-primary);
+}
+.g-rte--invalid {
+  border-color: var(--g-danger-solid);
+}
+.g-rte--disabled {
+  opacity: 0.6;
+}
+
+.g-rte__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--g-space-1);
+  padding: var(--g-space-2);
+  border-bottom: 1px solid var(--g-border);
+  background: var(--g-surface);
+}
+.g-rte__btn {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 var(--g-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-rte__btn:hover:not(:disabled) {
+  background: var(--g-secondary-bg);
+}
+.g-rte__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+.g-rte__btn--active {
+  background: var(--g-secondary-bg);
+  border-color: var(--g-border-strong);
+}
+.g-rte__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.g-rte__sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 2px var(--g-space-1);
+  background: var(--g-border);
+}
+
+.g-rte__body {
+  padding: var(--g-space-3) var(--g-space-4);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  line-height: 1.6;
+  outline: none;
+  overflow-y: auto;
+}
+.g-rte__body:empty::before {
+  content: attr(data-placeholder);
+  color: var(--g-text-muted);
+  pointer-events: none;
+}
+
+// Nội dung do contenteditable/execCommand chèn KHÔNG mang thuộc tính scope → dùng ::ng-deep (đóng
+// khung trong :host) để style vẫn với tới h2/blockquote/ul/ol/a động.
+:host ::ng-deep .g-rte__body {
+  h1,
+  h2,
+  h3 {
+    margin: 0.5em 0 0.3em;
+    line-height: 1.3;
+  }
+  p {
+    margin: 0.4em 0;
+  }
+  blockquote {
+    margin: 0.5em 0;
+    padding-left: var(--g-space-3);
+    border-left: 3px solid var(--g-border-strong);
+    color: var(--g-text-muted);
+  }
+  ul,
+  ol {
+    margin: 0.4em 0;
+    padding-left: 1.5em;
+  }
+  a {
+    color: var(--g-chart-5);
+  }
+}

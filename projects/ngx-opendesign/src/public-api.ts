@@ -88,3 +88,6 @@ export * from './lib/charts/line-chart';
 export * from './lib/charts/bar-chart';
 export * from './lib/charts/pie-chart';
 export * from './lib/charts/donut-chart';
+export * from './lib/editor/code-highlight';
+export * from './lib/editor/code-editor';
+export * from './lib/editor/rich-text-editor';

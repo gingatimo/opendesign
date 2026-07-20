@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+// Font/metric DÙNG CHUNG cho textarea + pre → glyph chồng khít.
+$mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+
+.g-code-editor {
+  display: flex;
+  position: relative;
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-raised);
+  overflow: hidden;
+  font-family: $mono;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.g-code-editor:focus-within {
+  border-color: var(--g-primary);
+}
+.g-code-editor--disabled {
+  opacity: 0.6;
+}
+
+.g-code-editor__gutter {
+  flex-shrink: 0;
+  overflow: hidden;
+  padding: 12px 0;
+  text-align: right;
+  color: var(--g-text-muted);
+  background: var(--g-surface);
+  border-right: 1px solid var(--g-border);
+  user-select: none;
+}
+.g-code-editor__gutter div {
+  padding: 0 8px;
+  min-width: 2ch;
+}
+
+.g-code-editor__body {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.g-code-editor__pre,
+.g-code-editor__input {
+  // Consumer có thể không đặt box-sizing toàn cục; textarea mặc định content-box sẽ cao hơn pre đúng
+  // bằng padding → hai lớp lệch tầm cuộn, cuộn bị trôi. Ép cả hai border-box cho khớp từng pixel.
+  box-sizing: border-box;
+  margin: 0;
+  padding: 12px;
+  border: 0;
+  font-family: $mono;
+  font-size: 13px;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.g-code-editor__pre {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--g-text);
+}
+.g-code-editor__pre code {
+  font: inherit;
+}
+
+.g-code-editor__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  overflow: auto;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--g-text);
+  outline: none;
+}
+.g-code-editor__input::placeholder {
+  color: var(--g-text-muted);
+}

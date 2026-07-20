@@ -1128,3 +1128,27 @@ a.g-breadcrumb-item:hover {
   color: var(--g-text-muted);
   font-weight: 400;
 }
+
+// Token tô màu code của GCodeEditor — GLOBAL vì nội dung tô màu chèn qua [innerHTML] không mang
+// thuộc tính scope của component (giống .g-menu-item với nội dung chiếu vào). Màu mượn palette chart
+// nên tự đổi theo theme.
+.g-tok-comment {
+  color: var(--g-text-muted);
+  font-style: italic;
+}
+.g-tok-string {
+  color: var(--g-chart-2);
+}
+.g-tok-number {
+  color: var(--g-chart-3);
+}
+.g-tok-keyword {
+  color: var(--g-chart-6);
+  font-weight: 600;
+}
+.g-tok-property {
+  color: var(--g-chart-1);
+}
+.g-tok-fn {
+  color: var(--g-chart-5);
+}

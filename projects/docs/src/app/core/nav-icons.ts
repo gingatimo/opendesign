@@ -74,6 +74,8 @@ export type NavIcon =
   | 'bar-chart'
   | 'pie-chart'
   | 'donut-chart'
+  | 'code-editor'
+  | 'rich-text-editor'
   | 'scroll-panel'
   | 'timeline'
   | 'accordion'
@@ -355,6 +357,16 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { cx: 12, cy: 12, r: 9 },
       { cx: 12, cy: 12, r: 3.5 },
     ],
+  },
+  'code-editor': {
+    viewBox: VB,
+    paths: ['M8 9l-3 3 3 3', 'M16 9l3 3-3 3'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
+  },
+  'rich-text-editor': {
+    viewBox: VB,
+    paths: ['M7 8h10', 'M7 12h10', 'M7 16h6'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
   },
   'scroll-panel': {
     viewBox: VB,

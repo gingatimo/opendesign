@@ -333,6 +333,16 @@ export const routes: Routes = [
     title: 'Donut Chart — OpenDesign',
   },
   {
+    path: 'components/code-editor',
+    loadComponent: () => import('./pages/code-editor.page'),
+    title: 'Code Editor — OpenDesign',
+  },
+  {
+    path: 'components/rich-text-editor',
+    loadComponent: () => import('./pages/rich-text-editor.page'),
+    title: 'Rich Text Editor — OpenDesign',
+  },
+  {
     path: 'components/time-picker',
     loadComponent: () => import('./pages/time-picker.page'),
     title: 'Time Picker — OpenDesign',

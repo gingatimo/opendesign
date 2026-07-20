@@ -188,6 +188,17 @@ export class App {
         { path: '/components/donut-chart', label: 'Donut Chart', icon: 'donut-chart' },
       ]),
     },
+    {
+      title: 'Editor',
+      links: sortByLabel([
+        { path: '/components/code-editor', label: 'Code Editor', icon: 'code-editor' },
+        {
+          path: '/components/rich-text-editor',
+          label: 'Rich Text Editor',
+          icon: 'rich-text-editor',
+        },
+      ]),
+    },
     // Nhóm riêng, đặt cuối: đây là phần "ráp lại" sau khi đã học từng component riêng lẻ ở các
     // nhóm trên — không thuộc phân loại theo LOẠI component nào ở trên nên không gộp vào "Bắt đầu".
     {
