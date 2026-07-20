@@ -10,7 +10,7 @@ interface Card {
   selector: 'docs-coverflow-basic-demo',
   imports: [GCoverflow],
   template: `
-    <g-coverflow class="cf-demo" [active]="2">
+    <g-coverflow class="cf-demo" [active]="2" loop>
       @for (c of cards; track c.label) {
         <div class="cf-demo__card" [style.background]="c.color">{{ c.label }}</div>
       }

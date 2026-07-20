@@ -25,7 +25,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 end` căn item theo trục dọc khi khác chiều cao. Khác `GImageSlider` (một ảnh/khung).
 - **`GCoverflow`** (`g-coverflow`): băng chuyền **tâm điểm** — khung hiện 3 card, card **giữa** phóng to,
   hai bên **peek** một phần card trước/sau. Chạy theo active index (bấm nút prev/next, bấm thẳng card bên
-  cạnh, hoặc phím ←/→); `[(active)]` hai chiều. Chiếu card qua slot. Khác `GCarousel` (free-scroll).
+  cạnh, hoặc phím ←/→); `[(active)]` hai chiều. `loop` cho **quay vòng** (next ở cuối về card đầu, prev ở
+  đầu tới card cuối) kèm dải **dot** điều hướng bên dưới. Chiếu card qua slot. Khác `GCarousel`
+  (free-scroll).
 - **`GGallery`** (`g-gallery`): gallery ảnh kiểu trang bán hàng — ảnh chính lớn + dải thumbnail, bấm
   thumbnail đổi ảnh chính, bấm ảnh chính mở lightbox. Dải thumbnail dùng `GCarousel` (center): **căn
   giữa** khi ít ảnh, tự có **nút trái/phải** khi danh sách dài. `[images]` nhận `string | File` (File tự

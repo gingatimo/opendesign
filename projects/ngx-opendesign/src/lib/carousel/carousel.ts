@@ -108,12 +108,14 @@ export class GCarousel {
     const el = this.track().nativeElement;
     const items = Array.from(el.children) as HTMLElement[];
     const cur = el.scrollLeft;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const behavior: ScrollBehavior = reduce ? 'auto' : 'smooth';
     if (dir === 1) {
       const next = items.find((it) => it.offsetLeft > cur + 1);
-      el.scrollTo({ left: next ? next.offsetLeft : el.scrollWidth, behavior: 'smooth' });
+      el.scrollTo({ left: next ? next.offsetLeft : el.scrollWidth, behavior });
     } else {
       const prev = [...items].reverse().find((it) => it.offsetLeft < cur - 1);
-      el.scrollTo({ left: prev ? prev.offsetLeft : 0, behavior: 'smooth' });
+      el.scrollTo({ left: prev ? prev.offsetLeft : 0, behavior });
     }
   }
 

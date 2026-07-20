@@ -12,7 +12,9 @@ import { CoverflowBasicDemo } from '../demos/coverflow/coverflow-basic.demo';
       Băng chuyền <b>tâm điểm</b>: khung hiện 3 card — card <b>ở giữa</b> phóng to (active), hai bên
       <b>peek</b> một phần card trước/sau. Chạy theo <b>active index</b> (không free-scroll như
       <code>GCarousel</code>): bấm nút prev/next, bấm thẳng vào card bên cạnh, hoặc phím ←/→ để đưa
-      card vào giữa. Chiếu card vào qua <code>&lt;ng-content&gt;</code>.
+      card vào giữa. Chiếu card vào qua <code>&lt;ng-content&gt;</code>. Bật <code>loop</code> để
+      quay vòng (next ở cuối về đầu, prev ở đầu tới cuối) và hiện dải <b>dot</b> điều hướng bên
+      dưới.
     </p>
 
     <docs-demo-section>
@@ -51,6 +53,13 @@ export default class CoverflowPage {
       default: '0',
       description:
         'Chỉ số card đang ở giữa (two-way `[(active)]`). Bấm card/nút/phím sẽ đổi giá trị.',
+    },
+    {
+      name: 'loop',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Quay vòng: next ở cuối về card đầu, prev ở đầu tới card cuối; hiện dải dot điều hướng bên dưới.',
     },
   ];
 }

@@ -47,11 +47,16 @@
 }
 
 .g-carousel__track {
+  // position:relative → offsetParent của card LÀ track, nên card.offsetLeft (dùng trong step()) luôn
+  // tính theo gốc toạ độ của track — đúng cả khi nút flanking đẩy track lệch khỏi mép host.
+  position: relative;
   display: flex;
   gap: var(--g-space-3);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  // KHÔNG đặt scroll-behavior: smooth ở đây — kết hợp với scroll-snap: mandatory nó khiến
+  // scrollTo({behavior:'smooth'}) của nút prev/next bị huỷ (kẹt tại chỗ, không tới được item cuối).
+  // step() tự truyền behavior 'smooth'/'auto' (theo prefers-reduced-motion) nên vẫn cuộn mượt.
   // Ẩn thanh cuộn — điều hướng bằng nút prev/next (kéo/trackpad vẫn cuộn được bình thường).
   scrollbar-width: none;
 
@@ -108,10 +113,4 @@
 .g-carousel__nav:focus-visible {
   outline: none;
   box-shadow: var(--g-focus-ring);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .g-carousel__track {
-    scroll-behavior: auto;
-  }
 }

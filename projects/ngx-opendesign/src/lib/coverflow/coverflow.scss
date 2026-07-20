@@ -1,5 +1,11 @@
-// Nút prev/next flanking (nằm ngoài viewport, sát mép, không đè lên card).
 :host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-3);
+}
+
+// Hàng chính: nút prev/next flanking (nằm ngoài viewport, sát mép, không đè lên card).
+.g-coverflow__stage {
   display: flex;
   align-items: center;
   gap: var(--g-space-2);
@@ -52,6 +58,36 @@
 // Ẩn nhưng GIỮ CHỖ (không đổi layout khi nút hiện/ẩn ở biên).
 .g-coverflow__nav--hidden {
   visibility: hidden;
+}
+
+// Dải dot điều hướng (chỉ hiện khi loop) — dot active nở dài thành pill.
+.g-coverflow__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--g-space-2);
+}
+.g-coverflow__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: var(--g-radius-pill);
+  background: var(--g-border-strong);
+  cursor: pointer;
+  transition:
+    width var(--g-duration-fast) var(--g-ease),
+    background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-coverflow__dot:hover {
+  background: var(--g-text-muted);
+}
+.g-coverflow__dot--active {
+  width: 22px;
+  background: var(--g-primary);
+}
+.g-coverflow__dot:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
 }
 
 @media (prefers-reduced-motion: reduce) {
