@@ -78,6 +78,13 @@
   letter-spacing: 0.04em;
 }
 
+// Item trong cùng một nhóm xếp sát nhau (group là block, không gap) nên focus ring của item đang
+// focus (box-shadow trồi 4px) đè lên item kề trên/dưới → trông "bị cắt". Chừa 8px giữa hai item
+// liên tiếp: 4px cho ring + 4px thở. (Item→tiêu-đề nhóm đã có margin-bottom của title.)
+.docs-nav-group .g-sidebar-item + .g-sidebar-item {
+  margin-top: var(--g-space-2);
+}
+
 // Sidebar thu gọn còn 72px thì tiêu đề nhóm không còn chỗ và bị cắt ngang chữ ("BẮT ĐẦ", "NÚ").
 // Thư viện CHỈ tự ẩn [gSidebarItemLabel]; mọi nội dung khác trong thân sidebar là việc của
 // consumer — trang docs Sidebar ghi đúng giới hạn này, và đây là chỗ docs shell tự áp dụng nó.
