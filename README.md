@@ -3,7 +3,7 @@
 [![CI](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml/badge.svg)](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/ngx-opendesign.svg)](https://www.npmjs.com/package/ngx-opendesign)
 
-Design system Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — 63
+Design system Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — 64
 component, standalone và `OnPush`. Package npm:
 [`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign).
 

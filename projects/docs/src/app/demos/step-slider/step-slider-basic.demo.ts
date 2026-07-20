@@ -26,6 +26,17 @@ import { GStepSlider } from 'ngx-opendesign';
       ariaLabel="Nhanh hơn hay thông minh hơn (nhỏ)"
     />
 
+    <p class="ss-demo__cap">Cỡ xs</p>
+    <g-step-slider
+      class="ss-demo"
+      size="xs"
+      [steps]="6"
+      [(value)]="level"
+      startLabel="Faster"
+      endLabel="Smarter"
+      ariaLabel="Nhanh hơn hay thông minh hơn (rất nhỏ)"
+    />
+
     <p class="ss-demo__val">
       Bậc đang chọn: <b>{{ level() + 1 }} / 6</b>
     </p>

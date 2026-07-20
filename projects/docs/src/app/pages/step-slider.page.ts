@@ -11,8 +11,9 @@ import { StepSliderBasicDemo } from '../demos/step-slider/step-slider-basic.demo
     <p>
       Thanh trượt <b>rời rạc</b> dạng pill: một dải pill chứa <code>steps</code> chấm đều nhau, chấm
       đang chọn thay bằng <b>thumb</b> nổi lên; kèm <b>nhãn hai đầu</b> (vd. Faster / Smarter). Chọn
-      bằng bấm/kéo trên dải hoặc phím ←/→ (Home/End về hai đầu). Hai chiều <code>[(value)]</code> —
-      chỉ số bậc <code>0..steps-1</code>. Khác <code>GSlider</code> (trượt liên tục có tay cầm).
+      bằng bấm/kéo trên dải hoặc phím ←/→ (Home/End về hai đầu). Dùng được cả
+      <code>formControlName</code>/<code>ngModel</code> lẫn <code>[(value)]</code> — chỉ số bậc
+      <code>0..steps-1</code>. Khác <code>GSlider</code> (trượt liên tục có tay cầm).
     </p>
 
     <docs-demo-section>
@@ -40,7 +41,8 @@ export default class StepSliderPage {
       name: 'value',
       type: 'number',
       default: '0',
-      description: 'Chỉ số bậc đang chọn (two-way `[(value)]`), 0..steps-1.',
+      description:
+        'Chỉ số bậc đang chọn (`[(value)]` hoặc `formControlName`/`ngModel`), 0..steps-1.',
     },
     {
       name: 'steps',
@@ -50,9 +52,9 @@ export default class StepSliderPage {
     },
     {
       name: 'size',
-      type: "'sm' | 'md'",
+      type: "'xs' | 'sm' | 'md'",
       default: "'md'",
-      description: 'Cỡ dải: md (40px) hoặc sm (32px) — như GInput.',
+      description: 'Cỡ dải: md (40px), sm (24px) hoặc xs (20px, gọn nhất).',
     },
     {
       name: 'startLabel / endLabel',
@@ -65,6 +67,12 @@ export default class StepSliderPage {
       type: 'string',
       default: "'Mức'",
       description: 'Nhãn cho screen reader.',
+    },
+    {
+      name: 'disabled',
+      type: 'boolean',
+      default: 'false',
+      description: 'Vô hiệu hoá (cũng tự theo `formControl.disable()`).',
     },
   ];
 }

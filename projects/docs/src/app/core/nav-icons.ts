@@ -27,6 +27,7 @@ export type NavIcon =
   | 'datepicker'
   | 'slider'
   | 'step-slider'
+  | 'rating'
   | 'time-picker'
   | 'date-range-picker'
   | 'color-picker'
@@ -218,6 +219,12 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { cx: 10, cy: 12, r: 1 },
       { cx: 18, cy: 12, r: 1 },
       { cx: 14, cy: 12, r: 2 },
+    ],
+  },
+  rating: {
+    viewBox: VB,
+    paths: [
+      'M12 3.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L12 16.77l-5.2 2.74.99-5.79-4.21-4.1 5.82-.85z',
     ],
   },
   'time-picker': gIconClock,

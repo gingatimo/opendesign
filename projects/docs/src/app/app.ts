@@ -98,6 +98,7 @@ export class App {
         { path: '/components/datepicker', label: 'Datepicker', icon: 'datepicker' },
         { path: '/components/slider', label: 'Slider', icon: 'slider' },
         { path: '/components/step-slider', label: 'Step Slider', icon: 'step-slider' },
+        { path: '/components/rating', label: 'Rating', icon: 'rating' },
         { path: '/components/time-picker', label: 'Time Picker', icon: 'time-picker' },
         {
           path: '/components/date-range-picker',

@@ -1,12 +1,41 @@
+// Biến riêng theo cỡ (md mặc định). Quy ước hình học:
+//   • ô mỗi bậc RỘNG ĐÚNG BẰNG thumb (--_cell) → khoảng cách giữa 2 chấm = chiều dài dải trắng.
+//   • padding ngang track = khe hở dọc của thumb (--_pad = _inset/2) → thumb ở hai đầu bao đều mọi phía
+//     (chấm đầu/cuối cách mép = ½ thumb + padding, đường bao ngoài song song với border thumb).
 :host {
-  display: block;
+  display: inline-block;
+  --_track-h: var(--g-control-md);
+  --_cell: 44px;
+  --_pad: var(--g-space-1);
+  --_dot: 5px;
+  --_inset: 8px; // tổng khe trên + dưới của thumb → khe mỗi bên = 4px = --_pad
+  --_label-mb: var(--g-space-2);
+  --_label-fs: var(--g-font-size-sm);
+}
+:host(.g-step-slider--sm) {
+  --_track-h: 24px;
+  --_cell: 28px;
+  --_pad: 3px;
+  --_dot: 3px;
+  --_inset: 6px;
+  --_label-mb: var(--g-space-1);
+  --_label-fs: var(--g-font-size-xs);
+}
+:host(.g-step-slider--xs) {
+  --_track-h: 20px;
+  --_cell: 22px;
+  --_pad: 3px;
+  --_dot: 2.5px;
+  --_inset: 6px;
+  --_label-mb: var(--g-space-1);
+  --_label-fs: var(--g-font-size-xs);
 }
 
 .g-step-slider__labels {
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--g-space-2);
-  font-size: var(--g-font-size-sm);
+  margin-bottom: var(--_label-mb);
+  font-size: var(--_label-fs);
   color: var(--g-text-muted);
 }
 
@@ -14,8 +43,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: var(--g-control-md);
-  padding: 0 var(--g-space-2);
+  height: var(--_track-h);
+  padding: 0 var(--_pad);
   border-radius: var(--g-radius-pill);
   background: var(--g-secondary-bg);
   cursor: pointer;
@@ -28,8 +57,10 @@
   box-shadow: var(--g-focus-ring);
 }
 
+// Ô mỗi bậc rộng cố định = bề rộng thumb (không kéo giãn) → chấm cách nhau đúng chiều dài thumb.
 .g-step-slider__step {
-  flex: 1 1 0;
+  flex: 0 0 auto;
+  width: var(--_cell);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,8 +68,8 @@
 }
 
 .g-step-slider__dot {
-  width: 5px;
-  height: 5px;
+  width: var(--_dot);
+  height: var(--_dot);
   border-radius: var(--g-radius-pill);
   background: var(--g-text-muted);
   opacity: 0.55;
@@ -49,28 +80,24 @@
   opacity: 1;
 }
 
-// Thumb pill nổi lên, phủ gần trọn ô bậc đang chọn.
+// Thumb pill nổi lên, phủ TRỌN ô bậc đang chọn (chiều dài = --_cell = khoảng cách 2 chấm).
 .g-step-slider__thumb {
   width: 100%;
-  max-width: 44px;
-  height: calc(var(--g-control-md) - 8px);
+  height: calc(var(--_track-h) - var(--_inset));
   border-radius: var(--g-radius-pill);
   background: var(--g-surface-raised);
   box-shadow: var(--g-shadow-sm);
 }
 
-// Cỡ nhỏ (sm) — dải thấp hơn, thumb + chấm nhỏ lại, nhãn cỡ xs.
-:host(.g-step-slider--sm) .g-step-slider__track {
-  height: var(--g-control-sm);
+// Vô hiệu hoá (input [disabled] hoặc form disable).
+:host(.g-step-slider--disabled) {
+  opacity: 0.5;
 }
-:host(.g-step-slider--sm) .g-step-slider__thumb {
-  max-width: 36px;
-  height: calc(var(--g-control-sm) - 6px);
+:host(.g-step-slider--disabled) .g-step-slider__track {
+  cursor: not-allowed;
 }
-:host(.g-step-slider--sm) .g-step-slider__dot {
-  width: 4px;
-  height: 4px;
-}
-:host(.g-step-slider--sm) .g-step-slider__labels {
-  font-size: var(--g-font-size-xs);
+
+// Lỗi validation (form): viền đỏ quanh dải.
+:host(.g-step-slider--invalid) .g-step-slider__track {
+  box-shadow: 0 0 0 1px var(--g-danger-solid);
 }

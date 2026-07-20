@@ -7,6 +7,23 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+## [0.16.0] — 2026-07-20
+
+### Added
+
+- **`GRating`** (`g-rating`): chấm điểm bằng **sao** tô đặc — bấm/rê để chọn (rê xem trước), phím ←/→
+  (Home/End); bấm lại đúng mức đang chọn để bỏ (về 0). `allowHalf` cho **nửa sao** (bước 0.5, chọn
+  theo nửa trái/phải). `size` `sm | md | lg`; `readonly` chỉ hiển thị (`role="img"`, nhãn tự sinh),
+  `disabled`. Hỗ trợ **cả** `formControlName`/`ngModel` (CVA, tự đánh dấu invalid) **lẫn** `[(value)]`
+  (số sao 0..`max`). `role="slider"` khi chọn được.
+
+### Changed
+
+- **`GStepSlider`**: hình học lại theo tỉ lệ — ô mỗi bậc rộng **đúng bằng thumb** (khoảng cách 2 chấm
+  = chiều dài dải trắng), chấm hai đầu cách mép = ½ thumb + padding → đường bao ngoài song song với
+  border thumb. Thêm cỡ **`xs`** (20px, gọn nhất): `size` giờ là `xs | sm | md`. Nay hỗ trợ **cả**
+  `formControlName`/`ngModel` (CVA) **lẫn** `[(value)]`; thêm `disabled`.
+
 ## [0.15.0] — 2026-07-20
 
 ### Added

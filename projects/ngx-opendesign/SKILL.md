@@ -76,8 +76,8 @@ Chia làm hai nhóm theo cách bind giá trị:
 `GSlider` (`[(value)]` number), `GColorPicker` (`[(value)]` hex `#rrggbb`),
 `GFileInput` (`[(files)]` `File[]`).
 
-> `GDatepicker`/`GTimePicker`/`GDateRangePicker` hỗ trợ **cả hai**: `formControlName` (trong form,
-> tự validate) HOẶC `[(value)]` (ngoài form). Chọn một.
+> `GDatepicker`/`GTimePicker`/`GDateRangePicker`/`GStepSlider`/`GRating` hỗ trợ **cả hai**:
+> `formControlName`/`ngModel` (trong form, tự validate) HOẶC `[(value)]` (ngoài form). Chọn một.
 
 **Trạng thái invalid:** từ v0.13.0 mọi control CVA **tự tô viền đỏ** khi control `invalid` và đã
 `touched`/`dirty` (giống `GInput`). Chỉ cần đặt validator (`Validators.required`, …) và để form đánh
@@ -115,7 +115,8 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
 (value `string[]`) · `GInputOtp` `g-input-otp` (`length`, `integerOnly`, `mask`) · `GDatepicker`
 `g-datepicker` · `GDateRangePicker` `g-date-range-picker` · `GTimePicker` `g-timepicker` ·
 `GColorPicker` `g-color-picker` · `GSlider` `g-slider` · `GStepSlider` `g-step-slider` (trượt rời rạc
-dạng pill; `steps`, `[(value)]` chỉ số bậc, `startLabel`/`endLabel`, `size` sm|md) · `GFileInput` `g-file-input`
+dạng pill; `steps`, `[(value)]` chỉ số bậc, `startLabel`/`endLabel`, `size` xs|sm|md) · `GRating`
+`g-rating` (chấm điểm sao; `[(value)]` số sao, `max`, `allowHalf` nửa sao, `size` sm|md|lg, `readonly`) · `GFileInput` `g-file-input`
 (`[(files)]`, `accept`, `multiple`) · `GSearchField` `g-search-field` (select trường + ô nhập,
 `(search)`).
 

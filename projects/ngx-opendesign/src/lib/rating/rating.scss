@@ -1,0 +1,72 @@
+:host {
+  display: inline-block;
+  --_star: 20px;
+}
+:host(.g-rating--sm) {
+  --_star: 16px;
+}
+:host(.g-rating--lg) {
+  --_star: 28px;
+}
+
+.g-rating__stars {
+  display: inline-flex;
+  gap: 2px;
+}
+.g-rating__stars:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+  border-radius: var(--g-radius-sm);
+}
+
+.g-rating__star {
+  position: relative;
+  display: inline-flex;
+  // Sao NỀN (rỗng): xám nhạt; tô qua `color` để fill dùng currentColor.
+  color: var(--g-border-strong);
+  cursor: pointer;
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+.g-rating__glyph {
+  display: block;
+  width: var(--_star);
+  height: var(--_star);
+  fill: currentColor;
+}
+// Lớp phủ VÀNG, cắt ngang theo % (đầy/nửa/rỗng) — svg bên trong giữ nguyên bề rộng sao nên overflow
+// hidden cắt gọn phần thừa.
+.g-rating__fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--g-warning-solid);
+  pointer-events: none;
+}
+
+// Chỉ đọc / vô hiệu: không con trỏ, không phóng khi rê.
+:host(.g-rating--readonly) .g-rating__star {
+  cursor: default;
+}
+:host(.g-rating--disabled) {
+  opacity: 0.5;
+}
+:host(.g-rating--disabled) .g-rating__star {
+  cursor: not-allowed;
+}
+:host(:not(.g-rating--readonly):not(.g-rating--disabled)) .g-rating__star:hover {
+  transform: scale(1.15);
+}
+
+// Lỗi validation (form): sao nền chuyển đỏ nhạt để báo mức chưa hợp lệ.
+:host(.g-rating--invalid) .g-rating__star {
+  color: var(--g-danger-solid);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-rating__star {
+    transition: none;
+  }
+  :host(:not(.g-rating--readonly):not(.g-rating--disabled)) .g-rating__star:hover {
+    transform: none;
+  }
+}

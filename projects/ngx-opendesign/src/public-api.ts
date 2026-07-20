@@ -1,4 +1,4 @@
-export const OPENDESIGN_VERSION = '0.15.0';
+export const OPENDESIGN_VERSION = '0.16.0';
 export * from './lib/core/dev-warning';
 export * from './lib/core/id-generator';
 export * from './lib/button/button';
@@ -65,6 +65,7 @@ export * from './lib/media-player/media-player';
 export * from './lib/terminal/terminal';
 export * from './lib/slider/slider';
 export * from './lib/step-slider/step-slider';
+export * from './lib/rating/rating';
 export * from './lib/time-picker/time-picker';
 export * from './lib/date-range-picker/date-range-picker';
 export * from './lib/color-picker/color-picker';
