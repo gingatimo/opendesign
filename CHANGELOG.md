@@ -7,6 +7,11 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Changed
+
+- **GSelect** (searchable): ô tìm kiếm nay nổi trên danh sách khi cuộn (không bị option đè viền/ring);
+  danh sách option dùng **thanh cuộn mảnh** theo theme (như GScrollPanel) thay cho scrollbar mặc định.
+
 ## [0.11.0] — 2026-07-20
 
 ### Added

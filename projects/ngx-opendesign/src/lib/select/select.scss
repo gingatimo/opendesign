@@ -97,8 +97,12 @@
   overflow: hidden;
 }
 
-// Ô tìm kiếm cố định trên đầu, danh sách option cuộn bên dưới.
+// Ô tìm kiếm cố định trên đầu, danh sách option cuộn bên dưới. position+z-index để focus-ring (box-
+// shadow trồi 4px xuống dưới) nằm TRÊN các option đang cuộn — nếu không, option (sibling sau) paint
+// đè lên viền/ring của ô tìm kiếm khi cuộn.
 .g-select__search {
+  position: relative;
+  z-index: 1;
   flex: none;
   margin: var(--g-space-2) var(--g-space-2) 0;
   padding: var(--g-space-2) var(--g-space-3);
@@ -120,6 +124,9 @@
   flex: 1;
   overflow-y: auto;
   padding: var(--g-space-2);
+  // Thanh cuộn mảnh theo theme (như GScrollPanel) thay cho scrollbar mặc định.
+  scrollbar-width: thin;
+  scrollbar-color: var(--g-border-strong) transparent;
 }
 
 .g-select__empty {
