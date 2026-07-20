@@ -39,6 +39,7 @@ export type GIconSize = 'sm' | 'md' | 'lg';
     '[class.g-icon--sm]': 'size() === "sm"',
     '[class.g-icon--md]': 'size() === "md"',
     '[class.g-icon--lg]': 'size() === "lg"',
+    '[class.g-icon--filled]': 'icon().filled',
   },
 })
 export class GIcon {

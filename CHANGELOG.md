@@ -7,6 +7,30 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-07-20
+
+Bản **ổn định đầu tiên**: 64 component, 101 icon, API đã chốt (prefix `g`, token `--g-*`, theme
+`data-g-theme`).
+
+### Added
+
+- **Icon**: bổ sung **46 icon phổ biến** (55 → **101**), phong cách outline đồng nhất, phủ nhiều nhóm:
+  liên lạc & xã hội (`gIconMail`/`Phone`/`MessageCircle`/`Share`/`Bookmark`/`Star`/`AtSign`/`Globe`),
+  file & dữ liệu (`gIconFolder`/`FolderOpen`/`FileText`/`Save`/`Clipboard`/`Filter`/`Printer`),
+  thương mại (`gIconCreditCard`/`Tag`/`Package`/`Gift`/`Wallet`/`Truck`), media & thiết bị
+  (`gIconCamera`/`Video`/`Monitor`/`Smartphone`/`Wifi`/`Cloud`/`Battery`), bản đồ
+  (`gIconMapPin`/`Map`/`Compass`), hành động & UI
+  (`gIconMoreHorizontal`/`MoreVertical`/`Refresh`/`ExternalLink`/`LogIn`/`LogOut`/`Lock`/`Unlock`/`Sliders`),
+  khác (`gIconZap`/`Flag`/`HelpCircle`/`Paperclip`/`Users`/`Code`). Lưới tra cứu ở trang docs Icon nay
+  hiển thị đủ toàn bộ set (kể cả các icon media/thời gian trước đây chưa lên lưới).
+- **`GIconGlyph`**: thêm cờ `filled?` — GIcon vẽ hình với `fill: currentColor; stroke: none` (thay vì
+  viền mặc định), dùng cho icon vốn là khối đặc.
+
+### Changed
+
+- **`gIconAngleUp`/`gIconAngleDown`**: đổi từ caret viền sang **tam giác TÔ ĐẶC** (▲▼). Chỉ báo sắp
+  xếp của `GSortHeader` (mask) cũng chuyển sang tam giác đặc cho khớp.
+
 ## [0.16.0] — 2026-07-20
 
 ### Added

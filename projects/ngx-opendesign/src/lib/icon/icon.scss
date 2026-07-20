@@ -29,3 +29,9 @@ svg {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+// Icon TÔ ĐẶC (glyph có `filled: true`, vd. tam giác sắp xếp) — đảo sang tô nền, bỏ viền.
+:host(.g-icon--filled) svg {
+  fill: currentColor;
+  stroke: none;
+}

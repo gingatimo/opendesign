@@ -940,7 +940,7 @@ body {
 .g-sort-header {
   cursor: pointer;
 }
-// Chỉ báo sắp xếp = mask icon angle (path khớp gIconAngleUp/Down trong icons.ts — sửa path thì sửa
+// Chỉ báo sắp xếp = mask TAM GIÁC ĐẶC (▲▼, khớp gIconAngleUp/Down trong icons.ts — sửa hình thì sửa
 // cả hai chỗ). Dùng mask + background-color để tô theo token, đổi màu theo theme. Chưa sort: hiện cả
 // hai chiều, màu muted (báo cột sort được); asc/desc: một chiều, màu text.
 .g-sort-header::after {
@@ -959,15 +959,15 @@ body {
   mask-position: center;
   -webkit-mask-size: contain;
   mask-size: contain;
-  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 10l4-4 4 4'/%3E%3Cpath d='M8 14l4 4 4-4'/%3E%3C/svg%3E");
+  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 5l4 5H8z'/%3E%3Cpath d='M12 19l4-5H8z'/%3E%3C/svg%3E");
 }
 .g-sort-header[aria-sort='ascending']::after {
   background-color: var(--g-text);
-  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 14l5-5 5 5'/%3E%3C/svg%3E");
+  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 8l6 8H6z'/%3E%3C/svg%3E");
 }
 .g-sort-header[aria-sort='descending']::after {
   background-color: var(--g-text);
-  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E");
+  --_g-sort-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M6 8h12l-6 8z'/%3E%3C/svg%3E");
 }
 
 // Menu item (GMenuItem + nút toggle của GSubmenu) — GLOBAL vì áp cho cả mục chiếu vào GMenu lẫn nút

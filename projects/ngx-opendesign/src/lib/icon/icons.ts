@@ -21,6 +21,12 @@ export interface GIconGlyph {
   paths?: readonly string[];
   circles?: readonly { cx: number; cy: number; r: number }[];
   rects?: readonly { x: number; y: number; width: number; height: number; rx?: number }[];
+  /**
+   * TÔ ĐẶC thay vì viền: GIcon vẽ hình với `fill: currentColor; stroke: none` thay cho mặc định
+   * `fill: none; stroke: currentColor`. Dùng cho icon vốn là khối đặc (vd. tam giác sắp xếp
+   * gIconAngleUp/Down). Đa số icon để trống (viền) — giữ phong cách outline nhất quán.
+   */
+  filled?: boolean;
 }
 
 const VIEW_BOX_24 = '0 0 24 24';
@@ -66,16 +72,18 @@ export const gIconChevronsRight: GIconGlyph = {
   paths: ['M7 18l6-6-6-6', 'M13 18l6-6-6-6'],
 };
 
-// Angle up/down — caret nhọn hơn chevron một chút, dùng cho chỉ báo sắp xếp (GSortHeader) và tái dùng
-// chung. Path này khớp với mask trong .g-sort-header (opendesign.scss) — sửa path thì sửa cả hai chỗ.
+// Angle up/down — TAM GIÁC TÔ ĐẶC (▲▼), dùng cho chỉ báo sắp xếp (GSortHeader) và tái dùng chung.
+// Tam giác đặc khớp với mask trong .g-sort-header (opendesign.scss) — sửa hình thì sửa cả hai chỗ.
 export const gIconAngleUp: GIconGlyph = {
   viewBox: VIEW_BOX_24,
-  paths: ['M7 14l5-5 5 5'],
+  filled: true,
+  paths: ['M12 8l6 8H6z'],
 };
 
 export const gIconAngleDown: GIconGlyph = {
   viewBox: VIEW_BOX_24,
-  paths: ['M7 10l5 5 5-5'],
+  filled: true,
+  paths: ['M6 8h12l-6 8z'],
 };
 
 export const gIconCheck: GIconGlyph = {
@@ -397,4 +405,397 @@ export const gIconThumbsDown: GIconGlyph = {
     'M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3z',
     'M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3',
   ],
+};
+
+// ===== Liên lạc & xã hội =====
+
+// Phong bì — email.
+export const gIconMail: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 2, y: 4, width: 20, height: 16, rx: 2 }],
+  paths: ['M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'],
+};
+
+// Ống nghe điện thoại.
+export const gIconPhone: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z',
+  ],
+};
+
+// Bong bóng chat — tin nhắn/bình luận.
+export const gIconMessageCircle: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z',
+  ],
+};
+
+// Chia sẻ — 3 nút nối bằng 2 đường.
+export const gIconShare: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  circles: [
+    { cx: 18, cy: 5, r: 3 },
+    { cx: 6, cy: 12, r: 3 },
+    { cx: 18, cy: 19, r: 3 },
+  ],
+  paths: ['M8.59 13.51l6.83 3.98', 'M15.41 6.51l-6.82 3.98'],
+};
+
+// Cờ đánh dấu (bookmark) — lưu/ghim.
+export const gIconBookmark: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'],
+};
+
+// Ngôi sao viền — yêu thích/xếp hạng (GRating vẽ sao TÔ ĐẶC riêng, đây là bản outline dùng chung).
+export const gIconStar: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01z',
+  ],
+};
+
+// Ký hiệu @ — tên người dùng/email.
+export const gIconAtSign: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  circles: [{ cx: 12, cy: 12, r: 4 }],
+  paths: ['M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94'],
+};
+
+// Địa cầu — ngôn ngữ/website.
+export const gIconGlobe: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  circles: [{ cx: 12, cy: 12, r: 10 }],
+  paths: [
+    'M2 12h20',
+    'M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z',
+  ],
+};
+
+// ===== File & dữ liệu =====
+
+// Thư mục.
+export const gIconFolder: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z'],
+};
+
+// Thư mục đang mở.
+export const gIconFolderOpen: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M6 14l1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2',
+  ],
+};
+
+// Tài liệu có dòng chữ.
+export const gIconFileText: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z',
+    'M14 2v6h6',
+    'M16 13H8',
+    'M16 17H8',
+    'M10 9H8',
+  ],
+};
+
+// Đĩa mềm — lưu (save).
+export const gIconSave: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z',
+    'M17 21v-8H7v8',
+    'M7 3v5h8',
+  ],
+};
+
+// Bảng kẹp (clipboard) — dán/sao chép nội dung.
+export const gIconClipboard: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2'],
+  rects: [{ x: 8, y: 2, width: 8, height: 4, rx: 1 }],
+};
+
+// Phễu lọc (filter).
+export const gIconFilter: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M22 3H2l8 9.46V19l4 2v-8.54L22 3z'],
+};
+
+// Máy in.
+export const gIconPrinter: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M6 9V2h12v7',
+    'M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2',
+  ],
+  rects: [{ x: 6, y: 14, width: 12, height: 8 }],
+};
+
+// ===== Thương mại =====
+
+// Thẻ tín dụng.
+export const gIconCreditCard: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 1, y: 4, width: 22, height: 16, rx: 2 }],
+  paths: ['M1 10h22'],
+};
+
+// Nhãn giá (tag).
+export const gIconTag: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z',
+    'M7 7h.01',
+  ],
+};
+
+// Thùng hàng (package) — đơn hàng/vận chuyển.
+export const gIconPackage: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M16.5 9.4L7.5 4.21',
+    'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z',
+    'M3.27 6.96L12 12.01l8.73-5.05',
+    'M12 22.08V12',
+  ],
+};
+
+// Hộp quà (gift).
+export const gIconGift: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M20 12v10H4V12',
+    'M12 22V7',
+    'M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z',
+    'M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z',
+  ],
+  rects: [{ x: 2, y: 7, width: 20, height: 5 }],
+};
+
+// Ví tiền (wallet).
+export const gIconWallet: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M21 12V7H5a2 2 0 0 1 0-4h14v4',
+    'M3 5v14a2 2 0 0 0 2 2h16v-5',
+    'M18 12a2 2 0 0 0 0 4h4v-4z',
+  ],
+};
+
+// Xe tải (giao hàng/vận chuyển).
+export const gIconTruck: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 1, y: 3, width: 15, height: 13 }],
+  paths: ['M16 8h4l3 3v5h-7V8'],
+  circles: [
+    { cx: 5.5, cy: 18.5, r: 2.5 },
+    { cx: 18.5, cy: 18.5, r: 2.5 },
+  ],
+};
+
+// ===== Media & thiết bị =====
+
+// Máy ảnh.
+export const gIconCamera: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'],
+  circles: [{ cx: 12, cy: 13, r: 4 }],
+};
+
+// Máy quay (video).
+export const gIconVideo: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M23 7l-7 5 7 5V7z'],
+  rects: [{ x: 1, y: 5, width: 15, height: 14, rx: 2 }],
+};
+
+// Màn hình máy tính (monitor).
+export const gIconMonitor: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 2, y: 3, width: 20, height: 14, rx: 2 }],
+  paths: ['M8 21h8', 'M12 17v4'],
+};
+
+// Điện thoại di động.
+export const gIconSmartphone: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 5, y: 2, width: 14, height: 20, rx: 2 }],
+  paths: ['M12 18h.01'],
+};
+
+// Wi-Fi (sóng).
+export const gIconWifi: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M5 12.55a11 11 0 0 1 14.08 0',
+    'M1.42 9a16 16 0 0 1 21.16 0',
+    'M8.53 16.11a6 6 0 0 1 6.95 0',
+    'M12 20h.01',
+  ],
+};
+
+// Đám mây (cloud) — lưu trữ/đồng bộ.
+export const gIconCloud: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z'],
+};
+
+// Pin (battery).
+export const gIconBattery: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 1, y: 6, width: 18, height: 12, rx: 2 }],
+  paths: ['M23 13v-2'],
+};
+
+// ===== Bản đồ & vị trí =====
+
+// Ghim bản đồ (map pin) — địa điểm.
+export const gIconMapPin: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'],
+  circles: [{ cx: 12, cy: 10, r: 3 }],
+};
+
+// Bản đồ gấp.
+export const gIconMap: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z', 'M8 2v16', 'M16 6v16'],
+};
+
+// La bàn (compass) — điều hướng.
+export const gIconCompass: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  circles: [{ cx: 12, cy: 12, r: 10 }],
+  paths: ['M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z'],
+};
+
+// ===== Hành động & UI =====
+
+// Ba chấm ngang (⋯) — menu thêm/kebab ngang.
+export const gIconMoreHorizontal: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  circles: [
+    { cx: 5, cy: 12, r: 1 },
+    { cx: 12, cy: 12, r: 1 },
+    { cx: 19, cy: 12, r: 1 },
+  ],
+};
+
+// Ba chấm dọc (⋮) — menu thêm/kebab dọc.
+export const gIconMoreVertical: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  circles: [
+    { cx: 12, cy: 5, r: 1 },
+    { cx: 12, cy: 12, r: 1 },
+    { cx: 12, cy: 19, r: 1 },
+  ],
+};
+
+// Làm mới (refresh) — tải lại.
+export const gIconRefresh: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M23 4v6h-6',
+    'M1 20v-6h6',
+    'M3.51 9a9 9 0 0 1 14.85-3.36L23 10',
+    'M1 14l4.64 4.36A9 9 0 0 0 20.49 15',
+  ],
+};
+
+// Liên kết ngoài (external link) — mở tab/trang mới.
+export const gIconExternalLink: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6', 'M15 3h6v6', 'M10 14L21 3'],
+};
+
+// Đăng xuất (log out).
+export const gIconLogOut: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4', 'M16 17l5-5-5-5', 'M21 12H9'],
+};
+
+// Đăng nhập (log in).
+export const gIconLogIn: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4', 'M10 17l5-5-5-5', 'M15 12H3'],
+};
+
+// Ổ khoá đóng (lock).
+export const gIconLock: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 3, y: 11, width: 18, height: 11, rx: 2 }],
+  paths: ['M7 11V7a5 5 0 0 1 10 0v4'],
+};
+
+// Ổ khoá mở (unlock).
+export const gIconUnlock: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 3, y: 11, width: 18, height: 11, rx: 2 }],
+  paths: ['M7 11V7a5 5 0 0 1 9.9-1'],
+};
+
+// Thanh trượt điều chỉnh (sliders) — cài đặt/tuỳ chỉnh.
+export const gIconSliders: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M4 21v-7',
+    'M4 10V3',
+    'M12 21v-9',
+    'M12 8V3',
+    'M20 21v-5',
+    'M20 12V3',
+    'M1 14h6',
+    'M9 8h6',
+    'M17 16h6',
+  ],
+};
+
+// ===== Khác phổ biến =====
+
+// Tia sét (zap) — nhanh/năng lượng/nổi bật.
+export const gIconZap: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M13 2L3 14h9l-1 8 10-12h-9l1-8z'],
+};
+
+// Lá cờ (flag) — đánh dấu/báo cáo.
+export const gIconFlag: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z', 'M4 22v-7'],
+};
+
+// Dấu hỏi trong vòng tròn (help) — trợ giúp.
+export const gIconHelpCircle: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  circles: [{ cx: 12, cy: 12, r: 10 }],
+  paths: ['M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3', 'M12 17h.01'],
+};
+
+// Kẹp giấy (paperclip) — đính kèm.
+export const gIconPaperclip: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48',
+  ],
+};
+
+// Nhóm người (users) — nhiều người dùng.
+export const gIconUsers: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2',
+    'M23 21v-2a4 4 0 0 0-3-3.87',
+    'M16 3.13a4 4 0 0 1 0 7.75',
+  ],
+  circles: [{ cx: 9, cy: 7, r: 4 }],
+};
+
+// Dấu ngoặc nhọn (code) — mã nguồn/kỹ thuật.
+export const gIconCode: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M16 18l6-6-6-6', 'M8 6l-6 6 6 6'],
 };
