@@ -90,57 +90,99 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
           <button
             type="button"
             class="g-date-range-picker__nav"
-            aria-label="Tháng trước"
-            (click)="shiftMonth(-1)"
+            [attr.aria-label]="stepPrevLabel()"
+            (click)="shiftHeader(-1)"
           >
             <g-icon [icon]="iconPrev" size="sm" />
           </button>
-          <span class="g-date-range-picker__title">
-            Tháng {{ viewMonth().getMonth() + 1 }} {{ viewMonth().getFullYear() }}
-          </span>
+          <!-- Bấm tiêu đề để leo cấp xem: ngày → tháng → năm (chọn nhanh không cần next nhiều lần). -->
+          <button
+            type="button"
+            class="g-date-range-picker__title"
+            [disabled]="viewMode() === 'years'"
+            [attr.aria-label]="titleLabel()"
+            (click)="climbView()"
+          >
+            {{ headerTitle() }}
+          </button>
           <button
             type="button"
             class="g-date-range-picker__nav"
-            aria-label="Tháng sau"
-            (click)="shiftMonth(1)"
+            [attr.aria-label]="stepNextLabel()"
+            (click)="shiftHeader(1)"
           >
             <g-icon [icon]="iconNext" size="sm" />
           </button>
         </div>
-        <div class="g-date-range-picker__weekdays">
-          @for (w of weekdays; track w) {
-            <span class="g-date-range-picker__weekday">{{ w }}</span>
-          }
-        </div>
-        <div class="g-date-range-picker__grid">
-          @for (day of grid(); track day.getTime()) {
-            <div
-              class="g-date-range-picker__cell"
-              [class.g-date-range-picker__cell--start]="isStart(day)"
-              [class.g-date-range-picker__cell--end]="isEnd(day)"
-              [class.g-date-range-picker__cell--in-range]="inRangeMid(day)"
-            >
-              <button
-                #dayBtn
-                type="button"
-                class="g-date-range-picker__day"
-                [class.g-date-range-picker__day--outside]="
-                  day.getMonth() !== viewMonth().getMonth()
-                "
-                [class.g-date-range-picker__day--today]="isToday(day)"
-                [class.g-date-range-picker__day--endpoint]="isStart(day) || isEnd(day)"
-                [attr.aria-disabled]="!inRangeDay(day) ? 'true' : null"
-                [attr.tabindex]="isFocused(day) ? 0 : -1"
-                [attr.aria-current]="isToday(day) ? 'date' : null"
-                [attr.aria-label]="dayLabel(day)"
-                (click)="select(day)"
-                (mouseenter)="hovered.set(day)"
-              >
-                {{ day.getDate() }}
-              </button>
+
+        @switch (viewMode()) {
+          @case ('days') {
+            <div class="g-date-range-picker__weekdays">
+              @for (w of weekdays; track w) {
+                <span class="g-date-range-picker__weekday">{{ w }}</span>
+              }
+            </div>
+            <div class="g-date-range-picker__grid">
+              @for (day of grid(); track day.getTime()) {
+                <div
+                  class="g-date-range-picker__cell"
+                  [class.g-date-range-picker__cell--start]="isStart(day)"
+                  [class.g-date-range-picker__cell--end]="isEnd(day)"
+                  [class.g-date-range-picker__cell--in-range]="inRangeMid(day)"
+                >
+                  <button
+                    #dayBtn
+                    type="button"
+                    class="g-date-range-picker__day"
+                    [class.g-date-range-picker__day--outside]="
+                      day.getMonth() !== viewMonth().getMonth()
+                    "
+                    [class.g-date-range-picker__day--today]="isToday(day)"
+                    [class.g-date-range-picker__day--endpoint]="isStart(day) || isEnd(day)"
+                    [attr.aria-disabled]="!inRangeDay(day) ? 'true' : null"
+                    [attr.tabindex]="isFocused(day) ? 0 : -1"
+                    [attr.aria-current]="isToday(day) ? 'date' : null"
+                    [attr.aria-label]="dayLabel(day)"
+                    (click)="select(day)"
+                    (mouseenter)="hovered.set(day)"
+                  >
+                    {{ day.getDate() }}
+                  </button>
+                </div>
+              }
             </div>
           }
-        </div>
+          @case ('months') {
+            <div class="g-date-range-picker__cells">
+              @for (m of months; track m) {
+                <button
+                  type="button"
+                  class="g-date-range-picker__pick"
+                  [class.g-date-range-picker__pick--selected]="isSelectedMonth(m)"
+                  [attr.aria-disabled]="!monthSelectable(m) ? 'true' : null"
+                  (click)="selectMonth(m)"
+                >
+                  Th {{ m + 1 }}
+                </button>
+              }
+            </div>
+          }
+          @case ('years') {
+            <div class="g-date-range-picker__cells">
+              @for (y of years(); track y) {
+                <button
+                  type="button"
+                  class="g-date-range-picker__pick"
+                  [class.g-date-range-picker__pick--selected]="isSelectedYear(y)"
+                  [attr.aria-disabled]="!yearSelectable(y) ? 'true' : null"
+                  (click)="selectYear(y)"
+                >
+                  {{ y }}
+                </button>
+              }
+            </div>
+          }
+        }
       </div>
     </ng-template>
   `,
@@ -197,6 +239,45 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
     return start && !end && hv && !isBeforeDay(hv, start) ? hv : null;
   });
 
+  // Chế độ xem panel: ngày (mặc định) → tháng → năm. Bấm tiêu đề leo cấp; bấm ô tháng/năm hạ cấp.
+  protected readonly viewMode = signal<'days' | 'months' | 'years'>('days');
+  protected readonly months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  private readonly yearsStart = computed(
+    () => Math.floor(this.viewMonth().getFullYear() / 12) * 12,
+  );
+  protected readonly years = computed(() => {
+    const s = this.yearsStart();
+    return Array.from({ length: 12 }, (_, i) => s + i);
+  });
+  protected readonly headerTitle = computed(() => {
+    const d = this.viewMonth();
+    switch (this.viewMode()) {
+      case 'days':
+        return `Tháng ${d.getMonth() + 1} ${d.getFullYear()}`;
+      case 'months':
+        return `${d.getFullYear()}`;
+      default:
+        return `${this.yearsStart()}–${this.yearsStart() + 11}`;
+    }
+  });
+  protected readonly titleLabel = computed(() =>
+    this.viewMode() === 'days' ? 'Chọn tháng' : this.viewMode() === 'months' ? 'Chọn năm' : '',
+  );
+  protected readonly stepPrevLabel = computed(() =>
+    this.viewMode() === 'days'
+      ? 'Tháng trước'
+      : this.viewMode() === 'months'
+        ? 'Năm trước'
+        : 'Trang năm trước',
+  );
+  protected readonly stepNextLabel = computed(() =>
+    this.viewMode() === 'days'
+      ? 'Tháng sau'
+      : this.viewMode() === 'months'
+        ? 'Năm sau'
+        : 'Trang năm sau',
+  );
+
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
     afterRenderEffect(() => {
@@ -238,6 +319,7 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
     const anchor = this.value().start ?? new Date();
     this.viewMonth.set(startOfMonth(anchor));
     this.focusedDate.set(anchor);
+    this.viewMode.set('days');
     this.focusPending.set(true);
     this.open.set(true);
   }
@@ -251,6 +333,66 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
   protected shiftMonth(n: number): void {
     this.viewMonth.set(addMonths(this.viewMonth(), n));
     this.focusedDate.set(addMonthsClamped(this.focusedDate(), n));
+  }
+
+  // Nút prev/next đổi theo chế độ xem: ngày → ±1 tháng · tháng → ±1 năm · năm → ±1 trang (12 năm).
+  protected shiftHeader(n: number): void {
+    const d = this.viewMonth();
+    switch (this.viewMode()) {
+      case 'days':
+        this.shiftMonth(n);
+        break;
+      case 'months':
+        this.viewMonth.set(new Date(d.getFullYear() + n, d.getMonth(), 1));
+        break;
+      default:
+        this.viewMonth.set(new Date(d.getFullYear() + n * 12, d.getMonth(), 1));
+    }
+  }
+
+  protected climbView(): void {
+    this.viewMode.set(this.viewMode() === 'days' ? 'months' : 'years');
+  }
+
+  protected selectMonth(m: number): void {
+    if (!this.monthSelectable(m)) return;
+    this.viewMonth.set(new Date(this.viewMonth().getFullYear(), m, 1));
+    this.viewMode.set('days');
+  }
+  protected selectYear(y: number): void {
+    if (!this.yearSelectable(y)) return;
+    this.viewMonth.set(new Date(y, this.viewMonth().getMonth(), 1));
+    this.viewMode.set('months');
+  }
+
+  // Đánh dấu tháng/năm chứa điểm ĐẦU (start) của dải để dễ định vị.
+  protected isSelectedMonth(m: number): boolean {
+    const s = this.value().start;
+    return !!s && s.getFullYear() === this.viewMonth().getFullYear() && s.getMonth() === m;
+  }
+  protected isSelectedYear(y: number): boolean {
+    const s = this.value().start;
+    return !!s && s.getFullYear() === y;
+  }
+
+  protected monthSelectable(m: number): boolean {
+    const y = this.viewMonth().getFullYear();
+    const min = this.min();
+    const max = this.max();
+    if (min && (y < min.getFullYear() || (y === min.getFullYear() && m < min.getMonth()))) {
+      return false;
+    }
+    if (max && (y > max.getFullYear() || (y === max.getFullYear() && m > max.getMonth()))) {
+      return false;
+    }
+    return true;
+  }
+  protected yearSelectable(y: number): boolean {
+    const min = this.min();
+    const max = this.max();
+    if (min && y < min.getFullYear()) return false;
+    if (max && y > max.getFullYear()) return false;
+    return true;
   }
 
   protected select(day: Date): void {

@@ -10,7 +10,9 @@ import { DateRangePickerBasicDemo } from '../demos/date-range-picker/date-range-
     <h1>Date Range Picker</h1>
     <p>
       Chọn khoảng ngày trên một lịch: bấm ngày đầu (start), rồi ngày cuối (end) — dải ở giữa được tô
-      màu, di chuột xem trước dải. Giá trị hai chiều qua <code>[(value)]</code> kiểu
+      màu, di chuột xem trước dải. <b>Bấm tiêu đề</b> (Tháng/Năm) để <b>chọn nhanh tháng & năm</b>
+      (ngày → lưới 12 tháng → lưới 12 năm), khỏi next từng tháng. Giá trị hai chiều qua
+      <code>[(value)]</code> kiểu
       <code>{{ '{' }} start, end {{ '}' }}</code> (<code>GDateRange</code>). Giới hạn bằng
       <code>min</code>/<code>max</code>.
     </p>

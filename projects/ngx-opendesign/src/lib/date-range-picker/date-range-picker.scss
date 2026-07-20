@@ -54,10 +54,70 @@
   margin-bottom: var(--g-space-2);
 }
 
+// Nút tiêu đề — bấm để đổi chế độ xem (ngày → tháng → năm).
 .g-date-range-picker__title {
+  padding: var(--g-space-1) var(--g-space-2);
+  border: none;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: var(--g-text);
+  font-family: var(--g-font-family);
   font-size: var(--g-font-size-sm);
   font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--g-surface);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+  &:disabled {
+    cursor: default;
+  }
+}
+
+// Lưới 12 ô tháng/năm — 3 cột, rộng bằng lưới ngày để panel không đổi kích thước khi chuyển chế độ.
+.g-date-range-picker__cells {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--g-space-1);
+  width: calc(36px * 7);
+}
+.g-date-range-picker__pick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--g-radius-md);
+  background: transparent;
   color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  cursor: pointer;
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--g-surface);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+  }
+  &[aria-disabled='true'] {
+    color: var(--g-text-muted);
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+.g-date-range-picker__pick--selected {
+  background: var(--g-primary);
+  color: var(--g-on-primary);
+}
+.g-date-range-picker__pick--selected:hover {
+  background: var(--g-primary-hover);
 }
 
 .g-date-range-picker__nav {

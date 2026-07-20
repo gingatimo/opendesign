@@ -10,6 +10,8 @@
   font-family: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
   font-size: var(--g-font-size-sm);
   line-height: 1.6;
+  // Thanh cuộn (và UI gốc khác của trình duyệt) đi theo terminal tối, không theo theme sáng của trang.
+  color-scheme: dark;
 }
 
 .g-terminal__bar {
@@ -47,6 +49,9 @@
   min-height: 0;
   overflow-y: auto;
   padding: var(--g-space-2) var(--g-space-3);
+  // Thanh cuộn mảnh, thumb xám tối hợp nền terminal (mặc định trên nền tối trình duyệt hay vẽ sáng).
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 transparent;
 }
 .g-terminal__line {
   white-space: pre-wrap;
