@@ -27,27 +27,6 @@
   cursor: not-allowed;
 }
 
-// Multiple: chips giữ MỘT hàng trên trigger (chiều cao control-md như single); tràn quá bề rộng thì
-// cắt (overflow:hidden) + hiện "…" (.g-tree-select__chips-more) thay vì xuống dòng.
-.g-tree-select__chips {
-  flex: 1;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: var(--g-space-1);
-  min-width: 0;
-  overflow: hidden;
-}
-// Chip giữ nguyên bề rộng để hàng tràn ra (rồi cắt + "…"), không bị nén lại.
-.g-tree-select__chips > g-chip {
-  flex-shrink: 0;
-}
-.g-tree-select__chips-more {
-  flex-shrink: 0;
-  padding-left: var(--g-space-1);
-  color: var(--g-text-muted);
-}
-
 .g-tree-select__value {
   flex: 1;
   overflow: hidden;

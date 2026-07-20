@@ -10,9 +10,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 ### Added
 
 - **GTreeSelect**: chế độ `multiple` — chọn nhiều node bằng checkbox lan truyền (cascade) + tri-state
-  (cha "một phần" khi chỉ vài con được tích); nút gập/mở sang phải, checkbox bên trái; trigger hiện
-  chips từng node **lá** đã chọn (× để bỏ) trên **một hàng**, tràn bề rộng thì hiện `…` thay vì xuống
-  dòng. Giá trị = mảng value các node lá.
+  (cha "một phần" khi chỉ vài con được tích); nút gập/mở sang phải, checkbox bên trái; trigger **liệt
+  kê nhãn** các node lá đã chọn trên một hàng (tràn thì cắt bằng `…`), bỏ chọn bằng cách mở lại cây.
+  Giá trị = mảng value các node lá.
 - **GSpinner**: thêm cỡ `xl` (48px) và `2xl` (64px).
 - **GPagination**: thêm nút về **trang đầu** và tới **trang cuối** (icon « »). Thêm icon công khai
   `gIconChevronsLeft` / `gIconChevronsRight`.

@@ -26,8 +26,7 @@ interface Api {
   selectNode(n: GTreeNode): void;
   onNodeClick(n: GTreeNode): void;
   stateOf(n: GTreeNode): 'checked' | 'indeterminate' | 'unchecked';
-  chipNodes: () => GTreeNode[];
-  removeChip(n: GTreeNode): void;
+  multipleLabel: () => string;
   writeValue(v: unknown): void;
 }
 
@@ -96,20 +95,21 @@ describe('GTreeSelect', () => {
     expect(cmp.stateOf(NODES[0].children![1])).toBe('unchecked');
   });
 
-  it('multiple: chips hiện các node LÁ đã chọn (không gộp lên cha)', () => {
+  it('multiple: nhãn trigger liệt kê các node LÁ đã chọn (không gộp lên cha)', () => {
     const { cmp } = makeMultiple();
     cmp.onNodeClick(NODES[0]); // tích đủ 'Tài liệu' → cascade 2 lá
-    expect(cmp.chipNodes().map((n) => n.label)).toEqual(['Báo cáo', 'Hợp đồng']);
+    expect(cmp.multipleLabel()).toBe('Báo cáo, Hợp đồng');
     cmp.onNodeClick(NODES[0].children![0]); // bỏ 'Báo cáo' → còn lá 'Hợp đồng'
-    expect(cmp.chipNodes().map((n) => n.label)).toEqual(['Hợp đồng']);
+    expect(cmp.multipleLabel()).toBe('Hợp đồng');
   });
 
-  it('multiple: removeChip cha bỏ chọn cả nhánh', () => {
+  it('multiple: bỏ chọn node đã tích qua onNodeClick (mở lại cây)', () => {
     const { f, cmp } = makeMultiple();
     let v: unknown;
     f.componentInstance.registerOnChange((x) => (v = x));
-    cmp.onNodeClick(NODES[0]);
-    cmp.removeChip(NODES[0]);
+    cmp.onNodeClick(NODES[0]); // tích cả nhánh
+    cmp.onNodeClick(NODES[0]); // tích lại → bỏ cả nhánh
     expect(v).toEqual([]);
+    expect(cmp.multipleLabel()).toBe('');
   });
 });
