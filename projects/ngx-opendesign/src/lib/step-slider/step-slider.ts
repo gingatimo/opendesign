@@ -49,13 +49,18 @@ import {
   `,
   styleUrl: './step-slider.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'g-step-slider' },
+  host: {
+    class: 'g-step-slider',
+    '[class.g-step-slider--sm]': "size() === 'sm'",
+  },
 })
 export class GStepSlider {
   // Số bậc (số chấm). Giá trị là chỉ số 0..steps-1.
   readonly steps = input(5);
   // Chỉ số bậc đang chọn (two-way `[(value)]`).
   readonly value = model(0);
+  // Cỡ dải: 'md' (40px, mặc định) hoặc 'sm' (32px) — như GInput.
+  readonly size = input<'sm' | 'md'>('md');
   readonly startLabel = input('');
   readonly endLabel = input('');
   readonly ariaLabel = input('Mức');

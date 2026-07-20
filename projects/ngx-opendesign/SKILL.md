@@ -115,7 +115,7 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
 (value `string[]`) · `GInputOtp` `g-input-otp` (`length`, `integerOnly`, `mask`) · `GDatepicker`
 `g-datepicker` · `GDateRangePicker` `g-date-range-picker` · `GTimePicker` `g-timepicker` ·
 `GColorPicker` `g-color-picker` · `GSlider` `g-slider` · `GStepSlider` `g-step-slider` (trượt rời rạc
-dạng pill; `steps`, `[(value)]` chỉ số bậc, `startLabel`/`endLabel`) · `GFileInput` `g-file-input`
+dạng pill; `steps`, `[(value)]` chỉ số bậc, `startLabel`/`endLabel`, `size` sm|md) · `GFileInput` `g-file-input`
 (`[(files)]`, `accept`, `multiple`) · `GSearchField` `g-search-field` (select trường + ô nhập,
 `(search)`).
 

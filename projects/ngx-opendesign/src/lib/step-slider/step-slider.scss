@@ -58,3 +58,19 @@
   background: var(--g-surface-raised);
   box-shadow: var(--g-shadow-sm);
 }
+
+// Cỡ nhỏ (sm) — dải thấp hơn, thumb + chấm nhỏ lại, nhãn cỡ xs.
+:host(.g-step-slider--sm) .g-step-slider__track {
+  height: var(--g-control-sm);
+}
+:host(.g-step-slider--sm) .g-step-slider__thumb {
+  max-width: 36px;
+  height: calc(var(--g-control-sm) - 6px);
+}
+:host(.g-step-slider--sm) .g-step-slider__dot {
+  width: 4px;
+  height: 4px;
+}
+:host(.g-step-slider--sm) .g-step-slider__labels {
+  font-size: var(--g-font-size-xs);
+}

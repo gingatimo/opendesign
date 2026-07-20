@@ -49,6 +49,12 @@ export default class StepSliderPage {
       description: 'Số bậc (số chấm).',
     },
     {
+      name: 'size',
+      type: "'sm' | 'md'",
+      default: "'md'",
+      description: 'Cỡ dải: md (40px) hoặc sm (32px) — như GInput.',
+    },
+    {
       name: 'startLabel / endLabel',
       type: 'string',
       default: "''",
