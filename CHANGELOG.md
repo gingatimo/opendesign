@@ -7,6 +7,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+## [0.14.0] — 2026-07-20
+
 ### Added
 
 - **`SKILL.md`** ship kèm npm package — hướng dẫn cho AI coding agent (pattern bắt buộc, form control
