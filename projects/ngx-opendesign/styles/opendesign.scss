@@ -487,6 +487,15 @@ body {
   margin-left: 0;
 }
 
+// GCarousel — item con là nội dung consumer CHIẾU vào track, style scoped của component không với tới
+// được (view encapsulation), nên đặt GLOBAL ở đây. flex: 0 0 auto → item KHÔNG co, giữ bề rộng tự
+// nhiên (item bằng nhau hay khác nhau — vd. thẻ ngang + thẻ dọc — đều đúng). scroll-snap-align → điểm
+// dừng khi cuộn.
+.g-carousel__track > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
 // CDK visually-hidden — tương đương @angular/cdk/a11y-prebuilt.css (bỏ prefix -webkit/-moz cũ,
 // dùng appearance chuẩn, hợp gu CSS hiện đại của lib).
 //

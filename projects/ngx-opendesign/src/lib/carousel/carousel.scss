@@ -1,0 +1,70 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.g-carousel__track {
+  display: flex;
+  gap: var(--g-space-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  // Ẩn thanh cuộn — điều hướng bằng nút prev/next (kéo/trackpad vẫn cuộn được bình thường).
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+    border-radius: var(--g-radius-md);
+  }
+}
+
+// Nút điều hướng nổi trên hai mép, tự ẩn ở biên (không còn chỗ cuộn về hướng đó).
+.g-carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  box-shadow: var(--g-shadow-md);
+  cursor: pointer;
+  transition: opacity var(--g-duration-fast) var(--g-ease);
+}
+
+.g-carousel__nav--prev {
+  left: var(--g-space-2);
+}
+.g-carousel__nav--next {
+  right: var(--g-space-2);
+}
+
+.g-carousel__nav:hover {
+  background: var(--g-surface);
+}
+.g-carousel__nav:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+
+.g-carousel__nav--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-carousel__track {
+    scroll-behavior: auto;
+  }
+}

@@ -40,6 +40,8 @@ export type NavIcon =
   | 'icon'
   | 'image-preview'
   | 'image-slider'
+  | 'carousel'
+  | 'gallery'
   | 'media-player'
   | 'divider'
   | 'fab'
@@ -153,6 +155,25 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     viewBox: VB,
     paths: ['M7 10l-2 2 2 2', 'M17 10l2 2-2 2'],
     rects: [{ x: 3, y: 6, width: 18, height: 12, rx: 2 }],
+  },
+  carousel: {
+    viewBox: VB,
+    rects: [
+      { x: 8, y: 5, width: 8, height: 14, rx: 2 },
+      { x: 2, y: 8, width: 3, height: 8, rx: 1 },
+      { x: 19, y: 8, width: 3, height: 8, rx: 1 },
+    ],
+  },
+  gallery: {
+    viewBox: VB,
+    paths: ['M7 13l3-3 3 3 3-4 2 2'],
+    circles: [{ cx: 8, cy: 8, r: 1.5 }],
+    rects: [
+      { x: 3, y: 3, width: 18, height: 12, rx: 2 },
+      { x: 3, y: 18, width: 4, height: 3, rx: 1 },
+      { x: 10, y: 18, width: 4, height: 3, rx: 1 },
+      { x: 17, y: 18, width: 4, height: 3, rx: 1 },
+    ],
   },
   'media-player': {
     viewBox: VB,

@@ -238,6 +238,16 @@ export const routes: Routes = [
     title: 'Image Slider — OpenDesign',
   },
   {
+    path: 'components/carousel',
+    loadComponent: () => import('./pages/carousel.page'),
+    title: 'Carousel — OpenDesign',
+  },
+  {
+    path: 'components/gallery',
+    loadComponent: () => import('./pages/gallery.page'),
+    title: 'Gallery — OpenDesign',
+  },
+  {
     path: 'components/media-player',
     loadComponent: () => import('./pages/media-player.page'),
     title: 'Media Player — OpenDesign',

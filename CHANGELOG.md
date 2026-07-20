@@ -16,6 +16,13 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **`GProgressCircle`** (`g-progress-circle`): tiến độ dạng **vòng tròn** — `[value]` 0–100 vẽ cung,
   `[size]`/`[stroke]` chỉnh đường kính/độ dày, nội dung chiếu vào **giữa** vòng qua `<ng-content>`
   (số đếm ngược, phần trăm…). Docs: trang Progress thêm mục "Vòng tròn (đếm ngược)" với demo hẹn giờ.
+- **`GCarousel`** (`g-carousel`): băng chuyền ngang cho **nội dung bất kỳ** (chiếu card qua slot). Track
+  dùng scroll-snap giữ **bề rộng tự nhiên** của item nên chạy đúng cả khi item **cùng kích thước** lẫn
+  **khác kích thước** (thẻ ngang kiểu thẻ tín dụng xen thẻ dọc). Nút prev/next cuộn đúng một item và tự
+  ẩn/`disabled` ở biên; track điều hướng được bằng phím ←/→. Khác `GImageSlider` (một ảnh/khung).
+- **`GGallery`** (`g-gallery`): gallery ảnh kiểu trang bán hàng — ảnh chính lớn + dải thumbnail, bấm
+  thumbnail đổi ảnh chính, bấm ảnh chính mở lightbox. `[images]` nhận `string | File` (File tự tạo/thu
+  hồi objectURL). Khác `GImagePreview` (lưới thumbnail).
 
 ## [0.14.0] — 2026-07-20
 
