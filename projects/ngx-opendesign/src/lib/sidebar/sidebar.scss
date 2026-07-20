@@ -7,7 +7,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 240px;
+  width: 248px;
   height: 100%;
   box-sizing: border-box;
   padding: var(--g-space-4) var(--g-space-2);
@@ -48,6 +48,8 @@
   display: flex;
   align-items: center;
   gap: var(--g-space-1);
+  // padding-inline khớp .g-sidebar__body (xem chú thích ở đó) để toggle vẫn canh cột với nav icon.
+  padding-inline: var(--g-space-1);
   overflow: hidden;
   scrollbar-gutter: stable;
 }
@@ -68,6 +70,10 @@
   flex: 1;
   flex-direction: column;
   gap: var(--g-space-1);
+  // overflow-y:auto cũng clip theo phương NGANG → focus ring (box-shadow trồi 4px) của item sát mép
+  // sẽ bị cắt. padding-inline lùi item vào trong để ring hiển thị đủ (host đã nới 8px bù lại bề rộng
+  // item). Phải khớp .g-sidebar__top để toggle vẫn canh cột với nav icon.
+  padding-inline: var(--g-space-1);
   overflow-y: auto;
   scrollbar-gutter: stable;
   // Thanh cuộn chỉ lộ khi chuột vào vùng sidebar: ẩn thumb (transparent) mặc định, hiện ở

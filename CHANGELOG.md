@@ -14,6 +14,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Changed
 
+- **GSidebar**: rộng 240 → 248px và thêm `padding-inline` cho vùng cuộn nav (khớp cả top row) để
+  **focus ring của item không bị mép sidebar cắt** (trước đây item sát mép, ring bị `overflow` clip).
 - **GInputGroup**: `<input>` bên trong chừa `padding: 0 2px` để con trỏ khi ô RỖNG không bị input tự
   clip ở mép content-box (trước đó caret sát mép trái bị cắt mất phần trái nên trông bé/mảnh).
 - **GSelect** (multiple): trigger **liệt kê nhãn** các mục đã chọn (nối `, `, một hàng, tràn thì cắt
