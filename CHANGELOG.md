@@ -7,6 +7,12 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Added
+
+- **`GProgressCircle`** (`g-progress-circle`): tiến độ dạng **vòng tròn** — `[value]` 0–100 vẽ cung,
+  `[size]`/`[stroke]` chỉnh đường kính/độ dày, nội dung chiếu vào **giữa** vòng qua `<ng-content>`
+  (số đếm ngược, phần trăm…). Docs: trang Progress thêm mục "Vòng tròn (đếm ngược)" với demo hẹn giờ.
+
 ## [0.14.0] — 2026-07-20
 
 ### Added

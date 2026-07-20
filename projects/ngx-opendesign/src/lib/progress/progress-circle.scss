@@ -1,0 +1,43 @@
+:host {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  // width/height do host style binding đặt theo size (px).
+  font-family: var(--g-font-family);
+}
+
+.g-progress-circle__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.g-progress-circle__track {
+  stroke: var(--g-secondary-bg);
+}
+
+.g-progress-circle__arc {
+  stroke: var(--g-primary);
+  transition: stroke-dashoffset var(--g-duration-base) var(--g-ease);
+}
+
+// Nhãn giữa (số đếm ngược, %…) phủ đúng tâm vòng tròn.
+.g-progress-circle__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--g-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-progress-circle__arc {
+    transition: none;
+  }
+}

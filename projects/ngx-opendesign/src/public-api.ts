@@ -16,6 +16,7 @@ export * from './lib/search-field/search-field';
 export * from './lib/badge/badge';
 export * from './lib/spinner/spinner';
 export * from './lib/progress/progress';
+export * from './lib/progress/progress-circle';
 export * from './lib/chip/chip';
 export * from './lib/avatar/avatar';
 export * from './lib/card/card';

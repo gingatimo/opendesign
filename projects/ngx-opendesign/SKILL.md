@@ -119,7 +119,8 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
 `(search)`).
 
 **Hiển thị:** `GBadge` `g-badge` (`variant`) · `GSpinner` `g-spinner` (`size` sm…2xl) · `GProgress`
-`g-progress` · `GChip` `g-chip` (`removable`, `(removed)`) · `GAvatar` `g-avatar`
+`g-progress` (thanh ngang) · `GProgressCircle` `g-progress-circle` (vòng tròn; `[value]`, `[size]`,
+`[stroke]`, nhãn giữa qua nội dung) · `GChip` `g-chip` (`removable`, `(removed)`) · `GAvatar` `g-avatar`
 (`[name]`, `shape`) · `GCard` `g-card` (+`gCardHeader`/`gCardFooter`) · `GIcon` `g-icon` (`[icon]`) ·
 `GDivider` `g-divider` (`vertical`, nhãn qua nội dung) · `GImagePreview` `g-image-preview`
 (lưới thumbnail + lightbox) · `GImageSlider` `g-image-slider` · `GMediaPlayer` `g-media-player` ·
