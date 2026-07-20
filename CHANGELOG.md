@@ -9,6 +9,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Changed
 
+- **GSelect** (multiple): trigger **liệt kê nhãn** các mục đã chọn (nối `, `, một hàng, tràn thì cắt
+  bằng `…`) thay vì chip có nút bỏ — bỏ chọn bằng cách mở lại panel. Nhất quán với GTreeSelect
+  multiple.
 - **GSelect** (searchable): ô tìm kiếm nay nổi trên danh sách khi cuộn (không bị option đè viền/ring);
   danh sách option dùng **thanh cuộn mảnh** theo theme (như GScrollPanel) thay cho scrollbar mặc định.
 

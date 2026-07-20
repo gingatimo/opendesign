@@ -69,23 +69,6 @@
   }
 }
 
-// ----- multiple: trigger cao co giãn theo chips (không giữ height cố định) -----
-:host(.g-select--multiple) {
-  height: auto;
-  min-height: var(--g-control-md);
-  padding-top: var(--g-space-1);
-  padding-bottom: var(--g-space-1);
-}
-:host(.g-select--multiple) .g-select__trigger-content {
-  overflow: visible;
-  white-space: normal;
-}
-.g-select__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--g-space-1);
-}
-
 .g-select__panel {
   display: flex;
   flex-direction: column;

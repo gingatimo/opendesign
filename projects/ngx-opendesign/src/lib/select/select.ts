@@ -15,7 +15,6 @@ import {
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
 import { gNextId } from '../core/id-generator';
-import { GChip } from '../chip/chip';
 import { GIcon } from '../icon/icon';
 import { gIconChevronDown } from '../icon/icons';
 import { GOption } from './option';
@@ -32,19 +31,12 @@ function normalize(s: string): string {
 
 @Component({
   selector: 'g-select',
-  imports: [CdkConnectedOverlay, GIcon, GChip],
+  imports: [CdkConnectedOverlay, GIcon],
   template: `
     <div class="g-select__trigger-content">
-      @if (multiple() && selectedOptions().length > 0) {
-        <span class="g-select__chips">
-          @for (opt of selectedOptions(); track opt.id) {
-            <g-chip removable [removeLabel]="'Bỏ ' + opt.getLabel()" (removed)="removeChip(opt)">
-              {{ opt.getLabel() }}
-            </g-chip>
-          }
-        </span>
-      } @else if (!multiple() && selectedLabel()) {
-        <span>{{ selectedLabel() }}</span>
+      @let text = multiple() ? multipleLabel() : selectedLabel();
+      @if (text) {
+        <span>{{ text }}</span>
       } @else {
         <span class="g-select__placeholder">{{ placeholder() }}</span>
       }
@@ -102,7 +94,7 @@ function normalize(s: string): string {
     '[class.g-select--disabled]': 'disabled()',
     '[class.g-select--open]': 'open()',
     '[class.g-select--multiple]': 'multiple()',
-    '(click)': 'onTriggerClick($event)',
+    '(click)': 'onTriggerClick()',
     '(keydown)': 'onKeydown($event)',
     '(blur)': 'onBlur($event)',
   },
@@ -165,6 +157,14 @@ export class GSelect implements ControlValueAccessor {
     this.optionsList().filter((o) => this.isSelected(o.value())),
   );
 
+  // Nhãn trigger (multiple) = nhãn các option đã chọn nối ", "; trigger một hàng + text-overflow
+  // ellipsis → tràn tự "…". Bỏ chọn bằng cách mở lại panel (không còn chip ×).
+  protected readonly multipleLabel = computed(() =>
+    this.selectedOptions()
+      .map((o) => o.getLabel())
+      .join(', '),
+  );
+
   protected readonly selectedLabel = computed(() => {
     const value = this.valueSignal();
     if (value === undefined || value === null) return '';
@@ -217,11 +217,6 @@ export class GSelect implements ControlValueAccessor {
     }
   }
 
-  protected removeChip(option: GOption): void {
-    // option đang được chọn → selectValue toggle sẽ bỏ chọn.
-    this.selectValue(option.value());
-  }
-
   close(): void {
     this.open.set(false);
     this.activeIndex.set(-1);
@@ -236,10 +231,8 @@ export class GSelect implements ControlValueAccessor {
     this.onTouchedFn();
   }
 
-  protected onTriggerClick(event: MouseEvent): void {
+  protected onTriggerClick(): void {
     if (this.disabled()) return;
-    // Click vào vùng chips (kể cả nút bỏ chip) không mở/đóng panel — để nút × của GChip xử lý riêng.
-    if ((event.target as HTMLElement).closest('.g-select__chips')) return;
     if (this.open()) {
       this.close();
     } else {

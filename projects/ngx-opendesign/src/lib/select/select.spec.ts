@@ -372,13 +372,14 @@ describe('GSelect multiple', () => {
     expect(opts[0].querySelector('.g-option__check g-icon')).not.toBeNull();
   });
 
-  it('chips hiện trên trigger cho từng mục đã chọn', () => {
+  it('trigger liệt kê nhãn các mục đã chọn (nối ", ")', () => {
     const { fixture } = setup();
     const opts = optionEls(fixture);
     opts[0].click();
     opts[2].click();
     fixture.detectChanges();
-    const chips = fixture.debugElement.queryAll(By.css('.g-select__chips g-chip'));
-    expect(chips.length).toBe(2);
+    const content = fixture.debugElement.query(By.css('.g-select__trigger-content'))
+      .nativeElement as HTMLElement;
+    expect(content.textContent?.trim()).toBe('A, C');
   });
 });

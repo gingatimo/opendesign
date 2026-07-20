@@ -37,8 +37,9 @@ import { SelectMultipleDemo } from '../demos/select/select-multiple.demo';
 
     <h2>Chọn nhiều</h2>
     <p>
-      Thêm <code>multiple</code> để chọn nhiều mục — giá trị là mảng, panel giữ mở, mỗi mục đã chọn
-      hiển thị dạng chip có nút bỏ. Ghép được với <code>searchable</code>.
+      Thêm <code>multiple</code> để chọn nhiều mục — giá trị là mảng, panel giữ mở. Trigger
+      <b>liệt kê nhãn</b> các mục đã chọn trên một hàng (tràn thì cắt bằng <code>…</code>); bỏ chọn
+      bằng cách mở lại panel. Ghép được với <code>searchable</code>.
     </p>
     <docs-demo-section>
       <docs-select-multiple-demo />
@@ -86,7 +87,8 @@ export default class SelectPage {
       name: 'multiple',
       type: 'boolean',
       default: 'false',
-      description: 'Cho chọn nhiều mục; giá trị trở thành mảng, hiển thị dạng chip trên trigger.',
+      description:
+        'Cho chọn nhiều mục; giá trị trở thành mảng, trigger liệt kê nhãn các mục đã chọn (cắt bằng … nếu dài).',
     },
     {
       name: 'searchPlaceholder',
