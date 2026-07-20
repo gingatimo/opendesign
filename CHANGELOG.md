@@ -7,6 +7,11 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Changed
+
+- **GChips**: ô nhập giữ một hàng và **cuộn ngang** khi nhiều chip (thay vì tràn xuống nhiều dòng) —
+  thanh cuộn mảnh theo theme; thêm chip xong tự cuộn về cuối để ô nhập không bị khuất.
+
 ## [0.10.0] — 2026-07-19
 
 ### Added

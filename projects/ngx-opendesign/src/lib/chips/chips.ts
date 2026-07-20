@@ -1,12 +1,15 @@
 import {
+  afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   inject,
   input,
   numberAttribute,
   signal,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { GChip } from '../chip/chip';
@@ -17,7 +20,7 @@ import { GChip } from '../chip/chip';
   selector: 'g-chips',
   imports: [GChip],
   template: `
-    <label class="g-chips__field">
+    <label class="g-chips__field" #field>
       @for (chip of chips(); track $index) {
         <g-chip
           removable
@@ -63,8 +66,23 @@ export class GChips implements ControlValueAccessor {
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
 
+  private readonly fieldRef = viewChild.required<ElementRef<HTMLElement>>('field');
+  // Sau khi THÊM chip, cuộn ô về cuối để chip mới + ô nhập không bị đẩy khuất bên phải. Cờ (không
+  // phải signal) để không ghi state trong render hook.
+  private scrollToEndPending = false;
+
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
+
+    // Cuộn PHẢI đợi chip mới render xong (zoneless: render ở macrotask) — dùng afterRenderEffect,
+    // KHÔNG queueMicrotask/setTimeout(0). Đọc chips() để chạy lại sau mỗi lần danh sách đổi + render.
+    afterRenderEffect(() => {
+      this.chips();
+      if (!this.scrollToEndPending) return;
+      this.scrollToEndPending = false;
+      const el = this.fieldRef().nativeElement;
+      el.scrollLeft = el.scrollWidth;
+    });
   }
 
   private add(text: string): void {
@@ -74,6 +92,7 @@ export class GChips implements ControlValueAccessor {
     const next = [...this.chips(), t];
     this.chips.set(next);
     this.onChange(next);
+    this.scrollToEndPending = true;
   }
 
   protected removeAt(i: number): void {

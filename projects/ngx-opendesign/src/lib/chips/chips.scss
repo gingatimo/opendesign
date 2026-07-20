@@ -4,7 +4,8 @@
 
 .g-chips__field {
   display: flex;
-  flex-wrap: wrap;
+  // Giữ MỘT hàng: nhiều chip → cuộn ngang thay vì tràn xuống nhiều hàng (chiều cao ổn định).
+  flex-wrap: nowrap;
   align-items: center;
   gap: var(--g-space-1);
   min-height: var(--g-control-md);
@@ -13,11 +14,22 @@
   border-radius: var(--g-radius-pill);
   background: var(--g-bg);
   cursor: text;
+  // Thanh cuộn mảnh theo theme (như GScrollPanel); overscroll-behavior chặn cuộn lan ra trang / cử
+  // chỉ vuốt-lùi khi lăn ngang.
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--g-border-strong) transparent;
 
   &:has(.g-chips__input:focus-visible) {
     border-color: var(--g-primary);
     box-shadow: var(--g-focus-ring);
   }
+}
+
+// Chip giữ nguyên bề rộng (không bị nén) để hàng tràn ra và cuộn thay vì co lại.
+.g-chips__field > g-chip {
+  flex-shrink: 0;
 }
 
 :host(.g-chips--disabled) .g-chips__field {
