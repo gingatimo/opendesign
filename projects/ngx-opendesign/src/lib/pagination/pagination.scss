@@ -4,8 +4,10 @@
   gap: var(--g-space-1);
 }
 .g-pagination__page,
+.g-pagination__first,
 .g-pagination__prev,
-.g-pagination__next {
+.g-pagination__next,
+.g-pagination__last {
   min-width: 32px;
   height: 32px;
   display: inline-flex;
@@ -25,14 +27,18 @@
   color: var(--g-on-primary);
 }
 .g-pagination__page:disabled,
+.g-pagination__first:disabled,
 .g-pagination__prev:disabled,
-.g-pagination__next:disabled {
+.g-pagination__next:disabled,
+.g-pagination__last:disabled {
   opacity: 0.5;
   cursor: default;
 }
 .g-pagination__page:focus-visible,
+.g-pagination__first:focus-visible,
 .g-pagination__prev:focus-visible,
-.g-pagination__next:focus-visible {
+.g-pagination__next:focus-visible,
+.g-pagination__last:focus-visible {
   outline: none;
   box-shadow: var(--g-focus-ring);
 }

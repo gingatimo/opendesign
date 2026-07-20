@@ -46,6 +46,10 @@ import { GSelect } from './select';
       background: var(--g-surface);
     }
 
+    :host(:hover:not(.g-option--disabled)) {
+      background: var(--g-surface);
+    }
+
     :host(.g-option--selected) {
       font-weight: 500;
     }

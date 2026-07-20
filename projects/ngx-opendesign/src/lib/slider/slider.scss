@@ -1,5 +1,9 @@
 :host {
-  display: block;
+  // flex + căn giữa để TRACK (6px) nằm đúng tâm host, không phụ thuộc chiều cao dư của input[range]
+  // (thumb/line-height làm host block cao hơn track ~19px, khiến track lệch ~3px khi đặt cạnh icon
+  // trong hàng align-items:center — vd. thanh âm lượng GMediaPlayer). Input width:100% giữ nguyên.
+  display: flex;
+  align-items: center;
 }
 
 .g-slider__input {
@@ -7,6 +11,8 @@
   -webkit-appearance: none;
   width: 100%;
   height: 6px;
+  // Gỡ margin mặc định của input[range] (Chrome ~2px) — trong host flex nó ăn mất bề rộng track.
+  margin: 0;
   border-radius: var(--g-radius-pill);
   cursor: pointer;
   outline: none;

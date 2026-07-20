@@ -24,12 +24,24 @@ interface Api {
   isExpanded(n: GTreeNode): boolean;
   toggleExpand(e: Event, n: GTreeNode): void;
   selectNode(n: GTreeNode): void;
+  onNodeClick(n: GTreeNode): void;
+  stateOf(n: GTreeNode): 'checked' | 'indeterminate' | 'unchecked';
+  chipNodes: () => GTreeNode[];
+  removeChip(n: GTreeNode): void;
   writeValue(v: unknown): void;
 }
 
 function make() {
   const f = TestBed.createComponent(GTreeSelect);
   f.componentRef.setInput('options', NODES);
+  f.detectChanges();
+  return { f, cmp: f.componentInstance as unknown as Api };
+}
+
+function makeMultiple() {
+  const f = TestBed.createComponent(GTreeSelect);
+  f.componentRef.setInput('options', NODES);
+  f.componentRef.setInput('multiple', true);
   f.detectChanges();
   return { f, cmp: f.componentInstance as unknown as Api };
 }
@@ -65,5 +77,39 @@ describe('GTreeSelect', () => {
     cmp.writeValue('contract');
     f.detectChanges();
     expect(cmp.selectedLabel()).toBe('Hợp đồng');
+  });
+
+  it('multiple: tích node CHA cascade cả nhánh (lá), cha = checked', () => {
+    const { f, cmp } = makeMultiple();
+    let v: unknown;
+    f.componentInstance.registerOnChange((x) => (v = x));
+    cmp.onNodeClick(NODES[0]); // 'Tài liệu' (nhánh)
+    expect(v).toEqual(['report', 'contract']);
+    expect(cmp.stateOf(NODES[0])).toBe('checked');
+  });
+
+  it('multiple: tích một lá con → cha = indeterminate (tri-state)', () => {
+    const { cmp } = makeMultiple();
+    cmp.onNodeClick(NODES[0].children![0]); // 'Báo cáo'
+    expect(cmp.stateOf(NODES[0])).toBe('indeterminate');
+    expect(cmp.stateOf(NODES[0].children![0])).toBe('checked');
+    expect(cmp.stateOf(NODES[0].children![1])).toBe('unchecked');
+  });
+
+  it('multiple: chip gộp lên cha khi tích đủ, tách thành lá khi một phần', () => {
+    const { cmp } = makeMultiple();
+    cmp.onNodeClick(NODES[0]); // tích đủ 'Tài liệu'
+    expect(cmp.chipNodes().map((n) => n.label)).toEqual(['Tài liệu']);
+    cmp.onNodeClick(NODES[0].children![0]); // bỏ 'Báo cáo' → còn 'Hợp đồng'
+    expect(cmp.chipNodes().map((n) => n.label)).toEqual(['Hợp đồng']);
+  });
+
+  it('multiple: removeChip cha bỏ chọn cả nhánh', () => {
+    const { f, cmp } = makeMultiple();
+    let v: unknown;
+    f.componentInstance.registerOnChange((x) => (v = x));
+    cmp.onNodeClick(NODES[0]);
+    cmp.removeChip(NODES[0]);
+    expect(v).toEqual([]);
   });
 });

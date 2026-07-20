@@ -7,10 +7,21 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Added
+
+- **GTreeSelect**: chế độ `multiple` — chọn nhiều node bằng checkbox lan truyền (cascade) + tri-state
+  (cha "một phần" khi chỉ vài con được tích); nút gập/mở sang phải, checkbox bên trái; trigger hiện
+  chips (gộp lên node cha khi cả nhánh được tích, × để bỏ chọn). Giá trị = mảng value các node lá.
+- **GSpinner**: thêm cỡ `xl` (48px) và `2xl` (64px).
+- **GPagination**: thêm nút về **trang đầu** và tới **trang cuối** (icon « »). Thêm icon công khai
+  `gIconChevronsLeft` / `gIconChevronsRight`.
+
 ### Changed
 
 - **GChips**: ô nhập giữ một hàng và **cuộn ngang** khi nhiều chip (thay vì tràn xuống nhiều dòng) —
   thanh cuộn mảnh theo theme; thêm chip xong tự cuộn về cuối để ô nhập không bị khuất.
+- **GSelect**: option nay có hiệu ứng **hover** (tô nền nhẹ) như trạng thái active bàn phím.
+- **GMediaPlayer**: căn thẳng thanh trượt âm lượng với các icon control trên thanh.
 
 ## [0.10.0] — 2026-07-19
 

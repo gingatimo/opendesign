@@ -27,6 +27,20 @@
   cursor: not-allowed;
 }
 
+// Multiple: trigger cao co giãn theo chips (như GSelect multiple), không cắt ở một hàng.
+:host(.g-tree-select--multiple) {
+  height: auto;
+  min-height: var(--g-control-md);
+  padding-block: var(--g-space-1);
+}
+.g-tree-select__chips {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--g-space-1);
+  min-width: 0;
+}
+
 .g-tree-select__value {
   flex: 1;
   overflow: hidden;
@@ -113,9 +127,43 @@
   color: var(--g-primary);
 }
 
+// Toggle gập/mở đặt bên PHẢI item (chế độ multiple); label flex:1 đã đẩy sang phải, margin-left:auto
+// giữ chắc kể cả khi label ngắn.
+.g-tree-select__toggle--right {
+  margin-left: auto;
+}
+
+// Checkbox tri-state trong node (multiple) — khớp visual GCheckbox: ô 18px, tích/một-phần tô primary.
+.g-tree-select__checkbox {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--g-border-strong);
+  border-radius: 4px;
+  background: var(--g-bg);
+  color: var(--g-on-primary);
+  transition:
+    background-color var(--g-duration-fast) var(--g-ease),
+    border-color var(--g-duration-fast) var(--g-ease);
+
+  g-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+.g-tree-select__checkbox--checked,
+.g-tree-select__checkbox--indeterminate {
+  background: var(--g-primary);
+  border-color: var(--g-primary);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .g-tree-select__arrow,
-  .g-tree-select__toggle {
+  .g-tree-select__toggle,
+  .g-tree-select__checkbox {
     transition: none;
   }
 }

@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
 import { GIcon } from '../icon/icon';
-import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
+import {
+  gIconChevronLeft,
+  gIconChevronRight,
+  gIconChevronsLeft,
+  gIconChevronsRight,
+} from '../icon/icons';
 
 // Control phân trang TRÌNH BÀY: phát sự kiện đổi trang; consumer tự cắt dữ liệu. 1-based.
 @Component({
@@ -8,6 +13,15 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
   imports: [GIcon],
   template: `
     <nav class="g-pagination" aria-label="Phân trang">
+      <button
+        type="button"
+        class="g-pagination__first"
+        aria-label="Trang đầu"
+        [disabled]="page() <= 1"
+        (click)="go(1)"
+      >
+        <g-icon [icon]="iconFirst" size="sm" />
+      </button>
       <button
         type="button"
         class="g-pagination__prev"
@@ -42,6 +56,15 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
       >
         <g-icon [icon]="iconNext" size="sm" />
       </button>
+      <button
+        type="button"
+        class="g-pagination__last"
+        aria-label="Trang cuối"
+        [disabled]="page() >= pageCount()"
+        (click)="go(pageCount())"
+      >
+        <g-icon [icon]="iconLast" size="sm" />
+      </button>
     </nav>
   `,
   styleUrl: './pagination.scss',
@@ -51,8 +74,10 @@ export class GPagination {
   readonly page = model(1);
   readonly pageCount = input.required<number>();
 
+  protected readonly iconFirst = gIconChevronsLeft;
   protected readonly iconPrev = gIconChevronLeft;
   protected readonly iconNext = gIconChevronRight;
+  protected readonly iconLast = gIconChevronsRight;
 
   protected readonly items = computed<(number | '…')[]>(() => {
     const total = this.pageCount();

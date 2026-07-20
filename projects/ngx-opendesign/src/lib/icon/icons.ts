@@ -55,6 +55,17 @@ export const gIconChevronDown: GIconGlyph = {
   paths: ['M6 9l6 6 6-6'],
 };
 
+// Double-chevron (« ») — về trang đầu / tới trang cuối trong GPagination.
+export const gIconChevronsLeft: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M17 18l-6-6 6-6', 'M11 18l-6-6 6-6'],
+};
+
+export const gIconChevronsRight: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M7 18l6-6-6-6', 'M13 18l6-6-6-6'],
+};
+
 // Angle up/down — caret nhọn hơn chevron một chút, dùng cho chỉ báo sắp xếp (GSortHeader) và tái dùng
 // chung. Path này khớp với mask trong .g-sort-header (opendesign.scss) — sửa path thì sửa cả hai chỗ.
 export const gIconAngleUp: GIconGlyph = {

@@ -45,9 +45,9 @@ export default class SpinnerPage {
   protected readonly apiRows: ApiRow[] = [
     {
       name: 'size',
-      type: "'sm' | 'md' | 'lg'",
+      type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
       default: "'md'",
-      description: 'Cỡ vòng xoay.',
+      description: 'Cỡ vòng xoay: sm 16px, md 24px, lg 32px, xl 48px, 2xl 64px.',
     },
   ];
 }

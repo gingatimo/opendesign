@@ -1,5 +1,6 @@
 import {
   afterRenderEffect,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -12,8 +13,9 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
+import { GChip } from '../chip/chip';
 import { GIcon } from '../icon/icon';
-import { gIconCheck, gIconChevronDown, gIconChevronRight } from '../icon/icons';
+import { gIconCheck, gIconChevronDown, gIconChevronRight, gIconMinus } from '../icon/icons';
 
 export interface GTreeNode {
   label: string;
@@ -26,16 +28,15 @@ interface Row {
   level: number;
 }
 
+type NodeState = 'checked' | 'indeterminate' | 'unchecked';
+type Eq = (a: unknown, b: unknown) => boolean;
+
 const POSITIONS: ConnectedPosition[] = [
   { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 },
   { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 },
 ];
 
-function findLabel(
-  nodes: GTreeNode[],
-  value: unknown,
-  eq: (a: unknown, b: unknown) => boolean,
-): string {
+function findLabel(nodes: GTreeNode[], value: unknown, eq: Eq): string {
   for (const n of nodes) {
     if (n.value !== undefined && eq(n.value, value)) return n.label;
     if (n.children?.length) {
@@ -46,14 +47,46 @@ function findLabel(
   return '';
 }
 
-// Chọn một node từ cây (single). Trigger + overlay cây gập/mở. Chọn được cả node nhánh lẫn lá. CVA.
+// Giá trị của các node LÁ (không con) trong nhánh — cascade lưu theo lá, trạng thái cha suy ra.
+function leafValues(node: GTreeNode): unknown[] {
+  if (!node.children?.length) return node.value !== undefined ? [node.value] : [];
+  return node.children.flatMap(leafValues);
+}
+
+// Chọn node từ cây. single = chọn một node (đóng ngay). multiple = checkbox cascade + tri-state:
+// tích cha → tích cả nhánh; cha hiện "một phần" khi chỉ vài lá được tích. Trigger hiện chips các
+// nhánh/lá đã chọn (gộp lên node cha cao nhất được tích đủ). CVA: single = value, multiple = value[].
 @Component({
   selector: 'g-tree-select',
-  imports: [CdkConnectedOverlay, GIcon],
+  imports: [CdkConnectedOverlay, GIcon, GChip],
   template: `
-    <div class="g-tree-select__value" [class.g-tree-select__value--placeholder]="!selectedLabel()">
-      {{ selectedLabel() || placeholder() }}
-    </div>
+    @if (multiple()) {
+      @if (chipNodes().length) {
+        <div class="g-tree-select__chips">
+          @for (n of chipNodes(); track n) {
+            <g-chip
+              removable
+              [removeLabel]="'Bỏ chọn ' + n.label"
+              [disabled]="disabled()"
+              (removed)="removeChip(n)"
+            >
+              {{ n.label }}
+            </g-chip>
+          }
+        </div>
+      } @else {
+        <div class="g-tree-select__value g-tree-select__value--placeholder">
+          {{ placeholder() }}
+        </div>
+      }
+    } @else {
+      <div
+        class="g-tree-select__value"
+        [class.g-tree-select__value--placeholder]="!selectedLabel()"
+      >
+        {{ selectedLabel() || placeholder() }}
+      </div>
+    }
     <g-icon class="g-tree-select__arrow" [icon]="iconDown" />
 
     <ng-template
@@ -67,38 +100,74 @@ function findLabel(
       (backdropClick)="close()"
       (detach)="close()"
     >
-      <div #panel class="g-tree-select__panel" role="tree">
+      <div
+        #panel
+        class="g-tree-select__panel"
+        role="tree"
+        [attr.aria-multiselectable]="multiple() ? true : null"
+      >
         @for (row of rows(); track row.node; let idx = $index) {
           <div
             class="g-tree-select__node"
             role="treeitem"
             [attr.data-idx]="idx"
             [attr.aria-level]="row.level + 1"
-            [attr.aria-selected]="isSelected(row.node)"
+            [attr.aria-selected]="multiple() ? null : isSelected(row.node)"
+            [attr.aria-checked]="multiple() ? ariaChecked(row.node) : null"
             [attr.aria-expanded]="row.node.children?.length ? isExpanded(row.node) : null"
-            [class.g-tree-select__node--selected]="isSelected(row.node)"
+            [class.g-tree-select__node--selected]="!multiple() && isSelected(row.node)"
             [attr.tabindex]="focused() === row.node ? 0 : -1"
             [style.padding-left.px]="row.level * 20 + 8"
-            (click)="selectNode(row.node)"
+            (click)="onNodeClick(row.node)"
             (keydown)="onKeydown($event, idx, row)"
           >
-            @if (row.node.children?.length) {
-              <button
-                type="button"
-                class="g-tree-select__toggle"
-                [class.g-tree-select__toggle--open]="isExpanded(row.node)"
-                tabindex="-1"
+            @if (multiple()) {
+              <span
+                class="g-tree-select__checkbox"
+                [class.g-tree-select__checkbox--checked]="stateOf(row.node) === 'checked'"
+                [class.g-tree-select__checkbox--indeterminate]="
+                  stateOf(row.node) === 'indeterminate'
+                "
                 aria-hidden="true"
-                (click)="toggleExpand($event, row.node)"
               >
-                <g-icon [icon]="iconRight" size="sm" />
-              </button>
+                @if (stateOf(row.node) === 'indeterminate') {
+                  <g-icon [icon]="iconMinus" size="sm" />
+                } @else if (stateOf(row.node) === 'checked') {
+                  <g-icon [icon]="iconCheck" size="sm" />
+                }
+              </span>
+              <span class="g-tree-select__label">{{ row.node.label }}</span>
+              @if (row.node.children?.length) {
+                <button
+                  type="button"
+                  class="g-tree-select__toggle g-tree-select__toggle--right"
+                  [class.g-tree-select__toggle--open]="isExpanded(row.node)"
+                  tabindex="-1"
+                  aria-hidden="true"
+                  (click)="toggleExpand($event, row.node)"
+                >
+                  <g-icon [icon]="iconRight" size="sm" />
+                </button>
+              }
             } @else {
-              <span class="g-tree-select__spacer"></span>
-            }
-            <span class="g-tree-select__label">{{ row.node.label }}</span>
-            @if (isSelected(row.node)) {
-              <g-icon class="g-tree-select__check" [icon]="iconCheck" size="sm" />
+              @if (row.node.children?.length) {
+                <button
+                  type="button"
+                  class="g-tree-select__toggle"
+                  [class.g-tree-select__toggle--open]="isExpanded(row.node)"
+                  tabindex="-1"
+                  aria-hidden="true"
+                  (click)="toggleExpand($event, row.node)"
+                >
+                  <g-icon [icon]="iconRight" size="sm" />
+                </button>
+              } @else {
+                <span class="g-tree-select__spacer"></span>
+              }
+              <span class="g-tree-select__label">{{ row.node.label }}</span>
+              @if (isSelected(row.node)) {
+                <g-icon class="g-tree-select__check" [icon]="iconCheck" size="sm" />
+              }
             }
           </div>
         }
@@ -114,7 +183,8 @@ function findLabel(
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[class.g-tree-select--disabled]': 'disabled()',
     '[class.g-tree-select--open]': 'open()',
-    '(click)': 'onTriggerClick()',
+    '[class.g-tree-select--multiple]': 'multiple()',
+    '(click)': 'onTriggerClick($event)',
     '(keydown)': 'onTriggerKeydown($event)',
     '(blur)': 'onBlur($event)',
   },
@@ -124,7 +194,8 @@ function findLabel(
 export class GTreeSelect implements ControlValueAccessor {
   readonly options = input<GTreeNode[]>([]);
   readonly placeholder = input('');
-  readonly compareWith = input<(a: unknown, b: unknown) => boolean>((a, b) => a === b);
+  readonly multiple = input(false, { transform: booleanAttribute });
+  readonly compareWith = input<Eq>((a, b) => a === b);
 
   protected readonly open = signal(false);
   protected readonly disabled = signal(false);
@@ -133,6 +204,7 @@ export class GTreeSelect implements ControlValueAccessor {
   protected readonly iconDown = gIconChevronDown;
   protected readonly iconRight = gIconChevronRight;
   protected readonly iconCheck = gIconCheck;
+  protected readonly iconMinus = gIconMinus;
 
   private readonly expandedSet = signal<Set<GTreeNode>>(new Set());
   private readonly valueSignal = signal<unknown>(undefined);
@@ -174,6 +246,7 @@ export class GTreeSelect implements ControlValueAccessor {
     return out;
   });
 
+  // ---- single ----
   protected readonly selectedLabel = computed(() => {
     const v = this.valueSignal();
     if (v === undefined || v === null) return '';
@@ -183,6 +256,76 @@ export class GTreeSelect implements ControlValueAccessor {
   protected isSelected(node: GTreeNode): boolean {
     return node.value !== undefined && this.compareWith()(node.value, this.valueSignal());
   }
+
+  // ---- multiple (mảng giá trị lá đã chọn) ----
+  private readonly selectedValues = computed<unknown[]>(() => {
+    const v = this.valueSignal();
+    return this.multiple() && Array.isArray(v) ? v : [];
+  });
+
+  private isValueSelected(v: unknown, arr: unknown[]): boolean {
+    const eq = this.compareWith();
+    return arr.some((x) => eq(x, v));
+  }
+
+  protected stateOf(node: GTreeNode): NodeState {
+    const leaves = leafValues(node);
+    if (leaves.length === 0) return 'unchecked';
+    const arr = this.selectedValues();
+    const sel = leaves.filter((v) => this.isValueSelected(v, arr)).length;
+    if (sel === 0) return 'unchecked';
+    return sel === leaves.length ? 'checked' : 'indeterminate';
+  }
+
+  protected ariaChecked(node: GTreeNode): 'true' | 'false' | 'mixed' {
+    const s = this.stateOf(node);
+    return s === 'checked' ? 'true' : s === 'indeterminate' ? 'mixed' : 'false';
+  }
+
+  // Node đại diện để hiện chip: cha được tích ĐỦ → một chip (gộp cả nhánh); tích một phần → đệ quy
+  // xuống con; lá đã tích → chip lá.
+  protected readonly chipNodes = computed<GTreeNode[]>(() => {
+    this.selectedValues(); // dependency
+    const collect = (nodes: GTreeNode[]): GTreeNode[] => {
+      const out: GTreeNode[] = [];
+      for (const n of nodes) {
+        const s = this.stateOf(n);
+        if (s === 'checked') out.push(n);
+        else if (s === 'indeterminate' && n.children?.length) out.push(...collect(n.children));
+      }
+      return out;
+    };
+    return collect(this.options());
+  });
+
+  private toggleNode(node: GTreeNode): void {
+    const leaves = leafValues(node);
+    if (leaves.length === 0) return;
+    const eq = this.compareWith();
+    const cur = this.selectedValues();
+    const checked = this.stateOf(node) === 'checked';
+    let next: unknown[];
+    if (checked) {
+      next = cur.filter((x) => !leaves.some((v) => eq(x, v)));
+    } else {
+      next = [...cur];
+      for (const v of leaves) if (!next.some((x) => eq(x, v))) next.push(v);
+    }
+    this.commit(next);
+  }
+
+  protected removeChip(node: GTreeNode): void {
+    const leaves = leafValues(node);
+    const eq = this.compareWith();
+    this.commit(this.selectedValues().filter((x) => !leaves.some((v) => eq(x, v))));
+  }
+
+  private commit(value: unknown): void {
+    this.valueSignal.set(value);
+    this.onChange(value);
+    this.onTouchedFn();
+  }
+
   protected isExpanded(node: GTreeNode): boolean {
     return this.expandedSet().has(node);
   }
@@ -195,15 +338,22 @@ export class GTreeSelect implements ControlValueAccessor {
     this.expandedSet.set(set);
   }
 
-  protected selectNode(node: GTreeNode): void {
+  protected onNodeClick(node: GTreeNode): void {
+    if (this.multiple()) this.toggleNode(node);
+    else this.selectNode(node);
+  }
+
+  private selectNode(node: GTreeNode): void {
     this.valueSignal.set(node.value);
     this.onChange(node.value);
     this.onTouchedFn();
     this.close();
   }
 
-  protected onTriggerClick(): void {
+  protected onTriggerClick(event: Event): void {
     if (this.disabled()) return;
+    // Click vào vùng chips (kể cả nút × của chip) không mở/đóng panel — chip tự xử lý bỏ chọn.
+    if ((event.target as HTMLElement).closest('.g-tree-select__chips')) return;
     if (this.open()) this.close();
     else this.openPanel();
   }
@@ -267,7 +417,7 @@ export class GTreeSelect implements ControlValueAccessor {
         break;
       case 'Enter':
       case ' ':
-        this.selectNode(row.node);
+        this.onNodeClick(row.node);
         event.preventDefault();
         break;
     }

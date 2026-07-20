@@ -7,7 +7,9 @@ import { GSpinner } from 'ngx-opendesign';
   template: `
     <g-spinner size="sm" />
     <g-spinner />
-    <g-spinner size="lg" aria-label="Đang tải danh sách sản phẩm" />
+    <g-spinner size="lg" />
+    <g-spinner size="xl" />
+    <g-spinner size="2xl" aria-label="Đang tải danh sách sản phẩm" />
   `,
   styles: `
     :host {

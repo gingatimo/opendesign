@@ -7,7 +7,7 @@ import {
   input,
 } from '@angular/core';
 
-export type GSpinnerSize = 'sm' | 'md' | 'lg';
+export type GSpinnerSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 @Component({
   selector: 'g-spinner',
@@ -24,6 +24,8 @@ export type GSpinnerSize = 'sm' | 'md' | 'lg';
     '[class.g-spinner--sm]': 'size() === "sm"',
     '[class.g-spinner--md]': 'size() === "md"',
     '[class.g-spinner--lg]': 'size() === "lg"',
+    '[class.g-spinner--xl]': 'size() === "xl"',
+    '[class.g-spinner--2xl]': 'size() === "2xl"',
   },
 })
 export class GSpinner {

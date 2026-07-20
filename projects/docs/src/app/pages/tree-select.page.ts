@@ -3,9 +3,10 @@ import { ApiRow, ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { TreeSelectBasicDemo } from '../demos/tree-select/tree-select-basic.demo';
+import { TreeSelectMultipleDemo } from '../demos/tree-select/tree-select-multiple.demo';
 
 @Component({
-  imports: [TreeSelectBasicDemo, CodeBlock, ApiTable, DemoSection],
+  imports: [TreeSelectBasicDemo, TreeSelectMultipleDemo, CodeBlock, ApiTable, DemoSection],
   template: `
     <h1>Tree Select</h1>
     <p>
@@ -20,6 +21,21 @@ import { TreeSelectBasicDemo } from '../demos/tree-select/tree-select-basic.demo
 
     <docs-code-block src="demo-sources/tree-select/tree-select-basic.demo.ts" />
 
+    <h2>Chọn nhiều (multiple)</h2>
+    <p>
+      Thêm <code>multiple</code> để chọn nhiều node bằng checkbox. Chọn theo kiểu <b>lan truyền</b>:
+      tích một node cha sẽ tích cả nhánh con; node cha hiện trạng thái
+      <b>một phần</b> (indeterminate) khi chỉ vài con được tích. Nút gập/mở chuyển sang bên phải,
+      checkbox nằm bên trái. Giá trị là mảng <code>value</code> của các node lá đã chọn; trigger
+      hiện chips (gộp lên node cha khi cả nhánh được tích), bấm <code>×</code> để bỏ chọn.
+    </p>
+
+    <docs-demo-section>
+      <docs-tree-select-multiple-demo />
+    </docs-demo-section>
+
+    <docs-code-block src="demo-sources/tree-select/tree-select-multiple.demo.ts" />
+
     <h2>API — GTreeSelect</h2>
     <docs-api-table [rows]="apiRows" />
 
@@ -28,8 +44,9 @@ import { TreeSelectBasicDemo } from '../demos/tree-select/tree-select-basic.demo
       <li>
         Trigger mang <code>role="combobox"</code> với <code>aria-haspopup="tree"</code>; panel là
         <code>role="tree"</code>, mỗi node là <code>role="treeitem"</code> có
-        <code>aria-level</code>, <code>aria-expanded</code> (nếu có con) và
-        <code>aria-selected</code>.
+        <code>aria-level</code>, <code>aria-expanded</code> (nếu có con). single dùng
+        <code>aria-selected</code>; multiple đặt <code>aria-multiselectable</code> trên tree và
+        <code>aria-checked="true|false|mixed"</code> trên từng node (mixed = một phần).
       </li>
       <li>
         Bàn phím: <code>↑</code>/<code>↓</code> di chuyển giữa các node đang hiển thị,
@@ -49,7 +66,14 @@ export default class TreeSelectPage {
       type: 'ControlValueAccessor<unknown>',
       default: '—',
       description:
-        'Dùng với [formControl], formControlName, hoặc [(ngModel)]. Giá trị là value của node đang chọn.',
+        'Dùng với [formControl], formControlName, hoặc [(ngModel)]. single: value của node đang chọn; multiple: mảng value các node lá đã chọn.',
+    },
+    {
+      name: 'multiple',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Bật chọn nhiều bằng checkbox (cascade + tri-state). Trigger hiện chips; nút gập/mở sang phải, checkbox bên trái.',
     },
     {
       name: 'options',
