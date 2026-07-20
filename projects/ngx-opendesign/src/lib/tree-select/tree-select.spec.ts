@@ -96,11 +96,11 @@ describe('GTreeSelect', () => {
     expect(cmp.stateOf(NODES[0].children![1])).toBe('unchecked');
   });
 
-  it('multiple: chip gộp lên cha khi tích đủ, tách thành lá khi một phần', () => {
+  it('multiple: chips hiện các node LÁ đã chọn (không gộp lên cha)', () => {
     const { cmp } = makeMultiple();
-    cmp.onNodeClick(NODES[0]); // tích đủ 'Tài liệu'
-    expect(cmp.chipNodes().map((n) => n.label)).toEqual(['Tài liệu']);
-    cmp.onNodeClick(NODES[0].children![0]); // bỏ 'Báo cáo' → còn 'Hợp đồng'
+    cmp.onNodeClick(NODES[0]); // tích đủ 'Tài liệu' → cascade 2 lá
+    expect(cmp.chipNodes().map((n) => n.label)).toEqual(['Báo cáo', 'Hợp đồng']);
+    cmp.onNodeClick(NODES[0].children![0]); // bỏ 'Báo cáo' → còn lá 'Hợp đồng'
     expect(cmp.chipNodes().map((n) => n.label)).toEqual(['Hợp đồng']);
   });
 

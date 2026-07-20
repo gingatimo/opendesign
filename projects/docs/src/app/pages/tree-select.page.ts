@@ -27,7 +27,8 @@ import { TreeSelectMultipleDemo } from '../demos/tree-select/tree-select-multipl
       tích một node cha sẽ tích cả nhánh con; node cha hiện trạng thái
       <b>một phần</b> (indeterminate) khi chỉ vài con được tích. Nút gập/mở chuyển sang bên phải,
       checkbox nằm bên trái. Giá trị là mảng <code>value</code> của các node lá đã chọn; trigger
-      hiện chips (gộp lên node cha khi cả nhánh được tích), bấm <code>×</code> để bỏ chọn.
+      hiện chips <b>từng node lá</b> (bấm <code>×</code> để bỏ chọn) trên <b>một hàng</b> — tràn quá
+      bề rộng thì hiện <code>…</code> thay vì xuống dòng.
     </p>
 
     <docs-demo-section>

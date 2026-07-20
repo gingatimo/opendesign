@@ -1,9 +1,11 @@
 import {
+  afterNextRender,
   afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -62,7 +64,7 @@ function leafValues(node: GTreeNode): unknown[] {
   template: `
     @if (multiple()) {
       @if (chipNodes().length) {
-        <div class="g-tree-select__chips">
+        <div #chipsBox class="g-tree-select__chips">
           @for (n of chipNodes(); track n) {
             <g-chip
               removable
@@ -74,6 +76,9 @@ function leafValues(node: GTreeNode): unknown[] {
             </g-chip>
           }
         </div>
+        @if (chipsOverflow()) {
+          <span class="g-tree-select__chips-more" aria-hidden="true">…</span>
+        }
       } @else {
         <div class="g-tree-select__value g-tree-select__value--placeholder">
           {{ placeholder() }}
@@ -217,7 +222,12 @@ export class GTreeSelect implements ControlValueAccessor {
 
   protected readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
+  private readonly chipsBox = viewChild<ElementRef<HTMLElement>>('chipsBox');
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
+
+  // Chips trên trigger tràn quá bề rộng chưa → hiện "…" (giữ một hàng, không xuống dòng/cuộn).
+  protected readonly chipsOverflow = signal(false);
 
   private onChange: (value: unknown) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
@@ -235,6 +245,23 @@ export class GTreeSelect implements ControlValueAccessor {
         this.focusPending = false;
       });
     });
+
+    // Đo tràn chips SAU render (đọc chipNodes() để chạy lại khi tập chip đổi). ResizeObserver lo khi
+    // bề rộng trigger đổi. Chỉ đổi cờ overflow (không đổi kích thước) nên không gây vòng lặp RO.
+    afterRenderEffect(() => {
+      this.chipNodes();
+      this.measureChipsOverflow();
+    });
+    afterNextRender(() => {
+      const ro = new ResizeObserver(() => this.measureChipsOverflow());
+      ro.observe(this.elementRef.nativeElement);
+      this.destroyRef.onDestroy(() => ro.disconnect());
+    });
+  }
+
+  private measureChipsOverflow(): void {
+    const el = this.chipsBox()?.nativeElement;
+    this.chipsOverflow.set(!!el && el.scrollWidth > el.clientWidth + 1);
   }
 
   // Các hàng đang hiển thị (DFS, chỉ mở con của node đã expand).
@@ -281,20 +308,19 @@ export class GTreeSelect implements ControlValueAccessor {
     return sel === leaves.length ? 'checked' : 'indeterminate';
   }
 
-  // Node đại diện để hiện chip: cha được tích ĐỦ → một chip (gộp cả nhánh); tích một phần → đệ quy
-  // xuống con; lá đã tích → chip lá.
+  // Chips = từng node LÁ đã chọn (hiện label lá, không gộp lên node cha). Trigger giữ một hàng, tràn
+  // thì hiện "…" (xem chipsOverflow).
   protected readonly chipNodes = computed<GTreeNode[]>(() => {
-    this.selectedValues(); // dependency
-    const collect = (nodes: GTreeNode[]): GTreeNode[] => {
-      const out: GTreeNode[] = [];
+    const arr = this.selectedValues();
+    const out: GTreeNode[] = [];
+    const walk = (nodes: GTreeNode[]) => {
       for (const n of nodes) {
-        const s = this.stateOf(n);
-        if (s === 'checked') out.push(n);
-        else if (s === 'indeterminate' && n.children?.length) out.push(...collect(n.children));
+        if (n.children?.length) walk(n.children);
+        else if (n.value !== undefined && this.isValueSelected(n.value, arr)) out.push(n);
       }
-      return out;
     };
-    return collect(this.options());
+    walk(this.options());
+    return out;
   });
 
   private toggleNode(node: GTreeNode): void {
