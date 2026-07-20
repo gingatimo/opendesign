@@ -7,6 +7,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+## [0.15.0] — 2026-07-20
+
 ### Added
 
 - **`GTerminal`** (`g-terminal`): khung **terminal** giả lập — thanh tiêu đề (3 chấm + tên), vùng log
