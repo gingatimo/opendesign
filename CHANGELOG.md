@@ -19,6 +19,12 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Docs**: trang **Table** thêm mục **Chọn hàng** — ví dụ ghép cột `GCheckbox` + ô chọn-tất-cả
   tri-state (`indeterminate` khi chọn một phần), tập id chọn giữ trong `signal<Set>`, hàng chọn tô nền.
 
+### Changed
+
+- **GInputGroup**: khi suffix là một `<button>` (nút con mắt mật khẩu, nút gửi chat…), thu padding
+  phải để nút **nép sát mép phải**, đường bao pill bao quanh nút gần đồng tâm (khe phải ≈ khe
+  trên/dưới) thay vì lơ lửng cách mép một khoảng. Icon trang trí ở suffix (không phải nút) giữ nguyên.
+
 ## [0.13.0] — 2026-07-20
 
 ### Added
