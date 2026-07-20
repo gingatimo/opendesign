@@ -9,6 +9,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
+- **`GReorderList`** (`g-reorder-list`): danh sách **kéo-thả để sắp xếp lại thứ tự** (CDK drag-drop).
+  `[(items)]` hai chiều — thả xong tự cập nhật mảng. Mỗi hàng render bằng `<ng-template let-item
+let-i="index">`; có tay nắm (grip) để kéo, bản xem trước nổi + chỗ trống mờ khi kéo.
 - **`GContextMenu`** (`[gContextMenu]`): menu **ngữ cảnh** (chuột phải) — directive gắn lên phần tử, mở
   menu tại **vị trí con trỏ** (overlay CDK, tự lật hướng). Nội dung là `<ng-template>` gồm các
   `<button g-menu-item>`; tự đóng khi bấm ra ngoài / Esc / chọn mục.

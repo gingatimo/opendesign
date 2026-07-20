@@ -66,6 +66,7 @@ export type NavIcon =
   | 'splitter'
   | 'table'
   | 'org-chart'
+  | 'reorder-list'
   | 'scroll-panel'
   | 'timeline'
   | 'accordion'
@@ -289,6 +290,17 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { x: 9, y: 3, width: 6, height: 4, rx: 1 },
       { x: 3, y: 15, width: 6, height: 4, rx: 1 },
       { x: 15, y: 15, width: 6, height: 4, rx: 1 },
+    ],
+  },
+  'reorder-list': {
+    viewBox: VB,
+    paths: [
+      'M9 7h11',
+      'M9 12h11',
+      'M9 17h11',
+      'M4 4v16',
+      'M4 4l-2 2M4 4l2 2',
+      'M4 20l-2-2M4 20l2-2',
     ],
   },
   'scroll-panel': {

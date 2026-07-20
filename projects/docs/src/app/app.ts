@@ -173,6 +173,7 @@ export class App {
       links: sortByLabel([
         { path: '/components/table', label: 'Table', icon: 'table' },
         { path: '/components/org-chart', label: 'Organization Chart', icon: 'org-chart' },
+        { path: '/components/reorder-list', label: 'Reorder List', icon: 'reorder-list' },
       ]),
     },
     // Nhóm riêng, đặt cuối: đây là phần "ráp lại" sau khi đã học từng component riêng lẻ ở các

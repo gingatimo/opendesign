@@ -193,6 +193,11 @@ export const routes: Routes = [
     title: 'Organization Chart — OpenDesign',
   },
   {
+    path: 'components/reorder-list',
+    loadComponent: () => import('./pages/reorder-list.page'),
+    title: 'Reorder List — OpenDesign',
+  },
+  {
     path: 'components/splitter',
     loadComponent: () => import('./pages/splitter.page'),
     title: 'Splitter — OpenDesign',

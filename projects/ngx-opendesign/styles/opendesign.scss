@@ -1019,6 +1019,69 @@ body {
   background: var(--g-border);
 }
 
+// GReorderList — item + tay nắm + preview/placeholder GLOBAL: bản xem trước khi kéo được CDK chuyển ra
+// <body> (ngoài encapsulation) nên chrome của item phải style global mới hiện đúng.
+.g-reorder-list__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-2);
+}
+.g-reorder-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2) var(--g-space-3);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface);
+}
+.g-reorder-list__handle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--g-text-muted);
+  cursor: grab;
+  touch-action: none;
+}
+.g-reorder-list__handle:active {
+  cursor: grabbing;
+}
+.g-reorder-list__handle:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+  border-radius: var(--g-radius-sm);
+}
+.g-reorder-list__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+// Bản xem trước (nổi khi kéo) — thêm bóng + nền nổi.
+.cdk-drag-preview.g-reorder-list__item {
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-lg);
+}
+// Chỗ trống (placeholder) khi kéo — mờ đi.
+.cdk-drag-placeholder.g-reorder-list__item {
+  opacity: 0.4;
+}
+// Mượt khi thả + khi các item khác dịch chỗ.
+.cdk-drag-animating {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+.g-reorder-list__list.cdk-drop-list-dragging .g-reorder-list__item:not(.cdk-drag-placeholder) {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cdk-drag-animating,
+  .g-reorder-list__list.cdk-drop-list-dragging .g-reorder-list__item:not(.cdk-drag-placeholder) {
+    transition: none;
+  }
+}
+
 // Breadcrumb — GLOBAL vì dấu phân cách › cần quan hệ anh-em của các mục chiếu vào <nav g-breadcrumb>.
 .g-breadcrumb {
   display: flex;
