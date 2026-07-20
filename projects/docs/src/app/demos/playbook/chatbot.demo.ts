@@ -112,7 +112,7 @@ function botReply(text: string): string {
           placeholder="Nhập tin nhắn…"
           [value]="draft()"
           (input)="draft.set($any($event.target).value)"
-          (keydown.enter)="send()"
+          (keydown.enter)="send($event)"
           aria-label="Nội dung tin nhắn"
         />
         <!-- Suffix: mặc định icon micro (ghi âm), có chữ thì đổi sang icon gửi. -->
@@ -268,7 +268,9 @@ export class ChatbotDemo {
     });
   }
 
-  protected send(): void {
+  protected send(e?: Event): void {
+    // Bỏ qua Enter khi bộ gõ (IME tiếng Việt) đang ghép ký tự — tránh gửi 2 lần.
+    if ((e as KeyboardEvent | undefined)?.isComposing) return;
     this.sendText(this.draft());
   }
 

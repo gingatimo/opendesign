@@ -128,6 +128,9 @@ export class GChips implements ControlValueAccessor, OnInit {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
+    // Bộ gõ (IME) đang ghép ký tự → Enter/phẩy đó thuộc về bộ gõ, không phải để thêm chip; bỏ qua để
+    // không thêm chip 2 lần (hoặc thêm nhầm) khi gõ tiếng Việt/CJK.
+    if (event.isComposing) return;
     const inputEl = event.target as HTMLInputElement;
     if (event.key === 'Enter' || event.key === ',') {
       if (inputEl.value.trim()) {

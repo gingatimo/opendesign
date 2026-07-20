@@ -46,7 +46,7 @@ export interface GTerminalLine {
           autocapitalize="off"
           [value]="draft()"
           (input)="draft.set($any($event.target).value)"
-          (keydown.enter)="onSubmit()"
+          (keydown.enter)="onSubmit($event)"
           [attr.aria-label]="title() + ' — nhập lệnh'"
         />
       </div>
@@ -79,7 +79,10 @@ export class GTerminal {
     });
   }
 
-  protected onSubmit(): void {
+  protected onSubmit(e: Event): void {
+    // Bỏ qua Enter khi bộ gõ (IME tiếng Việt/CJK) đang ghép ký tự — Enter đó CHỈ xác nhận ký tự, không
+    // phải để chạy lệnh; nếu không sẽ chạy 2 lần (một lúc composing, một lúc thật).
+    if ((e as KeyboardEvent).isComposing) return;
     const c = this.draft().trim();
     if (!c) return;
     this.run.emit(c);

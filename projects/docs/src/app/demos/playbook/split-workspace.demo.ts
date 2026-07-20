@@ -61,7 +61,7 @@ interface ChatMsg {
                 placeholder="Hỏi gì đó…"
                 [value]="draft()"
                 (input)="draft.set($any($event.target).value)"
-                (keydown.enter)="sendChat()"
+                (keydown.enter)="sendChat($event)"
                 aria-label="Tin nhắn"
               />
               <button
@@ -163,7 +163,9 @@ export class SplitWorkspaceDemo {
     });
   }
 
-  protected sendChat(): void {
+  protected sendChat(e?: Event): void {
+    // Bỏ qua Enter khi bộ gõ (IME) đang ghép ký tự — tránh gửi 2 lần khi gõ tiếng Việt.
+    if ((e as KeyboardEvent | undefined)?.isComposing) return;
     const t = this.draft().trim();
     if (!t) return;
     this.messages.update((l) => [...l, { id: this.chatId++, role: 'user', text: t }]);

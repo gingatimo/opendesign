@@ -46,7 +46,7 @@ export interface GSearchFieldOption {
         [disabled]="disabled()"
         aria-label="Giá trị tìm kiếm"
         (input)="query.set($any($event.target).value)"
-        (keydown.enter)="submit()"
+        (keydown.enter)="submit($event)"
       />
     </div>
   `,
@@ -75,7 +75,9 @@ export class GSearchField {
     });
   }
 
-  protected submit(): void {
+  protected submit(e: Event): void {
+    // Bỏ qua Enter khi bộ gõ (IME) đang ghép ký tự — tránh phát (search) 2 lần khi gõ tiếng Việt/CJK.
+    if ((e as KeyboardEvent).isComposing) return;
     this.search.emit({ field: this.field(), value: this.query() });
   }
 }
