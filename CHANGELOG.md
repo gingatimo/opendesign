@@ -7,6 +7,11 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Added
+
+- **Form**: `GSearchField` (ô tìm kiếm theo TRƯỜNG — `GSelect` chọn trường bên trái + ô nhập bên
+  phải trong khung pill; Enter phát `(search)` = `{ field, value }`, hai chiều `[(field)]`/`[(query)]`).
+
 ### Changed
 
 - **GInputGroup**: `<input>` bên trong chừa `padding: 0 2px` để con trỏ khi ô RỖNG không bị input tự

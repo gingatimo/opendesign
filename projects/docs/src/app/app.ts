@@ -93,6 +93,7 @@ export class App {
         { path: '/components/toggle', label: 'Toggle', icon: 'toggle' },
         { path: '/components/radio', label: 'Radio', icon: 'radio' },
         { path: '/components/select', label: 'Select', icon: 'select' },
+        { path: '/components/search-field', label: 'Search Field', icon: 'search-field' },
         { path: '/components/file-input', label: 'File Input', icon: 'file-input' },
         { path: '/components/datepicker', label: 'Datepicker', icon: 'datepicker' },
         { path: '/components/slider', label: 'Slider', icon: 'slider' },

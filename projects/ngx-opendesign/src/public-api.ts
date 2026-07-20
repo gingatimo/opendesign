@@ -12,6 +12,7 @@ export * from './lib/radio/radio-group';
 export * from './lib/radio/radio';
 export * from './lib/select/select';
 export * from './lib/select/option';
+export * from './lib/search-field/search-field';
 export * from './lib/badge/badge';
 export * from './lib/spinner/spinner';
 export * from './lib/progress/progress';

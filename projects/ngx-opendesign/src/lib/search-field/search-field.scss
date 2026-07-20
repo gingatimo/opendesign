@@ -1,0 +1,42 @@
+.g-search-field {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-1);
+  padding-right: var(--g-space-2);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+
+  // Ring khung ngoài khi Ô NHẬP focus (select là segment riêng, tự có ring của GSelect).
+  &:has(.g-search-field__input:focus-visible) {
+    border-color: var(--g-primary);
+    box-shadow: var(--g-focus-ring);
+  }
+}
+.g-search-field--disabled {
+  opacity: 0.5;
+}
+
+// Select chọn trường ở TRÁI — bề rộng cố định (label dài tự cắt ellipsis của GSelect), giữ look pill
+// segment. Specificity (class + ngcontent) thắng :host width:100% của GSelect.
+.g-search-field__select {
+  flex: none;
+  width: 160px;
+}
+
+// Ô nhập ở PHẢI — bỏ viền/nền/ring riêng của .g-input (khung ngoài đã lo), điền phần còn lại.
+.g-search-field__input {
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  height: auto;
+  padding: 0 var(--g-space-2);
+  border: none;
+  background: transparent;
+
+  &:focus-visible {
+    border-color: transparent;
+    box-shadow: none;
+  }
+}

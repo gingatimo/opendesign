@@ -67,6 +67,7 @@ export type NavIcon =
   | 'cascade-select'
   | 'tree-select'
   | 'dock-menu'
+  | 'search-field'
   | 'playbook';
 
 const VB = '0 0 24 24';
@@ -282,6 +283,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { cx: 12, cy: 13, r: 1.5 },
       { cx: 17, cy: 13, r: 1.5 },
     ],
+  },
+  'search-field': {
+    viewBox: VB,
+    paths: ['M20 20l-3.5-3.5'],
+    circles: [{ cx: 10, cy: 10, r: 6 }],
   },
   playbook: {
     viewBox: VB,

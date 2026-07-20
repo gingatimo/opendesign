@@ -221,7 +221,7 @@ interface ComponentGroup {
 export default class HomePage {
   protected readonly version = '0.11.0';
   protected readonly angularVersion = 22;
-  protected readonly componentCount = 52;
+  protected readonly componentCount = 53;
 
   protected readonly features: FeatureCard[] = [
     {
@@ -267,6 +267,7 @@ export default class HomePage {
         { path: '/components/file-input', label: 'File Input' },
         { path: '/components/input', label: 'Input' },
         { path: '/components/radio', label: 'Radio' },
+        { path: '/components/search-field', label: 'Search Field' },
         { path: '/components/cascade-select', label: 'Cascade Select' },
         { path: '/components/chips', label: 'Chips' },
         { path: '/components/color-picker', label: 'Color Picker' },

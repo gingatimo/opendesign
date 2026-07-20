@@ -68,6 +68,11 @@ export const routes: Routes = [
     title: 'Select — OpenDesign',
   },
   {
+    path: 'components/search-field',
+    loadComponent: () => import('./pages/search-field.page'),
+    title: 'Search Field — OpenDesign',
+  },
+  {
     path: 'components/file-input',
     loadComponent: () => import('./pages/file-input.page'),
     title: 'File Input — OpenDesign',
