@@ -54,7 +54,7 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
     <button
       type="button"
       class="g-date-range-picker__trigger"
-      [disabled]="disabled()"
+      [disabled]="isDisabled()"
       aria-haspopup="dialog"
       [attr.aria-expanded]="open()"
       (click)="toggle()"
@@ -156,14 +156,14 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
   readonly min = input<Date>();
   readonly max = input<Date>();
   readonly placeholder = input('dd/MM/yyyy – dd/MM/yyyy');
-  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly formDisabled = signal(false);
-  protected readonly disabled = computed(() => this.disabledInput() || this.formDisabled());
+  protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
   protected readonly invalid = signal(false);
 
   private onChange: (value: GDateRange) => void = () => undefined;

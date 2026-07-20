@@ -41,7 +41,7 @@ function pad(n: number): string {
     <button
       type="button"
       class="g-timepicker__trigger"
-      [disabled]="disabled()"
+      [disabled]="isDisabled()"
       aria-haspopup="dialog"
       [attr.aria-expanded]="open()"
       (click)="toggle()"
@@ -117,7 +117,7 @@ export class GTimePicker implements ControlValueAccessor, OnInit {
   readonly value = model<string | null>(null);
   readonly minuteStep = input(1, { transform: numberAttribute });
   readonly placeholder = input('HH:mm');
-  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
@@ -127,7 +127,7 @@ export class GTimePicker implements ControlValueAccessor, OnInit {
   protected readonly pad = pad;
 
   private readonly formDisabled = signal(false);
-  protected readonly disabled = computed(() => this.disabledInput() || this.formDisabled());
+  protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
   protected readonly invalid = signal(false);
 
   private onChange: (value: string | null) => void = () => undefined;
