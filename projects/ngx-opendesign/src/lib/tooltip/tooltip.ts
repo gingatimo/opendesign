@@ -81,20 +81,45 @@ const POSITIONS_BY_DIRECTION: Record<GTooltipPosition, ConnectedPosition> = {
   },
 };
 
+type ArrowSide = 'top' | 'bottom' | 'left' | 'right';
+type ArrowAlign = 'center' | 'start' | 'end';
+
+/**
+ * Suy ra CẠNH đặt mũi nhọn (và căn lề dọc cạnh đó) từ vị trí overlay THỰC TẾ đang áp dụng — mũi nhọn
+ * luôn chỉ RA NGOÀI về phía trigger. overlayY khác 'center' (trên/dưới) quyết định cạnh trước; chỉ khi
+ * overlayY='center' (trái/phải) mới xét overlayX.
+ */
+function arrowFor(pos: Pick<ConnectedPosition, 'overlayX' | 'overlayY'>): {
+  side: ArrowSide;
+  align: ArrowAlign;
+} {
+  if (pos.overlayY !== 'center') {
+    return {
+      side: pos.overlayY === 'bottom' ? 'bottom' : 'top',
+      align: pos.overlayX === 'start' ? 'start' : pos.overlayX === 'end' ? 'end' : 'center',
+    };
+  }
+  return { side: pos.overlayX === 'end' ? 'right' : 'left', align: 'center' };
+}
+
 /** Panel nội dung tooltip — component nội bộ, không export ra public API. */
 @Component({
   selector: 'g-tooltip-panel',
-  template: `{{ text() }}`,
+  template: `{{ text() }}<span class="g-tooltip__arrow" aria-hidden="true"></span>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'g-tooltip',
     role: 'tooltip',
     '[attr.id]': 'id()',
+    '[attr.data-arrow-side]': 'arrowSide()',
+    '[attr.data-arrow-align]': 'arrowAlign()',
   },
 })
 class GTooltipPanel {
   readonly text = signal('');
   readonly id = signal('');
+  readonly arrowSide = signal<ArrowSide>('bottom');
+  readonly arrowAlign = signal<ArrowAlign>('center');
 }
 
 @Directive({
@@ -241,6 +266,17 @@ export class GTooltip implements OnDestroy {
     const panelRef = this.overlayRef.attach(new ComponentPortal(GTooltipPanel));
     panelRef.instance.text.set(text);
     panelRef.instance.id.set(this.tooltipId);
+
+    // Mũi nhọn chỉ về trigger. Đặt theo vị trí ưu tiên trước, rồi cập nhật theo vị trí THỰC TẾ khi
+    // CDK lật sang fallback (thiếu chỗ). positionChanges hoàn tất khi overlayRef.dispose() nên
+    // subscription tự dọn.
+    const applyArrow = (pos: Pick<ConnectedPosition, 'overlayX' | 'overlayY'>): void => {
+      const { side, align } = arrowFor(pos);
+      panelRef.instance.arrowSide.set(side);
+      panelRef.instance.arrowAlign.set(align);
+    };
+    applyArrow(preferred);
+    positionStrategy.positionChanges.subscribe((change) => applyArrow(change.connectionPair));
 
     // Gộp id của tooltip vào danh sách aria-describedby thay vì ghi đè: trigger có thể đã có
     // sẵn id khác trong đó (vd. hint, thông báo lỗi) — không được làm mất mối liên kết đó.

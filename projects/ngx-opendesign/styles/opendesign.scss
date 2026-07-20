@@ -429,6 +429,64 @@ body {
   }
 }
 
+// Mũi nhọn chỉ về trigger. Dùng border-triangle nằm NGOÀI box tooltip nên không đè lên chữ; cùng màu
+// nền tooltip (--g-text) để liền mạch. data-arrow-side = cạnh đặt mũi, do vị trí THỰC TẾ overlay quyết
+// định (tooltip.ts, positionChanges). pointer-events:none để giữ "hover bridge" ở trên — con trỏ vẫn
+// xuyên qua khoảng trống 8px xuống trang.
+.g-tooltip__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.g-tooltip[data-arrow-side='bottom'] .g-tooltip__arrow {
+  bottom: -6px;
+  left: 50%;
+  margin-left: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--g-text);
+}
+.g-tooltip[data-arrow-side='top'] .g-tooltip__arrow {
+  top: -6px;
+  left: 50%;
+  margin-left: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--g-text);
+}
+.g-tooltip[data-arrow-side='left'] .g-tooltip__arrow {
+  left: -6px;
+  top: 50%;
+  margin-top: -6px;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid var(--g-text);
+}
+.g-tooltip[data-arrow-side='right'] .g-tooltip__arrow {
+  right: -6px;
+  top: 50%;
+  margin-top: -6px;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid var(--g-text);
+}
+
+// Vị trí góc (top-left/right, bottom-left/right): dịch mũi nhọn về gần mép trái/phải thay vì giữa —
+// khớp cạnh mà tooltip đang canh với trigger.
+.g-tooltip[data-arrow-side='top'][data-arrow-align='start'] .g-tooltip__arrow,
+.g-tooltip[data-arrow-side='bottom'][data-arrow-align='start'] .g-tooltip__arrow {
+  left: 12px;
+  margin-left: 0;
+}
+.g-tooltip[data-arrow-side='top'][data-arrow-align='end'] .g-tooltip__arrow,
+.g-tooltip[data-arrow-side='bottom'][data-arrow-align='end'] .g-tooltip__arrow {
+  left: auto;
+  right: 12px;
+  margin-left: 0;
+}
+
 // CDK visually-hidden — tương đương @angular/cdk/a11y-prebuilt.css (bỏ prefix -webkit/-moz cũ,
 // dùng appearance chuẩn, hợp gu CSS hiện đại của lib).
 //

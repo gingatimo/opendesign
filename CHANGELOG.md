@@ -33,6 +33,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Changed
 
+- **GTooltip**: thêm **mũi nhọn** (arrow) chỉ về phía trigger. Cạnh đặt mũi bám theo vị trí THỰC TẾ
+  của overlay (kể cả khi CDK lật sang hướng fallback vì thiếu chỗ); các vị trí góc dịch mũi về gần
+  mép trái/phải. Không phá "hover bridge" (mũi `pointer-events: none`).
 - **GInputGroup**: prefix/suffix (icon kính lúp, nút con mắt mật khẩu, nút gửi chat…) nay **nép sát
   mép** của nó — thu padding bên có adornment xuống, để icon/nút ôm sát đầu bo pill (đường bao pill
   song song với adornment) thay vì lơ lửng cách mép một khoảng padding dành cho chữ. Áp cả hai bên,
