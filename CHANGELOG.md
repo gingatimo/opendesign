@@ -7,6 +7,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+## [0.13.0] — 2026-07-20
+
 ### Added
 
 - **Forms — trạng thái invalid nhất quán**: mọi form control nay **tô viền đỏ** khi control invalid +
