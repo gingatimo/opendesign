@@ -1,0 +1,32 @@
+:host {
+  display: block;
+}
+.g-line-chart__svg {
+  display: block;
+  font-family: var(--g-font-family);
+}
+.g-line-chart__grid {
+  stroke: var(--g-border);
+  stroke-width: 1;
+}
+.g-line-chart__line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.g-line-chart__dot {
+  stroke: var(--g-surface-raised);
+  stroke-width: 1.5;
+}
+.g-line-chart__ylabel {
+  fill: var(--g-text-muted);
+  font-size: 11px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+.g-line-chart__xlabel {
+  fill: var(--g-text-muted);
+  font-size: 11px;
+  text-anchor: middle;
+}

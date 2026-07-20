@@ -1,0 +1,47 @@
+:host {
+  display: block;
+}
+.g-donut-chart__svg {
+  display: block;
+  font-family: var(--g-font-family);
+}
+.g-donut-chart__slice {
+  stroke: var(--g-surface-raised);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: opacity var(--g-duration-fast) var(--g-ease);
+}
+.g-donut-chart__slice:hover {
+  opacity: 0.85;
+}
+.g-donut-chart__total {
+  fill: var(--g-text);
+  font-size: 22px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.g-donut-chart__total-label {
+  fill: var(--g-text-muted);
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.g-donut-chart__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--g-space-3);
+}
+.g-donut-chart__export {
+  display: flex;
+  gap: var(--g-space-2);
+  margin-top: var(--g-space-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-donut-chart__slice {
+    transition: none;
+  }
+}

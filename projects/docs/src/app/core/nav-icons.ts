@@ -70,6 +70,10 @@ export type NavIcon =
   | 'table'
   | 'org-chart'
   | 'reorder-list'
+  | 'line-chart'
+  | 'bar-chart'
+  | 'pie-chart'
+  | 'donut-chart'
   | 'scroll-panel'
   | 'timeline'
   | 'accordion'
@@ -326,6 +330,30 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       'M4 4v16',
       'M4 4l-2 2M4 4l2 2',
       'M4 20l-2-2M4 20l2-2',
+    ],
+  },
+  'line-chart': {
+    viewBox: VB,
+    paths: ['M3 3v18h18', 'M7 13l3-3 3 3 4-6'],
+  },
+  'bar-chart': {
+    viewBox: VB,
+    paths: ['M3 3v18h18'],
+    rects: [
+      { x: 7, y: 12, width: 3, height: 6 },
+      { x: 12, y: 8, width: 3, height: 10 },
+      { x: 17, y: 5, width: 3, height: 13 },
+    ],
+  },
+  'pie-chart': {
+    viewBox: VB,
+    paths: ['M21.21 15.89A10 10 0 1 1 8 2.83', 'M22 12A10 10 0 0 0 12 2v10z'],
+  },
+  'donut-chart': {
+    viewBox: VB,
+    circles: [
+      { cx: 12, cy: 12, r: 9 },
+      { cx: 12, cy: 12, r: 3.5 },
     ],
   },
   'scroll-panel': {

@@ -313,6 +313,26 @@ export const routes: Routes = [
     title: 'Rating — OpenDesign',
   },
   {
+    path: 'components/line-chart',
+    loadComponent: () => import('./pages/line-chart.page'),
+    title: 'Line Chart — OpenDesign',
+  },
+  {
+    path: 'components/bar-chart',
+    loadComponent: () => import('./pages/bar-chart.page'),
+    title: 'Bar Chart — OpenDesign',
+  },
+  {
+    path: 'components/pie-chart',
+    loadComponent: () => import('./pages/pie-chart.page'),
+    title: 'Pie Chart — OpenDesign',
+  },
+  {
+    path: 'components/donut-chart',
+    loadComponent: () => import('./pages/donut-chart.page'),
+    title: 'Donut Chart — OpenDesign',
+  },
+  {
     path: 'components/time-picker',
     loadComponent: () => import('./pages/time-picker.page'),
     title: 'Time Picker — OpenDesign',

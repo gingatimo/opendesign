@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+.g-bar-chart__svg {
+  display: block;
+  font-family: var(--g-font-family);
+}
+.g-bar-chart__grid {
+  stroke: var(--g-border);
+  stroke-width: 1;
+}
+.g-bar-chart__bar {
+  rx: 3;
+  transition: opacity var(--g-duration-fast) var(--g-ease);
+}
+.g-bar-chart__bar:hover {
+  opacity: 0.82;
+}
+.g-bar-chart__vlabel {
+  fill: var(--g-text-muted);
+  font-size: 11px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+// Trục giá trị nằm ngang (biến thể horizontal) → nhãn ở dưới, căn giữa.
+.g-bar-chart__vlabel--h {
+  text-anchor: middle;
+  dominant-baseline: auto;
+}
+.g-bar-chart__catlabel {
+  fill: var(--g-text-muted);
+  font-size: 11px;
+  text-anchor: middle;
+}
+// Nhãn mốc của biến thể horizontal nằm bên trái → căn phải, giữa dòng.
+.g-bar-chart__catlabel--h {
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-bar-chart__bar {
+    transition: none;
+  }
+}

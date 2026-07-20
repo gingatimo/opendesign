@@ -40,6 +40,16 @@
   --g-warning-bg: #fcf4e0;
   --g-warning-solid: #d97706;
 
+  // Bảng màu chart (categorical) — dùng chung cho line/bar/pie/donut, đọc tốt cả 2 theme.
+  --g-chart-1: #6366f1;
+  --g-chart-2: #10b981;
+  --g-chart-3: #f59e0b;
+  --g-chart-4: #ef4444;
+  --g-chart-5: #3b82f6;
+  --g-chart-6: #8b5cf6;
+  --g-chart-7: #ec4899;
+  --g-chart-8: #14b8a6;
+
   // Radius — linh hồn của OpenDesign
   --g-radius-pill: 9999px;
   --g-radius-sm: 8px;
@@ -110,6 +120,16 @@
   --g-warning-text: #fbbf24;
   --g-warning-bg: #2b2110;
   --g-warning-solid: #f59e0b;
+
+  // Bảng màu chart — bản sáng hơn để nổi trên nền tối.
+  --g-chart-1: #818cf8;
+  --g-chart-2: #34d399;
+  --g-chart-3: #fbbf24;
+  --g-chart-4: #f87171;
+  --g-chart-5: #60a5fa;
+  --g-chart-6: #a78bfa;
+  --g-chart-7: #f472b6;
+  --g-chart-8: #2dd4bf;
 
   --g-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --g-shadow-md: 0 4px 12px rgb(0 0 0 / 0.5);

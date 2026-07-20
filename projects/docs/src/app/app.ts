@@ -179,6 +179,15 @@ export class App {
         { path: '/components/reorder-list', label: 'Reorder List', icon: 'reorder-list' },
       ]),
     },
+    {
+      title: 'Charts',
+      links: sortByLabel([
+        { path: '/components/line-chart', label: 'Line Chart', icon: 'line-chart' },
+        { path: '/components/bar-chart', label: 'Bar Chart', icon: 'bar-chart' },
+        { path: '/components/pie-chart', label: 'Pie Chart', icon: 'pie-chart' },
+        { path: '/components/donut-chart', label: 'Donut Chart', icon: 'donut-chart' },
+      ]),
+    },
     // Nhóm riêng, đặt cuối: đây là phần "ráp lại" sau khi đã học từng component riêng lẻ ở các
     // nhóm trên — không thuộc phân loại theo LOẠI component nào ở trên nên không gộp vào "Bắt đầu".
     {
