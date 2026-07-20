@@ -1,9 +1,11 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   contentChild,
   input,
+  model,
   TemplateRef,
 } from '@angular/core';
 
@@ -29,7 +31,16 @@ export interface GOrgChartNode {
 
     <ng-template #branch let-node>
       <li class="g-org-chart__node">
-        <div class="g-org-chart__box">
+        <div
+          class="g-org-chart__box"
+          [class.g-org-chart__box--selectable]="selectable()"
+          [class.g-org-chart__box--selected]="selectable() && isSelected(node)"
+          [attr.role]="selectable() ? 'button' : null"
+          [attr.tabindex]="selectable() ? 0 : null"
+          [attr.aria-pressed]="selectable() ? isSelected(node) : null"
+          (click)="onNodeClick(node)"
+          (keydown)="onNodeKeydown($event, node)"
+        >
           @if (nodeTemplate(); as tpl) {
             <ng-container *ngTemplateOutlet="tpl; context: { $implicit: node }" />
           } @else {
@@ -58,7 +69,28 @@ export class GOrgChart {
   // Các node gốc (thường 1, nhưng nhận nhiều để dựng "rừng" nếu cần).
   readonly nodes = input<readonly GOrgChartNode[]>([]);
 
+  // Cho phép CHỌN node bằng cách bấm (multi-select, bấm lần nữa để bỏ chọn).
+  readonly selectable = input(false, { transform: booleanAttribute });
+  // Danh sách node đang chọn (two-way `[(selected)]`).
+  readonly selected = model<readonly GOrgChartNode[]>([]);
+
   // Template tuỳ biến nội dung node (nếu consumer chiếu vào <ng-template let-node>). Không có thì dùng
   // mặc định label + sublabel.
   protected readonly nodeTemplate = contentChild(TemplateRef);
+
+  protected isSelected(node: GOrgChartNode): boolean {
+    return this.selected().includes(node);
+  }
+
+  protected onNodeClick(node: GOrgChartNode): void {
+    if (!this.selectable()) return;
+    const cur = this.selected();
+    this.selected.set(cur.includes(node) ? cur.filter((n) => n !== node) : [...cur, node]);
+  }
+
+  protected onNodeKeydown(e: KeyboardEvent, node: GOrgChartNode): void {
+    if (!this.selectable() || (e.key !== 'Enter' && e.key !== ' ')) return;
+    e.preventDefault();
+    this.onNodeClick(node);
+  }
 }

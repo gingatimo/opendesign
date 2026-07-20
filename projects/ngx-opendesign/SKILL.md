@@ -154,7 +154,7 @@ panel qua `<ng-template gSplitterPanel>`; `orientation`, `[sizes]`) · `GScrollP
 (`minRows`/`maxRows`) · `GSortHeader` `[gSortHeader]` · `GFreezeColumn`/`GFreezeRow`
 `[gFreezeColumn]`/`[gFreezeRow]` (đóng băng cột/hàng khi cuộn) · `GOrgChart` `g-org-chart`
 (sơ đồ tổ chức dạng cây; `[nodes]` `GOrgChartNode[]` đệ quy; node mặc định label+sublabel hoặc
-tuỳ biến qua `<ng-template let-node>`).
+tuỳ biến qua `<ng-template let-node>`; `selectable` + `[(selected)]` bấm chọn node multi).
 
 ## 6. Tài liệu đầy đủ
 

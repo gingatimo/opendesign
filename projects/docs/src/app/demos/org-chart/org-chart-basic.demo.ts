@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { GAvatar, GOrgChart, GOrgChartNode } from 'ngx-opendesign';
 
 const ORG: GOrgChartNode[] = [
@@ -28,8 +28,11 @@ const ORG: GOrgChartNode[] = [
   selector: 'docs-org-chart-basic-demo',
   imports: [GOrgChart, GAvatar],
   template: `
-    <p class="oc-demo__caption">Node mặc định — label + sublabel</p>
-    <g-org-chart [nodes]="org" />
+    <p class="oc-demo__caption">Node mặc định — bấm để chọn (multi)</p>
+    <g-org-chart [nodes]="org" selectable [(selected)]="picked" />
+    <p class="oc-demo__caption">
+      Đã chọn: <b>{{ picked().length ? pickedLabels() : '(chưa chọn)' }}</b>
+    </p>
 
     <p class="oc-demo__caption">
       Node tuỳ biến — chiếu &lt;ng-template let-node&gt; (avatar + tên + vai trò)
@@ -80,4 +83,10 @@ const ORG: GOrgChartNode[] = [
 })
 export class OrgChartBasicDemo {
   protected readonly org = ORG;
+  protected readonly picked = signal<readonly GOrgChartNode[]>([]);
+  protected readonly pickedLabels = computed(() =>
+    this.picked()
+      .map((n) => n.label)
+      .join(', '),
+  );
 }

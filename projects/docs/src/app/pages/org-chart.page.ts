@@ -13,7 +13,8 @@ import { OrgChartBasicDemo } from '../demos/org-chart/org-chart-basic.demo';
       <b>đường thuần CSS</b> (không SVG/canvas). Data-driven qua <code>[nodes]</code> với cấu trúc
       đệ quy (<code>children</code>). Node mặc định hiện <code>label</code> + <code>sublabel</code>;
       muốn tuỳ biến (avatar, badge…) thì chiếu một <code>&lt;ng-template let-node&gt;</code> vào.
-      Cây rộng hơn khung thì cuộn ngang.
+      Cây rộng hơn khung thì cuộn ngang. Bật <code>selectable</code> để bấm
+      <b>chọn node</b> (multi-select, hai chiều <code>[(selected)]</code>).
     </p>
 
     <docs-demo-section>
@@ -51,6 +52,18 @@ export default class OrgChartPage {
       default: '[]',
       description:
         'Các node gốc (thường 1). Mỗi node: `label`, `sublabel?`, `children?` (đệ quy nhiều tầng).',
+    },
+    {
+      name: 'selectable',
+      type: 'boolean',
+      default: 'false',
+      description: 'Cho bấm node để chọn (multi-select, bấm lần nữa để bỏ chọn).',
+    },
+    {
+      name: 'selected',
+      type: 'GOrgChartNode[]',
+      default: '[]',
+      description: 'Danh sách node đang chọn (two-way `[(selected)]`).',
     },
   ];
 }
