@@ -78,48 +78,90 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
           <button
             type="button"
             class="g-datepicker__nav"
-            aria-label="Tháng trước"
-            (click)="shiftMonth(-1)"
+            [attr.aria-label]="stepPrevLabel()"
+            (click)="shiftHeader(-1)"
           >
             <g-icon [icon]="iconPrev" size="sm" />
           </button>
-          <span class="g-datepicker__title">
-            Tháng {{ viewMonth().getMonth() + 1 }} {{ viewMonth().getFullYear() }}
-          </span>
+          <!-- Bấm tiêu đề để leo cấp xem: ngày → tháng → năm (chọn nhanh không cần next nhiều lần). -->
+          <button
+            type="button"
+            class="g-datepicker__title"
+            [disabled]="viewMode() === 'years'"
+            [attr.aria-label]="titleLabel()"
+            (click)="climbView()"
+          >
+            {{ headerTitle() }}
+          </button>
           <button
             type="button"
             class="g-datepicker__nav"
-            aria-label="Tháng sau"
-            (click)="shiftMonth(1)"
+            [attr.aria-label]="stepNextLabel()"
+            (click)="shiftHeader(1)"
           >
             <g-icon [icon]="iconNext" size="sm" />
           </button>
         </div>
-        <div class="g-datepicker__weekdays">
-          @for (w of weekdays; track w) {
-            <span class="g-datepicker__weekday">{{ w }}</span>
+
+        @switch (viewMode()) {
+          @case ('days') {
+            <div class="g-datepicker__weekdays">
+              @for (w of weekdays; track w) {
+                <span class="g-datepicker__weekday">{{ w }}</span>
+              }
+            </div>
+            <div class="g-datepicker__grid">
+              @for (day of grid(); track day.getTime()) {
+                <button
+                  #dayBtn
+                  type="button"
+                  class="g-datepicker__day"
+                  [class.g-datepicker__day--outside]="day.getMonth() !== viewMonth().getMonth()"
+                  [class.g-datepicker__day--today]="isToday(day)"
+                  [class.g-datepicker__day--selected]="isSelected(day)"
+                  [attr.aria-disabled]="!inRangeDay(day) ? 'true' : null"
+                  [attr.tabindex]="isFocused(day) ? 0 : -1"
+                  [attr.aria-current]="isToday(day) ? 'date' : null"
+                  [attr.aria-pressed]="isSelected(day)"
+                  [attr.aria-label]="dayLabel(day)"
+                  (click)="select(day)"
+                >
+                  {{ day.getDate() }}
+                </button>
+              }
+            </div>
           }
-        </div>
-        <div class="g-datepicker__grid">
-          @for (day of grid(); track day.getTime()) {
-            <button
-              #dayBtn
-              type="button"
-              class="g-datepicker__day"
-              [class.g-datepicker__day--outside]="day.getMonth() !== viewMonth().getMonth()"
-              [class.g-datepicker__day--today]="isToday(day)"
-              [class.g-datepicker__day--selected]="isSelected(day)"
-              [attr.aria-disabled]="!inRangeDay(day) ? 'true' : null"
-              [attr.tabindex]="isFocused(day) ? 0 : -1"
-              [attr.aria-current]="isToday(day) ? 'date' : null"
-              [attr.aria-pressed]="isSelected(day)"
-              [attr.aria-label]="dayLabel(day)"
-              (click)="select(day)"
-            >
-              {{ day.getDate() }}
-            </button>
+          @case ('months') {
+            <div class="g-datepicker__cells">
+              @for (m of months; track m) {
+                <button
+                  type="button"
+                  class="g-datepicker__cell"
+                  [class.g-datepicker__cell--selected]="isSelectedMonth(m)"
+                  [attr.aria-disabled]="!monthSelectable(m) ? 'true' : null"
+                  (click)="selectMonth(m)"
+                >
+                  Th {{ m + 1 }}
+                </button>
+              }
+            </div>
           }
-        </div>
+          @case ('years') {
+            <div class="g-datepicker__cells">
+              @for (y of years(); track y) {
+                <button
+                  type="button"
+                  class="g-datepicker__cell"
+                  [class.g-datepicker__cell--selected]="isSelectedYear(y)"
+                  [attr.aria-disabled]="!yearSelectable(y) ? 'true' : null"
+                  (click)="selectYear(y)"
+                >
+                  {{ y }}
+                </button>
+              }
+            </div>
+          }
+        }
       </div>
     </ng-template>
   `,
@@ -168,6 +210,47 @@ export class GDatepicker implements ControlValueAccessor, OnInit {
   });
   protected readonly grid = computed(() => buildMonthGrid(this.viewMonth()));
 
+  // Chế độ xem của panel: ngày (mặc định) → tháng → năm. Bấm tiêu đề leo cấp; bấm ô tháng/năm hạ cấp.
+  protected readonly viewMode = signal<'days' | 'months' | 'years'>('days');
+  protected readonly months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  // Trang năm 12 số, canh theo bội 12 để prev/next lật đúng trang.
+  private readonly yearsStart = computed(
+    () => Math.floor(this.viewMonth().getFullYear() / 12) * 12,
+  );
+  protected readonly years = computed(() => {
+    const s = this.yearsStart();
+    return Array.from({ length: 12 }, (_, i) => s + i);
+  });
+
+  protected readonly headerTitle = computed(() => {
+    const d = this.viewMonth();
+    switch (this.viewMode()) {
+      case 'days':
+        return `Tháng ${d.getMonth() + 1} ${d.getFullYear()}`;
+      case 'months':
+        return `${d.getFullYear()}`;
+      default:
+        return `${this.yearsStart()}–${this.yearsStart() + 11}`;
+    }
+  });
+  protected readonly titleLabel = computed(() =>
+    this.viewMode() === 'days' ? 'Chọn tháng' : this.viewMode() === 'months' ? 'Chọn năm' : '',
+  );
+  protected readonly stepPrevLabel = computed(() =>
+    this.viewMode() === 'days'
+      ? 'Tháng trước'
+      : this.viewMode() === 'months'
+        ? 'Năm trước'
+        : 'Trang năm trước',
+  );
+  protected readonly stepNextLabel = computed(() =>
+    this.viewMode() === 'days'
+      ? 'Tháng sau'
+      : this.viewMode() === 'months'
+        ? 'Năm sau'
+        : 'Trang năm sau',
+  );
+
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
     // Roving focus: chỉ focus ô ngày (tabindex=0) khi focusPending — sau render để tabindex đã cập nhật.
@@ -188,6 +271,7 @@ export class GDatepicker implements ControlValueAccessor, OnInit {
   protected openPanel(): void {
     this.viewMonth.set(startOfMonth(this.value() ?? new Date()));
     this.focusedDate.set(this.value() ?? new Date());
+    this.viewMode.set('days');
     this.focusPending.set(true);
     this.open.set(true);
   }
@@ -219,6 +303,68 @@ export class GDatepicker implements ControlValueAccessor, OnInit {
     // Dời ngày focus theo tháng (kẹp cuối tháng) để bàn phím tiếp tục đúng chỗ sau khi bấm chuột đổi
     // tháng; KHÔNG focusPending để nút chuyển tháng giữ focus.
     this.focusedDate.set(addMonthsClamped(this.focusedDate(), n));
+  }
+
+  // Nút prev/next đổi theo chế độ xem: ngày → ±1 tháng · tháng → ±1 năm · năm → ±1 trang (12 năm).
+  protected shiftHeader(n: number): void {
+    const d = this.viewMonth();
+    switch (this.viewMode()) {
+      case 'days':
+        this.shiftMonth(n);
+        break;
+      case 'months':
+        this.viewMonth.set(new Date(d.getFullYear() + n, d.getMonth(), 1));
+        break;
+      default:
+        this.viewMonth.set(new Date(d.getFullYear() + n * 12, d.getMonth(), 1));
+    }
+  }
+
+  // Bấm tiêu đề: ngày → tháng → năm (leo cấp để chọn nhanh).
+  protected climbView(): void {
+    this.viewMode.set(this.viewMode() === 'days' ? 'months' : 'years');
+  }
+
+  protected selectMonth(m: number): void {
+    if (!this.monthSelectable(m)) return;
+    this.viewMonth.set(new Date(this.viewMonth().getFullYear(), m, 1));
+    this.viewMode.set('days');
+  }
+
+  protected selectYear(y: number): void {
+    if (!this.yearSelectable(y)) return;
+    this.viewMonth.set(new Date(y, this.viewMonth().getMonth(), 1));
+    this.viewMode.set('months');
+  }
+
+  protected isSelectedMonth(m: number): boolean {
+    const v = this.value();
+    return !!v && v.getFullYear() === this.viewMonth().getFullYear() && v.getMonth() === m;
+  }
+  protected isSelectedYear(y: number): boolean {
+    const v = this.value();
+    return !!v && v.getFullYear() === y;
+  }
+
+  // Tháng/năm nằm ngoài [min, max] thì chặn chọn (so theo năm+tháng, khớp với inRange của ô ngày).
+  protected monthSelectable(m: number): boolean {
+    const y = this.viewMonth().getFullYear();
+    const min = this.min();
+    const max = this.max();
+    if (min && (y < min.getFullYear() || (y === min.getFullYear() && m < min.getMonth()))) {
+      return false;
+    }
+    if (max && (y > max.getFullYear() || (y === max.getFullYear() && m > max.getMonth()))) {
+      return false;
+    }
+    return true;
+  }
+  protected yearSelectable(y: number): boolean {
+    const min = this.min();
+    const max = this.max();
+    if (min && y < min.getFullYear()) return false;
+    if (max && y > max.getFullYear()) return false;
+    return true;
   }
 
   protected select(day: Date): void {

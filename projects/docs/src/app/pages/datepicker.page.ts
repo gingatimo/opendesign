@@ -10,8 +10,9 @@ import { DatepickerBasicDemo } from '../demos/datepicker/datepicker-basic.demo';
     <h1>Datepicker</h1>
     <p>
       Chọn một ngày qua ô hiển thị read-only + popover lịch. Điều hướng tháng bằng nút
-      <code>‹ ›</code>, chọn ngày bằng chuột hoặc bàn phím. Giá trị hai chiều qua
-      <code>[(value)]</code> kiểu <code>Date | null</code>, định dạng hiển thị
+      <code>‹ ›</code>, chọn ngày bằng chuột hoặc bàn phím. <b>Bấm tiêu đề</b> (Tháng/Năm) để
+      <b>chọn nhanh tháng & năm</b> (ngày → lưới 12 tháng → lưới 12 năm), khỏi next từng tháng. Giá
+      trị hai chiều qua <code>[(value)]</code> kiểu <code>Date | null</code>, định dạng hiển thị
       <code>dd/MM/yyyy</code>. Giới hạn khoảng chọn bằng <code>min</code>/<code>max</code>.
     </p>
 
