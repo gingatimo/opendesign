@@ -72,7 +72,8 @@ export type NavIcon =
   | 'pb-dashboard'
   | 'pb-list'
   | 'pb-detail'
-  | 'pb-create';
+  | 'pb-create'
+  | 'pb-chatbot';
 
 const VB = '0 0 24 24';
 
@@ -324,5 +325,15 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     viewBox: VB,
     rects: [{ x: 4, y: 3, width: 16, height: 18, rx: 2 }],
     paths: ['M12 9v6', 'M9 12h6'],
+  },
+  'pb-chatbot': {
+    viewBox: VB,
+    rects: [{ x: 3, y: 4, width: 18, height: 12, rx: 2 }],
+    paths: ['M8 16v4l4-4'],
+    circles: [
+      { cx: 8.5, cy: 10, r: 1 },
+      { cx: 12, cy: 10, r: 1 },
+      { cx: 15.5, cy: 10, r: 1 },
+    ],
   },
 };

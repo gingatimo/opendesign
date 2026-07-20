@@ -314,4 +314,9 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/playbook/create.page'),
     title: 'Playbook · Thêm mới — OpenDesign',
   },
+  {
+    path: 'playbook/chatbot',
+    loadComponent: () => import('./pages/playbook/chatbot.page'),
+    title: 'Playbook · Chatbot — OpenDesign',
+  },
 ];

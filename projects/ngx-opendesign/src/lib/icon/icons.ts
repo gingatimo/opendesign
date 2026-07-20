@@ -332,3 +332,9 @@ export const gIconClock: GIconGlyph = {
   paths: ['M12 7v5l3 2'],
   circles: [{ cx: 12, cy: 12, r: 9 }],
 };
+
+// Máy bay giấy (gửi) — nút gửi trong chat/bình luận.
+export const gIconSend: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M22 2L11 13', 'M22 2L15 22L11 13L2 9L22 2Z'],
+};

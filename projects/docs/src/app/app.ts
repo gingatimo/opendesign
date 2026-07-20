@@ -178,6 +178,7 @@ export class App {
         { path: '/playbook/danh-sach', label: 'Danh sách', icon: 'pb-list' },
         { path: '/playbook/chi-tiet', label: 'Chi tiết', icon: 'pb-detail' },
         { path: '/playbook/them-moi', label: 'Thêm mới', icon: 'pb-create' },
+        { path: '/playbook/chatbot', label: 'Chatbot', icon: 'pb-chatbot' },
       ],
     },
   ];
