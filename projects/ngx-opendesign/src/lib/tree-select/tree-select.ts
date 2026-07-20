@@ -100,20 +100,26 @@ function leafValues(node: GTreeNode): unknown[] {
       (backdropClick)="close()"
       (detach)="close()"
     >
-      <div
-        #panel
-        class="g-tree-select__panel"
-        role="tree"
-        [attr.aria-multiselectable]="multiple() ? true : null"
-      >
+      <div #panel class="g-tree-select__panel" role="tree">
         @for (row of rows(); track row.node; let idx = $index) {
+          <!-- Tính trạng thái tri-state MỘT lần mỗi hàng (dùng cho aria + checkbox), tránh gọi
+               stateOf() lặp 5-6 lần/hàng mỗi CD. -->
+          @let st = multiple() ? stateOf(row.node) : null;
           <div
             class="g-tree-select__node"
             role="treeitem"
             [attr.data-idx]="idx"
             [attr.aria-level]="row.level + 1"
             [attr.aria-selected]="multiple() ? null : isSelected(row.node)"
-            [attr.aria-checked]="multiple() ? ariaChecked(row.node) : null"
+            [attr.aria-checked]="
+              st === null
+                ? null
+                : st === 'checked'
+                  ? 'true'
+                  : st === 'indeterminate'
+                    ? 'mixed'
+                    : 'false'
+            "
             [attr.aria-expanded]="row.node.children?.length ? isExpanded(row.node) : null"
             [class.g-tree-select__node--selected]="!multiple() && isSelected(row.node)"
             [attr.tabindex]="focused() === row.node ? 0 : -1"
@@ -124,15 +130,13 @@ function leafValues(node: GTreeNode): unknown[] {
             @if (multiple()) {
               <span
                 class="g-tree-select__checkbox"
-                [class.g-tree-select__checkbox--checked]="stateOf(row.node) === 'checked'"
-                [class.g-tree-select__checkbox--indeterminate]="
-                  stateOf(row.node) === 'indeterminate'
-                "
+                [class.g-tree-select__checkbox--checked]="st === 'checked'"
+                [class.g-tree-select__checkbox--indeterminate]="st === 'indeterminate'"
                 aria-hidden="true"
               >
-                @if (stateOf(row.node) === 'indeterminate') {
+                @if (st === 'indeterminate') {
                   <g-icon [icon]="iconMinus" size="sm" />
-                } @else if (stateOf(row.node) === 'checked') {
+                } @else if (st === 'checked') {
                   <g-icon [icon]="iconCheck" size="sm" />
                 }
               </span>
@@ -277,11 +281,6 @@ export class GTreeSelect implements ControlValueAccessor {
     return sel === leaves.length ? 'checked' : 'indeterminate';
   }
 
-  protected ariaChecked(node: GTreeNode): 'true' | 'false' | 'mixed' {
-    const s = this.stateOf(node);
-    return s === 'checked' ? 'true' : s === 'indeterminate' ? 'mixed' : 'false';
-  }
-
   // Node đại diện để hiện chip: cha được tích ĐỦ → một chip (gộp cả nhánh); tích một phần → đệ quy
   // xuống con; lá đã tích → chip lá.
   protected readonly chipNodes = computed<GTreeNode[]>(() => {
@@ -339,8 +338,14 @@ export class GTreeSelect implements ControlValueAccessor {
   }
 
   protected onNodeClick(node: GTreeNode): void {
-    if (this.multiple()) this.toggleNode(node);
-    else this.selectNode(node);
+    if (this.multiple()) {
+      // Click chuột đã focus vào node (tabindex=-1 vẫn nhận click-focus) — cập nhật roving tabindex
+      // để khớp, khỏi lệch state khi sau đó dùng bàn phím. KHÔNG đặt focusPending (không cướp focus).
+      this.focused.set(node);
+      this.toggleNode(node);
+    } else {
+      this.selectNode(node);
+    }
   }
 
   private selectNode(node: GTreeNode): void {
@@ -352,8 +357,10 @@ export class GTreeSelect implements ControlValueAccessor {
 
   protected onTriggerClick(event: Event): void {
     if (this.disabled()) return;
-    // Click vào vùng chips (kể cả nút × của chip) không mở/đóng panel — chip tự xử lý bỏ chọn.
-    if ((event.target as HTMLElement).closest('.g-tree-select__chips')) return;
+    // Click vào ĐÚNG một chip (kể cả nút ×) không mở/đóng panel — GChip tự xử lý bỏ chọn. Nhắm
+    // <g-chip> chứ không phải cả vùng .g-tree-select__chips (vốn flex:1 trải kín field) để click
+    // vào khoảng trống của field vẫn mở được panel như một select bình thường.
+    if ((event.target as HTMLElement).closest('g-chip')) return;
     if (this.open()) this.close();
     else this.openPanel();
   }

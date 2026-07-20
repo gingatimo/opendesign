@@ -1,9 +1,11 @@
 import {
+  afterNextRender,
   afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -45,6 +47,7 @@ import { GChip } from '../chip/chip';
   host: {
     class: 'g-chips',
     '[class.g-chips--disabled]': 'disabled()',
+    '[class.g-chips--wrapped]': 'wrapped()',
   },
   styleUrl: './chips.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,24 +68,39 @@ export class GChips implements ControlValueAccessor {
   protected onTouchedFn: () => void = () => undefined;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly fieldRef = viewChild.required<ElementRef<HTMLElement>>('field');
-  // Sau khi THÊM chip, cuộn ô về cuối để chip mới + ô nhập không bị đẩy khuất bên phải. Cờ (không
-  // phải signal) để không ghi state trong render hook.
-  private scrollToEndPending = false;
+  // Ô đã xuống nhiều dòng chưa → đổi bo góc pill (1 dòng) ↔ chữ nhật (nhiều dòng).
+  protected readonly wrapped = signal(false);
 
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
 
-    // Cuộn PHẢI đợi chip mới render xong (zoneless: render ở macrotask) — dùng afterRenderEffect,
-    // KHÔNG queueMicrotask/setTimeout(0). Đọc chips() để chạy lại sau mỗi lần danh sách đổi + render.
+    // Đo xuống-dòng SAU khi render (zoneless: render ở macrotask) — afterRenderEffect, KHÔNG
+    // queueMicrotask/setTimeout(0). Đọc chips() để chạy lại khi số chip đổi.
     afterRenderEffect(() => {
       this.chips();
-      if (!this.scrollToEndPending) return;
-      this.scrollToEndPending = false;
-      const el = this.fieldRef().nativeElement;
-      el.scrollLeft = el.scrollWidth;
+      this.measureWrap();
     });
+    // Bề rộng field đổi (cửa sổ/parent co giãn) làm chip reflow → đo lại. Đổi bo góc không đổi kích
+    // thước nên không gây vòng lặp RO.
+    afterNextRender(() => {
+      const ro = new ResizeObserver(() => this.measureWrap());
+      ro.observe(this.fieldRef().nativeElement);
+      this.destroyRef.onDestroy(() => ro.disconnect());
+    });
+  }
+
+  // Nhiều hàng khi các con (chip + ô nhập) không cùng một offsetTop.
+  private measureWrap(): void {
+    const kids = Array.from(this.fieldRef().nativeElement.children) as HTMLElement[];
+    if (kids.length <= 1) {
+      this.wrapped.set(false);
+      return;
+    }
+    const tops = kids.map((k) => k.offsetTop);
+    this.wrapped.set(Math.max(...tops) - Math.min(...tops) > 4);
   }
 
   private add(text: string): void {
@@ -92,7 +110,6 @@ export class GChips implements ControlValueAccessor {
     const next = [...this.chips(), t];
     this.chips.set(next);
     this.onChange(next);
-    this.scrollToEndPending = true;
   }
 
   protected removeAt(i: number): void {

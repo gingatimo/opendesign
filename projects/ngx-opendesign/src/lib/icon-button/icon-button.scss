@@ -64,15 +64,18 @@
     background: var(--g-border);
   }
 }
+// Hover ghost/outline dùng --g-border (không phải --g-surface): --g-surface trùng nền sọc hàng chẵn
+// của bảng (.g-table--striped) nên hover icon "tàng hình" trên hàng chẵn. --g-border tối hơn một bậc
+// → hiện rõ trên cả nền trắng lẫn --g-surface (khớp variant secondary vốn đã dùng --g-border).
 :host(.g-icon-button--outline) {
   border-color: var(--g-border-strong);
   &:hover:not(:disabled) {
-    background: var(--g-surface);
+    background: var(--g-border);
   }
 }
 :host(.g-icon-button--ghost) {
   &:hover:not(:disabled) {
-    background: var(--g-surface);
+    background: var(--g-border);
   }
 }
 :host(.g-icon-button--danger) {

@@ -18,9 +18,11 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Changed
 
-- **GChips**: ô nhập giữ một hàng và **cuộn ngang** khi nhiều chip (thay vì tràn xuống nhiều dòng) —
-  thanh cuộn mảnh theo theme; thêm chip xong tự cuộn về cuối để ô nhập không bị khuất.
+- **GChips**: nhiều chip thì **xuống dòng**; khi đã xuống nhiều dòng, ô đổi từ bo viên (pill) sang bo
+  **chữ nhật radius nhỏ** (pill trên khối cao nhiều dòng trông kỳ) — trạng thái wrap đo lúc chạy.
 - **GSelect**: option nay có hiệu ứng **hover** (tô nền nhẹ) như trạng thái active bàn phím.
+- **GIconButton**: hover của variant `ghost`/`outline` dùng `--g-border` thay vì `--g-surface` để
+  **hiện rõ trên nền sọc** hàng chẵn của bảng (trước đây trùng màu nên như không có hover).
 - **GMediaPlayer**: căn thẳng thanh trượt âm lượng với các icon control trên thanh.
 
 ## [0.10.0] — 2026-07-19
