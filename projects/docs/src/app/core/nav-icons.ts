@@ -51,6 +51,7 @@ export type NavIcon =
   | 'tooltip'
   | 'toast'
   | 'drawer'
+  | 'context-menu'
   | 'tabs'
   | 'stepper'
   | 'topbar'
@@ -252,6 +253,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   },
   link: gIconLink,
   menu: { viewBox: VB, paths: ['M3 5h13', 'M3 12h13', 'M3 19h13', 'M19 9l2.5 3-2.5 3'] },
+  'context-menu': {
+    viewBox: VB,
+    paths: ['M7 7h5', 'M7 10h5', 'M7 13h3', 'M14 15l4 4', 'M18 15v4h-4'],
+    rects: [{ x: 4, y: 3, width: 11, height: 13, rx: 2 }],
+  },
   breadcrumb: { viewBox: VB, paths: ['M4 12h4', 'M16 12h4', 'M10 8l3 4-3 4'] },
   pagination: { viewBox: VB, paths: ['M4 12h2m4 0h2m4 0h2', 'M5 8l-3 4 3 4M19 8l3 4-3 4'] },
   container: {

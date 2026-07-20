@@ -135,7 +135,8 @@ tâm điểm: khung 3 card, card giữa phóng to, 2 bên peek; `[(active)]`; `l
 
 **Overlay:** `GDialogService` (service, `.open()`) · `GTooltip` `[gTooltip]` (attribute,
 `gTooltipPosition`) · `GToastService` (service, `.show()`) · `GDrawer` `g-drawer`
-(`side`, `[(open)]`).
+(`side`, `[(open)]`) · `GContextMenu` `[gContextMenu]="tpl"` (attribute, chuột phải mở menu tại con trỏ;
+tpl là `<ng-template>` chứa `<button g-menu-item>`).
 
 **Điều hướng:** `GTabs`+`GTab` `g-tabs`/`g-tab` (`tablistLabel`, `label`) · `GTopbar` `g-topbar`
 (+`gTopbarStart`/`gTopbarCenter`/`gTopbarEnd`) · `GSidebar` `g-sidebar`

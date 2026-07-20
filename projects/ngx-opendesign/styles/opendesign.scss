@@ -999,6 +999,26 @@ body {
   font-weight: 600;
 }
 
+// Panel menu ngữ cảnh (GContextMenu) — GLOBAL vì render trong overlay CDK (ngoài encapsulation). Bọc
+// các .g-menu-item chiếu vào; item bo nhẹ + hover dùng --g-border cho rõ trên nền raised.
+.g-context-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-1);
+  min-width: 160px;
+  padding: var(--g-space-1);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-lg);
+}
+.g-context-menu .g-menu-item {
+  border-radius: var(--g-radius-sm);
+}
+.g-context-menu .g-menu-item:hover {
+  background: var(--g-border);
+}
+
 // Breadcrumb — GLOBAL vì dấu phân cách › cần quan hệ anh-em của các mục chiếu vào <nav g-breadcrumb>.
 .g-breadcrumb {
   display: flex;

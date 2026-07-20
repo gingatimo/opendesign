@@ -139,6 +139,7 @@ export class App {
         { path: '/components/tooltip', label: 'Tooltip', icon: 'tooltip' },
         { path: '/components/toast', label: 'Toast', icon: 'toast' },
         { path: '/components/drawer', label: 'Drawer', icon: 'drawer' },
+        { path: '/components/context-menu', label: 'Context Menu', icon: 'context-menu' },
       ]),
     },
     {

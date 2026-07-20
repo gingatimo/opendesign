@@ -58,6 +58,7 @@ export * from './lib/datepicker/datepicker';
 export * from './lib/breadcrumb/breadcrumb';
 export * from './lib/menu/menu';
 export * from './lib/menu/submenu';
+export * from './lib/context-menu/context-menu';
 export * from './lib/drawer/drawer';
 export * from './lib/media-player/media-player';
 export * from './lib/slider/slider';

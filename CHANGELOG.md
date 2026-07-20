@@ -9,6 +9,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
+- **`GContextMenu`** (`[gContextMenu]`): menu **ngữ cảnh** (chuột phải) — directive gắn lên phần tử, mở
+  menu tại **vị trí con trỏ** (overlay CDK, tự lật hướng). Nội dung là `<ng-template>` gồm các
+  `<button g-menu-item>`; tự đóng khi bấm ra ngoài / Esc / chọn mục.
 - **`GSplitter`** (`g-splitter`): bố cục chia panel có **thanh kéo** đổi kích thước hai bên. Panel chiếu
   qua `<ng-template gSplitterPanel>` (N panel, gutter tự chèn giữa). Kéo bằng chuột/cảm ứng/phím mũi tên;
   `orientation` `horizontal | vertical`, `[sizes]` trọng số ban đầu, `minSize`, output `sizeChange`.

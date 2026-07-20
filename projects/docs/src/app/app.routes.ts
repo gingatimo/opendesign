@@ -313,6 +313,11 @@ export const routes: Routes = [
     title: 'Menu — OpenDesign',
   },
   {
+    path: 'components/context-menu',
+    loadComponent: () => import('./pages/context-menu.page'),
+    title: 'Context Menu — OpenDesign',
+  },
+  {
     path: 'components/breadcrumb',
     loadComponent: () => import('./pages/breadcrumb.page'),
     title: 'Breadcrumb — OpenDesign',
