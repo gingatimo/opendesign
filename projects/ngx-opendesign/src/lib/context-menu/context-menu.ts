@@ -43,7 +43,12 @@ export class GContextMenu {
     this.overlayRef = overlayRef;
     overlayRef.attach(new TemplatePortal(this.gContextMenu(), this.viewContainerRef));
 
-    overlayRef.outsidePointerEvents().subscribe(() => this.close());
+    overlayRef.outsidePointerEvents().subscribe((ev) => {
+      // Bỏ qua `auxclick` — đó là "đuôi" của CHÍNH cú chuột phải vừa mở menu (fire sau contextmenu),
+      // nếu không sẽ đóng menu ngay lập tức. Click/tap/chuột phải ra ngoài vẫn đóng như thường.
+      if (ev.type === 'auxclick') return;
+      this.close();
+    });
     overlayRef.keydownEvents().subscribe((ev) => {
       if (ev.key === 'Escape') this.close();
     });

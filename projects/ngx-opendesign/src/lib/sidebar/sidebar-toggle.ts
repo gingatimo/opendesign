@@ -34,7 +34,7 @@ import { GSidebar } from './sidebar';
       class="g-sidebar-toggle__button g-sidebar-item"
       [attr.aria-label]="nhan()"
       [attr.aria-expanded]="!daThuGon()"
-      (click)="doiTrangThai()"
+      (click)="doiTrangThai($event)"
     >
       <g-icon
         class="g-sidebar-item__icon"
@@ -69,7 +69,11 @@ export class GSidebarToggle {
     }
   }
 
-  protected doiTrangThai(): void {
+  protected doiTrangThai(event: MouseEvent): void {
     this.sidebar?.collapsed.update((v) => !v);
+    // Collapse đổi icon + bề rộng sidebar → re-render khiến :focus-visible bám nhầm sau CLICK CHUỘT,
+    // để lại focus ring lơ lửng. Bấm chuột (detail > 0) thì nhả focus; bàn phím (Enter/Space, detail
+    // = 0) GIỮ focus để người dùng bàn phím không mất vị trí.
+    if (event.detail > 0) (event.currentTarget as HTMLElement).blur();
   }
 }
