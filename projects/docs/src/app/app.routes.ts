@@ -188,6 +188,11 @@ export const routes: Routes = [
     title: 'Table — OpenDesign',
   },
   {
+    path: 'components/org-chart',
+    loadComponent: () => import('./pages/org-chart.page'),
+    title: 'Organization Chart — OpenDesign',
+  },
+  {
     path: 'components/scroll-panel',
     loadComponent: () => import('./pages/scroll-panel.page'),
     title: 'Scroll Panel — OpenDesign',

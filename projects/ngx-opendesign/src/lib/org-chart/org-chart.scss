@@ -1,0 +1,119 @@
+// Đường nối kiểu cây thuần CSS (nested ul/li + pseudo-element), không SVG. --cn = chiều cao đoạn nối.
+:host {
+  --cn: var(--g-space-5);
+  display: flex;
+  // Vừa khung thì căn giữa; cây rộng hơn khung thì lùi về trái để cuộn ngang tới được (safe center).
+  justify-content: safe center;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--g-border-strong) transparent;
+}
+
+.g-org-chart__level {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: var(--cn) 0 0;
+  list-style: none;
+}
+// Cấp gốc: không có node cha nên bỏ khoảng nối phía trên.
+.g-org-chart__level--root {
+  padding-top: 0;
+}
+
+.g-org-chart__node {
+  position: relative;
+  flex: 0 0 auto;
+  padding: var(--cn) var(--g-space-3) 0;
+  text-align: center;
+}
+
+// Thanh ngang (bus) nối các anh em: hai nửa border-top; nửa phải kèm border-left làm đoạn rớt xuống node.
+.g-org-chart__node::before,
+.g-org-chart__node::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: var(--cn);
+  border-top: 1px solid var(--g-border-strong);
+}
+.g-org-chart__node::before {
+  right: 50%;
+}
+.g-org-chart__node::after {
+  left: 50%;
+  border-left: 1px solid var(--g-border-strong);
+}
+
+// Node duy nhất (không có anh em): bỏ bus hai bên, chỉ còn đoạn rớt dọc từ cha (do ::before dựng lại).
+.g-org-chart__node:only-child::after {
+  display: none;
+}
+.g-org-chart__node:only-child::before {
+  right: auto;
+  left: 50%;
+  width: 0;
+  border-top: 0 none;
+  border-left: 1px solid var(--g-border-strong);
+}
+// Con đầu/cuối: cắt nửa bus phía ngoài; con cuối lấy border-right của ::before làm đoạn rớt (bo góc).
+.g-org-chart__node:first-child::before {
+  border: 0 none;
+}
+.g-org-chart__node:last-child::after {
+  border: 0 none;
+}
+.g-org-chart__node:last-child::before {
+  border-top: 1px solid var(--g-border-strong);
+  border-right: 1px solid var(--g-border-strong);
+  border-radius: 0 var(--g-radius-sm) 0 0;
+}
+.g-org-chart__node:first-child::after {
+  border-radius: var(--g-radius-sm) 0 0 0;
+}
+
+// Đoạn nối dọc từ MỘT node cha xuống thanh bus của các con (nằm trong padding-top của ul con).
+.g-org-chart__node > .g-org-chart__level::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: var(--cn);
+  border-left: 1px solid var(--g-border-strong);
+}
+
+// Node gốc: không có đoạn nối đến từ trên.
+.g-org-chart__level--root > .g-org-chart__node {
+  padding-top: 0;
+}
+.g-org-chart__level--root > .g-org-chart__node::before,
+.g-org-chart__level--root > .g-org-chart__node::after {
+  display: none;
+}
+
+// Hộp node (card).
+.g-org-chart__box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--g-space-2) var(--g-space-3);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface);
+  box-shadow: var(--g-shadow-sm);
+  min-width: 88px;
+  white-space: nowrap;
+}
+.g-org-chart__label {
+  font-weight: 600;
+  color: var(--g-text);
+}
+.g-org-chart__sublabel {
+  font-size: var(--g-font-size-sm);
+  color: var(--g-text-muted);
+}

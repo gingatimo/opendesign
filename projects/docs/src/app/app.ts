@@ -168,7 +168,10 @@ export class App {
     },
     {
       title: 'Dữ liệu',
-      links: sortByLabel([{ path: '/components/table', label: 'Table', icon: 'table' }]),
+      links: sortByLabel([
+        { path: '/components/table', label: 'Table', icon: 'table' },
+        { path: '/components/org-chart', label: 'Organization Chart', icon: 'org-chart' },
+      ]),
     },
     // Nhóm riêng, đặt cuối: đây là phần "ráp lại" sau khi đã học từng component riêng lẻ ở các
     // nhóm trên — không thuộc phân loại theo LOẠI component nào ở trên nên không gộp vào "Bắt đầu".

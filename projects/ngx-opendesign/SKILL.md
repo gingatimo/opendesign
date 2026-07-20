@@ -151,7 +151,9 @@ tâm điểm: khung 3 card, card giữa phóng to, 2 bên peek; `[(active)]`; `l
 
 **Dữ liệu:** `GTable` `table[gTable]` (`striped`) · `GTableContainer` `g-table-container`
 (`minRows`/`maxRows`) · `GSortHeader` `[gSortHeader]` · `GFreezeColumn`/`GFreezeRow`
-`[gFreezeColumn]`/`[gFreezeRow]` (đóng băng cột/hàng khi cuộn).
+`[gFreezeColumn]`/`[gFreezeRow]` (đóng băng cột/hàng khi cuộn) · `GOrgChart` `g-org-chart`
+(sơ đồ tổ chức dạng cây; `[nodes]` `GOrgChartNode[]` đệ quy; node mặc định label+sublabel hoặc
+tuỳ biến qua `<ng-template let-node>`).
 
 ## 6. Tài liệu đầy đủ
 

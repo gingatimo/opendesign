@@ -63,6 +63,7 @@ export type NavIcon =
   | 'stack'
   | 'layout'
   | 'table'
+  | 'org-chart'
   | 'scroll-panel'
   | 'timeline'
   | 'accordion'
@@ -269,6 +270,15 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   },
   layout: gIconLayout,
   table: gIconTable,
+  'org-chart': {
+    viewBox: VB,
+    paths: ['M12 7v4M6 11h12M6 11v4M18 11v4'],
+    rects: [
+      { x: 9, y: 3, width: 6, height: 4, rx: 1 },
+      { x: 3, y: 15, width: 6, height: 4, rx: 1 },
+      { x: 15, y: 15, width: 6, height: 4, rx: 1 },
+    ],
+  },
   'scroll-panel': {
     viewBox: VB,
     paths: ['M18 5v14'],
