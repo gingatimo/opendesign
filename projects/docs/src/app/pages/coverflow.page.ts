@@ -27,7 +27,9 @@ import { CoverflowBasicDemo } from '../demos/coverflow/coverflow-basic.demo';
     <p>
       Đặt các card làm con trực tiếp của <code>&lt;g-coverflow&gt;</code> và cho mỗi card một bề
       rộng <b>nhỏ hơn khung</b> để lộ phần peek hai bên. Track tự dịch để card active nằm chính
-      giữa; nút prev/next đặt flanking (ngoài khung, không đè lên card) và tự ẩn ở biên.
+      giữa; nút prev/next đặt flanking (ngoài khung, không đè lên card) và tự ẩn ở biên. Card có thể
+      <b>khác kích thước</b> (thẻ ngang xen thẻ dọc) — card active luôn căn giữa theo đúng bề rộng
+      của nó, các card căn dọc giữa nhau.
     </p>
 
     <h2>API — GCoverflow</h2>

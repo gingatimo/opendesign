@@ -54,18 +54,14 @@
   border: none;
   border-radius: var(--g-radius-pill);
   color: #fff;
+  // Nền trắng-mờ (đã có alpha) — nhẹ lúc nghỉ, rê/focus vào thì đậm hơn để không che nội dung sau.
   background: rgb(255 255 255 / 12%);
   cursor: pointer;
-  // Mờ đi lúc nghỉ để không che nội dung phía sau; rê/focus vào thì hiện rõ.
-  opacity: 0.45;
-  transition:
-    background-color var(--g-duration-fast) var(--g-ease),
-    opacity var(--g-duration-fast) var(--g-ease);
+  transition: background-color var(--g-duration-fast) var(--g-ease);
 }
 .g-lightbox__btn:hover,
 .g-lightbox__btn:focus-visible {
   background: rgb(255 255 255 / 25%);
-  opacity: 1;
 }
 .g-lightbox__btn:focus-visible {
   outline: 2px solid #fff;
