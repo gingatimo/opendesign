@@ -7,6 +7,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+## [0.12.0] — 2026-07-20
+
 ### Added
 
 - **Form**: `GSearchField` (ô tìm kiếm theo TRƯỜNG — `GSelect` chọn trường bên trái + ô nhập bên
