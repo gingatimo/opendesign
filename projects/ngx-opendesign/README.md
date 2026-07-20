@@ -1,6 +1,10 @@
 # ngx-opendesign
 
+[![npm](https://img.shields.io/npm/v/ngx-opendesign.svg)](https://www.npmjs.com/package/ngx-opendesign)
+
 Design system cho Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — standalone và OnPush.
+
+npm: https://www.npmjs.com/package/ngx-opendesign
 
 ## Tài liệu
 

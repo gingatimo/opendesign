@@ -267,7 +267,8 @@ export const gIconLayout: GIconGlyph = {
 
 export const gIconTable: GIconGlyph = {
   viewBox: VIEW_BOX_24,
-  paths: ['M3 10h18M9 10v10'],
+  // Lưới thật: hàng header + 1 hàng, 3 cột → trông giống bảng hơn (trước chỉ 1 vạch ngang + 1 dọc).
+  paths: ['M3 9h18', 'M3 15h18', 'M9 4v16', 'M15 4v16'],
   rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
 };
 
@@ -326,6 +327,30 @@ export const gIconMaximize: GIconGlyph = {
   ],
 };
 
+// Bốn góc chụm vào trong — cặp với gIconMaximize (thu nhỏ/thoát toàn màn hình).
+export const gIconMinimize: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M8 3v3a2 2 0 0 1-2 2H3',
+    'M21 8h-3a2 2 0 0 1-2-2V3',
+    'M3 16h3a2 2 0 0 1 2 2v3',
+    'M16 21v-3a2 2 0 0 1 2-2h3',
+  ],
+};
+
+// Kính lúp + dấu cộng/trừ (dùng cho lightbox/xem ảnh).
+export const gIconZoomIn: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['m21 21-4.3-4.3', 'M11 8v6', 'M8 11h6'],
+  circles: [{ cx: 11, cy: 11, r: 7 }],
+};
+
+export const gIconZoomOut: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['m21 21-4.3-4.3', 'M8 11h6'],
+  circles: [{ cx: 11, cy: 11, r: 7 }],
+};
+
 // Đồng hồ — vòng tròn + 2 kim (dùng cho GTimePicker).
 export const gIconClock: GIconGlyph = {
   viewBox: VIEW_BOX_24,
@@ -344,4 +369,32 @@ export const gIconMic: GIconGlyph = {
   viewBox: VIEW_BOX_24,
   rects: [{ x: 9, y: 2, width: 6, height: 11, rx: 3 }],
   paths: ['M5 11v1a7 7 0 0 0 14 0v-1', 'M12 19v3', 'M8 22h8'],
+};
+
+// ----- Phản ứng (favorite / like / dislike) -----
+
+// Trái tim — yêu thích/favorite.
+export const gIconHeart: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+  ],
+};
+
+// Ngón cái lên — thích/like.
+export const gIconThumbsUp: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3z',
+    'M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3',
+  ],
+};
+
+// Ngón cái xuống — không thích/dislike.
+export const gIconThumbsDown: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3z',
+    'M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3',
+  ],
 };
