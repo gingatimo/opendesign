@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ApiRow, ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { CarouselBasicDemo } from '../demos/carousel/carousel-basic.demo';
 
 @Component({
-  imports: [CarouselBasicDemo, CodeBlock, DemoSection],
+  imports: [CarouselBasicDemo, ApiTable, CodeBlock, DemoSection],
   template: `
     <h1>Carousel</h1>
     <p>
@@ -28,6 +29,9 @@ import { CarouselBasicDemo } from '../demos/carousel/carousel-basic.demo';
       là ảnh, có thể là card, thẻ sản phẩm, biểu đồ…
     </p>
 
+    <h2>API — GCarousel</h2>
+    <docs-api-table [rows]="apiRows" />
+
     <h2>Accessibility</h2>
     <ul>
       <li>
@@ -40,4 +44,14 @@ import { CarouselBasicDemo } from '../demos/carousel/carousel-basic.demo';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class CarouselPage {}
+export default class CarouselPage {
+  protected readonly apiRows: ApiRow[] = [
+    {
+      name: 'center',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Căn giữa các item khi chúng vừa khung; khi tràn tự lùi về mép trái để vẫn cuộn/hiện nút.',
+    },
+  ];
+}

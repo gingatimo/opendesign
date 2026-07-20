@@ -19,10 +19,12 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **`GCarousel`** (`g-carousel`): băng chuyền ngang cho **nội dung bất kỳ** (chiếu card qua slot). Track
   dùng scroll-snap giữ **bề rộng tự nhiên** của item nên chạy đúng cả khi item **cùng kích thước** lẫn
   **khác kích thước** (thẻ ngang kiểu thẻ tín dụng xen thẻ dọc). Nút prev/next cuộn đúng một item và tự
-  ẩn/`disabled` ở biên; track điều hướng được bằng phím ←/→. Khác `GImageSlider` (một ảnh/khung).
+  ẩn/`disabled` ở biên; track điều hướng được bằng phím ←/→. `center` căn giữa item khi vừa khung (tràn
+  thì tự lùi về mép trái để vẫn cuộn/hiện nút). Khác `GImageSlider` (một ảnh/khung).
 - **`GGallery`** (`g-gallery`): gallery ảnh kiểu trang bán hàng — ảnh chính lớn + dải thumbnail, bấm
-  thumbnail đổi ảnh chính, bấm ảnh chính mở lightbox. `[images]` nhận `string | File` (File tự tạo/thu
-  hồi objectURL). Khác `GImagePreview` (lưới thumbnail).
+  thumbnail đổi ảnh chính, bấm ảnh chính mở lightbox. Dải thumbnail dùng `GCarousel` (center): **căn
+  giữa** khi ít ảnh, tự có **nút trái/phải** khi danh sách dài. `[images]` nhận `string | File` (File tự
+  tạo/thu hồi objectURL). Khác `GImagePreview` (lưới thumbnail).
 
 ## [0.14.0] — 2026-07-20
 

@@ -126,8 +126,9 @@ neutral|success|warning|danger, `heading`, `dismissible`, `[(open)]`, nội dung
 (`[name]`, `shape`) · `GCard` `g-card` (+`gCardHeader`/`gCardFooter`) · `GIcon` `g-icon` (`[icon]`) ·
 `GDivider` `g-divider` (`vertical`, nhãn qua nội dung) · `GImagePreview` `g-image-preview`
 (lưới thumbnail + lightbox) · `GImageSlider` `g-image-slider` · `GCarousel` `g-carousel`
-(băng chuyền scroll-snap cho item bất kỳ qua slot; item cùng/khác kích thước) · `GGallery`
-`g-gallery` (`[images]` string|File; ảnh chính + thumbnail + lightbox) · `GMediaPlayer` `g-media-player` ·
+(băng chuyền scroll-snap cho item bất kỳ qua slot; item cùng/khác kích thước; `center` căn giữa khi
+vừa khung) · `GGallery` `g-gallery` (`[images]` string|File; ảnh chính + dải thumbnail căn giữa/có nút
+trái-phải khi dài + lightbox) · `GMediaPlayer` `g-media-player` ·
 `GSkeleton` `g-skeleton` · `GTimeline`+`GTimelineItem` `g-timeline`/`g-timeline-item` (`status`).
 
 **Overlay:** `GDialogService` (service, `.open()`) · `GTooltip` `[gTooltip]` (attribute,

@@ -30,15 +30,6 @@
   }
 }
 
-.g-gallery__thumbs {
-  display: flex;
-  gap: var(--g-space-2);
-  overflow-x: auto;
-  padding-bottom: 2px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--g-border-strong) transparent;
-}
-
 .g-gallery__thumb {
   flex: 0 0 auto;
   width: 64px;

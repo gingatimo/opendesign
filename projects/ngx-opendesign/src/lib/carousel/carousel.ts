@@ -1,10 +1,12 @@
 import {
   afterNextRender,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
   inject,
+  input,
   signal,
   viewChild,
 } from '@angular/core';
@@ -33,6 +35,7 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
     <div
       #track
       class="g-carousel__track"
+      [class.g-carousel__track--center]="center()"
       tabindex="0"
       role="group"
       aria-roledescription="băng chuyền"
@@ -58,6 +61,10 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
   host: { class: 'g-carousel' },
 })
 export class GCarousel {
+  // Căn GIỮA các item khi chúng vừa khung (safe center → tự lùi về mép trái khi tràn để vẫn cuộn/hiện
+  // nút được). Mặc định căn trái (item kế peek ở mép phải như băng chuyền thường).
+  readonly center = input(false, { transform: booleanAttribute });
+
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
   private readonly destroyRef = inject(DestroyRef);
 

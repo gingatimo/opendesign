@@ -23,6 +23,11 @@
   }
 }
 
+// Căn giữa khi vừa khung; `safe` để khi TRÀN thì lùi về mép trái (không kẹt phần đầu không cuộn tới).
+.g-carousel__track--center {
+  justify-content: safe center;
+}
+
 // Nút điều hướng nổi trên hai mép, tự ẩn ở biên (không còn chỗ cuộn về hướng đó).
 .g-carousel__nav {
   position: absolute;

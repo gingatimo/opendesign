@@ -8,13 +8,16 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { GCarousel } from '../carousel/carousel';
 import { openLightbox } from '../image-preview/lightbox';
 
 // Gallery ảnh kiểu trang bán hàng: một ảnh CHÍNH lớn + dải THUMBNAIL bên dưới; bấm thumbnail đổi ảnh
 // chính, bấm ảnh chính mở GLightbox (zoom/pan). Nhận string URL hoặc File (File → objectURL, revoke
-// khi đổi/huỷ để không rò). Thuần TRÌNH BÀY — consumer tự quản danh sách ảnh.
+// khi đổi/huỷ để không rò). Dải thumbnail dùng GCarousel (center) — căn giữa khi ít ảnh, tự có nút
+// trái/phải khi danh sách dài. Thuần TRÌNH BÀY — consumer tự quản danh sách ảnh.
 @Component({
   selector: 'g-gallery',
+  imports: [GCarousel],
   template: `
     @if (urls().length) {
       <button
@@ -27,7 +30,7 @@ import { openLightbox } from '../image-preview/lightbox';
       </button>
 
       @if (urls().length > 1) {
-        <div class="g-gallery__thumbs">
+        <g-carousel center class="g-gallery__thumbs">
           @for (url of urls(); track $index) {
             <button
               type="button"
@@ -45,7 +48,7 @@ import { openLightbox } from '../image-preview/lightbox';
               />
             </button>
           }
-        </div>
+        </g-carousel>
       }
     }
   `,
