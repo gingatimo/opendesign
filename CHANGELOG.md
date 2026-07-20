@@ -9,6 +9,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
+- **`GStepSlider`** (`g-step-slider`): thanh trượt **rời rạc** dạng pill — dải pill chứa `steps` chấm,
+  chấm đang chọn thay bằng **thumb** nổi; kèm nhãn hai đầu (`startLabel`/`endLabel`, vd. Faster /
+  Smarter). Chọn bằng bấm/kéo hoặc phím ←/→ (Home/End); hai chiều `[(value)]` (chỉ số 0..steps-1).
 - **Icon**: thêm `gIconZoomIn` / `gIconZoomOut` (kính lúp ±), `gIconMinimize` (bốn góc chụm vào —
   cặp với `gIconMaximize`), `gIconHeart` (favorite), `gIconThumbsUp` (like), `gIconThumbsDown`
   (dislike) vào bộ public.

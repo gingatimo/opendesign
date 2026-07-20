@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.g-step-slider__labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--g-space-2);
+  font-size: var(--g-font-size-sm);
+  color: var(--g-text-muted);
+}
+
+.g-step-slider__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--g-control-md);
+  padding: 0 var(--g-space-2);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-secondary-bg);
+  cursor: pointer;
+  // Kéo mượt trên cảm ứng, không cho chọn text.
+  touch-action: none;
+  user-select: none;
+}
+.g-step-slider__track:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+
+.g-step-slider__step {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.g-step-slider__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--g-radius-pill);
+  background: var(--g-text-muted);
+  opacity: 0.55;
+}
+// Chấm cuối làm điểm nhấn (đầu mút "cao nhất").
+.g-step-slider__dot--last {
+  background: var(--g-primary);
+  opacity: 1;
+}
+
+// Thumb pill nổi lên, phủ gần trọn ô bậc đang chọn.
+.g-step-slider__thumb {
+  width: 100%;
+  max-width: 44px;
+  height: calc(var(--g-control-md) - 8px);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-sm);
+}

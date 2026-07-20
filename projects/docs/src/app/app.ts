@@ -97,6 +97,7 @@ export class App {
         { path: '/components/file-input', label: 'File Input', icon: 'file-input' },
         { path: '/components/datepicker', label: 'Datepicker', icon: 'datepicker' },
         { path: '/components/slider', label: 'Slider', icon: 'slider' },
+        { path: '/components/step-slider', label: 'Step Slider', icon: 'step-slider' },
         { path: '/components/time-picker', label: 'Time Picker', icon: 'time-picker' },
         {
           path: '/components/date-range-picker',

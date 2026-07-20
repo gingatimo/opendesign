@@ -298,6 +298,11 @@ export const routes: Routes = [
     title: 'Slider — OpenDesign',
   },
   {
+    path: 'components/step-slider',
+    loadComponent: () => import('./pages/step-slider.page'),
+    title: 'Step Slider — OpenDesign',
+  },
+  {
     path: 'components/time-picker',
     loadComponent: () => import('./pages/time-picker.page'),
     title: 'Time Picker — OpenDesign',

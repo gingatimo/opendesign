@@ -26,6 +26,7 @@ export type NavIcon =
   | 'file-input'
   | 'datepicker'
   | 'slider'
+  | 'step-slider'
   | 'time-picker'
   | 'date-range-picker'
   | 'color-picker'
@@ -202,6 +203,16 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     rects: [{ x: 3, y: 4, width: 18, height: 18, rx: 2 }],
   },
   slider: { viewBox: VB, paths: ['M3 12h18'], circles: [{ cx: 9, cy: 12, r: 3 }] },
+  'step-slider': {
+    viewBox: VB,
+    rects: [{ x: 2, y: 9, width: 20, height: 6, rx: 3 }],
+    circles: [
+      { cx: 6, cy: 12, r: 1 },
+      { cx: 10, cy: 12, r: 1 },
+      { cx: 18, cy: 12, r: 1 },
+      { cx: 14, cy: 12, r: 2 },
+    ],
+  },
   'time-picker': gIconClock,
   'date-range-picker': {
     viewBox: VB,
