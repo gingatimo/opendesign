@@ -50,6 +50,9 @@
   gap: var(--g-space-1);
   // padding-inline khớp .g-sidebar__body (xem chú thích ở đó) để toggle vẫn canh cột với nav icon.
   padding-inline: var(--g-space-1);
+  // padding-block: overflow: hidden (cho scrollbar-gutter) clip cả phương DỌC → focus ring của nút
+  // toggle (box-shadow trồi 4px) bị cắt trên/dưới khi Tab tới. Chừa 4px trên-dưới để ring hiện đủ.
+  padding-block: var(--g-space-1);
   overflow: hidden;
   scrollbar-gutter: stable;
 }
