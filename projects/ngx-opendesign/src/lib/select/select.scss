@@ -72,6 +72,10 @@
 .g-select__panel {
   display: flex;
   flex-direction: column;
+  // .cdk-overlay-pane là flex-row: panel (child) mặc định chỉ rộng bằng nội dung nên khi pane được
+  // nới tới min-width (= bề rộng trigger) mà nội dung option ngắn hơn thì hộp panel hẹp hơn trigger.
+  // width:100% cho panel lấp đầy pane (pane vẫn = max(min-width trigger, nội dung option)).
+  width: 100%;
   max-height: 280px;
   border-radius: var(--g-radius-md);
   background: var(--g-surface-raised);

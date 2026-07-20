@@ -7,6 +7,12 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+### Changed
+
+- **GSelect**: panel dropdown nay rộng **tối thiểu bằng trigger** rồi tự nới theo nội dung option (thay
+  vì rộng cố định đúng bằng trigger) — nhãn option dài không còn bị xuống dòng khi trigger hẹp (vd.
+  `GSearchField` đặt select `max-content`). Trigger đủ rộng thì panel giữ nguyên bằng trigger như cũ.
+
 ## [0.12.0] — 2026-07-20
 
 ### Added

@@ -48,7 +48,7 @@ function normalize(s: string): string {
       cdkConnectedOverlay
       [cdkConnectedOverlayOrigin]="elementRef"
       [cdkConnectedOverlayOpen]="open()"
-      [cdkConnectedOverlayWidth]="triggerWidth()"
+      [cdkConnectedOverlayMinWidth]="triggerWidth()"
       [cdkConnectedOverlayPositions]="positions"
       cdkConnectedOverlayHasBackdrop
       cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
@@ -108,6 +108,9 @@ export class GSelect implements ControlValueAccessor {
   readonly compareWith = input<(a: unknown, b: unknown) => boolean>((a, b) => a === b);
 
   protected readonly open = signal(false);
+  // Dùng làm MIN-width của panel (không phải width cứng): panel rộng tối thiểu bằng trigger, nhưng
+  // tự nới theo nội dung để nhãn option dài không bị wrap — cần khi trigger hẹp (vd. GSearchField
+  // đặt select max-content, "CCCD" rất ngắn) mà option lại dài ("Mã khách hàng").
   protected readonly triggerWidth = signal(0);
   protected readonly activeIndex = signal(-1);
   protected readonly disabled = signal(false);
