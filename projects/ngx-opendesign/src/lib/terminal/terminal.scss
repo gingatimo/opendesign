@@ -1,0 +1,93 @@
+// Nền tối CỐ ĐỊNH (terminal luôn tối, không theo theme). Màu tự chứa, không dùng token --g-*.
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: var(--g-radius-md);
+  overflow: hidden;
+  background: #0d0d0f;
+  color: #d4d4d8;
+  font-family: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: var(--g-font-size-sm);
+  line-height: 1.6;
+}
+
+.g-terminal__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2) var(--g-space-3);
+  border-bottom: 1px solid #26262b;
+  background: #161618;
+}
+.g-terminal__dots {
+  display: inline-flex;
+  gap: 6px;
+}
+.g-terminal__dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.g-terminal__dots i:nth-child(1) {
+  background: #ff5f56;
+}
+.g-terminal__dots i:nth-child(2) {
+  background: #ffbd2e;
+}
+.g-terminal__dots i:nth-child(3) {
+  background: #27c93f;
+}
+.g-terminal__title {
+  color: #8f8f96;
+}
+
+.g-terminal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--g-space-2) var(--g-space-3);
+}
+.g-terminal__line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.g-terminal__line[data-kind='command'] {
+  color: #ededef;
+}
+.g-terminal__line[data-kind='output'] {
+  color: #8f8f96;
+}
+.g-terminal__line[data-kind='success'] {
+  color: #4ade80;
+}
+.g-terminal__line[data-kind='error'] {
+  color: #f87171;
+}
+
+.g-terminal__prompt {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2) var(--g-space-3);
+  border-top: 1px solid #26262b;
+}
+.g-terminal__caret {
+  color: #4ade80;
+}
+.g-terminal__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #ededef;
+  font: inherit;
+  caret-color: #4ade80;
+}
+.g-terminal__input:focus {
+  outline: none;
+}
+.g-terminal__input::placeholder {
+  color: #52525b;
+}

@@ -15,6 +15,8 @@ import {
   GInputSuffix,
   GSplitter,
   GSplitterPanel,
+  GTerminal,
+  GTerminalLine,
   gIconSend,
 } from 'ngx-opendesign';
 
@@ -23,18 +25,14 @@ interface ChatMsg {
   role: 'bot' | 'user';
   text: string;
 }
-interface TermLine {
-  text: string;
-  kind: 'cmd' | 'out' | 'ok';
-}
 
-// Playbook: GSplitter chia đôi — trái là khung CHAT, phải là TERMINAL. Kéo thanh giữa để đổi tỉ lệ.
-// Cả hai panel tương tác thật (gõ chat → bot trả lời mẫu; gõ lệnh → terminal in kết quả mẫu).
+// Playbook: GSplitter chia đôi — trái là khung CHAT, phải là GTerminal. Kéo thanh giữa để đổi tỉ lệ.
 @Component({
   selector: 'docs-split-workspace-demo',
   imports: [
     GSplitter,
     GSplitterPanel,
+    GTerminal,
     GAvatar,
     GIcon,
     GIconButton,
@@ -55,51 +53,34 @@ interface TermLine {
               <div class="sw-msg" [class.sw-msg--user]="m.role === 'user'">{{ m.text }}</div>
             }
           </div>
-          <g-input-group class="sw-chat__input">
-            <input
-              gInput
-              type="text"
-              placeholder="Hỏi gì đó…"
-              [value]="draft()"
-              (input)="draft.set($any($event.target).value)"
-              (keydown.enter)="sendChat()"
-              aria-label="Tin nhắn"
-            />
-            <button
-              type="button"
-              g-icon-button
-              gInputSuffix
-              size="sm"
-              aria-label="Gửi"
-              (click)="sendChat()"
-            >
-              <g-icon [icon]="iconSend" size="sm" />
-            </button>
-          </g-input-group>
+          <div class="sw-chat__foot">
+            <g-input-group>
+              <input
+                gInput
+                type="text"
+                placeholder="Hỏi gì đó…"
+                [value]="draft()"
+                (input)="draft.set($any($event.target).value)"
+                (keydown.enter)="sendChat()"
+                aria-label="Tin nhắn"
+              />
+              <button
+                type="button"
+                g-icon-button
+                gInputSuffix
+                size="sm"
+                aria-label="Gửi"
+                (click)="sendChat()"
+              >
+                <g-icon [icon]="iconSend" size="sm" />
+              </button>
+            </g-input-group>
+          </div>
         </div>
       </ng-template>
 
       <ng-template gSplitterPanel>
-        <div class="sw-term">
-          <div class="sw-term__head">Terminal</div>
-          <div #termScroll class="sw-term__body">
-            @for (l of terminal(); track $index) {
-              <div class="sw-term__line" [attr.data-kind]="l.kind">{{ l.text }}</div>
-            }
-          </div>
-          <div class="sw-term__prompt">
-            <span class="sw-term__caret">$</span>
-            <input
-              class="sw-term__cmd"
-              type="text"
-              placeholder="type a command"
-              [value]="cmd()"
-              (input)="cmd.set($any($event.target).value)"
-              (keydown.enter)="runCmd()"
-              aria-label="Lệnh terminal"
-            />
-          </div>
-        </div>
+        <g-terminal class="sw-term" [lines]="terminal()" (run)="runCmd($event)" />
       </ng-template>
     </g-splitter>
   `,
@@ -144,63 +125,15 @@ interface TermLine {
       background: var(--g-primary);
       color: var(--g-on-primary);
     }
-    .sw-chat__input {
-      margin: var(--g-space-3);
+    /* Padding ở FOOT (không margin trên input-group vốn width:100% → tràn panel, bị cắt). */
+    .sw-chat__foot {
+      padding: var(--g-space-3);
     }
 
-    /* --- Terminal (phải) — luôn tối như terminal thật, không đổi theo theme --- */
+    /* GTerminal tự lấp đầy panel phải. */
     .sw-term {
-      display: flex;
-      flex-direction: column;
       height: 100%;
-      background: #0d0d0f;
-      color: #d4d4d8;
-      font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-      font-size: var(--g-font-size-sm);
-    }
-    .sw-term__head {
-      padding: var(--g-space-2) var(--g-space-3);
-      border-bottom: 1px solid #26262b;
-      color: #8f8f96;
-    }
-    .sw-term__body {
-      flex: 1 1 0;
-      min-height: 0;
-      overflow-y: auto;
-      padding: var(--g-space-2) var(--g-space-3);
-    }
-    .sw-term__line {
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .sw-term__line[data-kind='cmd'] {
-      color: #ededef;
-    }
-    .sw-term__line[data-kind='out'] {
-      color: #8f8f96;
-    }
-    .sw-term__line[data-kind='ok'] {
-      color: #4ade80;
-    }
-    .sw-term__prompt {
-      display: flex;
-      align-items: center;
-      gap: var(--g-space-2);
-      padding: var(--g-space-2) var(--g-space-3);
-      border-top: 1px solid #26262b;
-    }
-    .sw-term__caret {
-      color: #4ade80;
-    }
-    .sw-term__cmd {
-      flex: 1 1 auto;
-      min-width: 0;
-      background: transparent;
-      border: none;
-      color: #ededef;
-      font: inherit;
-      outline: none;
+      border-radius: 0;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -214,25 +147,18 @@ export class SplitWorkspaceDemo {
   protected readonly draft = signal('');
   private chatId = 2;
 
-  protected readonly terminal = signal<TermLine[]>([
-    { text: 'opendesign@dev ~ %', kind: 'out' },
-    { text: 'npm run build:lib', kind: 'cmd' },
-    { text: 'Build complete. [1245ms]', kind: 'ok' },
+  protected readonly terminal = signal<GTerminalLine[]>([
+    { text: 'opendesign@dev ~ %', kind: 'output' },
+    { text: 'npm run build:lib', kind: 'command' },
+    { text: 'Build complete. [1245ms]', kind: 'success' },
   ]);
-  protected readonly cmd = signal('');
 
   private readonly chatScroll = viewChild<ElementRef<HTMLElement>>('chatScroll');
-  private readonly termScroll = viewChild<ElementRef<HTMLElement>>('termScroll');
 
   constructor() {
     afterRenderEffect(() => {
       this.messages();
       const el = this.chatScroll()?.nativeElement;
-      if (el) el.scrollTop = el.scrollHeight;
-    });
-    afterRenderEffect(() => {
-      this.terminal();
-      const el = this.termScroll()?.nativeElement;
       if (el) el.scrollTop = el.scrollHeight;
     });
   }
@@ -250,14 +176,11 @@ export class SplitWorkspaceDemo {
     }, 500);
   }
 
-  protected runCmd(): void {
-    const c = this.cmd().trim();
-    if (!c) return;
+  protected runCmd(cmd: string): void {
     this.terminal.update((l) => [
       ...l,
-      { text: '$ ' + c, kind: 'cmd' },
-      { text: 'Đã chạy: ' + c + ' (kết quả mẫu)', kind: 'out' },
+      { text: '$ ' + cmd, kind: 'command' },
+      { text: 'Đã chạy: ' + cmd + ' (kết quả mẫu)', kind: 'output' },
     ]);
-    this.cmd.set('');
   }
 }

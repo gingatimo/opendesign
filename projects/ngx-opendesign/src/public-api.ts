@@ -62,6 +62,7 @@ export * from './lib/context-menu/context-menu';
 export * from './lib/reorder-list/reorder-list';
 export * from './lib/drawer/drawer';
 export * from './lib/media-player/media-player';
+export * from './lib/terminal/terminal';
 export * from './lib/slider/slider';
 export * from './lib/step-slider/step-slider';
 export * from './lib/time-picker/time-picker';

@@ -273,6 +273,11 @@ export const routes: Routes = [
     title: 'Media Player — OpenDesign',
   },
   {
+    path: 'components/terminal',
+    loadComponent: () => import('./pages/terminal.page'),
+    title: 'Terminal — OpenDesign',
+  },
+  {
     path: 'components/divider',
     loadComponent: () => import('./pages/divider.page'),
     title: 'Divider — OpenDesign',

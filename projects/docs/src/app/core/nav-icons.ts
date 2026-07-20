@@ -45,6 +45,7 @@ export type NavIcon =
   | 'coverflow'
   | 'gallery'
   | 'media-player'
+  | 'terminal'
   | 'divider'
   | 'fab'
   | 'grid'
@@ -194,6 +195,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     viewBox: VB,
     paths: ['M10 9l5 3-5 3z'],
     rects: [{ x: 3, y: 5, width: 18, height: 14, rx: 2 }],
+  },
+  terminal: {
+    viewBox: VB,
+    paths: ['M7 9l3 3-3 3', 'M13 15h4'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
   },
   divider: { viewBox: VB, paths: ['M3 12h18', 'M6 7h4', 'M14 17h4'] },
   fab: { viewBox: VB, paths: ['M12 8v8M8 12h8'], circles: [{ cx: 12, cy: 12, r: 9 }] },

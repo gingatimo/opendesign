@@ -131,7 +131,8 @@ neutral|success|warning|danger, `heading`, `dismissible`, `[(open)]`, nội dung
 vừa khung; `navPlacement` overlay|flanking; `align` căn dọc) · `GCoverflow` `g-coverflow` (băng chuyền
 tâm điểm: khung 3 card, card giữa phóng to, 2 bên peek; `[(active)]`; `loop` quay vòng + dot) · `GGallery` `g-gallery`
 (`[images]` string|File; ảnh chính + dải thumbnail căn giữa/có nút trái-phải khi dài + lightbox) ·
-`GMediaPlayer` `g-media-player` ·
+`GMediaPlayer` `g-media-player` · `GTerminal` `g-terminal` (khung terminal nền tối cố định; `[lines]`
+`GTerminalLine[]` màu theo kind, `(run)` khi gõ+Enter; `title`/`prompt`/`interactive`) ·
 `GSkeleton` `g-skeleton` · `GTimeline`+`GTimelineItem` `g-timeline`/`g-timeline-item` (`status`).
 
 **Overlay:** `GDialogService` (service, `.open()`) · `GTooltip` `[gTooltip]` (attribute,

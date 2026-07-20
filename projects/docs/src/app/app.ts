@@ -130,6 +130,7 @@ export class App {
         { path: '/components/coverflow', label: 'Coverflow', icon: 'coverflow' },
         { path: '/components/gallery', label: 'Gallery', icon: 'gallery' },
         { path: '/components/media-player', label: 'Media Player', icon: 'media-player' },
+        { path: '/components/terminal', label: 'Terminal', icon: 'terminal' },
         { path: '/components/divider', label: 'Divider', icon: 'divider' },
       ]),
     },

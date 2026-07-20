@@ -9,6 +9,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
+- **`GTerminal`** (`g-terminal`): khung **terminal** giả lập — thanh tiêu đề (3 chấm + tên), vùng log
+  mono cuộn được tô màu theo `kind` (command/output/success/error), dòng nhập lệnh có prompt. Nền tối
+  **cố định**. `[lines]` `GTerminalLine[]`; gõ lệnh + Enter phát `(run)`; `title`/`prompt`/
+  `interactive`. Tự cuộn xuống đáy khi có dòng mới. Docs: dùng trong playbook Chat + Terminal.
 - **`GStepSlider`** (`g-step-slider`): thanh trượt **rời rạc** dạng pill — dải pill chứa `steps` chấm,
   chấm đang chọn thay bằng **thumb** nổi; kèm nhãn hai đầu (`startLabel`/`endLabel`, vd. Faster /
   Smarter). Chọn bằng bấm/kéo hoặc phím ←/→ (Home/End); hai chiều `[(value)]` (chỉ số 0..steps-1).
