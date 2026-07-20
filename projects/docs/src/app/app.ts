@@ -163,6 +163,7 @@ export class App {
         { path: '/components/stack', label: 'Stack', icon: 'stack' },
         { path: '/components/grid', label: 'Grid', icon: 'grid' },
         { path: '/components/layout', label: 'Layout', icon: 'layout' },
+        { path: '/components/splitter', label: 'Splitter', icon: 'splitter' },
         { path: '/components/scroll-panel', label: 'Scroll Panel', icon: 'scroll-panel' },
       ]),
     },

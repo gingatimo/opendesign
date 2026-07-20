@@ -9,6 +9,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
+- **`GSplitter`** (`g-splitter`): bố cục chia panel có **thanh kéo** đổi kích thước hai bên. Panel chiếu
+  qua `<ng-template gSplitterPanel>` (N panel, gutter tự chèn giữa). Kéo bằng chuột/cảm ứng/phím mũi tên;
+  `orientation` `horizontal | vertical`, `[sizes]` trọng số ban đầu, `minSize`, output `sizeChange`.
+
 - **`GAlert`** (`g-alert`): thông báo **inline** (callout) cho ghi chú/cảnh báo/lỗi — `variant`
   `neutral | success | warning | danger` (màu + icon riêng), `heading` tuỳ chọn, `dismissible` +
   hai chiều `[(open)]`, nội dung qua slot. Khác `GToast` (overlay tạm) và `GBadge` (nhãn nhỏ). Mức độ

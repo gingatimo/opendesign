@@ -62,6 +62,7 @@ export type NavIcon =
   | 'container'
   | 'stack'
   | 'layout'
+  | 'splitter'
   | 'table'
   | 'org-chart'
   | 'scroll-panel'
@@ -269,6 +270,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     ],
   },
   layout: gIconLayout,
+  splitter: {
+    viewBox: VB,
+    paths: ['M12 4v16', 'M12 9l-2 3 2 3', 'M12 9l2 3-2 3'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
+  },
   table: gIconTable,
   'org-chart': {
     viewBox: VB,

@@ -193,6 +193,11 @@ export const routes: Routes = [
     title: 'Organization Chart — OpenDesign',
   },
   {
+    path: 'components/splitter',
+    loadComponent: () => import('./pages/splitter.page'),
+    title: 'Splitter — OpenDesign',
+  },
+  {
     path: 'components/scroll-panel',
     loadComponent: () => import('./pages/scroll-panel.page'),
     title: 'Scroll Panel — OpenDesign',

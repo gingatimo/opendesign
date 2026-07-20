@@ -147,7 +147,8 @@ tâm điểm: khung 3 card, card giữa phóng to, 2 bên peek; `[(active)]`; `l
 `g-dock-menu`.
 
 **Cấu trúc:** `GContainer` `[gContainer]` · `GStack` `g-stack` · `GGrid` `g-grid`
-(`cols` hoặc `minColWidth`) · `GLayout` `g-layout` · `GScrollPanel` `g-scroll-panel`.
+(`cols` hoặc `minColWidth`) · `GLayout` `g-layout` · `GSplitter` `g-splitter` (chia panel có thanh kéo;
+panel qua `<ng-template gSplitterPanel>`; `orientation`, `[sizes]`) · `GScrollPanel` `g-scroll-panel`.
 
 **Dữ liệu:** `GTable` `table[gTable]` (`striped`) · `GTableContainer` `g-table-container`
 (`minRows`/`maxRows`) · `GSortHeader` `[gSortHeader]` · `GFreezeColumn`/`GFreezeRow`
