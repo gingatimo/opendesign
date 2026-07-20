@@ -13,6 +13,12 @@ import {
 import { GIcon } from '../icon/icon';
 import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
 
+// Căn item theo trục dọc (khi các item khác chiều cao). Map sang align-items của track.
+export type GCarouselAlign = 'stretch' | 'start' | 'center' | 'end';
+// Vị trí nút prev/next: 'overlay' đè lên track (opacity nhẹ, rê vào hiện rõ) · 'flanking' nằm ngoài
+// track ở hai mép, không đè lên nội dung.
+export type GCarouselNav = 'overlay' | 'flanking';
+
 // Băng chuyền NỘI DUNG BẤT KỲ (project card qua <ng-content>). Track cuộn ngang + scroll-snap: mỗi item
 // giữ bề rộng TỰ NHIÊN nên xử lý được cả item bằng nhau lẫn khác nhau (vd. thẻ ngang + thẻ dọc). Nút
 // prev/next cuộn ĐÚNG một item mỗi lần (dò offsetLeft, không phụ thuộc bề rộng cố định) và tự ẩn ở
@@ -36,6 +42,7 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
       #track
       class="g-carousel__track"
       [class.g-carousel__track--center]="center()"
+      [attr.data-align]="align()"
       tabindex="0"
       role="group"
       aria-roledescription="băng chuyền"
@@ -58,12 +65,20 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
   `,
   styleUrl: './carousel.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'g-carousel' },
+  host: {
+    class: 'g-carousel',
+    '[class.g-carousel--flanking]': "navPlacement() === 'flanking'",
+    '[class.g-carousel--overlay]': "navPlacement() === 'overlay'",
+  },
 })
 export class GCarousel {
   // Căn GIỮA các item khi chúng vừa khung (safe center → tự lùi về mép trái khi tràn để vẫn cuộn/hiện
   // nút được). Mặc định căn trái (item kế peek ở mép phải như băng chuyền thường).
   readonly center = input(false, { transform: booleanAttribute });
+  // Căn item theo trục dọc khi khác chiều cao (map align-items). Mặc định 'stretch'.
+  readonly align = input<GCarouselAlign>('stretch');
+  // Vị trí nút prev/next. Mặc định 'flanking' (nút nằm ngoài, không đè lên nội dung).
+  readonly navPlacement = input<GCarouselNav>('flanking');
 
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
   private readonly destroyRef = inject(DestroyRef);

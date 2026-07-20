@@ -75,7 +75,7 @@ File theme cũng khai báo sẵn `color-scheme: light`/`dark` tương ứng — 
 
 ## Component
 
-Nút (Button, Fab, Icon Button) · Form (Input, Textarea, Checkbox, Toggle, Radio, Select, File Input, Datepicker, Date Range Picker, Time Picker, Color Picker, Slider, Cascade Select, Tree Select, Chips, Input OTP, Search Field) · Hiển thị (Alert, Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Divider, Image Preview, Image Slider, Carousel, Gallery, Media Player, Skeleton, Timeline) · Overlay (Dialog, Drawer, Tooltip, Toast) · Điều hướng (Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb, Menu, Accordion, Dock Menu) · Cấu trúc (Layout, Container, Stack, Grid, Scroll Panel) · Dữ liệu (Table + Table Container).
+Nút (Button, Fab, Icon Button) · Form (Input, Textarea, Checkbox, Toggle, Radio, Select, File Input, Datepicker, Date Range Picker, Time Picker, Color Picker, Slider, Cascade Select, Tree Select, Chips, Input OTP, Search Field) · Hiển thị (Alert, Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Divider, Image Preview, Image Slider, Carousel, Coverflow, Gallery, Media Player, Skeleton, Timeline) · Overlay (Dialog, Drawer, Tooltip, Toast) · Điều hướng (Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb, Menu, Accordion, Dock Menu) · Cấu trúc (Layout, Container, Stack, Grid, Scroll Panel) · Dữ liệu (Table + Table Container).
 
 ## Yêu cầu
 

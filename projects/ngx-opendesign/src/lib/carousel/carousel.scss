@@ -1,6 +1,49 @@
 :host {
-  position: relative;
   display: block;
+}
+
+// FLANKING (mặc định): nút nằm NGOÀI track ở hai mép, track co lại — nút không đè lên nội dung.
+:host(.g-carousel--flanking) {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+}
+:host(.g-carousel--flanking) .g-carousel__track {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+:host(.g-carousel--flanking) .g-carousel__nav {
+  flex: 0 0 auto;
+}
+// Ẩn nhưng GIỮ CHỖ (không đổi layout khi nút hiện/ẩn lúc cuộn).
+:host(.g-carousel--flanking) .g-carousel__nav--hidden {
+  visibility: hidden;
+}
+
+// OVERLAY: nút ĐÈ lên track ở hai mép; opacity nhẹ lúc nghỉ, rê/focus vào thì hiện rõ.
+:host(.g-carousel--overlay) {
+  position: relative;
+}
+:host(.g-carousel--overlay) .g-carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  opacity: 0.55;
+}
+:host(.g-carousel--overlay) .g-carousel__nav:hover,
+:host(.g-carousel--overlay) .g-carousel__nav:focus-visible {
+  opacity: 1;
+}
+:host(.g-carousel--overlay) .g-carousel__nav--prev {
+  left: var(--g-space-2);
+}
+:host(.g-carousel--overlay) .g-carousel__nav--next {
+  right: var(--g-space-2);
+}
+:host(.g-carousel--overlay) .g-carousel__nav--hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .g-carousel__track {
@@ -28,12 +71,21 @@
   justify-content: safe center;
 }
 
-// Nút điều hướng nổi trên hai mép, tự ẩn ở biên (không còn chỗ cuộn về hướng đó).
+// Căn dọc item khi các item khác chiều cao (map align-items).
+.g-carousel__track[data-align='start'] {
+  align-items: flex-start;
+}
+.g-carousel__track[data-align='center'] {
+  align-items: center;
+}
+.g-carousel__track[data-align='end'] {
+  align-items: flex-end;
+}
+.g-carousel__track[data-align='stretch'] {
+  align-items: stretch;
+}
+
 .g-carousel__nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -45,14 +97,9 @@
   color: var(--g-text);
   box-shadow: var(--g-shadow-md);
   cursor: pointer;
-  transition: opacity var(--g-duration-fast) var(--g-ease);
-}
-
-.g-carousel__nav--prev {
-  left: var(--g-space-2);
-}
-.g-carousel__nav--next {
-  right: var(--g-space-2);
+  transition:
+    opacity var(--g-duration-fast) var(--g-ease),
+    background-color var(--g-duration-fast) var(--g-ease);
 }
 
 .g-carousel__nav:hover {
@@ -61,11 +108,6 @@
 .g-carousel__nav:focus-visible {
   outline: none;
   box-shadow: var(--g-focus-ring);
-}
-
-.g-carousel__nav--hidden {
-  opacity: 0;
-  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

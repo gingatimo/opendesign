@@ -49,6 +49,7 @@ export * from './lib/file-input/file-input';
 export * from './lib/image-preview/image-preview';
 export * from './lib/image-slider/image-slider';
 export * from './lib/carousel/carousel';
+export * from './lib/coverflow/coverflow';
 export * from './lib/gallery/gallery';
 export * from './lib/divider/divider';
 export * from './lib/fab/fab';

@@ -41,6 +41,7 @@ export type NavIcon =
   | 'image-preview'
   | 'image-slider'
   | 'carousel'
+  | 'coverflow'
   | 'gallery'
   | 'media-player'
   | 'divider'
@@ -162,6 +163,14 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { x: 8, y: 5, width: 8, height: 14, rx: 2 },
       { x: 2, y: 8, width: 3, height: 8, rx: 1 },
       { x: 19, y: 8, width: 3, height: 8, rx: 1 },
+    ],
+  },
+  coverflow: {
+    viewBox: VB,
+    rects: [
+      { x: 8, y: 3, width: 8, height: 18, rx: 2 },
+      { x: 3, y: 8, width: 3, height: 8, rx: 1 },
+      { x: 18, y: 8, width: 3, height: 8, rx: 1 },
     ],
   },
   gallery: {

@@ -56,10 +56,16 @@
   color: #fff;
   background: rgb(255 255 255 / 12%);
   cursor: pointer;
-  transition: background-color var(--g-duration-fast) var(--g-ease);
+  // Mờ đi lúc nghỉ để không che nội dung phía sau; rê/focus vào thì hiện rõ.
+  opacity: 0.45;
+  transition:
+    background-color var(--g-duration-fast) var(--g-ease),
+    opacity var(--g-duration-fast) var(--g-ease);
 }
-.g-lightbox__btn:hover {
+.g-lightbox__btn:hover,
+.g-lightbox__btn:focus-visible {
   background: rgb(255 255 255 / 25%);
+  opacity: 1;
 }
 .g-lightbox__btn:focus-visible {
   outline: 2px solid #fff;

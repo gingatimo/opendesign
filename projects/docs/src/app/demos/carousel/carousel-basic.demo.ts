@@ -10,15 +10,24 @@ interface MixedCard {
   selector: 'docs-carousel-basic-demo',
   imports: [GCarousel],
   template: `
-    <p class="cr-demo__label">Item cùng kích thước</p>
+    <p class="cr-demo__label">Item cùng kích thước — nút flanking (mặc định, không đè lên card)</p>
     <g-carousel>
       @for (n of equalItems; track n) {
         <div class="cr-demo__card cr-demo__card--equal">Thẻ {{ n }}</div>
       }
     </g-carousel>
 
-    <p class="cr-demo__label">Item khác kích thước — thẻ ngang (như thẻ tín dụng) xen thẻ dọc</p>
-    <g-carousel>
+    <p class="cr-demo__label">Nút overlay — đè lên track, mờ nhẹ lúc nghỉ, rê vào hiện rõ</p>
+    <g-carousel navPlacement="overlay">
+      @for (n of equalItems; track n) {
+        <div class="cr-demo__card cr-demo__card--equal">Thẻ {{ n }}</div>
+      }
+    </g-carousel>
+
+    <p class="cr-demo__label">
+      Item khác kích thước (thẻ ngang xen thẻ dọc) — <code>align="center"</code> căn dọc giữa
+    </p>
+    <g-carousel align="center">
       @for (c of mixedItems; track $index) {
         <div
           class="cr-demo__card"

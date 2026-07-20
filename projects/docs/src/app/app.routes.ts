@@ -243,6 +243,11 @@ export const routes: Routes = [
     title: 'Carousel — OpenDesign',
   },
   {
+    path: 'components/coverflow',
+    loadComponent: () => import('./pages/coverflow.page'),
+    title: 'Coverflow — OpenDesign',
+  },
+  {
     path: 'components/gallery',
     loadComponent: () => import('./pages/gallery.page'),
     title: 'Gallery — OpenDesign',

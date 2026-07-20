@@ -47,6 +47,20 @@ import { CarouselBasicDemo } from '../demos/carousel/carousel-basic.demo';
 export default class CarouselPage {
   protected readonly apiRows: ApiRow[] = [
     {
+      name: 'navPlacement',
+      type: "'overlay' | 'flanking'",
+      default: "'flanking'",
+      description:
+        "Vị trí nút prev/next. 'flanking' nằm ngoài track (không đè lên card); 'overlay' đè lên track, mờ nhẹ lúc nghỉ, rê/focus vào hiện rõ.",
+    },
+    {
+      name: 'align',
+      type: "'stretch' | 'start' | 'center' | 'end'",
+      default: "'stretch'",
+      description:
+        'Căn item theo trục dọc khi các item khác chiều cao (map align-items của track).',
+    },
+    {
       name: 'center',
       type: 'boolean',
       default: 'false',

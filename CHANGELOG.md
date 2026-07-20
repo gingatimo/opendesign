@@ -20,11 +20,21 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   dùng scroll-snap giữ **bề rộng tự nhiên** của item nên chạy đúng cả khi item **cùng kích thước** lẫn
   **khác kích thước** (thẻ ngang kiểu thẻ tín dụng xen thẻ dọc). Nút prev/next cuộn đúng một item và tự
   ẩn/`disabled` ở biên; track điều hướng được bằng phím ←/→. `center` căn giữa item khi vừa khung (tràn
-  thì tự lùi về mép trái để vẫn cuộn/hiện nút). Khác `GImageSlider` (một ảnh/khung).
+  thì tự lùi về mép trái để vẫn cuộn/hiện nút). `navPlacement` `overlay | flanking` (mặc định flanking —
+  nút ngoài track, không đè; overlay đè lên track với opacity nhẹ). `align` `stretch | start | center |
+end` căn item theo trục dọc khi khác chiều cao. Khác `GImageSlider` (một ảnh/khung).
+- **`GCoverflow`** (`g-coverflow`): băng chuyền **tâm điểm** — khung hiện 3 card, card **giữa** phóng to,
+  hai bên **peek** một phần card trước/sau. Chạy theo active index (bấm nút prev/next, bấm thẳng card bên
+  cạnh, hoặc phím ←/→); `[(active)]` hai chiều. Chiếu card qua slot. Khác `GCarousel` (free-scroll).
 - **`GGallery`** (`g-gallery`): gallery ảnh kiểu trang bán hàng — ảnh chính lớn + dải thumbnail, bấm
   thumbnail đổi ảnh chính, bấm ảnh chính mở lightbox. Dải thumbnail dùng `GCarousel` (center): **căn
   giữa** khi ít ảnh, tự có **nút trái/phải** khi danh sách dài. `[images]` nhận `string | File` (File tự
   tạo/thu hồi objectURL). Khác `GImagePreview` (lưới thumbnail).
+
+### Changed
+
+- **GLightbox** (dùng bởi `GImagePreview`/`GGallery`): nút điều khiển (zoom −/+, đóng, prev/next) nay
+  **mờ nhẹ** (opacity 0.45) lúc nghỉ, rê/focus vào mới hiện rõ — đỡ che nội dung phía sau.
 
 ## [0.14.0] — 2026-07-20
 

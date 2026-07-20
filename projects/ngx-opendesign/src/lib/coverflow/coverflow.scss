@@ -1,0 +1,61 @@
+// Nút prev/next flanking (nằm ngoài viewport, sát mép, không đè lên card).
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+}
+
+.g-coverflow__viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  // Khung chỉ hiện phần card active + peek hai bên; phần thừa của track bị cắt.
+  overflow: hidden;
+}
+
+.g-coverflow__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-3);
+  transition: transform var(--g-duration-base) var(--g-ease);
+  will-change: transform;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--g-focus-ring);
+    border-radius: var(--g-radius-md);
+  }
+}
+
+.g-coverflow__nav {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  box-shadow: var(--g-shadow-md);
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-coverflow__nav:hover {
+  background: var(--g-surface);
+}
+.g-coverflow__nav:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+// Ẩn nhưng GIỮ CHỖ (không đổi layout khi nút hiện/ẩn ở biên).
+.g-coverflow__nav--hidden {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-coverflow__track {
+    transition: none;
+  }
+}
