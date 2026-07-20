@@ -2,6 +2,7 @@ import {
   afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   signal,
   viewChild,
@@ -14,7 +15,10 @@ import {
   GIcon,
   GIconButton,
   GInput,
+  GInputGroup,
+  GInputSuffix,
   GScrollPanel,
+  gIconMic,
   gIconSend,
 } from 'ngx-opendesign';
 
@@ -44,7 +48,18 @@ function botReply(text: string): string {
 
 @Component({
   selector: 'docs-chatbot-demo',
-  imports: [GAvatar, GBadge, GCard, GChip, GIcon, GIconButton, GInput, GScrollPanel],
+  imports: [
+    GAvatar,
+    GBadge,
+    GCard,
+    GChip,
+    GIcon,
+    GIconButton,
+    GInput,
+    GInputGroup,
+    GInputSuffix,
+    GScrollPanel,
+  ],
   template: `
     <g-card class="chatbot">
       <div class="chatbot__header">
@@ -90,10 +105,9 @@ function botReply(text: string): string {
         }
       </div>
 
-      <div class="chatbot__input">
+      <g-input-group class="chatbot__input">
         <input
           gInput
-          class="chatbot__field"
           type="text"
           placeholder="Nhập tin nhắn…"
           [value]="draft()"
@@ -101,16 +115,20 @@ function botReply(text: string): string {
           (keydown.enter)="send()"
           aria-label="Nội dung tin nhắn"
         />
+        <!-- Suffix: mặc định icon micro (ghi âm), có chữ thì đổi sang icon gửi. -->
         <button
+          type="button"
           g-icon-button
-          variant="primary"
-          aria-label="Gửi"
-          [disabled]="!draft().trim() || typing()"
-          (click)="send()"
+          gInputSuffix
+          size="sm"
+          [class.chatbot__send--active]="hasText()"
+          [attr.aria-label]="hasText() ? 'Gửi' : 'Ghi âm'"
+          [disabled]="typing()"
+          (click)="onSuffix()"
         >
-          <g-icon [icon]="iconSend" size="sm" />
+          <g-icon [icon]="hasText() ? iconSend : iconMic" size="sm" />
         </button>
-      </div>
+      </g-input-group>
     </g-card>
   `,
   styles: `
@@ -208,19 +226,17 @@ function botReply(text: string): string {
       outline: none;
       box-shadow: var(--g-focus-ring);
     }
-    .chatbot__input {
-      display: flex;
-      align-items: center;
-      gap: var(--g-space-2);
-    }
-    .chatbot__field {
-      flex: 1;
+    /* .chatbot__input LÀ g-input-group — nó tự lo viền pill + bố cục input/suffix. Chỉ tô màu chính
+       cho icon gửi khi đã có chữ để nút nổi lên như hành động chính. */
+    .chatbot__send--active {
+      color: var(--g-primary);
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatbotDemo {
   protected readonly iconSend = gIconSend;
+  protected readonly iconMic = gIconMic;
   protected readonly quickReplies = [
     'Giới thiệu OpenDesign',
     'Hỗ trợ dark mode?',
@@ -232,6 +248,8 @@ export class ChatbotDemo {
   ]);
   protected readonly draft = signal('');
   protected readonly typing = signal(false);
+  // Có chữ chưa → quyết định icon suffix (send) vs mặc định (mic).
+  protected readonly hasText = computed(() => this.draft().trim().length > 0);
 
   private nextId = 2;
   // read: ElementRef — không có nó, #scroller trên <g-scroll-panel> trả về INSTANCE component
@@ -252,6 +270,11 @@ export class ChatbotDemo {
 
   protected send(): void {
     this.sendText(this.draft());
+  }
+
+  // Nút suffix: có chữ → gửi; rỗng → mic (ghi âm chỉ là minh hoạ, không làm gì trong demo).
+  protected onSuffix(): void {
+    if (this.hasText()) this.send();
   }
 
   protected sendText(text: string): void {

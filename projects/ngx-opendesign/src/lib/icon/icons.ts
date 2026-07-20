@@ -338,3 +338,10 @@ export const gIconSend: GIconGlyph = {
   viewBox: VIEW_BOX_24,
   paths: ['M22 2L11 13', 'M22 2L15 22L11 13L2 9L22 2Z'],
 };
+
+// Micro — nhập giọng nói (vd. nút mic mặc định trong ô chat khi chưa gõ chữ).
+export const gIconMic: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  rects: [{ x: 9, y: 2, width: 6, height: 11, rx: 3 }],
+  paths: ['M5 11v1a7 7 0 0 0 14 0v-1', 'M12 19v3', 'M8 22h8'],
+};

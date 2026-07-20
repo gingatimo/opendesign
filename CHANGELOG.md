@@ -12,9 +12,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **`SKILL.md`** ship kèm npm package — hướng dẫn cho AI coding agent (pattern bắt buộc, form control
   CVA, bẫy thường gặp, bảng tra component + selector). Agent trong dự án consumer đọc được ở
   `node_modules/ngx-opendesign/SKILL.md`. README npm cũng đưa "Tài liệu" lên trước "Cài đặt".
-- **Icon**: thêm `gIconSend` (máy bay giấy, dùng cho nút gửi chat/bình luận) vào bộ public (47 → 48).
+- **Icon**: thêm `gIconSend` (máy bay giấy) và `gIconMic` (micro) vào bộ public (47 → 49).
 - **Docs**: thêm màn **Chatbot** vào Playbook — khung chat tương tác (gõ/chip gợi ý → typing → bot trả
-  lời mẫu; tự cuộn xuống đáy) ghép GCard + GScrollPanel + GAvatar + GChip + GInput + GIconButton.
+  lời mẫu; tự cuộn xuống đáy) ghép GCard + GScrollPanel + GAvatar + GChip + `GInputGroup` với nút
+  suffix đổi icon `gIconMic` ↔ `gIconSend` theo có chữ chưa.
 
 ## [0.13.0] — 2026-07-20
 

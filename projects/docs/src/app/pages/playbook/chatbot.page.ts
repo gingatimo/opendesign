@@ -11,8 +11,9 @@ import { ChatbotDemo } from '../../demos/playbook/chatbot.demo';
       Khung chat tương tác thật: gõ tin (hoặc bấm chip gợi ý) → tin hiện bên phải, bot "soạn" (chấm
       nhảy) rồi trả lời mẫu theo từ khoá. Ghép <code>GCard</code> + <code>GAvatar</code> +
       <code>GBadge</code> + <code>GScrollPanel</code> (tự cuộn xuống đáy khi có tin mới bằng
-      <code>afterRenderEffect</code>) + <code>GChip</code> gợi ý + <code>GInput</code> và
-      <code>GIconButton</code> gửi (icon <code>gIconSend</code>).
+      <code>afterRenderEffect</code>) + <code>GChip</code> gợi ý + ô nhập
+      <code>GInputGroup</code> với nút suffix đổi icon theo ngữ cảnh: mặc định
+      <code>gIconMic</code> (ghi âm), có chữ thì chuyển <code>gIconSend</code> (gửi).
     </p>
     <docs-demo-section>
       <docs-chatbot-demo />
