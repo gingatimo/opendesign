@@ -7,6 +7,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ## [Unreleased]
 
+## [0.11.0] — 2026-07-20
+
 ### Added
 
 - **GTreeSelect**: chế độ `multiple` — chọn nhiều node bằng checkbox lan truyền (cascade) + tri-state
