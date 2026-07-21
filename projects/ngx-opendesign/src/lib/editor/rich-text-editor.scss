@@ -79,20 +79,38 @@
   font-size: var(--g-font-size-sm);
 }
 
-// Khay phụ (nhập URL, chọn màu, kích thước bảng) hiện ngay dưới toolbar.
-.g-rte__bar {
+// Popover của toolbar (liên kết, bảng) — cùng dáng với bảng màu, neo vào đúng nút bấm.
+.g-rte__pop {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--g-space-2);
-  padding: var(--g-space-2);
-  border-bottom: 1px solid var(--g-border);
-  background: var(--g-surface);
+  flex-direction: column;
+  gap: var(--g-space-3);
+  min-width: 260px;
+  padding: var(--g-space-3);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-lg);
 }
+.g-rte__pop:focus-visible {
+  outline: none;
+}
+.g-rte__pop-row {
+  display: flex;
+  gap: var(--g-space-3);
+}
+.g-rte__pop-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--g-space-2);
+}
+.g-rte__pop-actions .g-rte__btn {
+  border-color: var(--g-border);
+}
+// Ô nhập trong popover. KHÔNG dùng flex-basis: nhãn xếp dọc nên basis sẽ thành CHIỀU CAO.
 .g-rte__input {
-  flex: 1 1 220px;
-  min-width: 0;
+  width: 100%;
   height: 30px;
+  box-sizing: border-box;
   padding: 0 var(--g-space-2);
   border: 1px solid var(--g-border);
   border-radius: var(--g-radius-sm);
@@ -110,17 +128,16 @@
   border-color: var(--g-danger-solid);
 }
 .g-rte__input--num {
-  flex: 0 0 64px;
+  width: 76px;
 }
 .g-rte__field {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--g-space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-1);
   color: var(--g-text-muted);
   font-size: var(--g-font-size-sm);
 }
 .g-rte__err {
-  flex: 1 1 100%;
   color: var(--g-danger-solid);
   font-size: var(--g-font-size-sm);
 }

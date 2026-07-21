@@ -135,6 +135,13 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         trị nạp lại từ ngoài sẽ mất sạch ô tick. Bấm vào ô vuông để tick, bấm vào chữ để gõ.
       </li>
       <li>
+        <b>Liên kết</b>: popover có <b>hai ô</b> — văn bản hiển thị và địa chỉ. Bôi đen sẵn thì chữ
+        được điền vào ô đầu và con trỏ nhảy thẳng sang ô địa chỉ. Giữ nguyên chữ thì dùng
+        <code>createLink</code> nên định dạng bên trong (đậm, màu…) còn nguyên; đổi chữ hoặc chưa
+        chọn gì thì chèn thẻ <code>&lt;a&gt;</code> mới. Đứng trong một liên kết rồi mở lại =
+        <b>sửa</b> (điền sẵn cả hai ô).
+      </li>
+      <li>
         <b>Bảng</b>: nút chèn tạo bảng rỗng (hàng đầu là <code>&lt;th&gt;</code>) kèm một đoạn trống
         phía sau để con trỏ thoát ra được. Gõ trong ô là contenteditable thường; thêm/xoá hàng cột
         sau khi chèn thì chưa có — cần thao tác bảng đầy đủ nên dùng engine ProseMirror/TipTap.

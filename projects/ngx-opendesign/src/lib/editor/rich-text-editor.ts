@@ -221,17 +221,71 @@ let hintCounter = 0;
         <span class="g-rte__sep"></span>
 
         <button
+          #linkTrigger
           type="button"
           class="g-rte__btn"
           [class.g-rte__btn--active]="panel() === 'link'"
           aria-label="Chèn liên kết"
+          aria-haspopup="true"
           [attr.aria-expanded]="panel() === 'link'"
           [disabled]="isDisabled()"
-          (mousedown)="$event.preventDefault()"
+          (mousedown)="saveSelection(); $event.preventDefault()"
           (click)="openLink()"
         >
           <g-icon [icon]="iconLink" size="sm" />
         </button>
+        <ng-template
+          cdkConnectedOverlay
+          [cdkConnectedOverlayOrigin]="linkTriggerRef()!"
+          [cdkConnectedOverlayOpen]="panel() === 'link'"
+          [cdkConnectedOverlayPositions]="menuPositions"
+          cdkConnectedOverlayHasBackdrop
+          cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+          (backdropClick)="closePanel()"
+          (detach)="closePanel()"
+        >
+          <!-- Không bật autoCapture: nó luôn nhảy vào ô ĐẦU, trong khi ta muốn con trỏ vào ô còn
+               trống (thường là Địa chỉ khi chữ đã lấy từ đoạn bôi đen). Focus do effect đặt. -->
+          <div class="g-rte__pop" cdkTrapFocus>
+            <label class="g-rte__field">
+              <span>Văn bản hiển thị</span>
+              <input
+                #linkText
+                type="text"
+                class="g-rte__input"
+                placeholder="Tên hiển thị (bỏ trống = dùng địa chỉ)"
+                (keydown.enter)="applyLink(linkText.value, linkUrl.value)"
+                (keydown.escape)="closePanel()"
+              />
+            </label>
+            <label class="g-rte__field">
+              <span>Địa chỉ</span>
+              <input
+                #linkUrl
+                type="url"
+                class="g-rte__input"
+                placeholder="https://vi-du.com"
+                [attr.aria-invalid]="linkError() || null"
+                [class.g-rte__input--invalid]="linkError()"
+                (keydown.enter)="applyLink(linkText.value, linkUrl.value)"
+                (keydown.escape)="closePanel()"
+              />
+            </label>
+            @if (linkError()) {
+              <span class="g-rte__err">Chỉ nhận http, https, mailto hoặc tel.</span>
+            }
+            <div class="g-rte__pop-actions">
+              <button
+                type="button"
+                class="g-rte__btn"
+                (click)="applyLink(linkText.value, linkUrl.value)"
+              >
+                Áp dụng
+              </button>
+              <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
+            </div>
+          </div>
+        </ng-template>
         <button
           type="button"
           class="g-rte__btn"
@@ -243,17 +297,68 @@ let hintCounter = 0;
           <g-icon [icon]="iconUnlink" size="sm" />
         </button>
         <button
+          #tableTrigger
           type="button"
           class="g-rte__btn"
           [class.g-rte__btn--active]="panel() === 'table'"
           aria-label="Chèn bảng"
+          aria-haspopup="true"
           [attr.aria-expanded]="panel() === 'table'"
           [disabled]="isDisabled()"
-          (mousedown)="$event.preventDefault()"
+          (mousedown)="saveSelection(); $event.preventDefault()"
           (click)="togglePanel('table')"
         >
           <g-icon [icon]="iconTable" size="sm" />
         </button>
+        <ng-template
+          cdkConnectedOverlay
+          [cdkConnectedOverlayOrigin]="tableTriggerRef()!"
+          [cdkConnectedOverlayOpen]="panel() === 'table'"
+          [cdkConnectedOverlayPositions]="menuPositions"
+          cdkConnectedOverlayHasBackdrop
+          cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+          (backdropClick)="closePanel()"
+          (detach)="closePanel()"
+        >
+          <div class="g-rte__pop" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+            <div class="g-rte__pop-row">
+              <label class="g-rte__field">
+                <span>Hàng</span>
+                <input
+                  #rowsInput
+                  type="number"
+                  class="g-rte__input g-rte__input--num"
+                  min="1"
+                  max="20"
+                  value="3"
+                  (keydown.escape)="closePanel()"
+                />
+              </label>
+              <label class="g-rte__field">
+                <span>Cột</span>
+                <input
+                  #colsInput
+                  type="number"
+                  class="g-rte__input g-rte__input--num"
+                  min="1"
+                  max="10"
+                  value="3"
+                  (keydown.escape)="closePanel()"
+                />
+              </label>
+            </div>
+            <div class="g-rte__pop-actions">
+              <button
+                type="button"
+                class="g-rte__btn"
+                (click)="applyTable(rowsInput.value, colsInput.value)"
+              >
+                Chèn bảng
+              </button>
+              <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
+            </div>
+          </div>
+        </ng-template>
         <span class="g-rte__sep"></span>
 
         <button
@@ -267,64 +372,6 @@ let hintCounter = 0;
           T&#818;x&#818;
         </button>
       </div>
-
-      @if (panel() === 'link') {
-        <div class="g-rte__bar">
-          <input
-            #linkInput
-            type="url"
-            class="g-rte__input"
-            placeholder="https://vi-du.com"
-            aria-label="Địa chỉ liên kết"
-            [attr.aria-invalid]="linkError() || null"
-            [class.g-rte__input--invalid]="linkError()"
-            (keydown.enter)="applyLink(linkInput.value)"
-            (keydown.escape)="closePanel()"
-          />
-          <button type="button" class="g-rte__btn" (click)="applyLink(linkInput.value)">
-            Áp dụng
-          </button>
-          <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
-          @if (linkError()) {
-            <span class="g-rte__err">Chỉ nhận http, https, mailto hoặc tel.</span>
-          }
-        </div>
-      }
-
-      @if (panel() === 'table') {
-        <div class="g-rte__bar">
-          <label class="g-rte__field">
-            Hàng
-            <input
-              #rowsInput
-              type="number"
-              class="g-rte__input g-rte__input--num"
-              min="1"
-              max="20"
-              value="3"
-            />
-          </label>
-          <label class="g-rte__field">
-            Cột
-            <input
-              #colsInput
-              type="number"
-              class="g-rte__input g-rte__input--num"
-              min="1"
-              max="10"
-              value="3"
-            />
-          </label>
-          <button
-            type="button"
-            class="g-rte__btn"
-            (click)="applyTable(rowsInput.value, colsInput.value)"
-          >
-            Chèn bảng
-          </button>
-          <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
-        </div>
-      }
 
       <div
         #editable
@@ -451,15 +498,19 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   // Mark vừa bật/tắt tại con trỏ RỖNG: DOM chưa có gì để dò, nên nhớ tay cho tới khi gõ/di chuyển.
   private pendingMarks = new Set<string>();
   private pendingAt: { node: Node; offset: number } | null = null;
-  // href điền sẵn cho ô URL khi mở popover liên kết.
+  // Giá trị điền sẵn cho hai ô của popover liên kết (địa chỉ + chữ hiển thị).
   private linkDraft = '';
+  private textDraft = '';
   // Vừa bấm Esc → lần Tab kế tiếp KHÔNG thụt lề mà rời khỏi vùng soạn (lối thoát bàn phím).
   private tabExits = false;
 
   private readonly editable = viewChild<ElementRef<HTMLElement>>('editable');
   private readonly toolbar = viewChild<ElementRef<HTMLElement>>('toolbar');
-  private readonly linkInput = viewChild<ElementRef<HTMLInputElement>>('linkInput');
+  private readonly linkUrlInput = viewChild<ElementRef<HTMLInputElement>>('linkUrl');
+  private readonly linkTextInput = viewChild<ElementRef<HTMLInputElement>>('linkText');
   protected readonly colorTriggerRef = viewChild<ElementRef<HTMLButtonElement>>('colorTrigger');
+  protected readonly linkTriggerRef = viewChild<ElementRef<HTMLButtonElement>>('linkTrigger');
+  protected readonly tableTriggerRef = viewChild<ElementRef<HTMLButtonElement>>('tableTrigger');
 
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
@@ -476,15 +527,19 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
         this.lastInternal = clean;
       }
     });
-    // Ô URL vừa hiện ra thì điền sẵn href cũ và đặt con trỏ vào — viewChild là signal nên effect này
-    // chạy đúng lúc phần tử xuất hiện trong DOM.
+    // Popover liên kết vừa hiện ra thì điền sẵn hai ô và đặt con trỏ vào ô cần gõ nhất — viewChild là
+    // signal nên effect này chạy đúng lúc phần tử xuất hiện trong DOM.
     effect(() => {
       if (this.panel() !== 'link') return;
-      const input = this.linkInput()?.nativeElement;
-      if (!input) return;
-      input.value = this.linkDraft;
-      input.focus();
-      input.select();
+      const urlInput = this.linkUrlInput()?.nativeElement;
+      const textInput = this.linkTextInput()?.nativeElement;
+      if (!urlInput || !textInput) return;
+      urlInput.value = this.linkDraft;
+      textInput.value = this.textDraft;
+      // Đã có sẵn chữ (bôi đen hoặc sửa link cũ) thì việc còn lại là nhập địa chỉ.
+      const target = textInput.value ? urlInput : textInput;
+      target.focus();
+      target.select();
     });
     afterNextRender(() => {
       // Cập nhật trạng thái nút khi con trỏ di chuyển trong vùng soạn.
@@ -739,29 +794,45 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
       return;
     }
     this.saveSelection();
-    // Đang đứng trong một liên kết thì mở ra để SỬA (điền sẵn href cũ).
-    this.linkDraft = activeLink(el)?.getAttribute('href') ?? '';
+    // Đang đứng trong một liên kết thì mở ra để SỬA (điền sẵn địa chỉ + chữ cũ); còn không thì lấy
+    // đoạn đang bôi đen làm chữ hiển thị.
+    const anchor = activeLink(el);
+    this.linkDraft = anchor?.getAttribute('href') ?? '';
+    this.textDraft = anchor?.textContent ?? document.getSelection()?.toString() ?? '';
     this.linkError.set(false);
     this.panel.set('link');
   }
 
-  protected applyLink(raw: string): void {
-    const url = safeLinkUrl(raw);
+  protected applyLink(text: string, rawUrl: string): void {
+    const url = safeLinkUrl(rawUrl);
     if (!url) {
       this.linkError.set(true);
       return;
     }
     this.restoreSelection();
+    const el = this.editable()?.nativeElement;
     const sel = document.getSelection();
-    if (sel?.isCollapsed) {
-      // Không có chữ nào được chọn → chèn hẳn thẻ <a> mới, lấy chính URL làm nhãn. Dựng bằng DOM rồi
-      // đọc outerHTML để URL được escape đúng cách (không nối chuỗi HTML tay).
+    // Đang sửa một liên kết có sẵn (con trỏ nằm trong nó) → chọn cả thẻ để thay thế trọn vẹn.
+    const anchor = el ? activeLink(el) : null;
+    if (anchor && sel?.isCollapsed) {
+      const range = document.createRange();
+      range.selectNodeContents(anchor);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    const selected = sel?.toString() ?? '';
+    const label = text.trim() || selected || url;
+
+    if (selected && label === selected) {
+      // Chữ giữ nguyên → `createLink` bọc quanh đoạn chọn, giữ được định dạng bên trong (đậm, màu…).
+      applyCommand('createLink', url);
+    } else {
+      // Có chữ mới (hoặc chưa chọn gì) → chèn thẻ <a> dựng bằng DOM, nhờ vậy URL và chữ được escape
+      // đúng cách thay vì nối chuỗi HTML tay.
       const a = document.createElement('a');
       a.href = url;
-      a.textContent = url;
+      a.textContent = label;
       applyCommand('insertHTML', a.outerHTML);
-    } else {
-      applyCommand('createLink', url);
     }
     this.panel.set('none');
     this.commit();
