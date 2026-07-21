@@ -799,3 +799,39 @@ export const gIconCode: GIconGlyph = {
   viewBox: VIEW_BOX_24,
   paths: ['M16 18l6-6-6-6', 'M8 6l-6 6 6 6'],
 };
+
+// Hoàn tác (undo) — mũi tên quay ngược sang trái.
+export const gIconUndo: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M9 14L4 9l5-5', 'M20 20v-7a4 4 0 0 0-4-4H4'],
+};
+
+// Làm lại (redo) — mũi tên quay ngược sang phải.
+export const gIconRedo: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M15 14l5-5-5-5', 'M4 20v-7a4 4 0 0 1 4-4h12'],
+};
+
+// Căn trái.
+export const gIconAlignLeft: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M21 6H3', 'M17 10H3', 'M21 14H3', 'M17 18H3'],
+};
+
+// Căn giữa.
+export const gIconAlignCenter: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M21 6H3', 'M18 10H6', 'M21 14H3', 'M18 18H6'],
+};
+
+// Căn phải.
+export const gIconAlignRight: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M21 6H3', 'M21 10H7', 'M21 14H3', 'M21 18H7'],
+};
+
+// Bỏ liên kết (unlink) — mắt xích bị gạch chéo.
+export const gIconUnlink: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M15 7h3a5 5 0 0 1 3.54 8.54', 'M9 17H6A5 5 0 0 1 6 7h3', 'M3 3l18 18'],
+};

@@ -5,7 +5,7 @@ import { GRichTextEditor } from 'ngx-opendesign';
   selector: 'docs-rich-text-editor-demo',
   imports: [GRichTextEditor],
   template: `
-    <g-rich-text-editor [(value)]="html" ariaLabel="Ví dụ soạn văn bản" />
+    <g-rich-text-editor [(value)]="html" pasteMode="html" ariaLabel="Ví dụ soạn văn bản" />
 
     <details class="rte-demo__out">
       <summary>Xem HTML kết quả</summary>
@@ -39,6 +39,6 @@ import { GRichTextEditor } from 'ngx-opendesign';
 })
 export class RichTextEditorDemo {
   protected readonly html = signal(
-    '<h2>Xin chào 👋</h2><p>Đây là trình soạn <b>rich-text</b> viết <i>thuần Angular</i>. Bôi đen chữ rồi bấm nút trên thanh công cụ để định dạng.</p><ul><li>Danh sách chấm</li><li>Đậm, nghiêng, gạch dưới</li></ul>',
+    '<h2>Xin chào 👋</h2><p>Đây là trình soạn <b>rich-text</b> viết <i>thuần Angular</i>. Bôi đen chữ rồi bấm nút trên thanh công cụ để định dạng, hoặc dùng <a href="https://developer.mozilla.org/vi/docs/Web/API/Document/execCommand">liên kết</a> và căn lề.</p><ul><li>Danh sách chấm</li><li>Đậm, nghiêng, gạch dưới</li></ul>',
   );
 }

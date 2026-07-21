@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import {
   GIcon,
+  gIconAlignCenter,
+  gIconAlignLeft,
+  gIconAlignRight,
   gIconAngleDown,
   gIconAngleUp,
   gIconAtSign,
@@ -71,6 +74,7 @@ import {
   gIconPlay,
   gIconPlus,
   gIconPrinter,
+  gIconRedo,
   gIconRefresh,
   gIconSave,
   gIconSearch,
@@ -88,6 +92,8 @@ import {
   gIconThumbsUp,
   gIconTrash,
   gIconTruck,
+  gIconUndo,
+  gIconUnlink,
   gIconUnlock,
   gIconUpload,
   gIconUser,
@@ -222,6 +228,13 @@ const ICON_ENTRIES: readonly IconEntry[] = [
   { name: 'gIconSuccess', glyph: gIconSuccess },
   { name: 'gIconFlag', glyph: gIconFlag },
   { name: 'gIconZap', glyph: gIconZap },
+  // Soạn thảo
+  { name: 'gIconUndo', glyph: gIconUndo },
+  { name: 'gIconRedo', glyph: gIconRedo },
+  { name: 'gIconAlignLeft', glyph: gIconAlignLeft },
+  { name: 'gIconAlignCenter', glyph: gIconAlignCenter },
+  { name: 'gIconAlignRight', glyph: gIconAlignRight },
+  { name: 'gIconUnlink', glyph: gIconUnlink },
 ];
 
 @Component({

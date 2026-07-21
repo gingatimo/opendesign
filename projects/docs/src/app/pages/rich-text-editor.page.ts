@@ -9,16 +9,67 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
   template: `
     <h1>Rich Text Editor</h1>
     <p>
-      Trình soạn <b>văn bản định dạng</b> (WYSIWYG), <b>Angular-only</b>. Bề mặt là
-      <code>contenteditable</code>; toolbar áp định dạng qua <code>document.execCommand</code> —
-      <b>built-in trình duyệt</b> (không phải thư viện). Hỗ trợ đậm/nghiêng/gạch dưới/gạch ngang,
-      <b>H2</b>, trích dẫn, danh sách chấm/số, xoá định dạng. <b>IME-safe</b> (không ghi đè
-      innerHTML lúc gõ), <b>dán = plain-text</b>, giá trị ngoài được <b>sanitize</b> chống XSS. Hai
-      chiều <code>[(value)]</code> (HTML) hoặc <code>formControlName</code>.
+      Trình soạn <b>văn bản định dạng</b> (WYSIWYG), <b>Angular-only</b>, 0 thư viện ngoài. Bề mặt
+      là <code>contenteditable</code>. Toolbar: hoàn tác/làm lại, chọn kiểu khối (đoạn, tiêu đề 1–3,
+      trích dẫn), đậm/nghiêng/gạch dưới/gạch ngang, danh sách chấm/số, căn trái/giữa/phải, chèn & bỏ
+      <b>liên kết</b>, xoá định dạng. <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán
+      plain-text hoặc HTML đã <b>sanitize</b>, giá trị ngoài cũng được sanitize chống XSS. Hai chiều
+      <code>[(value)]</code> (HTML) hoặc <code>formControlName</code>.
     </p>
+
+    <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
+    <p>
+      Câu hỏi đúng chỗ — và câu trả lời không phải "vì tiện".
+      <b>Deprecated ở đây không đồng nghĩa sắp bị gỡ:</b> execCommand nằm ngoài chuẩn từ lâu nhưng
+      Chrome/Safari/Firefox không thể bỏ vì quá nhiều dịch vụ đang phụ thuộc. Chính MDN ghi rõ vẫn
+      còn use case hợp lệ <b>chưa có phương án thay thế</b> — và đó đúng là trường hợp của trình
+      soạn thảo:
+    </p>
+    <ul>
+      <li>
+        <b>Undo/redo native.</b> Sửa DOM tay bằng Range API sẽ <b>xoá sạch</b> lịch sử undo của
+        trình duyệt: Ctrl+Z sau đó nhảy lung tung hoặc mất chữ. execCommand là cách duy nhất còn giữ
+        được undo stack đó.
+      </li>
+      <li>
+        <b>IME.</b> Gõ tiếng Việt/Nhật/Trung đi qua composition của trình duyệt. Tự dựng pipeline
+        nhập liệu là nơi editor tự viết hay vỡ nhất.
+      </li>
+      <li>
+        <b>Không có API thay thế 1–1.</b> Cách "hiện đại" (ProseMirror, Lexical, Slate) không phải
+        là gọi API khác — mà là <b>tự dựng document model + history + selection + IME</b>, cỡ hàng
+        chục nghìn dòng. Đó là một sản phẩm riêng, không phải một component của design system.
+      </li>
+    </ul>
+    <p>Nên hướng xử lý ở đây là <b>khoanh vùng</b> thay vì né tránh:</p>
+    <ul>
+      <li>
+        Toàn bộ lời gọi execCommand nằm trong
+        <b>một file duy nhất</b> (<code>rte-commands.ts</code>) — đổi engine sau này chỉ sửa một
+        chỗ, không lan ra component.
+      </li>
+      <li>
+        Phần <b>đọc trạng thái</b> (đang đậm? đang ở tiêu đề mấy? căn lề nào? có đang trong liên kết
+        không?) đã bỏ hẳn <code>queryCommandState</code>/<code>queryCommandValue</code>, chuyển sang
+        dò DOM bằng <b>Selection/Range API tiêu chuẩn</b> — vừa hết deprecated ở nhánh này, vừa hết
+        cảnh mỗi trình duyệt trả một kiểu.
+      </li>
+      <li>
+        Mọi lệnh đi qua <code>queryCommandSupported</code> và trả về boolean, nên trình duyệt nào
+        không hỗ trợ thì component biết chứ không "im lặng sai".
+      </li>
+      <li>
+        HTML đầu ra được ép <b>ngữ nghĩa</b> (<code>styleWithCSS=false</code> →
+        <code>&lt;b&gt;/&lt;i&gt;</code> thay vì <code>&lt;span style&gt;</code>;
+        <code>defaultParagraphSeparator=p</code> → <code>&lt;p&gt;</code> thay vì
+        <code>&lt;div&gt;</code>).
+      </li>
+    </ul>
     <p class="rte-note">
-      <b>Lưu ý:</b> <code>execCommand</code> đã deprecated (vẫn chạy ổn mọi trình duyệt). Cần
-      future-proof/cộng tác thời gian thực thì thay engine bằng TipTap ở một package riêng.
+      <b>Khi nào nên đổi:</b> cần <b>cộng tác thời gian thực</b> (nhiều người sửa cùng lúc), schema
+      nội dung chặt chẽ, hay các khối tuỳ biến (bảng, nhúng, mention) — lúc đó hãy dùng
+      ProseMirror/TipTap ở package riêng. Vì <code>[(value)]</code> chỉ là chuỗi HTML nên đổi engine
+      không kéo theo đổi API phía bạn.
     </p>
 
     <docs-demo-section>
@@ -29,6 +80,39 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
 
     <h2>API — GRichTextEditor</h2>
     <docs-api-table [rows]="apiRows" />
+
+    <h2>Accessibility</h2>
+    <ul>
+      <li>
+        Vùng soạn là <code>role="textbox"</code> + <code>aria-multiline</code>; toolbar là
+        <code>role="toolbar"</code>, nút bật/tắt có <code>aria-pressed</code> đồng bộ theo con trỏ.
+      </li>
+      <li>
+        Toolbar theo chuẩn ARIA: <b>một điểm dừng Tab duy nhất</b>, dùng <b>←/→</b> (và Home/End) để
+        đi giữa các nút — Tab tiếp theo nhảy thẳng vào vùng soạn, không phải bấm qua 15 nút.
+      </li>
+      <li>
+        Nút toolbar chặn <code>mousedown</code> nên bấm chuột <b>không cướp con trỏ</b> đang bôi
+        đen.
+      </li>
+    </ul>
+
+    <h2>Bảo mật</h2>
+    <ul>
+      <li>
+        Giá trị HTML nạp từ ngoài (<code>[(value)]</code>, form) đi qua
+        <code>DomSanitizer</code> trước khi render.
+      </li>
+      <li>
+        URL nhập vào ô liên kết chỉ nhận <code>http</code>, <code>https</code>, <code>mailto</code>,
+        <code>tel</code> — chặn <code>javascript:</code> (nếu lọt sẽ thành XSS ngay trong app của
+        bạn); thiếu scheme thì tự thêm <code>https://</code>.
+      </li>
+      <li>
+        <code>pasteMode="html"</code> giữ định dạng khi dán nhưng vẫn sanitize, vì clipboard là
+        nguồn không tin cậy.
+      </li>
+    </ul>
   `,
   styles: `
     .rte-note {
@@ -49,6 +133,13 @@ export default class RichTextEditorPage {
       default: "''",
       description:
         'Nội dung HTML — `[(value)]` hoặc `formControlName`. Giá trị ngoài được sanitize.',
+    },
+    {
+      name: 'pasteMode',
+      type: "'text' | 'html'",
+      default: "'text'",
+      description:
+        "'text' = dán bỏ hết định dạng (tránh rác từ Word/web); 'html' = giữ định dạng, đã sanitize.",
     },
     {
       name: 'minHeight',

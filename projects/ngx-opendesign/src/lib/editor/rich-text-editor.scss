@@ -62,6 +62,48 @@
   background: var(--g-border);
 }
 
+// Nút chọn kiểu khối (GActionMenu variant=label) — ghém chiều cao cho khớp hàng nút 30px.
+.g-rte__block ::ng-deep .g-action-menu__trigger--label {
+  height: 30px;
+  font-size: var(--g-font-size-sm);
+}
+
+// Hàng nhập URL, hiện ngay dưới toolbar khi bấm nút liên kết.
+.g-rte__linkbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--g-space-2);
+  padding: var(--g-space-2);
+  border-bottom: 1px solid var(--g-border);
+  background: var(--g-surface);
+}
+.g-rte__linkinput {
+  flex: 1 1 220px;
+  min-width: 0;
+  height: 30px;
+  padding: 0 var(--g-space-2);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-sm);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+}
+.g-rte__linkinput:focus-visible {
+  outline: none;
+  border-color: var(--g-primary);
+  box-shadow: var(--g-focus-ring);
+}
+.g-rte__linkinput--invalid {
+  border-color: var(--g-danger-solid);
+}
+.g-rte__linkerr {
+  flex: 1 1 100%;
+  color: var(--g-danger-solid);
+  font-size: var(--g-font-size-sm);
+}
+
 .g-rte__body {
   padding: var(--g-space-3) var(--g-space-4);
   color: var(--g-text);
