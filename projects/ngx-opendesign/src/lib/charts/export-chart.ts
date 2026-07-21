@@ -157,11 +157,16 @@ export async function exportChartSvg(
   clone.setAttribute('height', String(chartHeight));
   out.appendChild(clone);
 
-  // Chú giải: ô màu bo góc + tên, các hàng CĂN TRÁI — hàng cuối thường ít mục, căn giữa sẽ thành
-  // thụt vào giữa chừng trông như lỗi.
+  // Chú giải: ô màu bo góc + tên. KHỐI căn giữa theo chart, nhưng mọi hàng bắt đầu ở CÙNG một lề
+  // trái — căn giữa từng hàng riêng lẻ làm hàng cuối (thường ít mục) thụt vào lửng lơ như lỗi.
+  const rowWidths = rows.map(
+    (line) => line.reduce((sum, item) => sum + legendItemWidth(item.name, measure), 0) - LEGEND_GAP,
+  );
+  const blockWidth = Math.max(0, ...rowWidths);
+  const blockLeft = PAD + Math.max(0, (chartWidth - blockWidth) / 2);
   let y = PAD + titleHeight + chartHeight + 4;
   for (const line of rows) {
-    let x = PAD;
+    let x = blockLeft;
     for (const item of line) {
       const swatch = document.createElementNS(SVG_NS, 'rect');
       swatch.setAttribute('x', String(x));

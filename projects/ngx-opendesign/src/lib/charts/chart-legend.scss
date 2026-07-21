@@ -1,12 +1,16 @@
 :host {
   display: block;
 }
+// KHỐI chú giải căn giữa theo chart, nhưng các MỤC bên trong luôn căn trái: `width: max-content` +
+// `margin-inline: auto` cho khối co đúng bằng nội dung rồi tự căn giữa, còn `justify-content` để
+// nguyên flex-start nên khi xuống dòng các hàng vẫn thẳng lề trái thay vì so le mỗi hàng một kiểu.
 .g-chart-legend {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; // căn giữa cùng với chart/card
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
   gap: var(--g-space-2) var(--g-space-4);
-  margin: 0;
   padding: 0;
   list-style: none;
 }
