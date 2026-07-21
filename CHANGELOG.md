@@ -56,6 +56,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   `{date,value}[]` (nhận `Date` hoặc `YYYY-MM-DD`, cùng ngày thì cộng dồn), `from`/`to` (mặc định một
   năm gần nhất), `unit` cho tooltip, **`weekStart`** sunday|monday (nhãn thứ đổi
   theo). Ngày gom nhóm theo **giờ địa phương** nên không lệch múi giờ.
+- **Bảng màu chart**: mở rộng **8 → 18 màu** (`--g-chart-1` … `--g-chart-18`, đủ cả bản sáng và
+  tối), xếp xen kẽ tông để hai hạng mục liền nhau không lẫn. `chartColor` lặp vòng theo 18; 8 màu đầu
+  giữ NGUYÊN nên chart đang có không đổi diện mạo.
 - **`chart-utils`**: thêm `heatLevel`/`heatColor` — chia 4 bậc theo TỈ LỆ với giá trị lớn nhất và pha
   màu bằng `color-mix`, nên chỉ cần một token màu là ra cả thang và thang tự đổi theo theme.
 - **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea

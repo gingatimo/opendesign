@@ -182,7 +182,7 @@ download GActionExpand PNG/SVG, góc trên-phải). Data:
 `cellSize`, `color`) và `GCalendarHeatmap` `g-calendar-heatmap` (lịch nhiệt theo ngày kiểu
 contribution graph; `[data]` `{date,value}[]`, `from`/`to`, `unit`).
 `GChartSeries {name, values, color?}`, `GChartSlice {name, value, color?}`. Màu: bỏ trống thì lấy
-vòng bảng `--g-chart-1..8` (tự đổi theo theme); `color` ghi đè nhận MỌI màu CSS (hex/rgb/hsl/oklch,
+vòng bảng `--g-chart-1..18` (tự đổi theo theme); `color` ghi đè nhận MỌI màu CSS (hex/rgb/hsl/oklch,
 tên màu, `var(--x)` có fallback, `color-mix()`) — KHÔNG nhận gradient/pattern và không đặt màu riêng
 cho từng điểm được.
 

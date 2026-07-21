@@ -40,7 +40,8 @@
   --g-warning-bg: #fcf4e0;
   --g-warning-solid: #d97706;
 
-  // Bảng màu chart (categorical) — dùng chung cho line/bar/pie/donut, đọc tốt cả 2 theme.
+  // Bảng màu chart (categorical) — 18 màu dùng chung cho mọi chart, đọc tốt cả 2 theme. Thứ tự xếp
+  // XEN KẼ tông (chàm → lục → hổ phách → đỏ…) để hai hạng mục liền nhau không lẫn vào nhau.
   --g-chart-1: #6366f1;
   --g-chart-2: #10b981;
   --g-chart-3: #f59e0b;
@@ -49,6 +50,16 @@
   --g-chart-6: #8b5cf6;
   --g-chart-7: #ec4899;
   --g-chart-8: #14b8a6;
+  --g-chart-9: #84cc16;
+  --g-chart-10: #f97316;
+  --g-chart-11: #06b6d4;
+  --g-chart-12: #d946ef;
+  --g-chart-13: #0ea5e9;
+  --g-chart-14: #f43f5e;
+  --g-chart-15: #22c55e;
+  --g-chart-16: #a855f7;
+  --g-chart-17: #eab308;
+  --g-chart-18: #64748b;
 
   // Radius — linh hồn của OpenDesign
   --g-radius-pill: 9999px;
@@ -121,7 +132,7 @@
   --g-warning-bg: #2b2110;
   --g-warning-solid: #f59e0b;
 
-  // Bảng màu chart — bản sáng hơn để nổi trên nền tối.
+  // Bảng màu chart — bản sáng hơn để nổi trên nền tối (18 màu, cùng thứ tự với theme sáng).
   --g-chart-1: #818cf8;
   --g-chart-2: #34d399;
   --g-chart-3: #fbbf24;
@@ -130,6 +141,16 @@
   --g-chart-6: #a78bfa;
   --g-chart-7: #f472b6;
   --g-chart-8: #2dd4bf;
+  --g-chart-9: #a3e635;
+  --g-chart-10: #fb923c;
+  --g-chart-11: #22d3ee;
+  --g-chart-12: #e879f9;
+  --g-chart-13: #38bdf8;
+  --g-chart-14: #fb7185;
+  --g-chart-15: #4ade80;
+  --g-chart-16: #c084fc;
+  --g-chart-17: #facc15;
+  --g-chart-18: #94a3b8;
 
   --g-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --g-shadow-md: 0 4px 12px rgb(0 0 0 / 0.5);

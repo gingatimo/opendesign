@@ -2,7 +2,7 @@
 // Toàn bộ chart của OpenDesign vẽ bằng <svg> tọa độ do các hàm này sinh ra (0 thư viện ngoài).
 
 /**
- * Màu ghi đè cho một chuỗi/múi. Bỏ trống thì lấy theo bảng màu `--g-chart-1..8` (xem `chartColor`).
+ * Màu ghi đè cho một chuỗi/múi. Bỏ trống thì lấy theo bảng màu `--g-chart-1..18` (xem `chartColor`).
  *
  * Giá trị đi THẲNG vào `fill`/`stroke` của SVG nên nhận **mọi màu CSS hợp lệ**: hex (kể cả kênh
  * alpha `#rrggbbaa`), `rgb()`, `hsl()`, `oklch()`, tên màu, `var(--token)` (có/không fallback),
@@ -149,13 +149,19 @@ export function arcPath(
   );
 }
 
+/** Số màu trong bảng phân loại (`--g-chart-1` … `--g-chart-18`). */
+export const CHART_COLORS = 18;
+
 /**
- * Màu cho chuỗi/múi thứ `index` (0-based): lấy VÒNG bảng `--g-chart-1..8` — phần tử thứ 9 quay lại
+ * Màu cho chuỗi/múi thứ `index` (0-based): lấy VÒNG bảng `--g-chart-1..18` — vượt quá thì quay lại
  * màu 1 — trừ khi có `override` ({@link GChartColor}). Trả về token dạng `var(...)` chứ không phải mã
  * màu, nhờ vậy chart tự đổi theo theme sáng/tối mà không phải vẽ lại.
+ *
+ * Lưu ý: bảng màu KHÔNG đảm bảo không trùng. Quá 18 hạng mục là lặp lại đúng màu cũ, và ngay trong
+ * 18 màu vẫn có những cặp gần nhau về thị giác — cần phân biệt tuyệt đối thì truyền `color` tay.
  */
 export function chartColor(index: number, override?: GChartColor): string {
-  return override ?? `var(--g-chart-${(index % 8) + 1})`;
+  return override ?? `var(--g-chart-${(index % CHART_COLORS) + 1})`;
 }
 
 /** Số bậc màu của heatmap — 0 nghĩa là "không có gì", còn lại chia đều theo giá trị lớn nhất. */
