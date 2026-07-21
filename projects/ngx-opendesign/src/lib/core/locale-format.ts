@@ -20,7 +20,7 @@ export function formatNumberFor(tag: string, n: number): string {
   return new Intl.NumberFormat(tag).format(n);
 }
 
-// 4/1/2024 là Chủ nhật. Mốc cố định + timeZone UTC để tên thứ không lệch theo múi giờ máy chạy.
+// 7/1/2024 là Chủ nhật. Mốc cố định + timeZone UTC để tên thứ không lệch theo múi giờ máy chạy.
 const SUNDAY_UTC = Date.UTC(2024, 0, 7);
 const DAY_MS = 86_400_000;
 
