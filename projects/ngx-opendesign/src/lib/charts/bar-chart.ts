@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { GChartExport } from './chart-export';
+import { GChartZoom } from './chart-zoom';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
 import {
   chartColor,
@@ -47,23 +48,31 @@ interface CatLabel {
 // series → cột NHÓM cạnh nhau; một series → tô màu theo từng mốc. Miền giá trị luôn gồm 0 (chân cột).
 @Component({
   selector: 'g-bar-chart',
-  imports: [GChartLegend, GChartExport],
+  imports: [GChartLegend, GChartExport, GChartZoom],
   template: `
-    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
-      @if (title() || exportable()) {
+    <div
+      class="g-chart-frame"
+      [class]="'g-chart-frame--' + legendPosition()"
+      [class.g-chart-frame--zoom]="zoomed()"
+    >
+      @if (title() || exportable() || zoomable()) {
         <div class="g-chart-frame__head">
           @if (title()) {
             <div class="g-chart-frame__title">{{ title() }}</div>
           }
-          @if (exportable()) {
-            <g-chart-export
-              class="g-chart-frame__export"
-              [target]="svgEl()?.nativeElement"
-              [filename]="filename()"
-              [title]="title()"
-              [legend]="legendItems()"
-            />
-          }
+          <div class="g-chart-frame__actions">
+            @if (exportable()) {
+              <g-chart-export
+                [target]="svgEl()?.nativeElement"
+                [filename]="filename()"
+                [title]="title()"
+                [legend]="legendItems()"
+              />
+            }
+            @if (zoomable()) {
+              <g-chart-zoom [(zoomed)]="zoomed" />
+            }
+          </div>
         </div>
       }
       <div class="g-chart-frame__plot">
@@ -138,6 +147,8 @@ export class GBarChart {
   readonly showLegend = input(true);
   readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly exportable = input(false);
+  /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
+  readonly zoomable = input(false);
   readonly filename = input('bar-chart');
   readonly title = input('');
   readonly ariaLabel = input('Biểu đồ cột');
@@ -265,6 +276,7 @@ export class GBarChart {
     },
   );
 
+  protected readonly zoomed = signal(false);
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.series().map((s, j) => ({ name: s.name, color: chartColor(j, s.color) })),
   );

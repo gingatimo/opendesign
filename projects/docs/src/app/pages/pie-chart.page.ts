@@ -68,6 +68,13 @@ export default class PieChartPage {
       description: 'Hiện nút export PNG/SVG + tên file khi tải.',
     },
     {
+      name: 'zoomable',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Hiện nút phóng to (cạnh nút tải xuống): chart phủ gần kín màn hình, Esc hoặc bấm lại để thu.',
+    },
+    {
       name: 'ariaLabel',
       type: 'string',
       default: "'Biểu đồ tròn'",

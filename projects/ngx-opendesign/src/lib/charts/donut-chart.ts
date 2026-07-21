@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { GChartExport } from './chart-export';
+import { GChartZoom } from './chart-zoom';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
 import {
   chartColor,
@@ -25,23 +26,31 @@ import { pieSlices } from './pie-chart';
 // (`legendPosition`), export PNG/SVG (`exportable`, mặc định BẬT). `thickness` = tỉ lệ bán kính lỗ.
 @Component({
   selector: 'g-donut-chart',
-  imports: [GChartLegend, GChartExport],
+  imports: [GChartLegend, GChartExport, GChartZoom],
   template: `
-    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
-      @if (title() || exportable()) {
+    <div
+      class="g-chart-frame"
+      [class]="'g-chart-frame--' + legendPosition()"
+      [class.g-chart-frame--zoom]="zoomed()"
+    >
+      @if (title() || exportable() || zoomable()) {
         <div class="g-chart-frame__head">
           @if (title()) {
             <div class="g-chart-frame__title">{{ title() }}</div>
           }
-          @if (exportable()) {
-            <g-chart-export
-              class="g-chart-frame__export"
-              [target]="svgEl()?.nativeElement"
-              [filename]="filename()"
-              [title]="title()"
-              [legend]="legendItems()"
-            />
-          }
+          <div class="g-chart-frame__actions">
+            @if (exportable()) {
+              <g-chart-export
+                [target]="svgEl()?.nativeElement"
+                [filename]="filename()"
+                [title]="title()"
+                [legend]="legendItems()"
+              />
+            }
+            @if (zoomable()) {
+              <g-chart-zoom [(zoomed)]="zoomed" />
+            }
+          </div>
         </div>
       }
       <div class="g-chart-frame__plot">
@@ -90,6 +99,8 @@ export class GDonutChart {
   readonly showTotal = input(true);
   readonly totalLabel = input('Tổng');
   readonly exportable = input(true);
+  /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
+  readonly zoomable = input(false);
   readonly filename = input('donut-chart');
   readonly title = input('');
   readonly ariaLabel = input('Biểu đồ vành khuyên');
@@ -118,6 +129,7 @@ export class GDonutChart {
   protected readonly totalText = computed(() =>
     formatChartNumber(this.data().reduce((s, d) => s + Math.max(0, d.value), 0)),
   );
+  protected readonly zoomed = signal(false);
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.data().map((d, i) => ({ name: d.name, color: chartColor(i, d.color) })),
   );

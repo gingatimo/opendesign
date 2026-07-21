@@ -74,6 +74,13 @@ export default class DonutChartPage {
       description: 'Hiện nút export PNG/SVG.',
     },
     {
+      name: 'zoomable',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Hiện nút phóng to (cạnh nút tải xuống): chart phủ gần kín màn hình, Esc hoặc bấm lại để thu.',
+    },
+    {
       name: 'filename',
       type: 'string',
       default: "'donut-chart'",

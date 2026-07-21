@@ -31,6 +31,7 @@ import { GBarChart, GButton, GChartSeries } from 'ngx-opendesign';
       [orientation]="dir()"
       [height]="dir() === 'horizontal' ? 320 : 280"
       [exportable]="true"
+      [zoomable]="true"
       filename="don-theo-quy"
       ariaLabel="Số đơn theo quý, hai khu vực"
     />

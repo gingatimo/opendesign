@@ -173,6 +173,7 @@ tuỳ biến qua `<ng-template let-node>`; `selectable` + `[(selected)]` bấm c
 tổng giữa) · `GChartLegend` `g-chart-legend` · `GChartExport` `g-chart-export`. **Cả 4 chart:** `title`
 (góc trên-trái) + chú giải căn giữa + `legendPosition` (top|right|bottom|left) + `exportable` (nút
 download GActionExpand PNG/SVG, góc trên-phải). Data:
+`exportable` (nút tải PNG/SVG), `zoomable` (nút phóng to gần kín màn hình, Esc để thu);
 `GChartSeries {name, values, color?}`, `GChartSlice {name, value, color?}`. Màu: bỏ trống thì lấy
 vòng bảng `--g-chart-1..8` (tự đổi theo theme); `color` ghi đè nhận MỌI màu CSS (hex/rgb/hsl/oklch,
 tên màu, `var(--x)` có fallback, `color-mix()`) — KHÔNG nhận gradient/pattern và không đặt màu riêng

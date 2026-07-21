@@ -1,0 +1,26 @@
+:host {
+  display: inline-flex;
+}
+
+// Cùng dáng với nút thu gọn của GActionExpand (nút tải xuống bên cạnh) để hai nút thành một cặp.
+.g-chart-zoom__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--g-control-md);
+  height: var(--g-control-md);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  cursor: pointer;
+  box-shadow: var(--g-shadow-sm);
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-chart-zoom__btn:hover {
+  background: var(--g-surface);
+}
+.g-chart-zoom__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}

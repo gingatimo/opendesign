@@ -7,6 +7,7 @@ import { GChartSlice, GDonutChart } from 'ngx-opendesign';
   template: `
     <div class="dc-demo">
       <g-donut-chart
+        [zoomable]="true"
         title="Đơn theo kênh"
         [data]="data"
         [height]="280"

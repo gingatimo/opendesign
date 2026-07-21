@@ -1196,6 +1196,43 @@ a.g-breadcrumb-item:hover {
   font-weight: 600;
   color: var(--g-text);
 }
-.g-chart-frame__export {
-  margin-left: auto; // luôn nằm sát phải dù có hay không có tiêu đề
+// Cụm nút góc phải (tải xuống + phóng to) — luôn sát phải dù có hay không có tiêu đề.
+.g-chart-frame__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  margin-left: auto;
+}
+
+// PHÓNG TO: khung chart phủ gần kín màn hình, SVG tự giãn theo vì đã responsive.
+.g-chart-frame--zoom {
+  position: fixed;
+  inset: 4vh 4vw;
+  z-index: 50;
+  padding: var(--g-space-5);
+  border-radius: var(--g-radius-lg);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-lg);
+  overflow: auto;
+}
+// Nền mờ phía sau: vẽ bằng ::before cố định theo viewport, nằm dưới nội dung khung.
+.g-chart-frame--zoom::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgb(0 0 0 / 45%);
+}
+.g-chart-frame--zoom .g-chart-frame__plot {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+// Cho SVG lấp đầy khung phóng to. KHÔNG dùng `height: 100%`: phần trăm cần một mốc chiều cao xác
+// định, mà chiều cao ô chứa lại do chính nội dung quyết định → vòng lặp, SVG co lại còn vài px.
+// Giãn bằng flex + `align-self: stretch` thì đúng cho cả legend dọc lẫn ngang; viewBox lo tỉ lệ.
+.g-chart-frame--zoom .g-chart-frame__svg {
+  flex: 1 1 auto;
+  align-self: stretch;
+  height: auto;
+  min-height: 0;
 }

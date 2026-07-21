@@ -45,6 +45,7 @@ import { GButton, GChartLegendPosition, GChartSeries, GLineChart } from 'ngx-ope
       [curve]="curve()"
       [legendPosition]="legendPos()"
       [exportable]="true"
+      [zoomable]="true"
       filename="doanh-thu-chi-phi"
       ariaLabel="Doanh thu và chi phí 6 tháng"
     />

@@ -12,6 +12,7 @@ import { GChartSlice, GPieChart } from 'ngx-opendesign';
         [height]="260"
         legendPosition="right"
         [exportable]="true"
+        [zoomable]="true"
         filename="nguon-truy-cap"
         ariaLabel="Tỉ trọng nguồn truy cập"
       />

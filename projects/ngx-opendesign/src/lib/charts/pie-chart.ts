@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { GChartExport } from './chart-export';
+import { GChartZoom } from './chart-zoom';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
 import {
   arcPath,
@@ -26,23 +27,31 @@ import {
 // `g-donut-chart`.
 @Component({
   selector: 'g-pie-chart',
-  imports: [GChartLegend, GChartExport],
+  imports: [GChartLegend, GChartExport, GChartZoom],
   template: `
-    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
-      @if (title() || exportable()) {
+    <div
+      class="g-chart-frame"
+      [class]="'g-chart-frame--' + legendPosition()"
+      [class.g-chart-frame--zoom]="zoomed()"
+    >
+      @if (title() || exportable() || zoomable()) {
         <div class="g-chart-frame__head">
           @if (title()) {
             <div class="g-chart-frame__title">{{ title() }}</div>
           }
-          @if (exportable()) {
-            <g-chart-export
-              class="g-chart-frame__export"
-              [target]="svgEl()?.nativeElement"
-              [filename]="filename()"
-              [title]="title()"
-              [legend]="legendItems()"
-            />
-          }
+          <div class="g-chart-frame__actions">
+            @if (exportable()) {
+              <g-chart-export
+                [target]="svgEl()?.nativeElement"
+                [filename]="filename()"
+                [title]="title()"
+                [legend]="legendItems()"
+              />
+            }
+            @if (zoomable()) {
+              <g-chart-zoom [(zoomed)]="zoomed" />
+            }
+          </div>
         </div>
       }
       <div class="g-chart-frame__plot">
@@ -84,6 +93,8 @@ export class GPieChart {
   readonly showLegend = input(true);
   readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly exportable = input(false);
+  /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
+  readonly zoomable = input(false);
   readonly filename = input('pie-chart');
   readonly title = input('');
   readonly ariaLabel = input('Biểu đồ tròn');
@@ -107,6 +118,7 @@ export class GPieChart {
 
   protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
   protected readonly slices = computed(() => pieSlices(this.data(), this.w(), this.height(), 0));
+  protected readonly zoomed = signal(false);
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.data().map((d, i) => ({ name: d.name, color: chartColor(i, d.color) })),
   );

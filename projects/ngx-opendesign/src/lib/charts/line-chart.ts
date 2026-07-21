@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { GChartExport } from './chart-export';
+import { GChartZoom } from './chart-zoom';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
 import {
   chartColor,
@@ -30,23 +31,31 @@ import {
 // SVG bằng ResizeObserver → viewBox khớp pixel (chữ không méo, kể cả khi legend chiếm chỗ hai bên).
 @Component({
   selector: 'g-line-chart',
-  imports: [GChartLegend, GChartExport],
+  imports: [GChartLegend, GChartExport, GChartZoom],
   template: `
-    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
-      @if (title() || exportable()) {
+    <div
+      class="g-chart-frame"
+      [class]="'g-chart-frame--' + legendPosition()"
+      [class.g-chart-frame--zoom]="zoomed()"
+    >
+      @if (title() || exportable() || zoomable()) {
         <div class="g-chart-frame__head">
           @if (title()) {
             <div class="g-chart-frame__title">{{ title() }}</div>
           }
-          @if (exportable()) {
-            <g-chart-export
-              class="g-chart-frame__export"
-              [target]="svgEl()?.nativeElement"
-              [filename]="filename()"
-              [title]="title()"
-              [legend]="legendItems()"
-            />
-          }
+          <div class="g-chart-frame__actions">
+            @if (exportable()) {
+              <g-chart-export
+                [target]="svgEl()?.nativeElement"
+                [filename]="filename()"
+                [title]="title()"
+                [legend]="legendItems()"
+              />
+            }
+            @if (zoomable()) {
+              <g-chart-zoom [(zoomed)]="zoomed" />
+            }
+          </div>
         </div>
       }
       <div class="g-chart-frame__plot">
@@ -116,6 +125,8 @@ export class GLineChart {
   readonly showLegend = input(true);
   readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly exportable = input(false);
+  /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
+  readonly zoomable = input(false);
   readonly filename = input('line-chart');
   readonly title = input('');
   readonly ariaLabel = input('Biểu đồ đường');
@@ -191,6 +202,7 @@ export class GLineChart {
     }),
   );
 
+  protected readonly zoomed = signal(false);
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.seriesRender().map((s) => ({ name: s.name, color: s.color })),
   );
