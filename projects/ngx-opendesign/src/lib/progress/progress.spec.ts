@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { GLocaleService } from '../core/locale';
+import { gLocaleVi } from '../locales/vi';
 import { GProgress } from './progress';
 
 @Component({
@@ -70,5 +72,30 @@ describe('GProgress', () => {
   it('có aria-label mặc định theo gói ngôn ngữ khi consumer không đặt', () => {
     const { progress } = setup();
     expect(progress.getAttribute('aria-label')).toBe('Progress');
+  });
+
+  // Bài học review Task 3: aria-label mặc định trước đây chỉ đặt MỘT LẦN lúc mount trong
+  // afterNextRender nên đổi ngôn ngữ lúc chạy không kéo theo nhãn — trái mục tiêu số 1 của i18n.
+  it('đổi ngôn ngữ lúc chạy thì aria-label mặc định đổi theo', () => {
+    const fixture = TestBed.createComponent(GProgress);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.getAttribute('aria-label')).toBe('Progress');
+
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    fixture.detectChanges();
+    expect(el.getAttribute('aria-label')).toBe('Tiến độ');
+  });
+
+  it('consumer tự đặt aria-label thì đổi ngôn ngữ KHÔNG được ghi đè', () => {
+    const fixture = TestBed.createComponent(GProgress);
+    fixture.nativeElement.setAttribute('aria-label', 'Đang tải dữ liệu');
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.getAttribute('aria-label')).toBe('Đang tải dữ liệu');
+
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    fixture.detectChanges();
+    expect(el.getAttribute('aria-label')).toBe('Đang tải dữ liệu');
   });
 });
