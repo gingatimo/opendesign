@@ -388,10 +388,12 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     { label: 'Quote', value: 'blockquote' },
     { label: 'Code block', value: 'pre' },
   ];
-  // Định dạng ít dùng, gộp vào một dropdown. 'code' không có lệnh execCommand nên xử lý riêng.
+  // Định dạng ít dùng, gộp vào một dropdown. Đây là các định dạng TRONG DÒNG — nhãn "Inline code" để
+  // khỏi lẫn với "Code block" (kiểu KHỐI, nằm ở Text styles). 'code' không có lệnh execCommand nên
+  // xử lý riêng.
   protected readonly extraFormats: GActionMenuItem[] = [
     { label: 'Strikethrough', value: 'strikeThrough', icon: gIconStrikethrough },
-    { label: 'Code', value: 'code', icon: gIconCode },
+    { label: 'Inline code', value: 'code', icon: gIconCode },
     { label: 'Subscript', value: 'subscript', icon: gIconSubscript },
     { label: 'Superscript', value: 'superscript', icon: gIconSuperscript },
   ];

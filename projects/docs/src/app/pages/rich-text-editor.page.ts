@@ -12,7 +12,7 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
       Trình soạn <b>văn bản định dạng</b> (WYSIWYG), <b>Angular-only</b>, 0 thư viện ngoài. Bề mặt
       là <code>contenteditable</code>. Toolbar: hoàn tác/làm lại · <b>Text styles</b> (Normal text,
       Heading 1–6, Quote, <b>Code block</b>) · đậm/nghiêng/gạch dưới · dropdown
-      <b>định dạng khác</b> (Strikethrough, Code, Subscript, Superscript) · <b>màu chữ</b> ·
+      <b>định dạng khác</b> (Strikethrough, Inline code, Subscript, Superscript) · <b>màu chữ</b> ·
       dropdown <b>kiểu danh sách</b> (Bulleted, Numbered, <b>Checkbox</b>) · căn trái/giữa/phải ·
       chèn & bỏ <b>liên kết</b> · chèn <b>bảng</b> · xoá định dạng. <b>IME-safe</b> (không ghi đè
       innerHTML lúc gõ), dán plain-text hoặc HTML đã <b>sanitize</b>, giá trị ngoài cũng được
@@ -104,15 +104,25 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         đen.
       </li>
       <li>
-        <b>Tab</b> trong danh sách = thụt vào thành <b>danh sách con</b>, <b>Shift+Tab</b> lùi ra
-        (áp dụng cho cả 3 kiểu, kể cả checklist). Ngoài danh sách, Tab giữ nguyên chức năng
-        <b>rời khỏi vùng soạn</b> — nếu chiếm Tab ở mọi chỗ thì người dùng bàn phím sẽ kẹt lại trong
-        editor.
+        <b>Tab</b> = thụt lề, <b>Shift+Tab</b> = lùi ra. Trong danh sách thì thành
+        <b>danh sách con</b> (cả 3 kiểu, kể cả checklist); ở đoạn văn/tiêu đề thì thụt cả khối 40px
+        mỗi bậc (vẫn giữ thẻ h1–h6); trong <b>Code block</b> thì gõ 2 dấu cách.
+      </li>
+      <li>
+        Vì Tab đã bị chiếm, lối ra bàn phím là <b>Esc rồi Tab</b> — Esc báo cho đúng lần Tab kế tiếp
+        đi ra khỏi vùng soạn (WCAG 2.1.2, không tạo bẫy bàn phím). Quy ước này được đọc cho screen
+        reader qua <code>aria-describedby</code>.
       </li>
     </ul>
 
     <h2>Ghi chú</h2>
     <ul>
+      <li>
+        Có <b>hai</b> kiểu code, không trùng nhau. <b>Inline code</b> (dropdown định dạng) là chip
+        nhỏ <b>giữa câu</b> — bôi nhiều dòng sẽ ra nhiều chip rời. <b>Code block</b> (Text styles)
+        đổi <b>cả khối</b> thành <code>&lt;pre&gt;</code> — một hộp riêng, giữ nguyên khoảng trắng
+        và xuống dòng.
+      </li>
       <li>
         <b>Màu chữ</b> ghi thẳng mã màu vào HTML, nên bảng màu chọn các tông đọc được trên
         <b>cả nền sáng lẫn tối</b>. Ô đầu tiên (gạch chéo) là <b>Mặc định</b> — trả chữ về
