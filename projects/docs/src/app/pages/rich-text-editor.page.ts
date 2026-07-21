@@ -107,8 +107,8 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
       <li>
         <b>Tab</b> = thụt lề, <b>Shift+Tab</b> = lùi ra (hai nút thụt/lùi trên toolbar làm đúng việc
         này). Trong danh sách thì thành <b>danh sách con</b> (cả 3 kiểu, kể cả checklist); ở đoạn
-        văn/tiêu đề thì thụt cả khối 40px mỗi bậc (vẫn giữ thẻ h1–h6); trong <b>Code block</b> thì
-        gõ 2 dấu cách.
+        văn/tiêu đề thì thụt cả khối <b>1.5em mỗi bậc</b> — đúng bằng mức thụt của danh sách, vẫn
+        giữ thẻ h1–h6; trong <b>Code block</b> thì gõ 2 dấu cách.
       </li>
       <li>
         Vì Tab đã bị chiếm, lối ra bàn phím là <b>Esc rồi Tab</b> — Esc báo cho đúng lần Tab kế tiếp
@@ -142,6 +142,12 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         <code>createLink</code> nên định dạng bên trong (đậm, màu…) còn nguyên; đổi chữ hoặc chưa
         chọn gì thì chèn thẻ <code>&lt;a&gt;</code> mới. Đứng trong một liên kết rồi mở lại =
         <b>sửa</b> (điền sẵn cả hai ô).
+      </li>
+      <li>
+        <b>Thụt lề</b>: Chrome hardcode 40px cho lệnh <code>indent</code> — con số của trình duyệt,
+        không thuộc thang khoảng cách của design system và nhìn quá rộng. Component ghi đè về
+        <b>1.5em</b> ngay trên thẻ bọc, nên HTML lưu ra cũng mang đúng bậc thụt đó khi render ở nơi
+        khác.
       </li>
       <li>
         <b>Bảng</b>: nút chèn tạo bảng rỗng (hàng đầu là <code>&lt;th&gt;</code>) kèm một đoạn trống

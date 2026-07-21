@@ -35,7 +35,7 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   `GActionMenu`), đậm/nghiêng/gạch dưới, dropdown **định dạng khác** (Strikethrough, **Inline code**,
   Subscript, Superscript — có icon), **màu chữ** (dropdown bảng màu), dropdown **kiểu danh sách**
   (Bulleted, Numbered, **Checkbox list**),
-  **căn trái/giữa/phải**, **thụt/lùi lề**, **chèn & bỏ liên kết** (popover 2 ô: văn bản hiển thị +
+  **căn trái/giữa/phải**, **thụt/lùi lề** (1.5em mỗi bậc, bằng mức thụt của danh sách), **chèn & bỏ liên kết** (popover 2 ô: văn bản hiển thị +
   địa chỉ), **chèn bảng**, xoá định dạng; **Tab thụt lề / Shift+Tab lùi ra** (trong danh sách thành danh sách
   con, ở đoạn văn/tiêu đề thụt cả khối; lối ra bàn phím là **Esc rồi Tab**); `pasteMode` **text|html**; giá trị ngoài lẫn HTML dán đều **sanitize** chống
   XSS, URL liên kết chặn `javascript:`; toolbar theo chuẩn ARIA — **một điểm dừng Tab**, ←/→ chuyển
