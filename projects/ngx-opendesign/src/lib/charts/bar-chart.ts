@@ -61,7 +61,9 @@ interface CatLabel {
             <div class="g-chart-frame__title">{{ title() }}</div>
           }
           <div class="g-chart-frame__actions">
-            @if (exportable()) {
+            <!-- Đang phóng to thì giấu nút tải: lúc này người dùng đang XEM, còn muốn tải thì
+                 thu lại rồi tải — đỡ một nút trong khung đang cố dành hết chỗ cho biểu đồ. -->
+            @if (exportable() && !zoomed()) {
               <g-chart-export
                 [target]="svgEl()?.nativeElement"
                 [filename]="filename()"

@@ -78,7 +78,7 @@ export default class DonutChartPage {
       type: 'boolean',
       default: 'false',
       description:
-        'Hiện nút phóng to (cạnh nút tải xuống): chart phủ gần kín màn hình, Esc hoặc bấm lại để thu.',
+        'Hiện nút phóng to (cạnh nút tải xuống): chart phủ gần kín màn hình, Esc hoặc bấm lại để thu. Khi đang phóng to, nút tải ẩn đi.',
     },
     {
       name: 'filename',
