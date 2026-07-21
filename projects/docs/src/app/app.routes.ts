@@ -38,6 +38,11 @@ export const routes: Routes = [
     title: 'Action Expand — OpenDesign',
   },
   {
+    path: 'components/action-menu',
+    loadComponent: () => import('./pages/action-menu.page'),
+    title: 'Action Menu — OpenDesign',
+  },
+  {
     path: 'components/icon',
     loadComponent: () => import('./pages/icon.page'),
     title: 'Icon — OpenDesign',

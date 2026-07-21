@@ -18,6 +18,7 @@ export type NavIcon =
   | 'button'
   | 'icon-button'
   | 'action-expand'
+  | 'action-menu'
   | 'input'
   | 'textarea'
   | 'checkbox'
@@ -114,6 +115,10 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     viewBox: VB,
     paths: ['M10 9l3 3-3 3', 'M15 8h4'],
     circles: [{ cx: 8, cy: 12, r: 5 }],
+  },
+  'action-menu': {
+    viewBox: VB,
+    paths: ['M5 8h14', 'M5 12h14', 'M9 16l3 3 3-3'],
   },
   input: { viewBox: VB, paths: ['M8 11v2'], rects: [{ x: 3, y: 7, width: 18, height: 10, rx: 2 }] },
   textarea: {

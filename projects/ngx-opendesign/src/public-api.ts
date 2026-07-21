@@ -4,6 +4,7 @@ export * from './lib/core/id-generator';
 export * from './lib/button/button';
 export * from './lib/icon-button/icon-button';
 export * from './lib/action-expand/action-expand';
+export * from './lib/action-menu/action-menu';
 export * from './lib/input/input';
 export * from './lib/input/input-group';
 export * from './lib/textarea/textarea';

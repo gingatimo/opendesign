@@ -1,0 +1,86 @@
+:host {
+  display: inline-block;
+}
+
+.g-action-menu__trigger {
+  width: var(--g-control-md);
+  height: var(--g-control-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  color: var(--g-text);
+  cursor: pointer;
+  box-shadow: var(--g-shadow-sm);
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-action-menu__trigger:hover {
+  background: var(--g-surface);
+}
+.g-action-menu__trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+
+// Panel nằm trong CDK overlay nhưng render từ <ng-template> của component nên GIỮ ViewEncapsulation
+// → style scoped này vẫn áp (giống panel của GDatepicker).
+.g-action-menu__panel {
+  min-width: 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--g-space-1);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-lg);
+  transform-origin: top;
+  animation: g-action-menu-in var(--g-duration-fast) var(--g-ease);
+}
+
+.g-action-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-2);
+  width: 100%;
+  padding: var(--g-space-2) var(--g-space-3);
+  border: 0;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-action-menu__item:hover:not(:disabled) {
+  background: var(--g-secondary-bg);
+}
+.g-action-menu__item:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+.g-action-menu__item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes g-action-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-action-menu__panel {
+    animation: none;
+  }
+}
