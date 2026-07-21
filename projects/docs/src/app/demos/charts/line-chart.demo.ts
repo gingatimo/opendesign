@@ -39,6 +39,7 @@ import { GButton, GChartLegendPosition, GChartSeries, GLineChart } from 'ngx-ope
     </div>
 
     <g-line-chart
+      title="Doanh thu & chi phí"
       [series]="series"
       [labels]="labels"
       [curve]="curve()"

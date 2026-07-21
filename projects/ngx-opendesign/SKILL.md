@@ -106,7 +106,7 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
 **Nút:** `GButton` `button[g-button]`/`a[g-button]` (`variant` primary|secondary|outline|ghost|danger,
 `size` sm|md|lg, `[loading]`) · `GIconButton` `button[g-icon-button]` (cần `aria-label`) · `GFab` `button[g-fab]`
 (`position` fixed, `extended`) · `GActionExpand` `g-action-expand` (nút bung: 1 hành động nhiều type,
-thu gọn icon tròn → hover/focus bung nút lựa chọn; `[actions]` `GActionExpandItem[]`, `(action)`).
+thu gọn icon tròn → hover/focus bung nút lựa chọn; `[actions]` `GActionExpandItem[]`, `align` start|end, `(action)`).
 
 **Form:** `GInput` `input[gInput]` · `GTextarea` `textarea[gTextarea]` · `GInputGroup` `g-input-group`
 (bọc `<input gInput>` + `<g-icon gInputPrefix/gInputSuffix>`) · `GCheckbox` `g-checkbox` ·
@@ -167,8 +167,9 @@ tuỳ biến qua `<ng-template let-node>`; `selectable` + `[(selected)]` bấm c
 **Charts (SVG thuần, 0 dep):** `GLineChart` `g-line-chart` (`[series]` `GChartSeries[]`, `[labels]`,
 `curve` straight|smooth) · `GBarChart` `g-bar-chart` (`orientation` vertical|horizontal, grouped) ·
 `GPieChart` `g-pie-chart` (`[data]` `GChartSlice[]`) · `GDonutChart` `g-donut-chart` (vành khuyên +
-tổng giữa) · `GChartLegend` `g-chart-legend` · `GChartExport` `g-chart-export`. **Cả 4 chart:** chú
-giải căn giữa + `legendPosition` (top|right|bottom|left) + `exportable` (nút PNG/SVG). Data:
+tổng giữa) · `GChartLegend` `g-chart-legend` · `GChartExport` `g-chart-export`. **Cả 4 chart:** `title`
+(góc trên-trái) + chú giải căn giữa + `legendPosition` (top|right|bottom|left) + `exportable` (nút
+download GActionExpand PNG/SVG, góc trên-phải). Data:
 `GChartSeries {name, values, color?}`, `GChartSlice {name, value, color?}`; màu palette `--g-chart-1..8`.
 
 **Editor (Angular-only):** `GCodeEditor` `g-code-editor` (soạn code, textarea-overlay + tô màu regex

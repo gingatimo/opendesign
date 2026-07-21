@@ -16,6 +16,10 @@
 .g-action-expand--open {
   box-shadow: var(--g-shadow-md);
 }
+// Bung sang TRÁI: trigger nằm phải, vùng nút trải về bên trái (DOM giữ nguyên, chỉ đảo hướng flex).
+.g-action-expand--end {
+  flex-direction: row-reverse;
+}
 
 .g-action-expand__trigger {
   flex-shrink: 0;

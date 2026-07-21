@@ -30,6 +30,7 @@ export interface GActionExpandItem {
     <div
       class="g-action-expand"
       [class.g-action-expand--open]="expanded()"
+      [class.g-action-expand--end]="align() === 'end'"
       role="group"
       [attr.aria-label]="label()"
       (mouseenter)="hovering.set(true)"
@@ -75,6 +76,9 @@ export class GActionExpand {
   readonly icon = input<GIconGlyph>(gIconDownload);
   readonly actions = input<readonly GActionExpandItem[]>([]);
   readonly label = input('Hành động');
+  // Hướng bung: 'start' (trigger trái, bung phải — mặc định) hoặc 'end' (trigger phải, bung sang
+  // TRÁI — hợp khi đặt sát mép phải như góc trên chart).
+  readonly align = input<'start' | 'end'>('start');
   // Phát khi chọn một type (không phải sự kiện DOM native → tên hợp lệ).
   readonly action = output<GActionExpandItem>();
 

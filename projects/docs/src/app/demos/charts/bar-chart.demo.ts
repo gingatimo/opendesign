@@ -25,6 +25,7 @@ import { GBarChart, GButton, GChartSeries } from 'ngx-opendesign';
     </div>
 
     <g-bar-chart
+      title="Số đơn theo quý"
       [series]="series"
       [labels]="labels"
       [orientation]="dir()"

@@ -50,6 +50,20 @@ interface CatLabel {
   imports: [GChartLegend, GChartExport],
   template: `
     <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
+      @if (title() || exportable()) {
+        <div class="g-chart-frame__head">
+          @if (title()) {
+            <div class="g-chart-frame__title">{{ title() }}</div>
+          }
+          @if (exportable()) {
+            <g-chart-export
+              class="g-chart-frame__export"
+              [target]="svgEl()?.nativeElement"
+              [filename]="filename()"
+            />
+          }
+        </div>
+      }
       <div class="g-chart-frame__plot">
         <svg
           #chartSvg
@@ -107,10 +121,6 @@ interface CatLabel {
           <g-chart-legend [items]="legendItems()" [direction]="legendDir()" />
         }
       </div>
-
-      @if (exportable()) {
-        <g-chart-export [target]="svgEl()?.nativeElement" [filename]="filename()" />
-      }
     </div>
   `,
   styleUrl: './bar-chart.scss',
@@ -127,6 +137,7 @@ export class GBarChart {
   readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly exportable = input(false);
   readonly filename = input('bar-chart');
+  readonly title = input('');
   readonly ariaLabel = input('Biểu đồ cột');
 
   private readonly MT = 12;

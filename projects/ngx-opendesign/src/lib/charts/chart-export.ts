@@ -1,33 +1,34 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { GButton } from '../button/button';
-import { GIcon } from '../icon/icon';
-import { gIconDownload } from '../icon/icons';
+import { GActionExpand, GActionExpandItem } from '../action-expand/action-expand';
+import { gIconImage } from '../icon/icons';
 import { exportChartSvg, GChartExportFormat } from './export-chart';
 
-// Thanh nút EXPORT dùng chung cho mọi chart — nhận thẳng phần tử <svg> cần xuất, tải PNG/SVG khi bấm.
+// Nút EXPORT chart — dùng GActionExpand (thu gọn icon tải, hover/focus bung PNG/SVG). Nhận thẳng phần
+// tử <svg> cần xuất; đặt góc trên-phải chart nên bung sang TRÁI (`align="end"`).
 @Component({
   selector: 'g-chart-export',
-  imports: [GButton, GIcon],
+  imports: [GActionExpand],
   template: `
-    <div class="g-chart-export">
-      <button g-button variant="outline" size="sm" (click)="download('png')">
-        <g-icon [icon]="iconDownload" size="sm" /> PNG
-      </button>
-      <button g-button variant="outline" size="sm" (click)="download('svg')">
-        <g-icon [icon]="iconDownload" size="sm" /> SVG
-      </button>
-    </div>
+    <g-action-expand
+      align="end"
+      label="Tải xuống"
+      [actions]="formats"
+      (action)="onExport($event)"
+    />
   `,
-  styleUrl: './chart-export.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GChartExport {
   readonly target = input<SVGSVGElement | undefined>();
   readonly filename = input('chart');
-  protected readonly iconDownload = gIconDownload;
 
-  protected download(format: GChartExportFormat): void {
+  protected readonly formats: GActionExpandItem[] = [
+    { label: 'PNG', value: 'png', icon: gIconImage },
+    { label: 'SVG', value: 'svg', icon: gIconImage },
+  ];
+
+  protected onExport(item: GActionExpandItem): void {
     const el = this.target();
-    if (el) void exportChartSvg(el, this.filename(), format);
+    if (el) void exportChartSvg(el, this.filename(), item.value as GChartExportFormat);
   }
 }

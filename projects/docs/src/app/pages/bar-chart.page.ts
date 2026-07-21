@@ -49,6 +49,12 @@ export default class BarChartPage {
       description: 'Bật/tắt lưới, chú giải.',
     },
     {
+      name: 'title',
+      type: 'string',
+      default: "''",
+      description: 'Tiêu đề hiển thị góc trên-trái.',
+    },
+    {
       name: 'legendPosition',
       type: "'top' | 'right' | 'bottom' | 'left'",
       default: "'bottom'",

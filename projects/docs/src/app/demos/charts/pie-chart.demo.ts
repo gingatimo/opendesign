@@ -7,6 +7,7 @@ import { GChartSlice, GPieChart } from 'ngx-opendesign';
   template: `
     <div class="pc-demo">
       <g-pie-chart
+        title="Nguồn truy cập"
         [data]="data"
         [height]="260"
         legendPosition="right"

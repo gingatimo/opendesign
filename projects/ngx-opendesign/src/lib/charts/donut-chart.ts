@@ -28,6 +28,20 @@ import { pieSlices } from './pie-chart';
   imports: [GChartLegend, GChartExport],
   template: `
     <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
+      @if (title() || exportable()) {
+        <div class="g-chart-frame__head">
+          @if (title()) {
+            <div class="g-chart-frame__title">{{ title() }}</div>
+          }
+          @if (exportable()) {
+            <g-chart-export
+              class="g-chart-frame__export"
+              [target]="svgEl()?.nativeElement"
+              [filename]="filename()"
+            />
+          }
+        </div>
+      }
       <div class="g-chart-frame__plot">
         <svg
           #chartSvg
@@ -59,10 +73,6 @@ import { pieSlices } from './pie-chart';
           <g-chart-legend [items]="legendItems()" [direction]="legendDir()" />
         }
       </div>
-
-      @if (exportable()) {
-        <g-chart-export [target]="svgEl()?.nativeElement" [filename]="filename()" />
-      }
     </div>
   `,
   styleUrl: './donut-chart.scss',
@@ -79,6 +89,7 @@ export class GDonutChart {
   readonly totalLabel = input('Tổng');
   readonly exportable = input(true);
   readonly filename = input('donut-chart');
+  readonly title = input('');
   readonly ariaLabel = input('Biểu đồ vành khuyên');
 
   private readonly destroyRef = inject(DestroyRef);

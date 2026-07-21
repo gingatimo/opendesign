@@ -47,6 +47,12 @@ export default class DonutChartPage {
       description: 'Tổng ở giữa + nhãn dưới nó.',
     },
     {
+      name: 'title',
+      type: 'string',
+      default: "''",
+      description: 'Tiêu đề hiển thị góc trên-trái.',
+    },
+    {
       name: 'legendPosition',
       type: "'top' | 'right' | 'bottom' | 'left'",
       default: "'bottom'",
