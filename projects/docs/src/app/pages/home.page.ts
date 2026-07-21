@@ -221,7 +221,7 @@ interface ComponentGroup {
 export default class HomePage {
   protected readonly version = '1.0.0';
   protected readonly angularVersion = 22;
-  protected readonly componentCount = 70;
+  protected readonly componentCount = 71;
 
   protected readonly features: FeatureCard[] = [
     {

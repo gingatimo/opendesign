@@ -82,6 +82,7 @@ export class App {
         { path: '/components/button', label: 'Button', icon: 'button' },
         { path: '/components/icon-button', label: 'Icon Button', icon: 'icon-button' },
         { path: '/components/fab', label: 'Fab', icon: 'fab' },
+        { path: '/components/action-expand', label: 'Action Expand', icon: 'action-expand' },
       ]),
     },
     {

@@ -17,6 +17,7 @@ export type NavIcon =
   | 'dark-mode'
   | 'button'
   | 'icon-button'
+  | 'action-expand'
   | 'input'
   | 'textarea'
   | 'checkbox'
@@ -109,6 +110,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   'dark-mode': { viewBox: VB, paths: ['M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z'] },
   button: { viewBox: VB, rects: [{ x: 4, y: 7, width: 16, height: 10, rx: 5 }] },
   'icon-button': { viewBox: VB, paths: ['M12 9v6M9 12h6'], circles: [{ cx: 12, cy: 12, r: 8 }] },
+  'action-expand': {
+    viewBox: VB,
+    paths: ['M10 9l3 3-3 3', 'M15 8h4'],
+    circles: [{ cx: 8, cy: 12, r: 5 }],
+  },
   input: { viewBox: VB, paths: ['M8 11v2'], rects: [{ x: 3, y: 7, width: 18, height: 10, rx: 2 }] },
   textarea: {
     viewBox: VB,

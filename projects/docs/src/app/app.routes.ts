@@ -33,6 +33,11 @@ export const routes: Routes = [
     title: 'Icon Button — OpenDesign',
   },
   {
+    path: 'components/action-expand',
+    loadComponent: () => import('./pages/action-expand.page'),
+    title: 'Action Expand — OpenDesign',
+  },
+  {
     path: 'components/icon',
     loadComponent: () => import('./pages/icon.page'),
     title: 'Icon — OpenDesign',

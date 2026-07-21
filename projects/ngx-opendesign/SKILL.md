@@ -105,7 +105,8 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
 
 **Nút:** `GButton` `button[g-button]`/`a[g-button]` (`variant` primary|secondary|outline|ghost|danger,
 `size` sm|md|lg, `[loading]`) · `GIconButton` `button[g-icon-button]` (cần `aria-label`) · `GFab` `button[g-fab]`
-(`position` fixed, `extended`).
+(`position` fixed, `extended`) · `GActionExpand` `g-action-expand` (nút bung: 1 hành động nhiều type,
+thu gọn icon tròn → hover/focus bung nút lựa chọn; `[actions]` `GActionExpandItem[]`, `(action)`).
 
 **Form:** `GInput` `input[gInput]` · `GTextarea` `textarea[gTextarea]` · `GInputGroup` `g-input-group`
 (bọc `<input gInput>` + `<g-icon gInputPrefix/gInputSuffix>`) · `GCheckbox` `g-checkbox` ·

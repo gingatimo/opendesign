@@ -9,6 +9,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
+- **`GActionExpand`** (`g-action-expand`): nút **hành động bung** — cùng hành động, nhiều "type" (vd.
+  Tải xuống → PDF/SVG/PNG). Thu gọn thành icon tròn; **rê chuột / focus / chạm** → bung sang phải lộ
+  các nút lựa chọn kiểu tab. `[actions]` `GActionExpandItem[]`, `(action)` phát item chọn; trigger là
+  điểm vào bàn phím, nút lựa chọn `tabindex="-1"` khi thu gọn; `role="group"` + `aria-expanded`.
 - **Charts** (SVG thuần, 0 thư viện ngoài): **`GLineChart`** (`g-line-chart`, nối `straight`/`smooth`
   Catmull-Rom, trục + gridline, responsive), **`GBarChart`** (`g-bar-chart`, `orientation`
   vertical/horizontal, grouped), **`GPieChart`** (`g-pie-chart`), **`GDonutChart`** (`g-donut-chart`,

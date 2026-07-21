@@ -1,0 +1,85 @@
+:host {
+  display: inline-block;
+}
+
+// Khung pill: thu gọn = hình tròn (chỉ trigger), bung = pill kéo dài sang phải chứa các nút.
+.g-action-expand {
+  display: inline-flex;
+  align-items: center;
+  height: var(--g-control-md);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-pill);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-sm);
+  transition: box-shadow var(--g-duration-fast) var(--g-ease);
+}
+.g-action-expand--open {
+  box-shadow: var(--g-shadow-md);
+}
+
+.g-action-expand__trigger {
+  flex-shrink: 0;
+  width: var(--g-control-md);
+  height: var(--g-control-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--g-radius-pill);
+  background: transparent;
+  color: var(--g-text);
+  cursor: pointer;
+}
+.g-action-expand__trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+
+// Vùng nút — animate bề rộng bằng max-width (0 → đủ rộng). Cụm auto-width không có mốc kích thước
+// định nên mẹo grid 0fr/1fr không cho bề rộng khi mở; max-width thì chắc chắn (bề rộng thực = min của
+// max-width và content). max-width:0 đóng, 40rem mở → bung tới đúng bề rộng nội dung rồi giữ.
+.g-action-expand__actions {
+  max-width: 0;
+  overflow: hidden;
+  transition: max-width var(--g-duration-base) var(--g-ease);
+}
+.g-action-expand--open .g-action-expand__actions {
+  max-width: 40rem;
+}
+.g-action-expand__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--g-space-1);
+  padding-right: var(--g-space-1);
+  white-space: nowrap;
+}
+
+.g-action-expand__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--g-space-1);
+  height: calc(var(--g-control-md) - 10px);
+  padding: 0 var(--g-space-3);
+  white-space: nowrap;
+  border: 0;
+  border-radius: var(--g-radius-pill);
+  background: var(--g-secondary-bg);
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--g-duration-fast) var(--g-ease);
+}
+.g-action-expand__btn:hover {
+  background: var(--g-border-strong);
+}
+.g-action-expand__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-action-expand__actions {
+    transition: none;
+  }
+}
