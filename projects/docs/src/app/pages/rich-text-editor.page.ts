@@ -20,67 +20,6 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
       <code>formControlName</code>.
     </p>
 
-    <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
-    <p>
-      Câu hỏi đúng chỗ — và câu trả lời không phải "vì tiện".
-      <b>Deprecated ở đây không đồng nghĩa sắp bị gỡ:</b> execCommand nằm ngoài chuẩn từ lâu nhưng
-      Chrome/Safari/Firefox không thể bỏ vì quá nhiều dịch vụ đang phụ thuộc. Chính MDN ghi rõ vẫn
-      còn use case hợp lệ <b>chưa có phương án thay thế</b> — và đó đúng là trường hợp của trình
-      soạn thảo:
-    </p>
-    <ul>
-      <li>
-        <b>Undo/redo native.</b> Sửa DOM tay bằng Range API sẽ <b>xoá sạch</b> lịch sử undo của
-        trình duyệt: Ctrl+Z sau đó nhảy lung tung hoặc mất chữ. execCommand là cách duy nhất còn giữ
-        được undo stack đó.
-      </li>
-      <li>
-        <b>IME.</b> Gõ tiếng Việt/Nhật/Trung đi qua composition của trình duyệt. Tự dựng pipeline
-        nhập liệu là nơi editor tự viết hay vỡ nhất.
-      </li>
-      <li>
-        <b>Không có API thay thế 1–1.</b> Cách "hiện đại" (ProseMirror, Lexical, Slate) không phải
-        là gọi API khác — mà là <b>tự dựng document model + history + selection + IME</b>, cỡ hàng
-        chục nghìn dòng. Đó là một sản phẩm riêng, không phải một component của design system.
-      </li>
-    </ul>
-    <p>Nên hướng xử lý ở đây là <b>khoanh vùng</b> thay vì né tránh:</p>
-    <ul>
-      <li>
-        Toàn bộ lời gọi execCommand nằm trong
-        <b>một file duy nhất</b> (<code>rte-commands.ts</code>) — đổi engine sau này chỉ sửa một
-        chỗ, không lan ra component.
-      </li>
-      <li>
-        Phần <b>đọc trạng thái</b> (đang đậm? đang ở tiêu đề mấy? căn lề nào? có đang trong liên kết
-        không?) đã bỏ hẳn <code>queryCommandState</code>/<code>queryCommandValue</code>, chuyển sang
-        dò DOM bằng <b>Selection/Range API tiêu chuẩn</b> — vừa hết deprecated ở nhánh này, vừa hết
-        cảnh mỗi trình duyệt trả một kiểu.
-      </li>
-      <li>
-        Mọi lệnh đi qua <code>queryCommandSupported</code> và trả về boolean, nên trình duyệt nào
-        không hỗ trợ thì component biết chứ không "im lặng sai".
-      </li>
-      <li>
-        Hai thứ execCommand <b>không có lệnh</b> — inline <code>code</code> và <b>bảng</b> — vẫn đi
-        qua lệnh có sẵn (<code>insertHTML</code>, <code>removeFormat</code>) thay vì sửa DOM tay, để
-        <b>không mất undo</b>. Riêng màu chữ bật <code>styleWithCSS</code> tạm thời cho ra
-        <code>&lt;span style="color"&gt;</code> thay vì thẻ <code>&lt;font&gt;</code> đã bỏ chuẩn.
-      </li>
-      <li>
-        HTML đầu ra được ép <b>ngữ nghĩa</b> (<code>styleWithCSS=false</code> →
-        <code>&lt;b&gt;/&lt;i&gt;</code> thay vì <code>&lt;span style&gt;</code>;
-        <code>defaultParagraphSeparator=p</code> → <code>&lt;p&gt;</code> thay vì
-        <code>&lt;div&gt;</code>).
-      </li>
-    </ul>
-    <p class="rte-note">
-      <b>Khi nào nên đổi:</b> cần <b>cộng tác thời gian thực</b> (nhiều người sửa cùng lúc), schema
-      nội dung chặt chẽ, hay các khối tuỳ biến (bảng, nhúng, mention) — lúc đó hãy dùng
-      ProseMirror/TipTap ở package riêng. Vì <code>[(value)]</code> chỉ là chuỗi HTML nên đổi engine
-      không kéo theo đổi API phía bạn.
-    </p>
-
     <docs-demo-section>
       <docs-rich-text-editor-demo />
     </docs-demo-section>
@@ -172,6 +111,67 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         nguồn không tin cậy.
       </li>
     </ul>
+
+    <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
+    <p>
+      Câu hỏi đúng chỗ — và câu trả lời không phải "vì tiện".
+      <b>Deprecated ở đây không đồng nghĩa sắp bị gỡ:</b> execCommand nằm ngoài chuẩn từ lâu nhưng
+      Chrome/Safari/Firefox không thể bỏ vì quá nhiều dịch vụ đang phụ thuộc. Chính MDN ghi rõ vẫn
+      còn use case hợp lệ <b>chưa có phương án thay thế</b> — và đó đúng là trường hợp của trình
+      soạn thảo:
+    </p>
+    <ul>
+      <li>
+        <b>Undo/redo native.</b> Sửa DOM tay bằng Range API sẽ <b>xoá sạch</b> lịch sử undo của
+        trình duyệt: Ctrl+Z sau đó nhảy lung tung hoặc mất chữ. execCommand là cách duy nhất còn giữ
+        được undo stack đó.
+      </li>
+      <li>
+        <b>IME.</b> Gõ tiếng Việt/Nhật/Trung đi qua composition của trình duyệt. Tự dựng pipeline
+        nhập liệu là nơi editor tự viết hay vỡ nhất.
+      </li>
+      <li>
+        <b>Không có API thay thế 1–1.</b> Cách "hiện đại" (ProseMirror, Lexical, Slate) không phải
+        là gọi API khác — mà là <b>tự dựng document model + history + selection + IME</b>, cỡ hàng
+        chục nghìn dòng. Đó là một sản phẩm riêng, không phải một component của design system.
+      </li>
+    </ul>
+    <p>Nên hướng xử lý ở đây là <b>khoanh vùng</b> thay vì né tránh:</p>
+    <ul>
+      <li>
+        Toàn bộ lời gọi execCommand nằm trong
+        <b>một file duy nhất</b> (<code>rte-commands.ts</code>) — đổi engine sau này chỉ sửa một
+        chỗ, không lan ra component.
+      </li>
+      <li>
+        Phần <b>đọc trạng thái</b> (đang đậm? đang ở tiêu đề mấy? căn lề nào? có đang trong liên kết
+        không?) đã bỏ hẳn <code>queryCommandState</code>/<code>queryCommandValue</code>, chuyển sang
+        dò DOM bằng <b>Selection/Range API tiêu chuẩn</b> — vừa hết deprecated ở nhánh này, vừa hết
+        cảnh mỗi trình duyệt trả một kiểu.
+      </li>
+      <li>
+        Mọi lệnh đi qua <code>queryCommandSupported</code> và trả về boolean, nên trình duyệt nào
+        không hỗ trợ thì component biết chứ không "im lặng sai".
+      </li>
+      <li>
+        Hai thứ execCommand <b>không có lệnh</b> — inline <code>code</code> và <b>bảng</b> — vẫn đi
+        qua lệnh có sẵn (<code>insertHTML</code>, <code>removeFormat</code>) thay vì sửa DOM tay, để
+        <b>không mất undo</b>. Riêng màu chữ bật <code>styleWithCSS</code> tạm thời cho ra
+        <code>&lt;span style="color"&gt;</code> thay vì thẻ <code>&lt;font&gt;</code> đã bỏ chuẩn.
+      </li>
+      <li>
+        HTML đầu ra được ép <b>ngữ nghĩa</b> (<code>styleWithCSS=false</code> →
+        <code>&lt;b&gt;/&lt;i&gt;</code> thay vì <code>&lt;span style&gt;</code>;
+        <code>defaultParagraphSeparator=p</code> → <code>&lt;p&gt;</code> thay vì
+        <code>&lt;div&gt;</code>).
+      </li>
+    </ul>
+    <p class="rte-note">
+      <b>Khi nào nên đổi:</b> cần <b>cộng tác thời gian thực</b> (nhiều người sửa cùng lúc), schema
+      nội dung chặt chẽ, hay các khối tuỳ biến (bảng, nhúng, mention) — lúc đó hãy dùng
+      ProseMirror/TipTap ở package riêng. Vì <code>[(value)]</code> chỉ là chuỗi HTML nên đổi engine
+      không kéo theo đổi API phía bạn.
+    </p>
   `,
   styles: `
     .rte-note {
