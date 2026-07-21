@@ -53,6 +53,7 @@ import {
   applyStyledCommand,
   insertTable,
   insertTaskList,
+  normalizeIndentBlocks,
   safeLinkUrl,
   TASK_DONE_CLASS,
   TASK_LIST_CLASS,
@@ -751,6 +752,7 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     const block = activeBlock(el);
     if (block === 'ul' || block === 'ol') applyCommand(command);
     else applyStyledCommand(command);
+    normalizeIndentBlocks(el);
     this.syncTaskLists(el);
     this.commit();
     this.updateActive();

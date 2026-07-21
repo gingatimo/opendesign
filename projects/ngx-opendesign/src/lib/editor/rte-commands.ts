@@ -228,6 +228,28 @@ export function insertTaskList(): boolean {
   return applyCommand('insertHTML', list.outerHTML);
 }
 
+/**
+ * Một bậc thụt lề. Chrome hardcode 40px cho lệnh `indent` — con số của trình duyệt, không dính gì
+ * tới thang khoảng cách của design system và nhìn quá rộng. Ta ghi đè về **1.5em**, đúng bằng mức
+ * thụt của danh sách (`padding-left: 1.5em`) nên đoạn văn và danh sách lùi cùng một nhịp; dùng `em`
+ * để bậc thụt co giãn theo cỡ chữ.
+ */
+const INDENT_STEP = '1.5em';
+
+/**
+ * Chuẩn hoá các khối do lệnh `indent` tạo ra. Chrome bọc `<blockquote style="margin:0 0 0 40px;
+ * border:none; padding:0">` — ta giữ nguyên cách vô hiệu viền/padding (nhờ vậy HTML tự mô tả nó là
+ * khối THỤT LỀ chứ không phải trích dẫn, kể cả khi render ngoài editor) nhưng đổi 40px về một bậc
+ * hợp lý. Mỗi cấp là một thẻ lồng nên khoảng thụt vẫn cộng dồn.
+ */
+export function normalizeIndentBlocks(root: HTMLElement): void {
+  for (const block of root.querySelectorAll<HTMLElement>('blockquote[style*="margin"]')) {
+    if (block.style.marginLeft !== INDENT_STEP) {
+      block.style.cssText = `margin: 0 0 0 ${INDENT_STEP}; border: none; padding: 0`;
+    }
+  }
+}
+
 /** Danh sách có ô đánh dấu đang chứa con trỏ, nếu có. */
 export function activeTaskList(root: HTMLElement): HTMLElement | null {
   return closestTag(root, `ul.${TASK_LIST_CLASS}`);
