@@ -4,6 +4,8 @@
 
 Design system cho Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — standalone và OnPush.
 
+78 component, 10 loại chart SVG thuần, 2 trình soạn thảo (rich text + code) và 116 icon tree-shakable. **Không có dependency bên thứ ba nào** — chỉ hai peer dependency trong chính hệ Angular (`@angular/cdk`, `@angular/forms`).
+
 npm: https://www.npmjs.com/package/ngx-opendesign
 
 ## Tài liệu

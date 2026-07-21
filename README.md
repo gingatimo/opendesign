@@ -3,8 +3,9 @@
 [![CI](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml/badge.svg)](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/ngx-opendesign.svg)](https://www.npmjs.com/package/ngx-opendesign)
 
-Design system Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — 72
-component, standalone và `OnPush`. Package npm:
+Design system Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — 78
+component, standalone và `OnPush`. Kèm 10 loại chart SVG thuần, 2 trình soạn thảo (rich text + code)
+và bộ 116 icon tree-shakable. Không có dependency bên thứ ba nào. Package npm:
 [`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign).
 
 **Docs site (demo sống, code mẫu, bảng API):** https://gingatimo.github.io/opendesign/
@@ -81,8 +82,11 @@ Các bước để phát hành một phiên bản mới của `ngx-opendesign`:
    `v{{ version }}` ở đầu trang chủ) cho khớp — trang docs không tự đọc version từ `package.json`.
 3. Cập nhật [`CHANGELOG.md`](CHANGELOG.md): đổi mục `chưa phát hành` hiện tại thành ngày phát hành
    thật, thêm mục mới ở trên cho các thay đổi tiếp theo.
-4. Commit, tag `vX.Y.Z` (khớp version vừa bump), rồi `git push --tags`.
-5. CI tự publish lên npm khi thấy tag mới.
+4. Nếu có component mới: cập nhật số component + danh sách trong **cả hai** README (README này và
+   [README của package](projects/ngx-opendesign/README.md) — README của package chính là trang hiển
+   thị trên npmjs, và npm **chỉ** cập nhật nó khi publish, sửa sau khi tag là không kịp).
+5. Commit, tag `vX.Y.Z` (khớp version vừa bump), rồi `git push --tags`.
+6. CI tự publish lên npm khi thấy tag mới.
 
 ### Trước khi tag lần đầu — việc cần làm thủ công (không nằm trong code)
 
