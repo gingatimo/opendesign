@@ -46,6 +46,7 @@ import {
   gIconHelpCircle,
   gIconHome,
   gIconImage,
+  gIconIndent,
   gIconInfo,
   gIconLayout,
   gIconLink,
@@ -68,6 +69,7 @@ import {
   gIconMoon,
   gIconMoreHorizontal,
   gIconMoreVertical,
+  gIconOutdent,
   gIconPackage,
   gIconPanelLeftClose,
   gIconPanelLeftOpen,
@@ -249,6 +251,8 @@ const ICON_ENTRIES: readonly IconEntry[] = [
   { name: 'gIconList', glyph: gIconList },
   { name: 'gIconListOrdered', glyph: gIconListOrdered },
   { name: 'gIconListChecks', glyph: gIconListChecks },
+  { name: 'gIconIndent', glyph: gIconIndent },
+  { name: 'gIconOutdent', glyph: gIconOutdent },
 ];
 
 @Component({

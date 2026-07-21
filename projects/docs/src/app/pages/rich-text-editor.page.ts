@@ -14,9 +14,10 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
       Heading 1–6, Quote, <b>Code block</b>) · đậm/nghiêng/gạch dưới · dropdown
       <b>định dạng khác</b> (Strikethrough, Inline code, Subscript, Superscript) · <b>màu chữ</b> ·
       dropdown <b>kiểu danh sách</b> (Bulleted, Numbered, <b>Checkbox</b>) · căn trái/giữa/phải ·
-      chèn & bỏ <b>liên kết</b> · chèn <b>bảng</b> · xoá định dạng. <b>IME-safe</b> (không ghi đè
-      innerHTML lúc gõ), dán plain-text hoặc HTML đã <b>sanitize</b>, giá trị ngoài cũng được
-      sanitize chống XSS. Hai chiều <code>[(value)]</code> (HTML) hoặc <code>formControlName</code>.
+      thụt/lùi lề · chèn & bỏ <b>liên kết</b> · chèn <b>bảng</b> · xoá định dạng.
+      <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán plain-text hoặc HTML đã <b>sanitize</b>,
+      giá trị ngoài cũng được sanitize chống XSS. Hai chiều <code>[(value)]</code> (HTML) hoặc
+      <code>formControlName</code>.
     </p>
 
     <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
@@ -104,9 +105,10 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         đen.
       </li>
       <li>
-        <b>Tab</b> = thụt lề, <b>Shift+Tab</b> = lùi ra. Trong danh sách thì thành
-        <b>danh sách con</b> (cả 3 kiểu, kể cả checklist); ở đoạn văn/tiêu đề thì thụt cả khối 40px
-        mỗi bậc (vẫn giữ thẻ h1–h6); trong <b>Code block</b> thì gõ 2 dấu cách.
+        <b>Tab</b> = thụt lề, <b>Shift+Tab</b> = lùi ra (hai nút thụt/lùi trên toolbar làm đúng việc
+        này). Trong danh sách thì thành <b>danh sách con</b> (cả 3 kiểu, kể cả checklist); ở đoạn
+        văn/tiêu đề thì thụt cả khối 40px mỗi bậc (vẫn giữ thẻ h1–h6); trong <b>Code block</b> thì
+        gõ 2 dấu cách.
       </li>
       <li>
         Vì Tab đã bị chiếm, lối ra bàn phím là <b>Esc rồi Tab</b> — Esc báo cho đúng lần Tab kế tiếp

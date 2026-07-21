@@ -35,7 +35,7 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   `GActionMenu`), đậm/nghiêng/gạch dưới, dropdown **định dạng khác** (Strikethrough, **Inline code**,
   Subscript, Superscript — có icon), **màu chữ** (dropdown bảng màu), dropdown **kiểu danh sách**
   (Bulleted, Numbered, **Checkbox list**),
-  **căn trái/giữa/phải**, **chèn & bỏ liên kết** (popover 2 ô: văn bản hiển thị +
+  **căn trái/giữa/phải**, **thụt/lùi lề**, **chèn & bỏ liên kết** (popover 2 ô: văn bản hiển thị +
   địa chỉ), **chèn bảng**, xoá định dạng; **Tab thụt lề / Shift+Tab lùi ra** (trong danh sách thành danh sách
   con, ở đoạn văn/tiêu đề thụt cả khối; lối ra bàn phím là **Esc rồi Tab**); `pasteMode` **text|html**; giá trị ngoài lẫn HTML dán đều **sanitize** chống
   XSS, URL liên kết chặn `javascript:`; toolbar theo chuẩn ARIA — **một điểm dừng Tab**, ←/→ chuyển
@@ -46,8 +46,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   API tiêu chuẩn**. HTML đầu ra ép ngữ nghĩa (`styleWithCSS=false`, `defaultParagraphSeparator=p`).
 - **Icon**: thêm 13 icon soạn thảo — `gIconUndo`, `gIconRedo`, `gIconAlignLeft`,
   `gIconAlignCenter`, `gIconAlignRight`, `gIconUnlink`, `gIconTextColor`, `gIconStrikethrough`,
-  `gIconSubscript`, `gIconSuperscript`, `gIconList`, `gIconListOrdered`, `gIconListChecks`
-  (101 → **114**).
+  `gIconSubscript`, `gIconSuperscript`, `gIconList`, `gIconListOrdered`, `gIconListChecks`,
+  `gIconIndent`, `gIconOutdent` (101 → **116**).
 
 ## [1.0.0] — 2026-07-20
 

@@ -27,11 +27,13 @@ import {
   gIconAlignLeft,
   gIconAlignRight,
   gIconCode,
+  gIconIndent,
   gIconLink,
   gIconList,
   gIconListChecks,
   gIconListOrdered,
   gIconMoreHorizontal,
+  gIconOutdent,
   gIconRedo,
   gIconStrikethrough,
   gIconSubscript,
@@ -218,6 +220,26 @@ let hintCounter = 0;
             <g-icon [icon]="a.icon" size="sm" />
           </button>
         }
+        <button
+          type="button"
+          class="g-rte__btn"
+          aria-label="Lùi lề"
+          [disabled]="isDisabled()"
+          (mousedown)="$event.preventDefault()"
+          (click)="indent(true)"
+        >
+          <g-icon [icon]="iconOutdent" size="sm" />
+        </button>
+        <button
+          type="button"
+          class="g-rte__btn"
+          aria-label="Thụt lề"
+          [disabled]="isDisabled()"
+          (mousedown)="$event.preventDefault()"
+          (click)="indent()"
+        >
+          <g-icon [icon]="iconIndent" size="sm" />
+        </button>
         <span class="g-rte__sep"></span>
 
         <button
@@ -471,6 +493,8 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   protected readonly iconTextColor = gIconTextColor;
   protected readonly iconTable = gIconTable;
   protected readonly iconList = gIconList;
+  protected readonly iconIndent = gIconIndent;
+  protected readonly iconOutdent = gIconOutdent;
   protected readonly hintId = `g-rte-hint-${++hintCounter}`;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
@@ -707,16 +731,24 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     const el = this.editable()?.nativeElement;
     if (!el) return;
     e.preventDefault();
-    const block = activeBlock(el);
     // Trong khối code, Tab là để GÕ THỤT ĐẦU DÒNG chứ không phải thụt cả khối.
-    if (block === 'pre' && !e.shiftKey) {
+    if (activeBlock(el) === 'pre' && !e.shiftKey) {
       applyCommand('insertText', '  ');
       this.commit();
       return;
     }
-    const command = e.shiftKey ? 'outdent' : 'indent';
+    this.indent(e.shiftKey);
+  }
+
+  /** Thụt lề (hoặc lùi ra) khối đang đứng — dùng chung cho phím Tab và hai nút trên toolbar. */
+  protected indent(outdent = false): void {
+    const el = this.editable()?.nativeElement;
+    if (this.isDisabled() || !el) return;
+    this.restoreSelection();
+    const command = outdent ? 'outdent' : 'indent';
     // Trong danh sách: lệnh mặc định tạo danh sách CON. Ngoài danh sách: phải ở chế độ CSS, nếu không
     // Chrome bọc đoạn văn vào <blockquote>.
+    const block = activeBlock(el);
     if (block === 'ul' || block === 'ol') applyCommand(command);
     else applyStyledCommand(command);
     this.syncTaskLists(el);

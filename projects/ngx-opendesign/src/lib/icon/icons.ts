@@ -892,3 +892,15 @@ export const gIconListChecks: GIconGlyph = {
   viewBox: VIEW_BOX_24,
   paths: ['M3 7l2 2 4-4', 'M3 17l2 2 4-4', 'M13 6h8', 'M13 12h8', 'M13 18h8'],
 };
+
+// Thụt lề vào (indent).
+export const gIconIndent: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M3 8l4 4-4 4', 'M21 6H11', 'M21 12H11', 'M21 18H11'],
+};
+
+// Lùi lề ra (outdent).
+export const gIconOutdent: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M7 8l-4 4 4 4', 'M21 6H11', 'M21 12H11', 'M21 18H11'],
+};
