@@ -11,8 +11,11 @@ import { ActionExpandBasicDemo } from '../demos/action-expand/action-expand-basi
     <p>
       Nút <b>hành động bung</b>: cùng một hành động nhưng <b>nhiều "type"</b> (vd. Tải xuống →
       PDF/SVG/PNG). Lúc đầu thu gọn thành <b>icon tròn</b>; khi <b>rê chuột / focus</b> (bàn phím)
-      hoặc chạm → bung sang phải, lộ các nút lựa chọn kiểu tab. Phát <code>(action)</code> với item
-      được chọn (<code>{{ '{ label, value, icon? }' }}</code
+      hoặc chạm → bung, lộ các nút lựa chọn kiểu tab. <code>align</code> chỉnh hướng bung:
+      <b>phải</b> (<code>start</code>, mặc định) hoặc <b>trái</b> (<code>end</code>, hợp khi đặt sát
+      mép phải như góc chart). Phát <code>(action)</code> với item được chọn (<code>{{
+        '{ label, value, icon? }'
+      }}</code
       >).
     </p>
 
@@ -56,6 +59,13 @@ export default class ActionExpandPage {
       type: 'string',
       default: "'Hành động'",
       description: 'Nhãn a11y cho cụm + trigger.',
+    },
+    {
+      name: 'align',
+      type: "'start' | 'end'",
+      default: "'start'",
+      description:
+        "Hướng bung: 'start' (trigger trái, bung phải) hoặc 'end' (trigger phải, bung sang trái — hợp khi đặt sát mép phải như góc chart).",
     },
     {
       name: '(action)',
