@@ -1,80 +1,25 @@
 :host {
   display: block;
 }
-.g-calendar {
-  display: flex;
-  gap: var(--g-space-2);
-  overflow-x: auto; // một năm là 53 cột — hẹp thì cuộn ngang thay vì bóp méo ô
-}
-.g-calendar__weekdays {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  // Đẩy xuống cho thẳng hàng với lưới (hàng nhãn tháng nằm phía trên lưới).
-  padding-top: calc(var(--g-font-size-xs) + 6px);
-}
-.g-calendar__weekday {
-  height: 12px;
-  color: var(--g-text-muted);
-  font-size: var(--g-font-size-xs);
-  line-height: 12px;
-}
-.g-calendar__grid-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: max-content; // ôm sát lưới để thang màu bên dưới căn đúng mép phải của lưới
-}
-.g-calendar__months {
-  display: grid;
-  grid-auto-columns: 15px; // 12px ô + 3px khe: nhãn tháng rơi đúng cột tuần của nó
-  grid-auto-flow: column;
-  color: var(--g-text-muted);
-  font-size: var(--g-font-size-xs);
-}
-.g-calendar__month {
-  grid-row: 1;
-  white-space: nowrap;
-}
-.g-calendar__grid {
-  display: flex;
-  gap: 3px;
-}
-.g-calendar__week {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+.g-calendar__svg {
+  display: block;
+  font-family: var(--g-font-family);
 }
 .g-calendar__day {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
   outline: 1px solid transparent;
   transition: outline-color var(--g-duration-fast) var(--g-ease);
 }
 .g-calendar__day:hover {
   outline-color: var(--g-border-strong);
 }
-// Ô nằm ngoài khoảng ngày: giữ chỗ cho lưới thẳng hàng, không vẽ gì.
-.g-calendar__day--empty {
-  background: transparent;
-  pointer-events: none;
+.g-calendar__month,
+.g-calendar__scale-label {
+  fill: var(--g-text-muted);
 }
-
-// Nằm trong khối lưới nên `flex-end` là mép phải của LƯỚI, không phải của card.
-.g-calendar__scale {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-top: var(--g-space-1);
-  gap: var(--g-space-1);
-  color: var(--g-text-muted);
-  font-size: var(--g-font-size-xs);
-}
-.g-calendar__swatch {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
+.g-calendar__weekday {
+  fill: var(--g-text-muted);
+  text-anchor: end;
+  dominant-baseline: middle;
 }
 
 @media (prefers-reduced-motion: reduce) {

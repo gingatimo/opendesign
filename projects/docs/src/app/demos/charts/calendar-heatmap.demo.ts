@@ -6,6 +6,8 @@ import { GButton, GCalendarHeatmap, GCalendarHeatmapDay, GWeekStart } from 'ngx-
   imports: [GCalendarHeatmap, GButton],
   template: `
     <g-calendar-heatmap
+      [exportable]="true"
+      [zoomable]="true"
       title="Hoạt động một năm qua"
       [data]="data"
       [from]="from"

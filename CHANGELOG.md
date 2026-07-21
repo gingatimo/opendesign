@@ -48,14 +48,14 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   đỉnh nhọn, xếp so le nên khít hơn lưới vuông. `[data]` `GChartSlice[]`, `columns` (bỏ trống thì tự
   chia lưới gần vuông), `colorMode` **heat|category** (đậm theo giá trị hoặc màu phân loại), nhãn +
   giá trị trong ô (tự ẩn khi ô quá nhỏ), tooltip từng ô.
-- **`GHeatmapChart`** (`g-heatmap-chart`): **bản đồ nhiệt ma trận** hàng × cột, ô đậm dần theo giá
+- **`GHeatmapChart`** (`g-heatmap-chart`, vẽ bằng SVG): **bản đồ nhiệt ma trận** hàng × cột, ô đậm dần theo giá
   trị, thang màu 4 bậc + nhãn hai đầu. `[data]` `GHeatmapCell[] {row,col,value}`, `rows`/`columns`
-  (thứ tự), `cellSize`, `color`.
-- **`GCalendarHeatmap`** (`g-calendar-heatmap`): **lịch nhiệt theo ngày** kiểu biểu đồ đóng góp của
+  (thứ tự), `cellSize`, `color`, **`exportable`/`zoomable`** như các chart khác.
+- **`GCalendarHeatmap`** (`g-calendar-heatmap`, vẽ bằng SVG): **lịch nhiệt theo ngày** kiểu biểu đồ đóng góp của
   GitHub — cột là tuần, hàng là thứ, nhãn tháng tự đặt đúng cột, thang Ít → Nhiều. `[data]`
   `{date,value}[]` (nhận `Date` hoặc `YYYY-MM-DD`, cùng ngày thì cộng dồn), `from`/`to` (mặc định một
   năm gần nhất), `unit` cho tooltip, **`weekStart`** sunday|monday (nhãn thứ đổi
-  theo). Ngày gom nhóm theo **giờ địa phương** nên không lệch múi giờ.
+  theo), **`exportable`/`zoomable`**. Ô tự co giãn theo bề ngang nên phóng to là lưới to theo. Ngày gom nhóm theo **giờ địa phương** nên không lệch múi giờ.
 - **Bảng màu chart**: mở rộng **8 → 18 màu** (`--g-chart-1` … `--g-chart-18`, đủ cả bản sáng và
   tối), xếp xen kẽ tông để hai hạng mục liền nhau không lẫn. `chartColor` lặp vòng theo 18; 8 màu đầu
   giữ NGUYÊN nên chart đang có không đổi diện mạo.

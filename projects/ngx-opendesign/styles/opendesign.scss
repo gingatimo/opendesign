@@ -1276,6 +1276,19 @@ a.g-breadcrumb-item:hover {
   aspect-ratio: 1;
 }
 
+// Heatmap và lịch nhiệt cao theo số hàng (cố định), không co giãn theo khung như chart trục. Lúc
+// phóng to thì căn giữa cả cụm thay vì để nó dính mép trên.
+.g-chart-frame--zoom .g-heatmap__svg,
+.g-chart-frame--zoom .g-calendar__svg {
+  flex: 0 0 auto;
+  align-self: center;
+  height: auto;
+}
+.g-chart-frame--zoom:has(.g-heatmap__svg) .g-chart-frame__plot,
+.g-chart-frame--zoom:has(.g-calendar__svg) .g-chart-frame__plot {
+  margin: auto 0;
+}
+
 // Thanh tỉ lệ chỉ dày vài chục px. Lúc phóng to KHÔNG kéo giãn ô vẽ theo chiều cao: thanh vẫn vẽ
 // đúng độ dày của nó nên sẽ trôi giữa một khoảng trống mênh mông, còn chú giải bị đẩy xuống tận đáy.
 // Giữ nguyên chiều cao rồi căn giữa CẢ CỤM (thanh + chú giải) — chú giải nằm ngay dưới thanh.

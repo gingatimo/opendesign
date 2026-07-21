@@ -1,5 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { GChartExport } from './chart-export';
+import { maxTextWidth } from './chart-text';
 import { HEAT_LEVELS, heatColor, heatLevel } from './chart-utils';
+import { GChartZoom } from './chart-zoom';
 
 /** Một ngày có dữ liệu. `date` nhận `Date` hoặc chuỗi `YYYY-MM-DD`. */
 export interface GCalendarHeatmapDay {
@@ -8,6 +22,8 @@ export interface GCalendarHeatmapDay {
 }
 
 const DAY_MS = 86_400_000;
+const GAP = 3;
+const LABEL_SIZE = 12;
 const MONTHS = [
   'Th1',
   'Th2',
@@ -70,61 +86,114 @@ export function calendarWeeks(
 }
 
 // Lịch NHIỆT theo ngày (kiểu biểu đồ đóng góp của GitHub): mỗi cột là một tuần, mỗi hàng là một thứ,
-// ô đậm dần theo giá trị. Vẽ bằng lưới CSS thay vì SVG — ô chỉ là hình vuông bo góc nên grid vừa gọn
-// vừa tự lo căn nhãn tháng/thứ.
+// ô đậm dần theo giá trị.
+//
+// Vẽ bằng SVG (không phải lưới CSS) để dùng chung được đường XUẤT ẢNH và chế độ PHÓNG TO với các
+// chart khác — đổi lại phải tự đo bề ngang nhãn thứ để chừa chỗ, việc mà CSS grid vốn lo hộ.
 @Component({
   selector: 'g-calendar-heatmap',
+  imports: [GChartExport, GChartZoom],
   template: `
-    <div class="g-chart-frame">
-      @if (title()) {
+    <div class="g-chart-frame" [class.g-chart-frame--zoom]="zoomed()">
+      @if (title() || exportable() || zoomable()) {
         <div class="g-chart-frame__head" [class.g-chart-frame__head--center]="titleCentered()">
-          <div class="g-chart-frame__title">{{ title() }}</div>
+          @if (title()) {
+            <div class="g-chart-frame__title">{{ title() }}</div>
+          }
+          <div class="g-chart-frame__actions">
+            @if (exportable() && !zoomed()) {
+              <g-chart-export
+                [target]="svgEl()?.nativeElement"
+                [filename]="filename()"
+                [title]="title()"
+              />
+            }
+            @if (zoomable()) {
+              <g-chart-zoom [(zoomed)]="zoomed" />
+            }
+          </div>
         </div>
       }
-      <div class="g-calendar" role="img" [attr.aria-label]="ariaLabel()">
-        <div class="g-calendar__weekdays">
-          <!-- Chỉ ghi T2/T4/T6 như lịch đóng góp quen thuộc: ghi đủ 7 thứ thì chữ chen nhau. -->
-          @for (label of weekdayLabels(); track $index) {
-            <span class="g-calendar__weekday">{{ label }}</span>
+      <div class="g-chart-frame__plot">
+        <svg
+          #chartSvg
+          class="g-calendar__svg g-chart-frame__svg"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + svgHeight()"
+          width="100%"
+          [attr.height]="svgHeight()"
+          role="img"
+          [attr.aria-label]="ariaLabel()"
+        >
+          @for (m of monthLabels(); track m.index) {
+            <text
+              class="g-calendar__month"
+              [attr.x]="m.x"
+              [attr.y]="labelSize()"
+              [attr.font-size]="labelSize()"
+            >
+              {{ m.label }}
+            </text>
           }
-        </div>
-        <div class="g-calendar__grid-wrap">
-          <div class="g-calendar__months">
-            @for (m of monthLabels(); track m.index) {
-              <span class="g-calendar__month" [style.grid-column-start]="m.column + 1">
-                {{ m.label }}
-              </span>
+          @for (d of weekdayRows(); track d.index) {
+            @if (d.label) {
+              <text
+                class="g-calendar__weekday"
+                [attr.x]="labelWidth() - 6"
+                [attr.y]="d.y + cell() / 2"
+                [attr.font-size]="labelSize()"
+              >
+                {{ d.label }}
+              </text>
             }
-          </div>
-          <div class="g-calendar__grid">
-            @for (week of weeks(); track $index) {
-              <div class="g-calendar__week">
-                @for (day of week; track $index) {
-                  @if (day) {
-                    <span
-                      class="g-calendar__day"
-                      [style.background]="colorFor(day)"
-                      [attr.title]="tooltipFor(day)"
-                    ></span>
-                  } @else {
-                    <span class="g-calendar__day g-calendar__day--empty"></span>
-                  }
-                }
-              </div>
-            }
-          </div>
-          <!-- Thang màu nằm TRONG khối lưới để mép phải của nó trùng mép lưới; đặt ngoài thì nó căn
-               theo bề ngang cả card, nhìn lệch hẳn so với chart. -->
-          @if (showScale()) {
-            <div class="g-calendar__scale">
-              <span>{{ scaleMinLabel() }}</span>
-              @for (level of levels; track level) {
-                <span class="g-calendar__swatch" [style.background]="colorOfLevel(level)"></span>
+          }
+          @for (week of weeks(); track $index; let wi = $index) {
+            @for (day of week; track $index; let di = $index) {
+              @if (day) {
+                <rect
+                  class="g-calendar__day"
+                  [attr.x]="labelWidth() + wi * (cell() + gap)"
+                  [attr.y]="headerHeight() + di * (cell() + gap)"
+                  [attr.width]="cell()"
+                  [attr.height]="cell()"
+                  [attr.rx]="cellRadius()"
+                  [style.fill]="colorFor(day)"
+                >
+                  <title>{{ tooltipFor(day) }}</title>
+                </rect>
               }
-              <span>{{ scaleMaxLabel() }}</span>
-            </div>
+            }
           }
-        </div>
+
+          @if (showScale()) {
+            <text
+              class="g-calendar__scale-label"
+              [attr.x]="scale().minX"
+              [attr.y]="scale().textY"
+              [attr.font-size]="labelSize()"
+            >
+              {{ scaleMinLabel() }}
+            </text>
+            @for (s of scale().swatches; track s.level) {
+              <rect
+                class="g-calendar__swatch"
+                [attr.x]="s.x"
+                [attr.y]="scale().swatchY"
+                [attr.width]="cell()"
+                [attr.height]="cell()"
+                [attr.rx]="cellRadius()"
+                [style.fill]="s.color"
+              />
+            }
+            <text
+              class="g-calendar__scale-label"
+              [attr.x]="scale().maxX"
+              [attr.y]="scale().textY"
+              [attr.font-size]="labelSize()"
+            >
+              {{ scaleMaxLabel() }}
+            </text>
+          }
+        </svg>
       </div>
     </div>
   `,
@@ -146,25 +215,33 @@ export class GCalendarHeatmap {
   /** Đơn vị trong tooltip: "12 đóng góp vào 03/07/2026". */
   readonly unit = input('đóng góp');
   readonly title = input('');
-  /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
   readonly titlePosition = input<'left' | 'center'>('left');
   readonly ariaLabel = input('Lịch nhiệt theo ngày');
+  readonly exportable = input(false);
+  /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
+  readonly zoomable = input(false);
+  readonly filename = input('calendar-heatmap');
 
+  protected readonly gap = GAP;
+  protected readonly w = signal(760);
+  protected readonly zoomed = signal(false);
   protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
-  protected readonly levels = Array.from({ length: HEAT_LEVELS + 1 }, (_, i) => i);
-  /**
-   * Thứ tự hàng đổi theo `weekStart`. Chỉ ghi các thứ CÁCH QUÃNG (T2/T4/T6 hoặc T3/T5/T7) như lịch
-   * đóng góp quen thuộc — ghi đủ 7 thứ thì chữ chen nhau ở cỡ ô 12px.
-   */
-  protected readonly weekdayLabels = computed(() => {
-    const monday = this.weekStart() === 'monday';
-    const order = monday ? [...WEEKDAYS.slice(1), WEEKDAYS[0]] : [...WEEKDAYS];
-    // Luôn ghi T2/T4/T6 (như lịch đóng góp quen thuộc) — vị trí của chúng đổi theo ngày mở đầu tuần:
-    // bắt đầu CN thì chúng nằm ở hàng lẻ, bắt đầu T2 thì nằm ở hàng chẵn.
-    const labelled = monday ? 0 : 1;
-    return order.map((d, i) => (i % 2 === labelled ? d : ''));
-  });
+  private readonly destroyRef = inject(DestroyRef);
+  protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
+
+  constructor() {
+    afterNextRender(() => {
+      const el = this.svgEl()?.nativeElement;
+      if (!el) return;
+      const ro = new ResizeObserver((entries) => {
+        const width = Math.round(entries[0].contentRect.width);
+        if (width > 0) this.w.set(width);
+      });
+      ro.observe(el);
+      this.destroyRef.onDestroy(() => ro.disconnect());
+    });
+  }
 
   private readonly range = computed(() => {
     const to = this.to() ? startOfDay(this.to()!) : startOfDay(new Date());
@@ -186,32 +263,106 @@ export class GCalendarHeatmap {
   });
   private readonly max = computed(() => Math.max(0, ...this.byDay().values()));
 
+  private readonly weekdayOrder = computed(() =>
+    this.weekStart() === 'monday' ? [...WEEKDAYS.slice(1), WEEKDAYS[0]] : [...WEEKDAYS],
+  );
+
+  /**
+   * Cạnh ô suy từ bề ngang: một năm là ~53 cột nên ô phải co lại cho vừa, và phóng to thì ô tự to
+   * lên theo — đó là lý do không để cạnh ô cố định 12px như bản dựng bằng CSS grid.
+   */
+  private readonly weekCount = computed(() => this.weeks().length || 1);
+
+  /** Cạnh ô nếu chừa chỗ nhãn theo cỡ chữ GỐC — chỉ dùng để suy ra cỡ chữ, tránh vòng lặp. */
+  private readonly baseCell = computed(() =>
+    fitCell(this.w(), maxTextWidth(WEEKDAYS, LABEL_SIZE) + 8, this.weekCount()),
+  );
+  protected readonly labelSize = computed(() =>
+    Math.round(Math.min(20, Math.max(LABEL_SIZE, this.baseCell() * 0.95))),
+  );
+  protected readonly labelWidth = computed(() => maxTextWidth(WEEKDAYS, this.labelSize()) + 8);
+
+  /**
+   * Cạnh ô CHỐT LẠI theo bề ngang nhãn THẬT. Tính hai bước như vậy vì cỡ chữ phụ thuộc cạnh ô, mà
+   * cạnh ô lại phụ thuộc chỗ chừa cho chữ — lấy luôn bước ước lượng thì lưới rộng hơn khung và cột
+   * cuối bị cắt (đúng lỗi đã thấy lúc phóng to).
+   */
+  protected readonly cell = computed(() => fitCell(this.w(), this.labelWidth(), this.weekCount()));
+  protected readonly cellRadius = computed(() => Math.min(4, this.cell() / 3));
+  protected readonly headerHeight = computed(() => this.labelSize() + 8);
+
+  /** Nhãn thứ: chỉ ghi cách quãng (T2/T4/T6) như lịch đóng góp quen thuộc, ghi đủ 7 thì chữ chen nhau. */
+  protected readonly weekdayRows = computed(() => {
+    const labelled = this.weekStart() === 'monday' ? 0 : 1;
+    return this.weekdayOrder().map((label, index) => ({
+      index,
+      label: index % 2 === labelled ? label : '',
+      y: this.headerHeight() + index * (this.cell() + GAP),
+    }));
+  });
+
   /** Nhãn tháng đặt tại cột của tuần ĐẦU TIÊN thuộc tháng đó. */
   protected readonly monthLabels = computed(() => {
-    const labels: { index: number; column: number; label: string }[] = [];
+    const labels: { index: number; x: number; label: string }[] = [];
     let previous = -1;
     this.weeks().forEach((week, column) => {
       const first = week.find((d): d is Date => d !== null);
       if (!first) return;
       const month = first.getMonth();
       if (month !== previous) {
-        labels.push({ index: labels.length, column, label: MONTHS[month] });
+        labels.push({
+          index: labels.length,
+          x: this.labelWidth() + column * (this.cell() + GAP),
+          label: MONTHS[month],
+        });
         previous = month;
       }
     });
     return labels;
   });
 
+  private readonly gridRight = computed(
+    () => this.labelWidth() + this.weeks().length * (this.cell() + GAP) - GAP,
+  );
+  private readonly gridBottom = computed(() => this.headerHeight() + 7 * (this.cell() + GAP) - GAP);
+
+  /** Thang màu nằm dưới lưới, căn PHẢI theo mép LƯỚI (không phải mép khung). */
+  protected readonly scale = computed(() => {
+    const size = this.labelSize();
+    const count = HEAT_LEVELS + 1;
+    const swatchesWidth = count * (this.cell() + GAP) - GAP;
+    const maxX = this.gridRight() - maxTextWidth([this.scaleMaxLabel()], size);
+    const firstSwatchX = maxX - 6 - swatchesWidth;
+    const textY = this.gridBottom() + 14 + size * 0.8;
+    return {
+      textY,
+      swatchY: textY - this.cell() * 0.85,
+      minX: firstSwatchX - 6 - maxTextWidth([this.scaleMinLabel()], size),
+      maxX,
+      swatches: Array.from({ length: count }, (_, level) => ({
+        level,
+        x: firstSwatchX + level * (this.cell() + GAP),
+        color: heatColor(level, this.color()),
+      })),
+    };
+  });
+
+  protected readonly svgHeight = computed(() =>
+    Math.round(this.gridBottom() + (this.showScale() ? 22 + this.labelSize() : 4)),
+  );
+
   protected colorFor(day: Date): string {
     return heatColor(heatLevel(this.byDay().get(dayKey(day)) ?? 0, this.max()), this.color());
-  }
-
-  protected colorOfLevel(level: number): string {
-    return heatColor(level, this.color());
   }
 
   protected tooltipFor(day: Date): string {
     const value = this.byDay().get(dayKey(day)) ?? 0;
     return `${value} ${this.unit()} vào ${day.toLocaleDateString('vi-VN')}`;
   }
+}
+
+/** Chia đều chỗ trống còn lại sau khi trừ cột nhãn; chặn dưới 6px, chặn trên 28px. */
+function fitCell(width: number, labelWidth: number, count: number): number {
+  const available = Math.max(60, width - labelWidth) - GAP * (count - 1);
+  return Math.max(6, Math.min(28, available / count));
 }

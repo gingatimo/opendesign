@@ -78,6 +78,19 @@ export default class HeatmapChartPage {
       description: 'Tiêu đề hiển thị; nhãn a11y cho vùng lưới (role=img).',
     },
     {
+      name: 'exportable / filename',
+      type: 'boolean / string',
+      default: "false / 'heatmap-chart'",
+      description: 'Hiện nút export PNG/SVG + tên file khi tải.',
+    },
+    {
+      name: 'zoomable',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Hiện nút phóng to (cạnh nút tải xuống): chart phủ gần kín màn hình, Esc hoặc bấm lại để thu. Khi đang phóng to, nút tải ẩn đi.',
+    },
+    {
       name: 'titlePosition',
       type: "'left' | 'center'",
       default: "'left'",

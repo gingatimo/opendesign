@@ -179,7 +179,7 @@ download GActionExpand PNG/SVG, góc trên-phải). Data:
 "Languages" của GitHub; `[data]` `GChartSlice[]`, `barHeight`, `showPercent`), `GHoneycombChart` `g-honeycomb-chart` (tổ ong: mỗi hạng mục một ô lục giác xếp so le;
 `[data]` `GChartSlice[]`, `columns`, `colorMode` heat|category), `GHeatmapChart`
 `g-heatmap-chart` (ma trận hàng × cột; `[data]` `GHeatmapCell[] {row,col,value}`, `rows`/`columns`,
-`cellSize`, `color`) và `GCalendarHeatmap` `g-calendar-heatmap` (lịch nhiệt theo ngày kiểu
+`cellSize`, `color`; có export/zoom) và `GCalendarHeatmap` `g-calendar-heatmap` (lịch nhiệt theo ngày kiểu
 contribution graph; `[data]` `{date,value}[]`, `from`/`to`, `unit`).
 `GChartSeries {name, values, color?}`, `GChartSlice {name, value, color?}`. Màu: bỏ trống thì lấy
 vòng bảng `--g-chart-1..18` (tự đổi theo theme); `color` ghi đè nhận MỌI màu CSS (hex/rgb/hsl/oklch,

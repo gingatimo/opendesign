@@ -9,6 +9,8 @@ const DAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
   imports: [GHeatmapChart],
   template: `
     <g-heatmap-chart
+      [exportable]="true"
+      [zoomable]="true"
       title="Lượt truy cập theo giờ"
       [data]="data"
       [rows]="days"
