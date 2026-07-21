@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ApiRow, ApiTable } from '../shared/api-table';
+import { ChartColors } from '../shared/chart-colors';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { PieChartDemo } from '../demos/charts/pie-chart.demo';
 
 @Component({
-  imports: [PieChartDemo, ApiTable, CodeBlock, DemoSection],
+  imports: [PieChartDemo, ApiTable, CodeBlock, DemoSection, ChartColors],
   template: `
     <h1>Pie Chart</h1>
     <p>
@@ -20,6 +21,8 @@ import { PieChartDemo } from '../demos/charts/pie-chart.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/charts/pie-chart.demo.ts" />
+
+    <docs-chart-colors />
 
     <h2>API — GPieChart</h2>
     <docs-api-table [rows]="apiRows" />

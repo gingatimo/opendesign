@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ApiRow, ApiTable } from '../shared/api-table';
+import { ChartColors } from '../shared/chart-colors';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { BarChartDemo } from '../demos/charts/bar-chart.demo';
 
 @Component({
-  imports: [BarChartDemo, ApiTable, CodeBlock, DemoSection],
+  imports: [BarChartDemo, ApiTable, CodeBlock, DemoSection, ChartColors],
   template: `
     <h1>Bar Chart</h1>
     <p>
@@ -20,6 +21,8 @@ import { BarChartDemo } from '../demos/charts/bar-chart.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/charts/bar-chart.demo.ts" />
+
+    <docs-chart-colors />
 
     <h2>API — GBarChart</h2>
     <docs-api-table [rows]="apiRows" />

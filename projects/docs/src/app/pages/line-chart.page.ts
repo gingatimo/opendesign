@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ApiRow, ApiTable } from '../shared/api-table';
+import { ChartColors } from '../shared/chart-colors';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { LineChartDemo } from '../demos/charts/line-chart.demo';
 
 @Component({
-  imports: [LineChartDemo, ApiTable, CodeBlock, DemoSection],
+  imports: [LineChartDemo, ApiTable, CodeBlock, DemoSection, ChartColors],
   template: `
     <h1>Line Chart</h1>
     <p>
@@ -21,6 +22,8 @@ import { LineChartDemo } from '../demos/charts/line-chart.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/charts/line-chart.demo.ts" />
+
+    <docs-chart-colors />
 
     <h2>API — GLineChart</h2>
     <docs-api-table [rows]="apiRows" />

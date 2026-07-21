@@ -1,19 +1,32 @@
 // Toán học nền cho charts — HÀM THUẦN, không đụng DOM (dễ test, không phụ thuộc trình duyệt).
 // Toàn bộ chart của OpenDesign vẽ bằng <svg> tọa độ do các hàm này sinh ra (0 thư viện ngoài).
 
+/**
+ * Màu ghi đè cho một chuỗi/múi. Bỏ trống thì lấy theo bảng màu `--g-chart-1..8` (xem `chartColor`).
+ *
+ * Giá trị đi THẲNG vào `fill`/`stroke` của SVG nên nhận **mọi màu CSS hợp lệ**: hex (kể cả kênh
+ * alpha `#rrggbbaa`), `rgb()`, `hsl()`, `oklch()`, tên màu, `var(--token)` (có/không fallback),
+ * `color-mix()`. Lúc xuất ảnh, mọi dạng trên được quy về giá trị đã tính rồi mới ghi vào file.
+ *
+ * KHÔNG nhận gradient/pattern: `fill` cần `url(#id)` trỏ tới `<defs>` bên trong SVG, mà component
+ * chưa mở chỗ để chèn defs. Màu cũng thuộc về cả chuỗi/múi, không đặt riêng cho từng điểm được.
+ */
+export type GChartColor = string;
+
 export interface GChartSeries {
   /** Tên chuỗi (hiện ở legend/tooltip). */
   name: string;
   /** Giá trị theo từng mốc trục x (cùng độ dài với labels). */
   values: readonly number[];
-  /** Màu ghi đè; bỏ trống thì lấy theo bảng màu --g-chart-N. */
-  color?: string;
+  /** Màu của cả chuỗi — xem {@link GChartColor} để biết các dạng nhận được. */
+  color?: GChartColor;
 }
 
 export interface GChartSlice {
   name: string;
   value: number;
-  color?: string;
+  /** Màu của múi — xem {@link GChartColor} để biết các dạng nhận được. */
+  color?: GChartColor;
 }
 
 export interface Point {
@@ -136,8 +149,12 @@ export function arcPath(
   );
 }
 
-/** Màu cho chuỗi/múi thứ `index` (0-based) — lấy vòng bảng --g-chart-1..8, trừ khi có màu ghi đè. */
-export function chartColor(index: number, override?: string): string {
+/**
+ * Màu cho chuỗi/múi thứ `index` (0-based): lấy VÒNG bảng `--g-chart-1..8` — phần tử thứ 9 quay lại
+ * màu 1 — trừ khi có `override` ({@link GChartColor}). Trả về token dạng `var(...)` chứ không phải mã
+ * màu, nhờ vậy chart tự đổi theo theme sáng/tối mà không phải vẽ lại.
+ */
+export function chartColor(index: number, override?: GChartColor): string {
   return override ?? `var(--g-chart-${(index % 8) + 1})`;
 }
 

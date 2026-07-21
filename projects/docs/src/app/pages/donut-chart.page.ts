@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ApiRow, ApiTable } from '../shared/api-table';
+import { ChartColors } from '../shared/chart-colors';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { DonutChartDemo } from '../demos/charts/donut-chart.demo';
 
 @Component({
-  imports: [DonutChartDemo, ApiTable, CodeBlock, DemoSection],
+  imports: [DonutChartDemo, ApiTable, CodeBlock, DemoSection, ChartColors],
   template: `
     <h1>Donut Chart</h1>
     <p>
@@ -20,6 +21,8 @@ import { DonutChartDemo } from '../demos/charts/donut-chart.demo';
     </docs-demo-section>
 
     <docs-code-block src="demo-sources/charts/donut-chart.demo.ts" />
+
+    <docs-chart-colors />
 
     <h2>API — GDonutChart</h2>
     <docs-api-table [rows]="apiRows" />
