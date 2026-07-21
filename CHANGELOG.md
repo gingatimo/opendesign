@@ -26,7 +26,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   vertical/horizontal, grouped), **`GPieChart`** (`g-pie-chart`), **`GDonutChart`** (`g-donut-chart`,
   vành khuyên + tổng giữa). Cả 4 chart: **`title`** (góc trên-trái), **chú giải căn giữa**, đặt được
   4 phía (`legendPosition` top|right|bottom|left) và **export PNG/SVG** ở góc trên-phải — nút download
-  dùng `GActionExpand` (thu gọn icon, hover/focus bung PNG/SVG sang trái). Kèm `chart-utils`
+  dùng `GActionExpand` (thu gọn icon, hover/focus bung PNG/SVG sang trái). File xuất ra **nướng màu
+  đã tính vào inline style** (biến `--g-chart-*` không tồn tại ngoài trang) và **vẽ lại tiêu đề +
+  chú giải** trong chính SVG, vì hai thứ này là HTML nằm ngoài `<svg>`. Kèm `chart-utils`
   (niceTicks, linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
 - **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea
   trong suốt đè lên `<pre>` tô màu regex `js/ts/json/css/html`, `highlighter` cắm được, gutter số

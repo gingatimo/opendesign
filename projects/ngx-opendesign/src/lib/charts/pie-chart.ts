@@ -39,6 +39,8 @@ import {
               class="g-chart-frame__export"
               [target]="svgEl()?.nativeElement"
               [filename]="filename()"
+              [title]="title()"
+              [legend]="legendItems()"
             />
           }
         </div>

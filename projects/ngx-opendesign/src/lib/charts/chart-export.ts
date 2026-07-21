@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { GActionExpand, GActionExpandItem } from '../action-expand/action-expand';
 import { gIconImage } from '../icon/icons';
+import { GChartLegendItem } from './chart-legend';
 import { exportChartSvg, GChartExportFormat } from './export-chart';
 
 // Nút EXPORT chart — dùng GActionExpand (thu gọn icon tải, hover/focus bung PNG/SVG). Nhận thẳng phần
@@ -21,6 +22,9 @@ import { exportChartSvg, GChartExportFormat } from './export-chart';
 export class GChartExport {
   readonly target = input<SVGSVGElement | undefined>();
   readonly filename = input('chart');
+  // Tiêu đề và chú giải là HTML nằm ngoài <svg> nên phải truyền vào để vẽ lại trong file xuất ra.
+  readonly title = input('');
+  readonly legend = input<readonly GChartLegendItem[]>([]);
 
   protected readonly formats: GActionExpandItem[] = [
     { label: 'PNG', value: 'png', icon: gIconImage },
@@ -29,6 +33,10 @@ export class GChartExport {
 
   protected onExport(item: GActionExpandItem): void {
     const el = this.target();
-    if (el) void exportChartSvg(el, this.filename(), item.value as GChartExportFormat);
+    if (!el) return;
+    void exportChartSvg(el, this.filename(), item.value as GChartExportFormat, {
+      title: this.title(),
+      legend: this.legend(),
+    });
   }
 }
