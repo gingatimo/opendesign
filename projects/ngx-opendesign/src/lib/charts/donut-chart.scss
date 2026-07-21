@@ -16,14 +16,14 @@
 }
 .g-donut-chart__total {
   fill: var(--g-text);
-  font-size: 22px;
+  // KHÔNG đặt font-size ở đây: cỡ chữ do component tính theo bán kính rồi gắn qua thuộc tính, mà CSS
+  // thì luôn thắng thuộc tính trình bày — đặt lại ở đây là vô hiệu hoá phần co giãn.
   font-weight: 700;
   text-anchor: middle;
   dominant-baseline: middle;
 }
 .g-donut-chart__total-label {
   fill: var(--g-text-muted);
-  font-size: 12px;
   text-anchor: middle;
   dominant-baseline: middle;
 }

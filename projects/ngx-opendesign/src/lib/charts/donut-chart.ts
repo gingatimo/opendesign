@@ -67,13 +67,19 @@ import { pieSlices } from './pie-chart';
             <path class="g-donut-chart__slice" [attr.d]="s.d" [style.fill]="s.color" />
           }
           @if (showTotal()) {
-            <text class="g-donut-chart__total" [attr.x]="w() / 2" [attr.y]="plotHeight() / 2 - 2">
+            <text
+              class="g-donut-chart__total"
+              [attr.x]="w() / 2"
+              [attr.y]="plotHeight() / 2 - radius() * 0.015"
+              [attr.font-size]="totalSize()"
+            >
               {{ totalText() }}
             </text>
             <text
               class="g-donut-chart__total-label"
               [attr.x]="w() / 2"
-              [attr.y]="plotHeight() / 2 + 16"
+              [attr.y]="plotHeight() / 2 + radius() * 0.121"
+              [attr.font-size]="totalLabelSize()"
             >
               {{ totalLabel() }}
             </text>
@@ -127,6 +133,14 @@ export class GDonutChart {
   protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
   protected readonly slices = computed(() =>
     pieSlices(this.data(), this.w(), this.plotHeight(), this.thickness()),
+  );
+  // Chữ giữa vành phải TỈ LỆ theo bán kính, không để cỡ px cố định: viewBox nay khớp 1:1 với kích
+  // thước thật nên cỡ cố định sẽ hoá bé tí khi phóng to. Các hệ số lấy đúng theo tỉ lệ ở cỡ mặc định
+  // (22px/12px trên bán kính 132) để hình thường nhìn y như cũ.
+  protected readonly radius = computed(() => Math.min(this.w(), this.plotHeight()) / 2 - 8);
+  protected readonly totalSize = computed(() => Math.max(12, Math.round(this.radius() * 0.167)));
+  protected readonly totalLabelSize = computed(() =>
+    Math.max(9, Math.round(this.radius() * 0.091)),
   );
   protected readonly totalText = computed(() =>
     formatChartNumber(this.data().reduce((s, d) => s + Math.max(0, d.value), 0)),
