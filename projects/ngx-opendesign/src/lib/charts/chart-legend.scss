@@ -11,10 +11,20 @@
   list-style: none;
 }
 // Legend dọc (đặt bên trái/phải chart) — xếp cột, căn giữa theo trục chính.
+// `:host` phải co theo NỘI DUNG: là flex item cạnh chart, để mặc định nó bị ép hẹp lại và nhãn ngắn
+// cũng xuống dòng. `width: max-content` + không cho nhãn ngắt dòng giữ mỗi mục đúng một dòng.
+:host:has(.g-chart-legend--vertical) {
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: 40%;
+}
 .g-chart-legend--vertical {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: flex-start;
+}
+.g-chart-legend--vertical .g-chart-legend__item {
+  white-space: nowrap;
 }
 .g-chart-legend__item {
   display: inline-flex;

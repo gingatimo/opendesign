@@ -1212,16 +1212,12 @@ a.g-breadcrumb-item:hover {
   padding: var(--g-space-5);
   border-radius: var(--g-radius-lg);
   background: var(--g-surface-raised);
-  box-shadow: var(--g-shadow-lg);
+  // Nền mờ phía sau vẽ bằng BÓNG ĐỔ trải rộng, không phải lớp phủ con: con có z-index âm vẫn nằm
+  // TRÊN nền của chính khung (thứ tự vẽ của stacking context) nên sẽ làm xám luôn cả card.
+  box-shadow:
+    var(--g-shadow-lg),
+    0 0 0 100vmax rgb(0 0 0 / 45%);
   overflow: auto;
-}
-// Nền mờ phía sau: vẽ bằng ::before cố định theo viewport, nằm dưới nội dung khung.
-.g-chart-frame--zoom::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: rgb(0 0 0 / 45%);
 }
 .g-chart-frame--zoom .g-chart-frame__plot {
   flex: 1 1 auto;
