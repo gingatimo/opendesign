@@ -56,6 +56,12 @@ export default class StackedBarPage {
       description: 'Tiêu đề ở góc trên-trái.',
     },
     {
+      name: 'titlePosition',
+      type: "'left' | 'center'",
+      default: "'left'",
+      description: 'Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung.',
+    },
+    {
       name: 'exportable / filename',
       type: 'boolean / string',
       default: "false / 'stacked-bar'",

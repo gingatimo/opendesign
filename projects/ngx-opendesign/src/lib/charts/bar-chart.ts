@@ -56,7 +56,7 @@ interface CatLabel {
       [class.g-chart-frame--zoom]="zoomed()"
     >
       @if (title() || exportable() || zoomable()) {
-        <div class="g-chart-frame__head">
+        <div class="g-chart-frame__head" [class.g-chart-frame__head--center]="titleCentered()">
           @if (title()) {
             <div class="g-chart-frame__title">{{ title() }}</div>
           }
@@ -156,6 +156,8 @@ export class GBarChart {
   readonly zoomable = input(false);
   readonly filename = input('bar-chart');
   readonly title = input('');
+  /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
+  readonly titlePosition = input<'left' | 'center'>('left');
   readonly ariaLabel = input('Biểu đồ cột');
 
   private readonly MT = 12;
@@ -284,6 +286,7 @@ export class GBarChart {
   );
 
   protected readonly zoomed = signal(false);
+  protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
   // Chiều cao ô vẽ đo được. Lúc phóng to, hình phải cao theo KHUNG chứ không giữ `height` cố định —
   // nếu không, tỉ lệ viewBox trùng tỉ lệ ô nên trình duyệt không phóng gì cả, card rộng ra mà chart
   // vẫn y nguyên (đúng cái đã thấy trên màn hình).

@@ -56,6 +56,12 @@ export default class PieChartPage {
       description: 'Tiêu đề hiển thị góc trên-trái.',
     },
     {
+      name: 'titlePosition',
+      type: "'left' | 'center'",
+      default: "'left'",
+      description: 'Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung.',
+    },
+    {
       name: 'legendPosition',
       type: "'top' | 'right' | 'bottom' | 'left'",
       default: "'bottom'",

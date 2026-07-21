@@ -77,6 +77,7 @@ export type NavIcon =
   | 'pie-chart'
   | 'donut-chart'
   | 'stacked-bar'
+  | 'polar-chart'
   | 'heatmap-chart'
   | 'calendar-heatmap'
   | 'code-editor'
@@ -371,6 +372,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { cx: 12, cy: 12, r: 9 },
       { cx: 12, cy: 12, r: 3.5 },
     ],
+  },
+  'polar-chart': {
+    viewBox: VB,
+    paths: ['M12 12V3a9 9 0 0 1 9 9z', 'M12 12l6.36 6.36'],
+    circles: [{ cx: 12, cy: 12, r: 9 }],
   },
   'stacked-bar': {
     viewBox: VB,

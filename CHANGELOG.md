@@ -25,7 +25,7 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   Catmull-Rom, trục + gridline, responsive), **`GBarChart`** (`g-bar-chart`, `orientation`
   vertical/horizontal, grouped), **`GPieChart`** (`g-pie-chart`), **`GDonutChart`** (`g-donut-chart`,
   vành khuyên + tổng giữa). Cả 4 chart: **`title`** (góc trên-trái), **chú giải căn giữa**, đặt được
-  4 phía (`legendPosition` top|right|bottom|left) và **export PNG/SVG** ở góc trên-phải — nút download
+  4 phía (`legendPosition` top|right|bottom|left), **`titlePosition`** left|center và **export PNG/SVG** ở góc trên-phải — nút download
   dùng `GActionExpand` (thu gọn icon, hover/focus bung PNG/SVG sang trái). Thêm **`zoomable`** —
   nút phóng to cạnh nút tải: chart phủ gần kín màn hình (Esc hoặc bấm lại để thu). Lúc phóng to,
   hình vẽ theo chiều cao ĐO ĐƯỢC của khung thay vì `height` cố định — nếu không, tỉ lệ viewBox trùng
@@ -33,6 +33,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   đã tính vào inline style** (biến `--g-chart-*` không tồn tại ngoài trang) và **vẽ lại tiêu đề +
   chú giải** trong chính SVG, vì hai thứ này là HTML nằm ngoài `<svg>`. Rê chuột vào múi pie/donut hiện **tên múi + giá trị + %** (thẻ `<title>` của SVG). Kèm `chart-utils`
   (niceTicks, linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
+- **`GPolarChart`** (`g-polar-chart`): biểu đồ **cực** (polar area) — mỗi hạng mục chiếm **góc bằng
+  nhau**, **bán kính** thay đổi theo giá trị (ngược với pie). Kèm vòng lưới có nhãn số để đối chiếu;
+  bán kính tỉ lệ **tuyến tính** với giá trị cho khớp vòng lưới. `[data]` `GChartSlice[]`,
+  `legendPosition`, `showLabels`, `exportable`, `zoomable`.
 - **`GStackedBar`** (`g-stacked-bar`): **thanh tỉ lệ một dòng** (kiểu thanh "Languages" của GitHub) —
   cả tập dữ liệu trên một thanh ngang, mỗi phần rộng theo tỉ lệ, chú giải kèm **phần trăm**, tooltip
   từng đoạn. `[data]` `GChartSlice[]`, `barHeight`, `showPercent`, `exportable`, `zoomable`.

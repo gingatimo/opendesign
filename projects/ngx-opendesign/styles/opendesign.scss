@@ -1196,6 +1196,22 @@ a.g-breadcrumb-item:hover {
   font-weight: 600;
   color: var(--g-text);
 }
+// Tiêu đề CĂN GIỮA: chuyển hàng đầu sang lưới 3 cột (1fr | tiêu đề | 1fr) rồi đẩy cụm nút sang cột
+// cuối. Chỉ dùng flex + text-align sẽ căn giữa phần CÒN LẠI sau khi trừ cụm nút, nên tiêu đề lệch
+// trái đúng bằng nửa bề ngang cụm nút.
+.g-chart-frame__head--center {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+.g-chart-frame__head--center .g-chart-frame__title {
+  grid-column: 2;
+  text-align: center;
+}
+.g-chart-frame__head--center .g-chart-frame__actions {
+  grid-column: 3;
+  justify-self: end;
+}
+
 // Cụm nút góc phải (tải xuống + phóng to) — luôn sát phải dù có hay không có tiêu đề.
 .g-chart-frame__actions {
   display: flex;

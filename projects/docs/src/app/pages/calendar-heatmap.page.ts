@@ -80,5 +80,11 @@ export default class CalendarHeatmapPage {
       default: "'' / 'Lịch nhiệt theo ngày'",
       description: 'Tiêu đề hiển thị; nhãn a11y cho vùng lưới (role=img).',
     },
+    {
+      name: 'titlePosition',
+      type: "'left' | 'center'",
+      default: "'left'",
+      description: 'Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung.',
+    },
   ];
 }

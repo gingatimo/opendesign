@@ -343,6 +343,11 @@ export const routes: Routes = [
     title: 'Donut Chart — OpenDesign',
   },
   {
+    path: 'components/polar-chart',
+    loadComponent: () => import('./pages/polar-chart.page'),
+    title: 'Polar Chart — OpenDesign',
+  },
+  {
     path: 'components/stacked-bar',
     loadComponent: () => import('./pages/stacked-bar.page'),
     title: 'Stacked Bar — OpenDesign',

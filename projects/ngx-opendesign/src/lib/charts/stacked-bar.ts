@@ -24,7 +24,7 @@ import { GChartZoom } from './chart-zoom';
   template: `
     <div class="g-chart-frame" [class.g-chart-frame--zoom]="zoomed()">
       @if (title() || exportable() || zoomable()) {
-        <div class="g-chart-frame__head">
+        <div class="g-chart-frame__head" [class.g-chart-frame__head--center]="titleCentered()">
           @if (title()) {
             <div class="g-chart-frame__title">{{ title() }}</div>
           }
@@ -98,6 +98,8 @@ export class GStackedBar {
   /** Hiện phần trăm ngay sau tên trong chú giải. */
   readonly showPercent = input(true);
   readonly title = input('');
+  /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
+  readonly titlePosition = input<'left' | 'center'>('left');
   readonly ariaLabel = input('Thanh tỉ lệ');
   readonly exportable = input(false);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
@@ -109,6 +111,7 @@ export class GStackedBar {
   protected readonly clipId = `g-stacked-bar-clip-${++clipCounter}`;
   protected readonly w = signal(640);
   protected readonly zoomed = signal(false);
+  protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
   private readonly destroyRef = inject(DestroyRef);
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');

@@ -68,7 +68,7 @@ export function calendarWeeks(from: Date, to: Date): (Date | null)[][] {
   template: `
     <div class="g-chart-frame">
       @if (title()) {
-        <div class="g-chart-frame__head">
+        <div class="g-chart-frame__head" [class.g-chart-frame__head--center]="titleCentered()">
           <div class="g-chart-frame__title">{{ title() }}</div>
         </div>
       }
@@ -133,7 +133,11 @@ export class GCalendarHeatmap {
   /** Đơn vị trong tooltip: "12 đóng góp vào 03/07/2026". */
   readonly unit = input('đóng góp');
   readonly title = input('');
+  /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
+  readonly titlePosition = input<'left' | 'center'>('left');
   readonly ariaLabel = input('Lịch nhiệt theo ngày');
+
+  protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
   protected readonly levels = Array.from({ length: HEAT_LEVELS + 1 }, (_, i) => i);
   protected readonly weekdayLabels = WEEKDAYS.map((d, i) => (i % 2 === 1 ? d : ''));

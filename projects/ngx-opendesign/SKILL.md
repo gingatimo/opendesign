@@ -173,7 +173,8 @@ tuỳ biến qua `<ng-template let-node>`; `selectable` + `[(selected)]` bấm c
 tổng giữa) · `GChartLegend` `g-chart-legend` · `GChartExport` `g-chart-export`. **Cả 4 chart:** `title`
 (góc trên-trái) + chú giải căn giữa + `legendPosition` (top|right|bottom|left) + `exportable` (nút
 download GActionExpand PNG/SVG, góc trên-phải). Data:
-`exportable` (nút tải PNG/SVG), `zoomable` (nút phóng to gần kín màn hình, Esc để thu); Ngoài 4 chart trục/tròn còn có `GStackedBar` `g-stacked-bar` (thanh tỉ lệ 1 dòng kiểu
+`exportable` (nút tải PNG/SVG), `zoomable` (nút phóng to gần kín màn hình, Esc để thu), `titlePosition` left|center; Ngoài 4 chart trục/tròn còn có `GPolarChart` `g-polar-chart` (polar area: góc bằng nhau, BÁN KÍNH theo giá trị, có vòng lưới;
+`[data]` `GChartSlice[]`), `GStackedBar` `g-stacked-bar` (thanh tỉ lệ 1 dòng kiểu
 "Languages" của GitHub; `[data]` `GChartSlice[]`, `barHeight`, `showPercent`), `GHeatmapChart`
 `g-heatmap-chart` (ma trận hàng × cột; `[data]` `GHeatmapCell[] {row,col,value}`, `rows`/`columns`,
 `cellSize`, `color`) và `GCalendarHeatmap` `g-calendar-heatmap` (lịch nhiệt theo ngày kiểu

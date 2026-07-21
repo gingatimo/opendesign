@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+.g-polar-chart__svg {
+  display: block;
+  font-family: var(--g-font-family);
+}
+.g-polar-chart__sector {
+  stroke: var(--g-surface-raised);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  fill-opacity: 0.85; // hơi trong để thấy vòng lưới bên dưới — thứ để đối chiếu giá trị
+  transition: fill-opacity var(--g-duration-fast) var(--g-ease);
+}
+.g-polar-chart__sector:hover {
+  fill-opacity: 1;
+}
+.g-polar-chart__ring {
+  fill: none;
+  stroke: var(--g-border);
+}
+.g-polar-chart__tick {
+  fill: var(--g-text-muted);
+}
+.g-polar-chart__label {
+  fill: var(--g-text-muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-polar-chart__sector {
+    transition: none;
+  }
+}
