@@ -98,6 +98,7 @@ import { GChartZoom } from './chart-zoom';
                 [attr.x]="sector.lx"
                 [attr.y]="sector.ly"
                 [attr.font-size]="labelSize()"
+                [style.text-anchor]="sector.anchor"
               >
                 {{ sector.name }}
               </text>
@@ -157,12 +158,19 @@ export class GPolarChart {
   }
 
   protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
-  // Chừa vành ngoài cho nhãn tên; không có nhãn thì lấy sát mép hơn.
-  private readonly radius = computed(
-    () => Math.min(this.w(), this.plotHeight()) / 2 - (this.showLabels() ? 26 : 8),
+
+  // Nửa cạnh ngắn — mốc tính mọi kích thước. Cỡ chữ tính từ đây (không phải từ bán kính) để phá vòng
+  // lặp: bán kính cần biết chừa bao nhiêu cho nhãn, mà chỗ chừa lại theo cỡ chữ.
+  private readonly half = computed(() => Math.min(this.w(), this.plotHeight()) / 2);
+  protected readonly labelSize = computed(() => clamp(this.half() * 0.075, 10, 22));
+  protected readonly tickSize = computed(() => clamp(this.half() * 0.06, 9, 18));
+
+  // Chỗ chừa cho nhãn phải TỈ LỆ theo cỡ chữ: để hằng số px thì lúc phóng to chữ to lên mà chỗ chừa
+  // vẫn thế, nhãn tràn ra ngoài khung và bị cắt.
+  private readonly radius = computed(() =>
+    Math.max(20, this.half() - (this.showLabels() ? this.labelSize() * 2.6 : 8)),
   );
-  protected readonly labelSize = computed(() => Math.max(9, Math.round(this.radius() * 0.085)));
-  protected readonly tickSize = computed(() => Math.max(8, Math.round(this.radius() * 0.07)));
+  private readonly labelGap = computed(() => this.labelSize() * 1.1);
 
   /** Vạch giá trị: chỉ lấy các vạch > 0 vì vòng bán kính 0 không vẽ được gì. */
   private readonly ticks = computed(() => {
@@ -185,7 +193,7 @@ export class GPolarChart {
       const a1 = a0 + step;
       const r = (Math.max(0, d.value) / this.scaleMax()) * this.radius();
       // Nhãn đặt ngoài vành lớn nhất để không đè lên múi nào.
-      const labelPoint = polar(cx, cy, this.radius() + 14, (a0 + a1) / 2);
+      const labelPoint = polar(cx, cy, this.radius() + this.labelGap(), (a0 + a1) / 2);
       return {
         name: d.name,
         value: d.value,
@@ -193,6 +201,9 @@ export class GPolarChart {
         d: arcPath(cx, cy, r, 0, a0, a1),
         lx: labelPoint.x,
         ly: labelPoint.y,
+        // Nhãn hai bên mọc RA NGOÀI thay vì cân giữa: cân giữa thì nửa chữ thò vào trong chart và
+        // nửa kia thò ra ngoài khung, bị cắt.
+        anchor: textAnchor(labelPoint.x, cx),
       };
     });
   });
@@ -200,4 +211,15 @@ export class GPolarChart {
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.data().map((d, i) => ({ name: d.name, color: chartColor(i, d.color) })),
   );
+}
+
+/** Neo chữ theo phía so với tâm: bên phải mọc sang phải, bên trái mọc sang trái, trên/dưới cân giữa. */
+function textAnchor(x: number, cx: number): 'start' | 'middle' | 'end' {
+  if (x > cx + 1) return 'start';
+  if (x < cx - 1) return 'end';
+  return 'middle';
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.round(Math.min(Math.max(value, min), max));
 }

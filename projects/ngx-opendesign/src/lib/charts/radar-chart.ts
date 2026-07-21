@@ -101,6 +101,7 @@ import { GChartZoom } from './chart-zoom';
               [attr.x]="axis.lx"
               [attr.y]="axis.ly"
               [attr.font-size]="labelSize()"
+              [style.text-anchor]="axis.anchor"
             >
               {{ axis.label }}
             </text>
@@ -185,11 +186,18 @@ export class GRadarChart {
   protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
   protected readonly cx = computed(() => this.w() / 2);
   protected readonly cy = computed(() => this.plotHeight() / 2);
-  // Chừa vành ngoài cho nhãn trục — nhãn nằm ngoài vòng lớn nhất nên phải trừ trước.
-  private readonly radius = computed(() => Math.min(this.w(), this.plotHeight()) / 2 - 34);
-  protected readonly labelSize = computed(() => Math.max(9, Math.round(this.radius() * 0.09)));
-  protected readonly tickSize = computed(() => Math.max(8, Math.round(this.radius() * 0.075)));
-  protected readonly dotSize = computed(() => Math.max(2, Math.round(this.radius() * 0.022)));
+
+  // Nửa cạnh ngắn — mốc để tính MỌI kích thước, kể cả cỡ chữ. Tính cỡ chữ từ đây (chứ không từ bán
+  // kính) để phá vòng lặp: bán kính cần biết chừa bao nhiêu cho nhãn, mà chỗ chừa lại theo cỡ chữ.
+  private readonly half = computed(() => Math.min(this.w(), this.plotHeight()) / 2);
+  protected readonly labelSize = computed(() => clamp(this.half() * 0.075, 10, 22));
+  protected readonly tickSize = computed(() => clamp(this.half() * 0.06, 9, 18));
+  protected readonly dotSize = computed(() => clamp(this.half() * 0.02, 2, 6));
+
+  // Chỗ chừa cho nhãn trục phải TỈ LỆ theo cỡ chữ: để hằng số px thì lúc phóng to chữ to lên mà chỗ
+  // chừa vẫn thế, nhãn tràn ra ngoài khung và bị cắt.
+  private readonly radius = computed(() => Math.max(20, this.half() - this.labelSize() * 2.6));
+  private readonly labelGap = computed(() => this.labelSize() * 1.1);
 
   private readonly ticks = computed(() => {
     const max = Math.max(0, ...this.series().flatMap((s) => [...s.values]));
@@ -215,8 +223,17 @@ export class GRadarChart {
   protected readonly axes = computed(() =>
     this.labels().map((label, i) => {
       const end = this.pointAt(i, this.radius());
-      const labelPoint = this.pointAt(i, this.radius() + 18);
-      return { label, x: end.x, y: end.y, lx: labelPoint.x, ly: labelPoint.y };
+      const labelPoint = this.pointAt(i, this.radius() + this.labelGap());
+      return {
+        label,
+        x: end.x,
+        y: end.y,
+        lx: labelPoint.x,
+        ly: labelPoint.y,
+        // Nhãn hai bên mọc RA NGOÀI thay vì cân giữa điểm neo: cân giữa thì nửa chữ thò vào trong
+        // chart (đè lên hình) và nửa kia thò ra ngoài khung (bị cắt).
+        anchor: textAnchor(labelPoint.x, this.cx()),
+      };
     }),
   );
 
@@ -253,6 +270,17 @@ export class GRadarChart {
         .join(' ') + ' Z'
     );
   }
+}
+
+/** Neo chữ theo phía so với tâm: bên phải mọc sang phải, bên trái mọc sang trái, trên/dưới cân giữa. */
+function textAnchor(x: number, cx: number): 'start' | 'middle' | 'end' {
+  if (x > cx + 1) return 'start';
+  if (x < cx - 1) return 'end';
+  return 'middle';
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.round(Math.min(Math.max(value, min), max));
 }
 
 function round(v: number): number {

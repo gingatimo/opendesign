@@ -27,7 +27,8 @@
 }
 .g-radar-chart__label {
   fill: var(--g-text-muted);
-  text-anchor: middle;
+  // KHÔNG đặt text-anchor ở đây: component tính theo phía của từng nhãn rồi gắn inline, mà CSS thì
+  // luôn thắng thuộc tính trình bày.
   dominant-baseline: middle;
   pointer-events: none;
 }
