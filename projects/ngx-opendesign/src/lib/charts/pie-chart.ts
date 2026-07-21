@@ -57,7 +57,7 @@ import {
       <div class="g-chart-frame__plot">
         <svg
           #chartSvg
-          class="g-pie-chart__svg g-chart-frame__svg"
+          class="g-pie-chart__svg g-chart-frame__svg g-chart-frame__svg--round"
           [attr.viewBox]="'0 0 ' + w() + ' ' + plotHeight()"
           width="100%"
           [attr.height]="plotHeight()"

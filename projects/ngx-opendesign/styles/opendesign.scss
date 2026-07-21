@@ -1223,6 +1223,22 @@ a.g-breadcrumb-item:hover {
   flex: 1 1 auto;
   min-height: 0;
 }
+// Chart TRÒN (pie/donut) khi phóng to + legend trái/phải: ép ô vẽ thành hình VUÔNG rồi căn giữa cả
+// cụm. Nếu để nó chiếm hết bề ngang, hình tròn vẫn chỉ to bằng chiều cao còn phần thừa thành khoảng
+// trống, đẩy chú giải ra tít mép phải.
+.g-chart-frame--zoom.g-chart-frame--left .g-chart-frame__plot,
+.g-chart-frame--zoom.g-chart-frame--right .g-chart-frame__plot {
+  justify-content: center;
+}
+.g-chart-frame--zoom.g-chart-frame--left .g-chart-frame__svg--round,
+.g-chart-frame--zoom.g-chart-frame--right .g-chart-frame__svg--round {
+  flex: 0 0 auto;
+  // `width: auto` là bắt buộc: <svg> có thuộc tính width="100%" nên bề rộng vốn đã XÁC ĐỊNH, mà
+  // aspect-ratio chỉ điền vào chiều còn thiếu — không mở khoá thì tỉ lệ 1:1 bị bỏ qua hoàn toàn.
+  width: auto;
+  aspect-ratio: 1;
+}
+
 // Cho SVG lấp đầy khung phóng to. KHÔNG dùng `height: 100%`: phần trăm cần một mốc chiều cao xác
 // định, mà chiều cao ô chứa lại do chính nội dung quyết định → vòng lặp, SVG co lại còn vài px.
 // Giãn bằng flex + `align-self: stretch` thì đúng cho cả legend dọc lẫn ngang; viewBox lo tỉ lệ.
