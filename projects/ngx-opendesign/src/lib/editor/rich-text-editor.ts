@@ -246,7 +246,7 @@ let hintCounter = 0;
         >
           <!-- Không bật autoCapture: nó luôn nhảy vào ô ĐẦU, trong khi ta muốn con trỏ vào ô còn
                trống (thường là Địa chỉ khi chữ đã lấy từ đoạn bôi đen). Focus do effect đặt. -->
-          <div class="g-rte__pop" cdkTrapFocus>
+          <div class="g-rte__pop g-rte__pop--link" cdkTrapFocus>
             <label class="g-rte__field">
               <span>Văn bản hiển thị</span>
               <input
