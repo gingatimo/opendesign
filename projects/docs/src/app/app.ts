@@ -189,6 +189,7 @@ export class App {
         { path: '/components/pie-chart', label: 'Pie Chart', icon: 'pie-chart' },
         { path: '/components/donut-chart', label: 'Donut Chart', icon: 'donut-chart' },
         { path: '/components/polar-chart', label: 'Polar Chart', icon: 'polar-chart' },
+        { path: '/components/radar-chart', label: 'Radar Chart', icon: 'radar-chart' },
         { path: '/components/stacked-bar', label: 'Stacked Bar', icon: 'stacked-bar' },
         { path: '/components/heatmap-chart', label: 'Heatmap', icon: 'heatmap-chart' },
         {

@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+.g-radar-chart__svg {
+  display: block;
+  font-family: var(--g-font-family);
+}
+// Vùng của một chuỗi: nền trong mờ để các chuỗi chồng nhau vẫn đọc được, viền rõ để thấy hình dáng.
+.g-radar-chart__area {
+  fill-opacity: 0.18;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: fill-opacity var(--g-duration-fast) var(--g-ease);
+}
+.g-radar-chart__area:hover {
+  fill-opacity: 0.32;
+}
+.g-radar-chart__ring {
+  fill: none;
+  stroke: var(--g-border);
+}
+.g-radar-chart__spoke {
+  stroke: var(--g-border);
+}
+.g-radar-chart__tick {
+  fill: var(--g-text-muted);
+}
+.g-radar-chart__label {
+  fill: var(--g-text-muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+.g-radar-chart__dot {
+  stroke: var(--g-surface-raised);
+  stroke-width: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-radar-chart__area {
+    transition: none;
+  }
+}

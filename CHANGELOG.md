@@ -33,6 +33,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   đã tính vào inline style** (biến `--g-chart-*` không tồn tại ngoài trang) và **vẽ lại tiêu đề +
   chú giải** trong chính SVG, vì hai thứ này là HTML nằm ngoài `<svg>`. Rê chuột vào múi pie/donut hiện **tên múi + giá trị + %** (thẻ `<title>` của SVG). Kèm `chart-utils`
   (niceTicks, linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
+- **`GRadarChart`** (`g-radar-chart`): biểu đồ **radar** (spider/web) — mỗi trục toả từ tâm là một
+  tiêu chí, mỗi chuỗi nối các điểm thành một đa giác trong mờ. `[labels]` tên trục + `[series]`
+  `GChartSeries[]`, `shape` circle|polygon cho lưới nền, tooltip từng điểm. Docs ghi rõ khi nào
+  KHÔNG nên dùng (trục khác thang đo, quá 3 chuỗi, dưới 3 trục).
 - **`GPolarChart`** (`g-polar-chart`): biểu đồ **cực** (polar area) — mỗi hạng mục chiếm **góc bằng
   nhau**, **bán kính** thay đổi theo giá trị (ngược với pie). Kèm vòng lưới có nhãn số để đối chiếu;
   bán kính tỉ lệ **tuyến tính** với giá trị cho khớp vòng lưới. `[data]` `GChartSlice[]`,
