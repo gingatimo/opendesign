@@ -14,6 +14,7 @@ import {
 import { GIcon } from '../icon/icon';
 import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
 import { openLightbox } from '../image-preview/lightbox';
+import { GLocaleService } from '../core/locale';
 
 // Băng chuyền ảnh: 1 ảnh/khung trên track trượt, arrows + dots + phím ←/→. Nhận string URL hoặc File
 // (File → objectURL, revoke khi đổi/huỷ). loop: cuộn vòng (tắt thì arrows disabled ở biên). lightbox:
@@ -26,8 +27,8 @@ import { openLightbox } from '../image-preview/lightbox';
       <div
         class="g-image-slider"
         role="region"
-        aria-roledescription="băng chuyền ảnh"
-        aria-label="Băng chuyền ảnh"
+        [attr.aria-roledescription]="t().imageSlider.roleDescription"
+        [attr.aria-label]="t().imageSlider.label"
         tabindex="0"
         (keydown)="onKeydown($event)"
       >
@@ -39,7 +40,7 @@ import { openLightbox } from '../image-preview/lightbox';
                   <button
                     type="button"
                     class="g-image-slider__zoom"
-                    aria-label="Phóng to ảnh"
+                    [attr.aria-label]="t().imageSlider.zoom"
                     (click)="openAt($index)"
                   >
                     <img [src]="url" [attr.alt]="'Ảnh ' + ($index + 1)" draggable="false" />
@@ -61,7 +62,7 @@ import { openLightbox } from '../image-preview/lightbox';
           <button
             type="button"
             class="g-image-slider__nav g-image-slider__nav--prev"
-            aria-label="Ảnh trước"
+            [attr.aria-label]="t().imageSlider.previous"
             [disabled]="!canPrev()"
             (click)="prev()"
           >
@@ -70,7 +71,7 @@ import { openLightbox } from '../image-preview/lightbox';
           <button
             type="button"
             class="g-image-slider__nav g-image-slider__nav--next"
-            aria-label="Ảnh sau"
+            [attr.aria-label]="t().imageSlider.next"
             [disabled]="!canNext()"
             (click)="next()"
           >
@@ -84,7 +85,7 @@ import { openLightbox } from '../image-preview/lightbox';
                 class="g-image-slider__dot"
                 [class.g-image-slider__dot--active]="$index === index()"
                 [attr.aria-current]="$index === index() ? 'true' : null"
-                [attr.aria-label]="'Tới ảnh ' + ($index + 1)"
+                [attr.aria-label]="t().imageSlider.goTo($index + 1)"
                 (click)="goTo($index)"
               ></button>
             }
@@ -108,6 +109,8 @@ export class GImageSlider {
   protected readonly iconPrev = gIconChevronLeft;
   protected readonly iconNext = gIconChevronRight;
   private readonly dialog = inject(Dialog);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly urls = signal<string[]>([]);
   private created: string[] = [];
@@ -167,6 +170,6 @@ export class GImageSlider {
   }
 
   protected openAt(i: number): void {
-    openLightbox(this.dialog, this.urls(), i);
+    openLightbox(this.dialog, this.urls(), i, this.t().lightbox.label);
   }
 }

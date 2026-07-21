@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconChevronLeft, gIconChevronRight, gIconMinus, gIconPlus, gIconX } from '../icon/icons';
+import { GLocaleService } from '../core/locale';
 
 export interface GLightboxData {
   urls: string[];
@@ -26,13 +27,28 @@ const MAX_SCALE = 4;
   template: `
     <div class="g-lightbox">
       <div class="g-lightbox__toolbar">
-        <button type="button" class="g-lightbox__btn" aria-label="Thu nhỏ" (click)="zoomBy(-0.5)">
+        <button
+          type="button"
+          class="g-lightbox__btn"
+          [attr.aria-label]="t().lightbox.zoomOut"
+          (click)="zoomBy(-0.5)"
+        >
           <g-icon [icon]="iconMinus" size="sm" />
         </button>
-        <button type="button" class="g-lightbox__btn" aria-label="Phóng to" (click)="zoomBy(0.5)">
+        <button
+          type="button"
+          class="g-lightbox__btn"
+          [attr.aria-label]="t().lightbox.zoomIn"
+          (click)="zoomBy(0.5)"
+        >
           <g-icon [icon]="iconPlus" size="sm" />
         </button>
-        <button type="button" class="g-lightbox__btn" aria-label="Đóng" (click)="close()">
+        <button
+          type="button"
+          class="g-lightbox__btn"
+          [attr.aria-label]="t().common.close"
+          (click)="close()"
+        >
           <g-icon [icon]="iconX" size="sm" />
         </button>
       </div>
@@ -41,7 +57,7 @@ const MAX_SCALE = 4;
         <button
           type="button"
           class="g-lightbox__btn g-lightbox__nav g-lightbox__nav--prev"
-          aria-label="Ảnh trước"
+          [attr.aria-label]="t().lightbox.previous"
           (click)="prev()"
         >
           <g-icon [icon]="iconPrev" />
@@ -49,7 +65,7 @@ const MAX_SCALE = 4;
         <button
           type="button"
           class="g-lightbox__btn g-lightbox__nav g-lightbox__nav--next"
-          aria-label="Ảnh sau"
+          [attr.aria-label]="t().lightbox.next"
           (click)="next()"
         >
           <g-icon [icon]="iconNext" />
@@ -78,6 +94,10 @@ const MAX_SCALE = 4;
 export class GLightbox {
   private readonly data = inject<GLightboxData>(DIALOG_DATA);
   private readonly dialogRef = inject<DialogRef>(DialogRef);
+  // inject() ở đây chạy đúng dù GLightbox được tạo động qua CDK Dialog: ComponentPortal thừa kế
+  // injector gốc (không phải injector cô lập), nên không cần truyền chuỗi qua DIALOG_DATA.
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly urls = this.data.urls;
   protected readonly iconPrev = gIconChevronLeft;
@@ -185,14 +205,23 @@ export class GLightbox {
   }
 }
 
-// Mở GLightbox với cấu hình chuẩn — GImagePreview và GImageSlider dùng chung (DRY).
-export function openLightbox(dialog: Dialog, urls: string[], startIndex: number): void {
+// Mở GLightbox với cấu hình chuẩn — GImagePreview, GImageSlider, GGallery dùng chung (DRY).
+// ariaLabel do NGƯỜI GỌI truyền vào (t().lightbox.label): openLightbox là hàm thuần, không phải
+// component/service nên inject() không chạy được ở đây (không có injection context); còn caller thì
+// luôn là component đã inject GLocaleService sẵn cho chuỗi riêng của nó. Dialog được tạo MỚI mỗi lần
+// gọi nên chuỗi lấy tại thời điểm mở luôn đúng ngôn ngữ hiện tại — không có vấn đề "kẹt" như afterNextRender.
+export function openLightbox(
+  dialog: Dialog,
+  urls: string[],
+  startIndex: number,
+  ariaLabel: string,
+): void {
   dialog.open<unknown, GLightboxData>(GLightbox, {
     data: { urls, startIndex },
     panelClass: 'g-lightbox-panel',
     backdropClass: 'g-lightbox-backdrop',
     hasBackdrop: true,
-    ariaLabel: 'Xem ảnh',
+    ariaLabel,
     autoFocus: 'dialog',
     restoreFocus: true,
   });

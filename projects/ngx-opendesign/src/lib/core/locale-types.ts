@@ -23,6 +23,23 @@ export interface GLocaleStrings {
   sidebar: { expand: string; collapse: string };
   orgChart: { toggleBranch: string };
   reorderList: { dragHandle: string };
+  pagination: { label: string; first: string; previous: string; next: string; last: string };
+  carousel: { roleDescription: string; label: string; previous: string; next: string };
+  coverflow: { roleDescription: string; label: string; previous: string; next: string };
+  imageSlider: {
+    roleDescription: string;
+    label: string;
+    previous: string;
+    next: string;
+    zoom: string;
+    goTo: (position: number) => string;
+  };
+  imagePreview: {
+    remove: (position: number) => string;
+    view: (position: number) => string;
+    zoom: string;
+  };
+  lightbox: { label: string; zoomIn: string; zoomOut: string; previous: string; next: string };
 }
 
 export interface GLocale {

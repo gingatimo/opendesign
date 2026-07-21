@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
+import { GLocaleService } from '../core/locale';
 
 // Căn item theo trục dọc (khi các item khác chiều cao). Map sang align-items của track.
 export type GCarouselAlign = 'stretch' | 'start' | 'center' | 'end';
@@ -30,7 +31,7 @@ export type GCarouselNav = 'overlay' | 'flanking';
     <button
       type="button"
       class="g-carousel__nav g-carousel__nav--prev"
-      aria-label="Item trước"
+      [attr.aria-label]="t().carousel.previous"
       [class.g-carousel__nav--hidden]="!canPrev()"
       [disabled]="!canPrev()"
       (click)="step(-1)"
@@ -45,8 +46,8 @@ export type GCarouselNav = 'overlay' | 'flanking';
       [attr.data-align]="align()"
       tabindex="0"
       role="group"
-      aria-roledescription="băng chuyền"
-      aria-label="Băng chuyền"
+      [attr.aria-roledescription]="t().carousel.roleDescription"
+      [attr.aria-label]="t().carousel.label"
       (scroll)="onScroll()"
     >
       <ng-content />
@@ -55,7 +56,7 @@ export type GCarouselNav = 'overlay' | 'flanking';
     <button
       type="button"
       class="g-carousel__nav g-carousel__nav--next"
-      aria-label="Item sau"
+      [attr.aria-label]="t().carousel.next"
       [class.g-carousel__nav--hidden]="!canNext()"
       [disabled]="!canNext()"
       (click)="step(1)"
@@ -82,6 +83,8 @@ export class GCarousel {
 
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly iconPrev = gIconChevronLeft;
   protected readonly iconNext = gIconChevronRight;

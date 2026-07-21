@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { GCarousel } from '../carousel/carousel';
 import { openLightbox } from '../image-preview/lightbox';
+import { GLocaleService } from '../core/locale';
 
 // Gallery ảnh kiểu trang bán hàng: một ảnh CHÍNH lớn + dải THUMBNAIL bên dưới; bấm thumbnail đổi ảnh
 // chính, bấm ảnh chính mở GLightbox (zoom/pan). Nhận string URL hoặc File (File → objectURL, revoke
@@ -23,7 +24,7 @@ import { openLightbox } from '../image-preview/lightbox';
       <button
         type="button"
         class="g-gallery__main"
-        aria-label="Phóng to ảnh"
+        [attr.aria-label]="t().imagePreview.zoom"
         (click)="openLightbox()"
       >
         <img [src]="urls()[active()]" [attr.alt]="'Ảnh ' + (active() + 1)" draggable="false" />
@@ -37,7 +38,7 @@ import { openLightbox } from '../image-preview/lightbox';
               class="g-gallery__thumb"
               [class.g-gallery__thumb--active]="$index === active()"
               [attr.aria-current]="$index === active() ? 'true' : null"
-              [attr.aria-label]="'Xem ảnh ' + ($index + 1)"
+              [attr.aria-label]="t().imagePreview.view($index + 1)"
               (click)="active.set($index)"
             >
               <img
@@ -66,6 +67,8 @@ export class GGallery {
   protected readonly urls = signal<string[]>([]);
   private created: string[] = [];
   private readonly dialog = inject(Dialog);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   constructor() {
     effect(() => {
@@ -87,6 +90,6 @@ export class GGallery {
   }
 
   protected openLightbox(): void {
-    openLightbox(this.dialog, this.urls(), this.active());
+    openLightbox(this.dialog, this.urls(), this.active(), this.t().lightbox.label);
   }
 }

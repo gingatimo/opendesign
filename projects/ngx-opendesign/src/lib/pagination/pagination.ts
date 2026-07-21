@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import {
   gIconChevronLeft,
@@ -6,17 +6,18 @@ import {
   gIconChevronsLeft,
   gIconChevronsRight,
 } from '../icon/icons';
+import { GLocaleService } from '../core/locale';
 
 // Control phân trang TRÌNH BÀY: phát sự kiện đổi trang; consumer tự cắt dữ liệu. 1-based.
 @Component({
   selector: 'g-pagination',
   imports: [GIcon],
   template: `
-    <nav class="g-pagination" aria-label="Phân trang">
+    <nav class="g-pagination" [attr.aria-label]="t().pagination.label">
       <button
         type="button"
         class="g-pagination__first"
-        aria-label="Trang đầu"
+        [attr.aria-label]="t().pagination.first"
         [disabled]="page() <= 1"
         (click)="go(1)"
       >
@@ -25,7 +26,7 @@ import {
       <button
         type="button"
         class="g-pagination__prev"
-        aria-label="Trang trước"
+        [attr.aria-label]="t().pagination.previous"
         [disabled]="page() <= 1"
         (click)="go(page() - 1)"
       >
@@ -50,7 +51,7 @@ import {
       <button
         type="button"
         class="g-pagination__next"
-        aria-label="Trang sau"
+        [attr.aria-label]="t().pagination.next"
         [disabled]="page() >= pageCount()"
         (click)="go(page() + 1)"
       >
@@ -59,7 +60,7 @@ import {
       <button
         type="button"
         class="g-pagination__last"
-        aria-label="Trang cuối"
+        [attr.aria-label]="t().pagination.last"
         [disabled]="page() >= pageCount()"
         (click)="go(pageCount())"
       >
@@ -73,6 +74,9 @@ import {
 export class GPagination {
   readonly page = model(1);
   readonly pageCount = input.required<number>();
+
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly iconFirst = gIconChevronsLeft;
   protected readonly iconPrev = gIconChevronLeft;

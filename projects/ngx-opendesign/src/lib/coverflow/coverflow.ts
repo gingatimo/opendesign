@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
+import { GLocaleService } from '../core/locale';
 
 // Băng chuyền "tâm điểm": khung hiện 3 card — card GIỮA phóng to (active), hai bên PEEK một phần card
 // trước/sau. Chạy theo active INDEX (không free-scroll): bấm nút prev/next hoặc bấm thẳng vào card bên
@@ -30,7 +31,7 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
       <button
         type="button"
         class="g-coverflow__nav g-coverflow__nav--prev"
-        aria-label="Card trước"
+        [attr.aria-label]="t().coverflow.previous"
         [class.g-coverflow__nav--hidden]="!canPrev()"
         [disabled]="!canPrev()"
         (click)="move(-1)"
@@ -43,8 +44,8 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
           #track
           class="g-coverflow__track"
           role="group"
-          aria-roledescription="băng chuyền tâm điểm"
-          aria-label="Băng chuyền tâm điểm"
+          [attr.aria-roledescription]="t().coverflow.roleDescription"
+          [attr.aria-label]="t().coverflow.label"
           tabindex="0"
           (click)="onTrackClick($event)"
           (keydown)="onKeydown($event)"
@@ -56,7 +57,7 @@ import { gIconChevronLeft, gIconChevronRight } from '../icon/icons';
       <button
         type="button"
         class="g-coverflow__nav g-coverflow__nav--next"
-        aria-label="Card sau"
+        [attr.aria-label]="t().coverflow.next"
         [class.g-coverflow__nav--hidden]="!canNext()"
         [disabled]="!canNext()"
         (click)="move(1)"
@@ -92,6 +93,8 @@ export class GCoverflow {
 
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly iconPrev = gIconChevronLeft;
   protected readonly iconNext = gIconChevronRight;

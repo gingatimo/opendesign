@@ -13,6 +13,7 @@ import {
 import { GIcon } from '../icon/icon';
 import { gIconX } from '../icon/icons';
 import { openLightbox } from './lightbox';
+import { GLocaleService } from '../core/locale';
 
 // Lưới thumbnail ảnh. Nhận string URL hoặc File (File → objectURL, revoke khi đổi/huỷ để không rò).
 // Click thumbnail → mở GLightbox (zoom/pan). removable → nút × phát (remove) index.
@@ -30,7 +31,7 @@ import { openLightbox } from './lightbox';
             <button
               type="button"
               class="g-image-preview__remove"
-              [attr.aria-label]="'Xoá ảnh ' + ($index + 1)"
+              [attr.aria-label]="t().imagePreview.remove($index + 1)"
               (click)="remove.emit($index)"
             >
               <g-icon [icon]="iconX" size="sm" />
@@ -50,6 +51,8 @@ export class GImagePreview {
 
   protected readonly iconX = gIconX;
   private readonly dialog = inject(Dialog);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   // objectURL cho File. effect đồng bộ theo images(): revoke URL của lần trước rồi dựng mảng mới (map
   // File→createObjectURL, string→dùng thẳng) + revoke khi huỷ — tránh rò bộ nhớ. Dùng effect (KHÔNG
@@ -75,6 +78,6 @@ export class GImagePreview {
   }
 
   protected openLightbox(startIndex: number): void {
-    openLightbox(this.dialog, this.urls(), startIndex);
+    openLightbox(this.dialog, this.urls(), startIndex, this.t().lightbox.label);
   }
 }

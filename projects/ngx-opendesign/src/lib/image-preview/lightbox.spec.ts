@@ -38,7 +38,7 @@ describe('GLightbox', () => {
   it('nút phóng to tăng scale (transform); double số lần vẫn ≤ max', () => {
     const { f, img } = setup(['a.png']);
     const zoomIn = [...f.nativeElement.querySelectorAll('.g-lightbox__toolbar button')].find(
-      (b: HTMLButtonElement) => b.getAttribute('aria-label') === 'Phóng to',
+      (b: HTMLButtonElement) => b.getAttribute('aria-label') === 'Zoom in',
     ) as HTMLButtonElement;
     for (let i = 0; i < 10; i++) zoomIn.click();
     f.detectChanges();
@@ -51,7 +51,7 @@ describe('GLightbox', () => {
   it('nút đóng gọi dialogRef.close', () => {
     const { f, close } = setup(['a.png']);
     const closeBtn = [...f.nativeElement.querySelectorAll('.g-lightbox__toolbar button')].find(
-      (b: HTMLButtonElement) => b.getAttribute('aria-label') === 'Đóng',
+      (b: HTMLButtonElement) => b.getAttribute('aria-label') === 'Close',
     ) as HTMLButtonElement;
     closeBtn.click();
     expect(close).toHaveBeenCalled();
