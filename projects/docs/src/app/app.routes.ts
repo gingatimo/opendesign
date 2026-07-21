@@ -358,6 +358,11 @@ export const routes: Routes = [
     title: 'Stacked Bar — OpenDesign',
   },
   {
+    path: 'components/honeycomb-chart',
+    loadComponent: () => import('./pages/honeycomb-chart.page'),
+    title: 'Honeycomb Chart — OpenDesign',
+  },
+  {
     path: 'components/heatmap-chart',
     loadComponent: () => import('./pages/heatmap-chart.page'),
     title: 'Heatmap — OpenDesign',

@@ -176,7 +176,8 @@ download GActionExpand PNG/SVG, góc trên-phải). Data:
 `exportable` (nút tải PNG/SVG), `zoomable` (nút phóng to gần kín màn hình, Esc để thu), `titlePosition` left|center; Ngoài 4 chart trục/tròn còn có `GRadarChart` `g-radar-chart` (spider/web: mỗi trục một tiêu chí, mỗi chuỗi một đa giác;
 `[labels]` tên trục + `[series]` `GChartSeries[]`, `shape` circle|polygon), `GPolarChart` `g-polar-chart` (polar area: góc bằng nhau, BÁN KÍNH theo giá trị, có vòng lưới;
 `[data]` `GChartSlice[]`), `GStackedBar` `g-stacked-bar` (thanh tỉ lệ 1 dòng kiểu
-"Languages" của GitHub; `[data]` `GChartSlice[]`, `barHeight`, `showPercent`), `GHeatmapChart`
+"Languages" của GitHub; `[data]` `GChartSlice[]`, `barHeight`, `showPercent`), `GHoneycombChart` `g-honeycomb-chart` (tổ ong: mỗi hạng mục một ô lục giác xếp so le;
+`[data]` `GChartSlice[]`, `columns`, `colorMode` heat|category), `GHeatmapChart`
 `g-heatmap-chart` (ma trận hàng × cột; `[data]` `GHeatmapCell[] {row,col,value}`, `rows`/`columns`,
 `cellSize`, `color`) và `GCalendarHeatmap` `g-calendar-heatmap` (lịch nhiệt theo ngày kiểu
 contribution graph; `[data]` `{date,value}[]`, `from`/`to`, `unit`).

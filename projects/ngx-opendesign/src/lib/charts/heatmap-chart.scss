@@ -1,6 +1,15 @@
 :host {
   display: block;
 }
+// Khối ôm sát lưới, nhờ vậy thang màu bên dưới căn được theo mép phải của LƯỚI thay vì của card.
+.g-heatmap__wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-2);
+  width: max-content;
+  max-width: 100%;
+}
+
 // `justify-content: start` để lưới ôm sát nội dung: cột đã có bề rộng tối đa nên nếu để giãn đều,
 // phần thừa sẽ đẩy các ô rời nhau ra.
 .g-heatmap {

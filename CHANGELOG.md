@@ -44,6 +44,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **`GStackedBar`** (`g-stacked-bar`): **thanh tỉ lệ một dòng** (kiểu thanh "Languages" của GitHub) —
   cả tập dữ liệu trên một thanh ngang, mỗi phần rộng theo tỉ lệ, chú giải kèm **phần trăm**, tooltip
   từng đoạn. `[data]` `GChartSlice[]`, `barHeight`, `showPercent`, `exportable`, `zoomable`.
+- **`GHoneycombChart`** (`g-honeycomb-chart`): biểu đồ **tổ ong** — mỗi hạng mục là một ô lục giác
+  đỉnh nhọn, xếp so le nên khít hơn lưới vuông. `[data]` `GChartSlice[]`, `columns` (bỏ trống thì tự
+  chia lưới gần vuông), `colorMode` **heat|category** (đậm theo giá trị hoặc màu phân loại), nhãn +
+  giá trị trong ô (tự ẩn khi ô quá nhỏ), tooltip từng ô.
 - **`GHeatmapChart`** (`g-heatmap-chart`): **bản đồ nhiệt ma trận** hàng × cột, ô đậm dần theo giá
   trị, thang màu 4 bậc + nhãn hai đầu. `[data]` `GHeatmapCell[] {row,col,value}`, `rows`/`columns`
   (thứ tự), `cellSize`, `color`.

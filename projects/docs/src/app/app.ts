@@ -193,6 +193,11 @@ export class App {
         { path: '/components/stacked-bar', label: 'Stacked Bar', icon: 'stacked-bar' },
         { path: '/components/heatmap-chart', label: 'Heatmap', icon: 'heatmap-chart' },
         {
+          path: '/components/honeycomb-chart',
+          label: 'Honeycomb Chart',
+          icon: 'honeycomb-chart',
+        },
+        {
           path: '/components/calendar-heatmap',
           label: 'Calendar Heatmap',
           icon: 'calendar-heatmap',

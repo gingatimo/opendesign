@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+.g-honeycomb__svg {
+  display: block;
+  font-family: var(--g-font-family);
+}
+.g-honeycomb__hex {
+  stroke: var(--g-surface-raised);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: opacity var(--g-duration-fast) var(--g-ease);
+}
+.g-honeycomb__cell:hover .g-honeycomb__hex {
+  opacity: 0.85;
+}
+// Chữ nằm trên ô màu nên dùng màu chữ thường, không phải màu mờ — nền nhạt nhất vẫn đọc được.
+.g-honeycomb__label,
+.g-honeycomb__value {
+  fill: var(--g-text);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+.g-honeycomb__label {
+  font-weight: 600;
+}
+.g-honeycomb__value {
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-honeycomb__hex {
+    transition: none;
+  }
+}

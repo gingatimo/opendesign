@@ -80,6 +80,7 @@ export type NavIcon =
   | 'polar-chart'
   | 'radar-chart'
   | 'heatmap-chart'
+  | 'honeycomb-chart'
   | 'calendar-heatmap'
   | 'code-editor'
   | 'rich-text-editor'
@@ -390,6 +391,10 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { x: 13, y: 10, width: 5, height: 4, rx: 2 },
       { x: 19, y: 10, width: 2, height: 4, rx: 1 },
     ],
+  },
+  'honeycomb-chart': {
+    viewBox: VB,
+    paths: ['M12 3l6 3.5v7L12 17l-6-3.5v-7z', 'M12 17v4'],
   },
   'heatmap-chart': {
     viewBox: VB,

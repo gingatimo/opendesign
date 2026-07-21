@@ -95,6 +95,7 @@ export * from './lib/charts/stacked-bar';
 export * from './lib/charts/polar-chart';
 export * from './lib/charts/radar-chart';
 export * from './lib/charts/heatmap-chart';
+export * from './lib/charts/honeycomb-chart';
 export * from './lib/charts/calendar-heatmap';
 export * from './lib/editor/code-highlight';
 export * from './lib/editor/code-editor';
