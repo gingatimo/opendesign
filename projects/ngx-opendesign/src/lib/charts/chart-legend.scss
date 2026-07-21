@@ -39,3 +39,16 @@
   border-radius: var(--g-radius-sm);
   flex-shrink: 0;
 }
+
+// Khi chart phóng to, chú giải cũng phải nhỉnh lên — giữ nguyên 13px thì chữ bé tí so với hình đã to
+// gấp mấy lần. Dùng :host-context vì class phóng to nằm ở KHUNG chart (tổ tiên), ngoài tầm với của
+// style scoped.
+:host-context(.g-chart-frame--zoom) {
+  .g-chart-legend__item {
+    font-size: var(--g-font-size-lg);
+  }
+  .g-chart-legend__swatch {
+    width: 14px;
+    height: 14px;
+  }
+}
