@@ -1,4 +1,4 @@
-export const OPENDESIGN_VERSION = '1.0.0';
+export const OPENDESIGN_VERSION = '1.1.0';
 export * from './lib/core/dev-warning';
 export * from './lib/core/id-generator';
 export * from './lib/button/button';
@@ -87,6 +87,7 @@ export * from './lib/charts/chart-utils';
 export * from './lib/charts/chart-text';
 export * from './lib/charts/chart-legend';
 export * from './lib/charts/chart-export';
+export * from './lib/charts/chart-zoom';
 export * from './lib/charts/export-chart';
 export * from './lib/charts/line-chart';
 export * from './lib/charts/bar-chart';

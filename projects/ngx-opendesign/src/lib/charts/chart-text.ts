@@ -10,6 +10,9 @@ export const CHART_FONT_STACK =
 let context: CanvasRenderingContext2D | null | undefined;
 
 export function measureTextWidth(text: string, fontSize: number, weight = '400'): number {
+  // Không có DOM (render phía server) thì ước lượng thô — chart vẫn dựng được, chỉ là cột nhãn hơi
+  // lệch cho tới lần vẽ đầu trên trình duyệt.
+  if (typeof document === 'undefined') return text.length * fontSize * 0.55;
   context ??= document.createElement('canvas').getContext('2d');
   if (!context) return text.length * fontSize * 0.55; // môi trường không có canvas (SSR/test)
   context.font = `${weight} ${fontSize}px ${CHART_FONT_STACK}`;

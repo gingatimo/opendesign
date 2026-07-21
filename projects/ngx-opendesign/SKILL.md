@@ -167,24 +167,29 @@ tuỳ biến qua `<ng-template let-node>`; `selectable` + `[(selected)]` bấm c
 `GReorderList` `g-reorder-list` (danh sách kéo-thả sắp xếp lại; `[(items)]` two-way; hàng qua
 `<ng-template let-item let-i="index">`).
 
-**Charts (SVG thuần, 0 dep):** `GLineChart` `g-line-chart` (`[series]` `GChartSeries[]`, `[labels]`,
-`curve` straight|smooth) · `GBarChart` `g-bar-chart` (`orientation` vertical|horizontal, grouped) ·
-`GPieChart` `g-pie-chart` (`[data]` `GChartSlice[]`) · `GDonutChart` `g-donut-chart` (vành khuyên +
-tổng giữa) · `GChartLegend` `g-chart-legend` · `GChartExport` `g-chart-export`. **Cả 4 chart:** `title`
-(góc trên-trái) + chú giải căn giữa + `legendPosition` (top|right|bottom|left) + `exportable` (nút
-download GActionExpand PNG/SVG, góc trên-phải). Data:
-`exportable` (nút tải PNG/SVG), `zoomable` (nút phóng to gần kín màn hình, Esc để thu), `titlePosition` left|center; Ngoài 4 chart trục/tròn còn có `GRadarChart` `g-radar-chart` (spider/web: mỗi trục một tiêu chí, mỗi chuỗi một đa giác;
-`[labels]` tên trục + `[series]` `GChartSeries[]`, `shape` circle|polygon), `GPolarChart` `g-polar-chart` (polar area: góc bằng nhau, BÁN KÍNH theo giá trị, có vòng lưới;
-`[data]` `GChartSlice[]`), `GStackedBar` `g-stacked-bar` (thanh tỉ lệ 1 dòng kiểu
-"Languages" của GitHub; `[data]` `GChartSlice[]`, `barHeight`, `showPercent`), `GHoneycombChart` `g-honeycomb-chart` (tổ ong: mỗi hạng mục một ô lục giác xếp so le;
-`[data]` `GChartSlice[]`, `columns`, `colorMode` heat|category), `GHeatmapChart`
+**Charts (SVG thuần, 0 dep) — 10 loại:** `GLineChart` `g-line-chart` (`[series]` `GChartSeries[]`,
+`[labels]`, `curve` straight|smooth) · `GBarChart` `g-bar-chart` (`orientation` vertical|horizontal,
+grouped) · `GPieChart` `g-pie-chart` (`[data]` `GChartSlice[]`) · `GDonutChart` `g-donut-chart` (vành
+khuyên + tổng giữa, `thickness`) · `GPolarChart` `g-polar-chart` (polar area: góc bằng nhau, BÁN KÍNH
+theo giá trị, có vòng lưới) · `GRadarChart` `g-radar-chart` (spider/web: `[labels]` tên trục +
+`[series]`, `shape` circle|polygon) · `GStackedBar` `g-stacked-bar` (thanh tỉ lệ 1 dòng kiểu
+"Languages" của GitHub; `barHeight`, `showPercent`) · `GHoneycombChart` `g-honeycomb-chart` (tổ ong,
+mỗi hạng mục một ô lục giác; `columns`, `colorMode` heat|category) · `GHeatmapChart`
 `g-heatmap-chart` (ma trận hàng × cột; `[data]` `GHeatmapCell[] {row,col,value}`, `rows`/`columns`,
-`cellSize`, `color`; có export/zoom) và `GCalendarHeatmap` `g-calendar-heatmap` (lịch nhiệt theo ngày kiểu
-contribution graph; `[data]` `{date,value}[]`, `from`/`to`, `unit`).
-`GChartSeries {name, values, color?}`, `GChartSlice {name, value, color?}`. Màu: bỏ trống thì lấy
-vòng bảng `--g-chart-1..18` (tự đổi theo theme); `color` ghi đè nhận MỌI màu CSS (hex/rgb/hsl/oklch,
-tên màu, `var(--x)` có fallback, `color-mix()`) — KHÔNG nhận gradient/pattern và không đặt màu riêng
-cho từng điểm được.
+`cellSize`) · `GCalendarHeatmap` `g-calendar-heatmap` (lịch nhiệt theo ngày kiểu contribution graph;
+`[data]` `{date,value}[]`, `from`/`to`, `weekStart` sunday|monday, `unit`). Phụ trợ: `GChartLegend`
+`g-chart-legend`, `GChartExport` `g-chart-export`, `GChartZoom` `g-chart-zoom`.
+
+**Chung cho mọi chart:** `title` + `titlePosition` (left|center), `exportable`/`filename` (nút tải
+PNG/SVG — file tự nướng màu đã resolve, vẽ lại cả tiêu đề + chú giải), `zoomable` (phóng gần kín màn
+hình, Esc để thu; lúc đó nút tải ẩn đi), `ariaLabel`. Chart có chú giải thì thêm `legendPosition`
+(top|right|bottom|left).
+
+**Data:** `GChartSeries {name, values, color?}`, `GChartSlice {name, value, color?}`. Màu: bỏ trống
+thì lấy vòng bảng `--g-chart-1..18` (tự đổi theo theme, quá 18 là LẶP LẠI); `color` ghi đè nhận MỌI
+màu CSS (hex/rgb/hsl/oklch, tên màu, `var(--x)` có fallback, `color-mix()`) — KHÔNG nhận
+gradient/pattern và không đặt màu riêng cho từng điểm được. Heatmap/calendar/honeycomb dùng thang
+nhiệt 4 bậc pha từ một màu gốc (`color`), không phải bảng phân loại.
 
 **Editor (Angular-only):** `GCodeEditor` `g-code-editor` (soạn code, textarea-overlay + tô màu regex
 `language`, `highlighter` cắm được; `[(value)]`/CVA) · `GRichTextEditor` `g-rich-text-editor` (WYSIWYG

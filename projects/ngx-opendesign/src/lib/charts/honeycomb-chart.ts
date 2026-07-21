@@ -11,7 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { GChartExport } from './chart-export';
-import { chartColor, GChartSlice, heatColor, heatLevel, HEAT_LEVELS, polar } from './chart-utils';
+import { chartColor, GChartSlice, heatColor, heatLevel, polar } from './chart-utils';
 import { GChartZoom } from './chart-zoom';
 
 // Biểu đồ TỔ ONG (honeycomb/hexagon): mỗi hạng mục là một ô lục giác, xếp so le như tổ ong. Đọc
@@ -177,8 +177,6 @@ export class GHoneycombChart {
       };
     });
   });
-
-  protected readonly levels = Array.from({ length: HEAT_LEVELS + 1 }, (_, i) => i);
 }
 
 /** Đường viền lục giác ĐỈNH NHỌN: 6 đỉnh cách nhau 60°, đỉnh đầu ở hướng 12h. */

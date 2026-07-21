@@ -5,7 +5,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] — 2026-07-21
+
+**10 loại chart, 2 trình soạn thảo, 3 component nút/điều hướng mới, 116 icon.**
 
 ### Added
 
@@ -81,6 +83,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   `gIconAlignCenter`, `gIconAlignRight`, `gIconUnlink`, `gIconTextColor`, `gIconStrikethrough`,
   `gIconSubscript`, `gIconSuperscript`, `gIconList`, `gIconListOrdered`, `gIconListChecks`,
   `gIconIndent`, `gIconOutdent` (101 → **116**).
+- **Docs — trang chủ**: thêm mục **"Trong hộp có gì"** (chart, editor, icon set, dữ liệu dạng bảng,
+  token nền tảng, playbook) và mục **Playbook**; danh mục component nay đọc **chung một nguồn** với
+  sidebar (`core/nav.ts`) nên số component và danh sách link không còn lệch khi thêm component mới.
 
 ## [1.0.0] — 2026-07-20
 
