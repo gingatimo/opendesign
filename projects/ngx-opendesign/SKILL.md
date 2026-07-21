@@ -143,8 +143,9 @@ tâm điểm: khung 3 card, card giữa phóng to, 2 bên peek; `[(active)]`; `l
 tpl là `<ng-template>` chứa `<button g-menu-item>`).
 
 **Điều hướng:** `GActionMenu` `g-action-menu` (dropdown mở bằng trigger: `variant` icon (nút tròn ⋮)
-hoặc label (chữ + mũi tên — dùng cho MENU NGANG); xổ xuống/TỰ LẬT lên theo viewport qua CDK overlay;
-`[items]` `GActionMenuItem[]`, `placement` auto|top|bottom, `(action)`) · `GTabs`+`GTab` `g-tabs`/`g-tab` (`tablistLabel`, `label`) · `GTopbar` `g-topbar`
+hoặc label (chữ + mũi tên — dùng cho MENU NGANG); xổ ra 1 trong 4 góc, TỰ LẬT sang góc còn chỗ theo
+viewport qua CDK overlay; `[items]` `GActionMenuItem[]`, `placement`
+auto|bottom-left|bottom-right|top-left|top-right, `(action)`) · `GTabs`+`GTab` `g-tabs`/`g-tab` (`tablistLabel`, `label`) · `GTopbar` `g-topbar`
 (+`gTopbarStart`/`gTopbarCenter`/`gTopbarEnd`) · `GSidebar` `g-sidebar`
 (+`a[g-sidebar-item]`, `gSidebarItemIcon`/`gSidebarItemLabel`, `gSidebarHeader`/`gSidebarFooter`,
 `GSidebarToggle`) · `GStepper`+`GStep` `g-stepper`/`g-step` · `GLink` `a[gLink]` · `GPagination`

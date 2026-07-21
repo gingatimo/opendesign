@@ -9,8 +9,9 @@ import { ActionMenuBasicDemo } from '../demos/action-menu/action-menu-basic.demo
   template: `
     <h1>Action Menu</h1>
     <p>
-      Dropdown menu <b>điều hướng / hành động</b>: bấm trigger để xổ danh sách xuống dưới,
-      <b>TỰ LẬT lên trên</b> khi sát mép dưới viewport (dùng CDK overlay —
+      Dropdown menu <b>điều hướng / hành động</b>: bấm trigger để xổ danh sách ra
+      <b>1 trong 4 góc</b> (<code>placement</code>: dưới-trái, dưới-phải, trên-trái, trên-phải) và
+      <b>TỰ LẬT</b> sang góc còn chỗ khi sát mép viewport (dùng CDK overlay —
       <code>FlexibleConnectedPositionStrategy</code> chọn vị trí vừa màn hình). Trigger có 2 kiểu
       qua <code>variant</code>: <b>icon</b> (nút tròn, mặc định kebab <code>⋮</code>) hoặc
       <b>label</b> (chữ + mũi tên lên/xuống) — kiểu label <b>tái dùng cho menu ngang</b>. Phát
@@ -64,9 +65,10 @@ export default class ActionMenuPage {
     },
     {
       name: 'placement',
-      type: "'auto' | 'bottom' | 'top'",
+      type: "'auto' | 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right'",
       default: "'auto'",
-      description: 'Hướng ưu tiên; tự lật theo viewport nếu bị cắt.',
+      description:
+        "Góc ưu tiên ('auto' = bottom-left). Bị mép viewport cắt thì tự lật: dọc trước, rồi ngang, rồi cả hai.",
     },
     {
       name: 'label',

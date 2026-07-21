@@ -1,5 +1,12 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GActionMenu, GActionMenuItem, gIconCopy, gIconEdit, gIconTrash } from 'ngx-opendesign';
+import {
+  GActionMenu,
+  GActionMenuItem,
+  GActionMenuPlacement,
+  gIconCopy,
+  gIconEdit,
+  gIconTrash,
+} from 'ngx-opendesign';
 
 @Component({
   selector: 'docs-action-menu-basic-demo',
@@ -30,6 +37,21 @@ import { GActionMenu, GActionMenuItem, gIconCopy, gIconEdit, gIconTrash } from '
       />
       <g-action-menu variant="label" label="Hỗ trợ" [items]="support" (action)="onPick($event)" />
     </nav>
+
+    <p class="am-demo__cap">
+      <code>placement</code> — 4 góc; góc nào bị mép viewport cắt thì <b>tự lật</b> sang góc còn chỗ
+    </p>
+    <div class="am-demo__corners">
+      @for (p of placements; track p) {
+        <g-action-menu
+          [placement]="p"
+          [label]="p"
+          [items]="items"
+          variant="label"
+          (action)="onPick($event)"
+        />
+      }
+    </div>
   `,
   styles: `
     :host {
@@ -55,6 +77,11 @@ import { GActionMenu, GActionMenuItem, gIconCopy, gIconEdit, gIconTrash } from '
     .am-demo__nav {
       display: flex;
       align-items: center;
+      gap: var(--g-space-2);
+    }
+    .am-demo__corners {
+      display: flex;
+      flex-wrap: wrap;
       gap: var(--g-space-2);
     }
     .am-demo__link {
@@ -83,6 +110,12 @@ export class ActionMenuBasicDemo {
   protected readonly support: GActionMenuItem[] = [
     { label: 'Liên hệ', value: 'contact' },
     { label: 'Tài liệu', value: 'docs' },
+  ];
+  protected readonly placements: GActionMenuPlacement[] = [
+    'bottom-left',
+    'bottom-right',
+    'top-left',
+    'top-right',
   ];
   protected readonly picked = signal('');
 

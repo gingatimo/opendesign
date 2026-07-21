@@ -13,7 +13,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   xổ danh sách xuống dưới, **tự lật lên trên** khi sát mép dưới viewport (CDK overlay
   `FlexibleConnectedPositionStrategy`). Trigger 2 kiểu qua **`variant`**: `icon` (nút tròn, mặc định
   kebab ⋮) hoặc `label` (chữ + mũi tên lên/xuống theo trạng thái) — kiểu `label` **tái dùng cho menu
-  ngang**. `[items]` `GActionMenuItem[]`, `placement` auto|top|bottom, `(action)` phát item chọn.
+  ngang**. `[items]` `GActionMenuItem[]`, **`placement` 4 góc** (`bottom-left`|`bottom-right`|
+  `top-left`|`top-right`, `auto` = `bottom-left`) — góc bị mép viewport cắt thì tự lật dọc → ngang →
+  cả hai, `(action)` phát item chọn.
   Bàn phím ↑/↓/Home/End/Esc, `role="menu"`/`menuitem`, focus trap + trả focus về trigger.
 - **`GActionExpand`** (`g-action-expand`): nút **hành động bung** — cùng hành động, nhiều "type" (vd.
   Tải xuống → PDF/SVG/PNG). Thu gọn thành icon tròn; **rê chuột / focus / chạm** → bung sang phải lộ

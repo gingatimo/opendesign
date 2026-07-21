@@ -85,6 +85,23 @@
   cursor: not-allowed;
 }
 
+// Nằm TRÊN trigger thì mọc ngược lại: gốc ở mép dưới, trượt lên.
+.g-action-menu__panel--above {
+  transform-origin: bottom;
+  animation-name: g-action-menu-in-above;
+}
+
+@keyframes g-action-menu-in-above {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes g-action-menu-in {
   from {
     opacity: 0;

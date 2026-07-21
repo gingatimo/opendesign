@@ -1,5 +1,9 @@
 import { CdkTrapFocus } from '@angular/cdk/a11y';
-import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
+import {
+  CdkConnectedOverlay,
+  ConnectedOverlayPositionChange,
+  ConnectedPosition,
+} from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,25 +26,47 @@ export interface GActionMenuItem {
   disabled?: boolean;
 }
 
-// Vị trí panel: dưới (ưu tiên) và trên (dự phòng). CDK FlexibleConnectedPositionStrategy tự chọn cái
-// đầu tiên VỪA viewport → panel tự lật lên trên nếu dưới bị cắt (và ngược lại).
-const BELOW: ConnectedPosition = {
-  originX: 'start',
-  originY: 'bottom',
-  overlayX: 'start',
-  overlayY: 'top',
-  offsetY: 6,
-};
-const ABOVE: ConnectedPosition = {
-  originX: 'start',
-  originY: 'top',
-  overlayX: 'start',
-  overlayY: 'bottom',
-  offsetY: -6,
-};
+// 4 góc: dọc (dưới/trên trigger) × ngang (mép trái/phải panel căn với mép trái/phải trigger).
+export type GActionMenuPlacement =
+  'auto' | 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
 
-// Dropdown menu ĐIỀU HƯỚNG / HÀNH ĐỘNG — bấm trigger để xổ danh sách xuống DƯỚI, TỰ LẬT LÊN TRÊN khi
-// sát mép dưới viewport (CDK overlay). Trigger 2 kiểu (`variant`): 'icon' (nút tròn, mặc định kebab ⋮)
+// Dựng ConnectedPosition cho một góc. 'left' = panel căn mép TRÁI trigger (xổ sang phải), 'right' =
+// căn mép PHẢI (xổ sang trái). offsetY đẩy panel ra khỏi trigger 6px ở cả hai hướng dọc.
+function cornerPosition(
+  vertical: 'bottom' | 'top',
+  horizontal: 'left' | 'right',
+): ConnectedPosition {
+  const x = horizontal === 'left' ? 'start' : 'end';
+  return {
+    originX: x,
+    overlayX: x,
+    originY: vertical,
+    overlayY: vertical === 'bottom' ? 'top' : 'bottom',
+    offsetY: vertical === 'bottom' ? 6 : -6,
+  };
+}
+
+// Danh sách vị trí theo thứ tự ƯU TIÊN cho một placement: góc được chọn trước, rồi lần lượt lật DỌC
+// (hay bị cắt nhất), lật NGANG, và lật cả hai. CDK FlexibleConnectedPositionStrategy lấy cái ĐẦU TIÊN
+// vừa viewport → tự ra "combo" đúng theo chỗ trống, không cần người dùng tính tay.
+export function actionMenuPositions(placement: GActionMenuPlacement): ConnectedPosition[] {
+  const [vertical, horizontal] =
+    placement === 'auto'
+      ? (['bottom', 'left'] as const)
+      : (placement.split('-') as ['bottom' | 'top', 'left' | 'right']);
+  const flipV = vertical === 'bottom' ? 'top' : 'bottom';
+  const flipH = horizontal === 'left' ? 'right' : 'left';
+  return [
+    cornerPosition(vertical, horizontal),
+    cornerPosition(flipV, horizontal),
+    cornerPosition(vertical, flipH),
+    cornerPosition(flipV, flipH),
+  ];
+}
+
+// Dropdown menu ĐIỀU HƯỚNG / HÀNH ĐỘNG — bấm trigger để xổ danh sách ra góc chọn qua `placement`
+// (4 góc: dưới-trái/dưới-phải/trên-trái/trên-phải), TỰ LẬT sang góc còn chỗ khi sát mép viewport
+// (CDK overlay). Trigger 2 kiểu (`variant`): 'icon' (nút tròn, mặc định kebab ⋮)
 // hoặc 'label' (chữ + mũi tên lên/xuống) — kiểu label dùng lại được cho MENU NGANG. Bàn phím: ↑/↓
 // điều hướng, Home/End, Esc đóng, Enter chọn. Phát `(action)` với item được chọn.
 @Component({
@@ -75,9 +101,11 @@ const ABOVE: ConnectedPosition = {
       cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
       (backdropClick)="close()"
       (detach)="close()"
+      (positionChange)="onPositionChange($event)"
     >
       <div
         class="g-action-menu__panel"
+        [class.g-action-menu__panel--above]="above()"
         role="menu"
         tabindex="-1"
         [attr.aria-label]="label()"
@@ -115,20 +143,28 @@ export class GActionMenu {
   readonly items = input<readonly GActionMenuItem[]>([]);
   // Nhãn: a11y khi variant='icon'; là CHỮ HIỂN THỊ khi variant='label'.
   readonly label = input('Menu');
-  // Hướng ưu tiên: 'auto'/'bottom' (dưới, lật lên nếu bị cắt) hoặc 'top' (trên, lật xuống nếu bị cắt).
-  readonly placement = input<'auto' | 'bottom' | 'top'>('auto');
+  // Góc ưu tiên: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right' ('auto' = bottom-left).
+  // Dù chọn góc nào, panel vẫn TỰ LẬT sang góc còn vừa viewport nếu góc đó bị cắt.
+  readonly placement = input<GActionMenuPlacement>('auto');
   readonly action = output<GActionMenuItem>();
 
   protected readonly iconDown = gIconChevronDown;
   protected readonly iconUp = gIconChevronUp;
   protected readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly open = signal(false);
+  // Panel đang nằm TRÊN trigger? (do placement chọn hoặc do CDK tự lật vì hết chỗ bên dưới)
+  protected readonly above = signal(false);
   private readonly triggerRef = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
   private readonly itemRefs = viewChildren<ElementRef<HTMLButtonElement>>('item');
 
   protected readonly positions = computed<ConnectedPosition[]>(() =>
-    this.placement() === 'top' ? [ABOVE, BELOW] : [BELOW, ABOVE],
+    actionMenuPositions(this.placement()),
   );
+
+  // CDK báo góc thực sự dùng (có thể đã lật) → đổi hướng animation để panel luôn "mọc ra" từ trigger.
+  protected onPositionChange(e: ConnectedOverlayPositionChange): void {
+    this.above.set(e.connectionPair.overlayY === 'bottom');
+  }
 
   protected toggle(): void {
     this.open.set(!this.open());
