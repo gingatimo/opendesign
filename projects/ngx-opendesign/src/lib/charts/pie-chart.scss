@@ -17,7 +17,8 @@
 }
 .g-pie-chart__label {
   fill: #fff;
-  font-size: 12px;
+  // KHÔNG đặt font-size ở đây: cỡ chữ do component tính theo bán kính rồi gắn qua thuộc tính, mà CSS
+  // luôn thắng thuộc tính trình bày — đặt lại là vô hiệu hoá phần co giãn.
   font-weight: 600;
   text-anchor: middle;
   dominant-baseline: middle;

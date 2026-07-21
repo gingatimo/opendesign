@@ -65,12 +65,22 @@ import {
           [attr.aria-label]="ariaLabel()"
         >
           @for (s of slices(); track s.name) {
-            <path class="g-pie-chart__slice" [attr.d]="s.d" [style.fill]="s.color" />
+            <path class="g-pie-chart__slice" [attr.d]="s.d" [style.fill]="s.color">
+              <!-- Tooltip gốc của trình duyệt: rê vào múi nào hiện đúng tên múi đó. -->
+              <title>{{ s.name }}: {{ s.value }} ({{ s.pct }}%)</title>
+            </path>
           }
           @if (showLabels()) {
             @for (s of slices(); track s.name) {
               @if (s.frac >= 0.05) {
-                <text class="g-pie-chart__label" [attr.x]="s.lx" [attr.y]="s.ly">{{ s.pct }}%</text>
+                <text
+                  class="g-pie-chart__label"
+                  [attr.x]="s.lx"
+                  [attr.y]="s.ly"
+                  [attr.font-size]="labelSize()"
+                >
+                  {{ s.pct }}%
+                </text>
               }
             }
           }
@@ -84,7 +94,10 @@ import {
   `,
   styleUrl: './pie-chart.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'g-pie-chart' },
+  // `title` là input, nhưng viết dạng attribute tĩnh (title="...") nên nó NẰM LẠI trong DOM và
+  // trình duyệt coi đó là tooltip cho toàn bộ chart — rê chuột vào múi nào cũng hiện tên chart. Gỡ
+  // attribute khỏi host; tiêu đề đã được vẽ ở hàng đầu khung rồi.
+  host: { class: 'g-pie-chart', '[attr.title]': 'null' },
 })
 export class GPieChart {
   readonly data = input<readonly GChartSlice[]>([]);
@@ -130,6 +143,10 @@ export class GPieChart {
   protected readonly plotHeight = computed(() =>
     this.zoomed() && this.measuredHeight() > 0 ? this.measuredHeight() : this.height(),
   );
+  // Nhãn % phải TỈ LỆ theo bán kính: viewBox khớp 1:1 với kích thước thật nên cỡ px cố định sẽ hoá
+  // bé tí lúc phóng to. Hệ số lấy đúng tỉ lệ ở cỡ mặc định (12px trên bán kính 132).
+  protected readonly radius = computed(() => Math.min(this.w(), this.plotHeight()) / 2 - 8);
+  protected readonly labelSize = computed(() => Math.max(9, Math.round(this.radius() * 0.091)));
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.data().map((d, i) => ({ name: d.name, color: chartColor(i, d.color) })),
   );

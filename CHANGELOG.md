@@ -31,7 +31,7 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   hình vẽ theo chiều cao ĐO ĐƯỢC của khung thay vì `height` cố định — nếu không, tỉ lệ viewBox trùng
   tỉ lệ ô nên trình duyệt không phóng gì cả, card rộng ra mà chart vẫn y nguyên. File xuất ra **nướng màu
   đã tính vào inline style** (biến `--g-chart-*` không tồn tại ngoài trang) và **vẽ lại tiêu đề +
-  chú giải** trong chính SVG, vì hai thứ này là HTML nằm ngoài `<svg>`. Kèm `chart-utils`
+  chú giải** trong chính SVG, vì hai thứ này là HTML nằm ngoài `<svg>`. Rê chuột vào múi pie/donut hiện **tên múi + giá trị + %** (thẻ `<title>` của SVG). Kèm `chart-utils`
   (niceTicks, linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
 - **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea
   trong suốt đè lên `<pre>` tô màu regex `js/ts/json/css/html`, `highlighter` cắm được, gutter số

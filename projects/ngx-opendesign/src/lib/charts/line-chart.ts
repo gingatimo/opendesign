@@ -113,7 +113,10 @@ import {
   `,
   styleUrl: './line-chart.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'g-line-chart' },
+  // `title` là input, nhưng viết dạng attribute tĩnh (title="...") nên nó NẰM LẠI trong DOM và
+  // trình duyệt coi đó là tooltip cho toàn bộ chart — rê chuột vào múi nào cũng hiện tên chart. Gỡ
+  // attribute khỏi host; tiêu đề đã được vẽ ở hàng đầu khung rồi.
+  host: { class: 'g-line-chart', '[attr.title]': 'null' },
 })
 export class GLineChart {
   readonly series = input<readonly GChartSeries[]>([]);
