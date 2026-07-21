@@ -32,17 +32,20 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   trong suốt đè lên `<pre>` tô màu regex `js/ts/json/css/html`, `highlighter` cắm được, gutter số
   dòng, Tab=spaces; IME native), **`GRichTextEditor`** (`g-rich-text-editor`, contenteditable +
   toolbar: **hoàn tác/làm lại**, **Text styles** (Normal text, Heading 1–6, Quote — dùng lại
-  `GActionMenu`), đậm/nghiêng/gạch dưới/gạch ngang, **Code/Subscript/Superscript** gộp một dropdown,
-  **màu chữ**, danh sách chấm/số, **căn trái/giữa/phải**, **chèn & bỏ liên kết**, **chèn bảng**,
-  xoá định dạng; `pasteMode` **text|html**; giá trị ngoài lẫn HTML dán đều **sanitize** chống
+  `GActionMenu`), đậm/nghiêng/gạch dưới, dropdown **định dạng khác** (Strikethrough, Code,
+  Subscript, Superscript — có icon), **màu chữ** (dropdown bảng màu), dropdown **kiểu danh sách**
+  (Bulleted, Numbered, **Checkbox list**), **căn trái/giữa/phải**, **chèn & bỏ liên kết**,
+  **chèn bảng**, xoá định dạng; `pasteMode` **text|html**; giá trị ngoài lẫn HTML dán đều **sanitize** chống
   XSS, URL liên kết chặn `javascript:`; toolbar theo chuẩn ARIA — **một điểm dừng Tab**, ←/→ chuyển
   nút; IME-safe). Cả hai hỗ trợ `[(value)]` lẫn `formControlName` (CVA).
 - **`rte-commands`**: lớp lệnh của rich text editor — gom **toàn bộ** lời gọi `document.execCommand`
   (đã deprecated nhưng là cách DUY NHẤT giữ được undo stack + IME của trình duyệt) vào **một file**,
   và bỏ hẳn `queryCommandState`/`queryCommandValue`: trạng thái toolbar nay dò bằng **Selection/Range
   API tiêu chuẩn**. HTML đầu ra ép ngữ nghĩa (`styleWithCSS=false`, `defaultParagraphSeparator=p`).
-- **Icon**: thêm 7 icon soạn thảo — `gIconUndo`, `gIconRedo`, `gIconAlignLeft`, `gIconAlignCenter`,
-  `gIconAlignRight`, `gIconUnlink`, `gIconTextColor` (101 → **108**).
+- **Icon**: thêm 13 icon soạn thảo — `gIconUndo`, `gIconRedo`, `gIconAlignLeft`,
+  `gIconAlignCenter`, `gIconAlignRight`, `gIconUnlink`, `gIconTextColor`, `gIconStrikethrough`,
+  `gIconSubscript`, `gIconSuperscript`, `gIconList`, `gIconListOrdered`, `gIconListChecks`
+  (101 → **114**).
 
 ## [1.0.0] — 2026-07-20
 

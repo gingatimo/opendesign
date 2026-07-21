@@ -42,7 +42,7 @@ const CSS_SAMPLE = `.g-button {
 `;
 
 const PLAIN_SAMPLE = `OpenDesign — design system cho Angular
-- 71 component, 108 icon
+- 71 component, 114 icon
 - 0 dependency bên thứ ba
 - sáng/tối qua thuộc tính data-g-theme
 `;

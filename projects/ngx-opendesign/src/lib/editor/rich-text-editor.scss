@@ -125,6 +125,21 @@
   font-size: var(--g-font-size-sm);
 }
 
+// Bảng màu: dropdown neo vào nút trên toolbar (CDK overlay, tự lật theo viewport).
+.g-rte__colors {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--g-space-2);
+  padding: var(--g-space-2);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius-md);
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-shadow-lg);
+}
+.g-rte__colors:focus-visible {
+  outline: none;
+}
+
 // Ô màu chữ: nền lấy theo `color` inline nên chỉ cần một class.
 .g-rte__swatch {
   width: 24px;
@@ -192,6 +207,47 @@
   ol {
     margin: 0.4em 0;
     padding-left: 1.5em;
+  }
+
+  // Danh sách có ô đánh dấu: ô vuông + dấu tick do CSS vẽ (không dùng <input>, xem rte-commands).
+  ul.g-rte-tasks {
+    padding-left: 0;
+    list-style: none;
+  }
+  ul.g-rte-tasks > li {
+    position: relative;
+    padding-left: 1.8em;
+  }
+  ul.g-rte-tasks > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.28em;
+    width: 1em;
+    height: 1em;
+    border: 1px solid var(--g-border-strong);
+    border-radius: var(--g-radius-sm);
+    background: var(--g-surface-raised);
+    cursor: pointer;
+  }
+  ul.g-rte-tasks > li.g-rte-task--done {
+    color: var(--g-text-muted);
+    text-decoration: line-through;
+  }
+  ul.g-rte-tasks > li.g-rte-task--done::before {
+    border-color: var(--g-primary);
+    background: var(--g-primary);
+  }
+  ul.g-rte-tasks > li.g-rte-task--done::after {
+    content: '';
+    position: absolute;
+    left: 0.26em;
+    top: 0.45em;
+    width: 0.42em;
+    height: 0.2em;
+    border-left: 2px solid var(--g-on-primary);
+    border-bottom: 2px solid var(--g-on-primary);
+    transform: rotate(-45deg);
   }
   a {
     color: var(--g-chart-5);

@@ -197,6 +197,39 @@ export function toggleInlineCode(root: HTMLElement): boolean {
   return applyCommand('insertHTML', `<code>${escapeText(text)}</code>`);
 }
 
+/** Class đánh dấu danh sách có ô tick và mục đã tick — dùng CLASS chứ không phải `<input>`. */
+export const TASK_LIST_CLASS = 'g-rte-tasks';
+export const TASK_DONE_CLASS = 'g-rte-task--done';
+
+/**
+ * Chèn danh sách có ô đánh dấu từ đoạn đang chọn (mỗi dòng thành một mục).
+ *
+ * KHÔNG dùng `<input type="checkbox">`: sanitizer của Angular loại bỏ thẻ form, nên giá trị nạp lại
+ * từ ngoài (`[(value)]`, form) sẽ mất sạch ô tick. Trạng thái vì thế nằm ở CLASS trên `<li>` (class
+ * là thuộc tính sanitizer giữ lại), còn ô vuông/dấu tick do CSS vẽ.
+ */
+export function insertTaskList(): boolean {
+  const sel = document.getSelection();
+  const lines = (sel?.toString() ?? '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const list = document.createElement('ul');
+  list.className = TASK_LIST_CLASS;
+  for (const line of lines.length ? lines : ['']) {
+    const item = document.createElement('li');
+    if (line) item.textContent = line;
+    else item.appendChild(document.createElement('br'));
+    list.appendChild(item);
+  }
+  return applyCommand('insertHTML', list.outerHTML);
+}
+
+/** Danh sách có ô đánh dấu đang chứa con trỏ, nếu có. */
+export function activeTaskList(root: HTMLElement): HTMLElement | null {
+  return closestTag(root, `ul.${TASK_LIST_CLASS}`);
+}
+
 /**
  * Chèn bảng rỗng `rows × cols`. Cũng không có lệnh execCommand cho bảng → dựng DOM rồi đưa qua
  * `insertHTML` để giữ undo. Chèn kèm một đoạn trống phía sau để con trỏ còn lối thoát khỏi bảng.

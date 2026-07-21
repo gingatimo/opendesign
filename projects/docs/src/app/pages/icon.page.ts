@@ -9,7 +9,7 @@ import { IconBasicDemo } from '../demos/icon/icon-basic.demo';
   template: `
     <h1>Icon</h1>
     <p>
-      <code>g-icon</code> render icon set có sẵn của OpenDesign — 108 icon. Mỗi icon là dữ liệu hình
+      <code>g-icon</code> render icon set có sẵn của OpenDesign — 114 icon. Mỗi icon là dữ liệu hình
       học có cấu trúc (<code>{{ '{ viewBox, paths?, circles?, rects? }' }}</code
       >), không phải chuỗi HTML/SVG thô hay font icon — <code>GIcon</code> vẽ bằng binding thường
       (<code>[attr.d]</code>...), không dùng <code>innerHTML</code> hay

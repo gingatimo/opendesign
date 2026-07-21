@@ -15,18 +15,27 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
+import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { GActionMenu, GActionMenuItem } from '../action-menu/action-menu';
+import { actionMenuPositions, GActionMenu, GActionMenuItem } from '../action-menu/action-menu';
 import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import {
   gIconAlignCenter,
   gIconAlignLeft,
   gIconAlignRight,
+  gIconCode,
   gIconLink,
+  gIconList,
+  gIconListChecks,
+  gIconListOrdered,
   gIconMoreHorizontal,
   gIconRedo,
+  gIconStrikethrough,
+  gIconSubscript,
+  gIconSuperscript,
   gIconTable,
   gIconTextColor,
   gIconUndo,
@@ -37,10 +46,14 @@ import {
   activeBlock,
   activeLink,
   activeMarks,
+  activeTaskList,
   applyCommand,
   applyStyledCommand,
   insertTable,
+  insertTaskList,
   safeLinkUrl,
+  TASK_DONE_CLASS,
+  TASK_LIST_CLASS,
   toggleInlineCode,
 } from './rte-commands';
 
@@ -55,7 +68,7 @@ import {
 // SANITIZE trước. Toolbar theo chuẩn ARIA toolbar: một điểm dừng Tab duy nhất, ←/→ chuyển nút.
 @Component({
   selector: 'g-rich-text-editor',
-  imports: [GIcon, GActionMenu],
+  imports: [GIcon, GActionMenu, CdkConnectedOverlay, CdkTrapFocus],
   template: `
     <div class="g-rte" [class.g-rte--disabled]="isDisabled()" [class.g-rte--invalid]="invalid()">
       <div
@@ -130,43 +143,62 @@ import {
         </span>
 
         <button
+          #colorTrigger
           type="button"
           class="g-rte__btn"
-          [class.g-rte__btn--active]="panel() === 'color'"
+          [class.g-rte__btn--active]="colorOpen()"
           aria-label="Màu chữ"
-          [attr.aria-expanded]="panel() === 'color'"
+          aria-haspopup="true"
+          [attr.aria-expanded]="colorOpen()"
           [disabled]="isDisabled()"
-          (mousedown)="$event.preventDefault()"
-          (click)="togglePanel('color')"
+          (mousedown)="saveSelection(); $event.preventDefault()"
+          (click)="toggleColor()"
         >
           <g-icon [icon]="iconTextColor" size="sm" />
         </button>
+        <ng-template
+          cdkConnectedOverlay
+          [cdkConnectedOverlayOrigin]="colorTriggerRef()!"
+          [cdkConnectedOverlayOpen]="colorOpen()"
+          [cdkConnectedOverlayPositions]="menuPositions"
+          cdkConnectedOverlayHasBackdrop
+          cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+          (backdropClick)="closeColor()"
+          (detach)="closeColor()"
+        >
+          <div
+            class="g-rte__colors"
+            role="group"
+            aria-label="Màu chữ"
+            tabindex="-1"
+            cdkTrapFocus
+            [cdkTrapFocusAutoCapture]="true"
+            (keydown.escape)="closeColor()"
+          >
+            @for (c of colors; track c.value) {
+              <button
+                type="button"
+                class="g-rte__swatch"
+                [class.g-rte__swatch--reset]="c.value === 'inherit'"
+                [style.color]="c.value"
+                [attr.aria-label]="c.label"
+                [attr.title]="c.label"
+                (click)="applyColor(c.value)"
+              ></button>
+            }
+          </div>
+        </ng-template>
         <span class="g-rte__sep"></span>
 
-        <button
-          type="button"
-          class="g-rte__btn"
-          [class.g-rte__btn--active]="block() === 'ul'"
-          [attr.aria-pressed]="block() === 'ul'"
-          aria-label="Danh sách chấm"
-          [disabled]="isDisabled()"
-          (mousedown)="$event.preventDefault()"
-          (click)="exec('insertUnorderedList')"
-        >
-          &bull;
-        </button>
-        <button
-          type="button"
-          class="g-rte__btn"
-          [class.g-rte__btn--active]="block() === 'ol'"
-          [attr.aria-pressed]="block() === 'ol'"
-          aria-label="Danh sách số"
-          [disabled]="isDisabled()"
-          (mousedown)="$event.preventDefault()"
-          (click)="exec('insertOrderedList')"
-        >
-          1.
-        </button>
+        <span class="g-rte__menu" (mousedown)="saveSelection()">
+          <g-action-menu
+            label="Kiểu danh sách"
+            [icon]="iconList"
+            [items]="listItems"
+            placement="bottom-left"
+            (action)="onList($event)"
+          />
+        </span>
         <span class="g-rte__sep"></span>
 
         @for (a of aligns; track a.cmd) {
@@ -256,23 +288,6 @@ import {
         </div>
       }
 
-      @if (panel() === 'color') {
-        <div class="g-rte__bar" role="group" aria-label="Màu chữ">
-          @for (c of colors; track c.value) {
-            <button
-              type="button"
-              class="g-rte__swatch"
-              [class.g-rte__swatch--reset]="c.value === 'inherit'"
-              [style.color]="c.value"
-              [attr.aria-label]="c.label"
-              [attr.title]="c.label"
-              (mousedown)="$event.preventDefault()"
-              (click)="applyColor(c.value)"
-            ></button>
-          }
-        </div>
-      }
-
       @if (panel() === 'table') {
         <div class="g-rte__bar">
           <label class="g-rte__field">
@@ -320,6 +335,7 @@ import {
         [attr.tabindex]="isDisabled() ? -1 : 0"
         [style.min-height.px]="minHeight()"
         (input)="onInput()"
+        (click)="onEditableClick($event)"
         (paste)="onPaste($event)"
         (keyup)="updateActive()"
         (mouseup)="updateActive()"
@@ -345,12 +361,6 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     { cmd: 'bold', label: 'B', title: 'Đậm', style: 'font-weight:700' },
     { cmd: 'italic', label: 'I', title: 'Nghiêng', style: 'font-style:italic' },
     { cmd: 'underline', label: 'U', title: 'Gạch dưới', style: 'text-decoration:underline' },
-    {
-      cmd: 'strikeThrough',
-      label: 'S',
-      title: 'Gạch ngang',
-      style: 'text-decoration:line-through',
-    },
   ];
   protected readonly aligns = [
     { cmd: 'justifyLeft', value: 'left', title: 'Căn trái', icon: gIconAlignLeft },
@@ -369,9 +379,16 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   ];
   // Định dạng ít dùng, gộp vào một dropdown. 'code' không có lệnh execCommand nên xử lý riêng.
   protected readonly extraFormats: GActionMenuItem[] = [
-    { label: 'Code', value: 'code' },
-    { label: 'Subscript', value: 'subscript' },
-    { label: 'Superscript', value: 'superscript' },
+    { label: 'Strikethrough', value: 'strikeThrough', icon: gIconStrikethrough },
+    { label: 'Code', value: 'code', icon: gIconCode },
+    { label: 'Subscript', value: 'subscript', icon: gIconSubscript },
+    { label: 'Superscript', value: 'superscript', icon: gIconSuperscript },
+  ];
+  // Kiểu danh sách. 'task' (ô đánh dấu) không có lệnh execCommand nên xử lý riêng.
+  protected readonly listItems: GActionMenuItem[] = [
+    { label: 'Bulleted list', value: 'insertUnorderedList', icon: gIconList },
+    { label: 'Numbered list', value: 'insertOrderedList', icon: gIconListOrdered },
+    { label: 'Checkbox list', value: 'task', icon: gIconListChecks },
   ];
   // Bảng màu chữ: các tông trung tính đọc được trên CẢ nền sáng lẫn tối (giá trị được ghi thẳng vào
   // HTML nên không đổi theo theme). 'inherit' = trả về màu chữ mặc định của theme.
@@ -393,6 +410,7 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   protected readonly iconMore = gIconMoreHorizontal;
   protected readonly iconTextColor = gIconTextColor;
   protected readonly iconTable = gIconTable;
+  protected readonly iconList = gIconList;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
@@ -403,8 +421,11 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   protected readonly active = signal<ReadonlySet<string>>(new Set());
   protected readonly block = signal('');
   protected readonly align = signal('');
-  // Khay phụ hiện dưới toolbar: nhập URL, chọn màu, hoặc kích thước bảng.
-  protected readonly panel = signal<'none' | 'link' | 'color' | 'table'>('none');
+  // Khay phụ hiện dưới toolbar: nhập URL hoặc kích thước bảng (bảng màu là dropdown riêng).
+  protected readonly panel = signal<'none' | 'link' | 'table'>('none');
+  protected readonly colorOpen = signal(false);
+  // Dùng lại thứ tự vị trí của GActionMenu: xổ dưới-trái, tự lật khi sát mép viewport.
+  protected readonly menuPositions = actionMenuPositions('bottom-left');
   protected readonly linkError = signal(false);
   private onChange: (v: string) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
@@ -422,6 +443,7 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   private readonly editable = viewChild<ElementRef<HTMLElement>>('editable');
   private readonly toolbar = viewChild<ElementRef<HTMLElement>>('toolbar');
   private readonly linkInput = viewChild<ElementRef<HTMLInputElement>>('linkInput');
+  protected readonly colorTriggerRef = viewChild<ElementRef<HTMLButtonElement>>('colorTrigger');
 
   constructor() {
     if (this.ngControl) this.ngControl.valueAccessor = this;
@@ -551,9 +573,56 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     });
   }
 
-  // ----- Khay phụ: liên kết / màu chữ / bảng ----------------------------------------------------
+  /**
+   * Đổi kiểu danh sách. Ba kiểu chuyển qua lại được, nhưng phải gỡ kiểu cũ trước: Chrome KHÔNG cho
+   * `insertHTML` một `<ul>` chồng lên danh sách đang có (quy tắc lồng danh sách), nên muốn sang
+   * checklist thì tắt danh sách hiện tại trước đã.
+   */
+  protected onList(item: GActionMenuItem): void {
+    queueMicrotask(() => {
+      const el = this.editable()?.nativeElement;
+      if (this.isDisabled() || !el) return;
+      this.restoreSelection();
+      const taskList = activeTaskList(el);
+      const block = activeBlock(el);
 
-  protected togglePanel(name: 'link' | 'color' | 'table'): void {
+      if (item.value === 'task') {
+        if (taskList) {
+          // Đang là checklist → bấm lần nữa để tắt hẳn danh sách.
+          taskList.classList.remove(TASK_LIST_CLASS);
+          applyCommand('insertUnorderedList');
+        } else {
+          if (block === 'ul') applyCommand('insertUnorderedList');
+          else if (block === 'ol') applyCommand('insertOrderedList');
+          insertTaskList();
+        }
+      } else if (taskList) {
+        // Checklist → danh sách thường: bỏ class là xong (đổi sang số thì chuyển tiếp ul → ol).
+        // Đây là thao tác DOM trực tiếp nên KHÔNG vào undo stack — chấp nhận được vì chỉ đổi class.
+        taskList.classList.remove(TASK_LIST_CLASS);
+        if (item.value === 'insertOrderedList') applyCommand('insertOrderedList');
+      } else {
+        applyCommand(item.value);
+      }
+
+      this.commit();
+      this.updateActive();
+    });
+  }
+
+  /** Bấm vào ô vuông bên trái một mục checklist thì tick/bỏ tick (phần còn lại vẫn gõ chữ). */
+  protected onEditableClick(e: MouseEvent): void {
+    if (this.isDisabled()) return;
+    const item = (e.target as HTMLElement | null)?.closest?.('li');
+    if (!item?.parentElement?.classList.contains(TASK_LIST_CLASS)) return;
+    if (e.clientX - item.getBoundingClientRect().left > 22) return;
+    item.classList.toggle(TASK_DONE_CLASS);
+    this.commit();
+  }
+
+  // ----- Khay phụ: liên kết / bảng --------------------------------------------------------------
+
+  protected togglePanel(name: 'link' | 'table'): void {
     if (this.isDisabled()) return;
     if (this.panel() === name) {
       this.closePanel();
@@ -569,10 +638,21 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     this.restoreSelection();
   }
 
+  protected toggleColor(): void {
+    if (this.isDisabled()) return;
+    this.colorOpen.set(!this.colorOpen());
+  }
+
+  protected closeColor(): void {
+    if (!this.colorOpen()) return;
+    this.colorOpen.set(false);
+    this.restoreSelection();
+  }
+
   protected applyColor(color: string): void {
+    this.colorOpen.set(false);
     this.restoreSelection();
     applyStyledCommand('foreColor', color);
-    this.panel.set('none');
     this.commit();
     this.updateActive();
   }

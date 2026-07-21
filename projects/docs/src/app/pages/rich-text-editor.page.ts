@@ -11,12 +11,12 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
     <p>
       Trình soạn <b>văn bản định dạng</b> (WYSIWYG), <b>Angular-only</b>, 0 thư viện ngoài. Bề mặt
       là <code>contenteditable</code>. Toolbar: hoàn tác/làm lại · <b>Text styles</b> (Normal text,
-      Heading 1–6, Quote) · đậm/nghiêng/gạch dưới/gạch ngang ·
-      <b>Code / Subscript / Superscript</b> gộp trong một dropdown · <b>màu chữ</b> · danh sách
-      chấm/số · căn trái/giữa/phải · chèn & bỏ <b>liên kết</b> · chèn <b>bảng</b> · xoá định dạng.
-      <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán plain-text hoặc HTML đã <b>sanitize</b>,
-      giá trị ngoài cũng được sanitize chống XSS. Hai chiều <code>[(value)]</code> (HTML) hoặc
-      <code>formControlName</code>.
+      Heading 1–6, Quote) · đậm/nghiêng/gạch dưới · dropdown <b>định dạng khác</b> (Strikethrough,
+      Code, Subscript, Superscript) · <b>màu chữ</b> · dropdown <b>kiểu danh sách</b> (Bulleted,
+      Numbered, <b>Checkbox</b>) · căn trái/giữa/phải · chèn & bỏ <b>liên kết</b> · chèn
+      <b>bảng</b> · xoá định dạng. <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán plain-text
+      hoặc HTML đã <b>sanitize</b>, giá trị ngoài cũng được sanitize chống XSS. Hai chiều
+      <code>[(value)]</code> (HTML) hoặc <code>formControlName</code>.
     </p>
 
     <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
@@ -111,6 +111,12 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         <b>Màu chữ</b> ghi thẳng mã màu vào HTML, nên bảng màu chọn các tông đọc được trên
         <b>cả nền sáng lẫn tối</b>. Ô đầu tiên (gạch chéo) là <b>Mặc định</b> — trả chữ về
         <code>color: inherit</code> để đi theo theme.
+      </li>
+      <li>
+        <b>Checkbox list</b>: ô tick đánh dấu bằng <b>class trên <code>&lt;li&gt;</code></b>
+        (<code>g-rte-task--done</code>), ô vuông và dấu tick do CSS vẽ. Không dùng
+        <code>&lt;input type="checkbox"&gt;</code> vì sanitizer của Angular loại bỏ thẻ form — giá
+        trị nạp lại từ ngoài sẽ mất sạch ô tick. Bấm vào ô vuông để tick, bấm vào chữ để gõ.
       </li>
       <li>
         <b>Bảng</b>: nút chèn tạo bảng rỗng (hàng đầu là <code>&lt;th&gt;</code>) kèm một đoạn trống

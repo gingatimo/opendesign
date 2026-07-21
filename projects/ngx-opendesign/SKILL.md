@@ -177,8 +177,9 @@ download GActionExpand PNG/SVG, góc trên-phải). Data:
 
 **Editor (Angular-only):** `GCodeEditor` `g-code-editor` (soạn code, textarea-overlay + tô màu regex
 `language`, `highlighter` cắm được; `[(value)]`/CVA) · `GRichTextEditor` `g-rich-text-editor` (WYSIWYG
-qua contenteditable; toolbar undo/redo, Text styles p|h1-h6|blockquote, đậm/nghiêng/gạch,
-code/sub/sup, màu chữ, danh sách, căn lề, chèn/bỏ liên kết, chèn bảng, xoá định dạng;
+qua contenteditable; toolbar undo/redo, Text styles p|h1-h6|blockquote, đậm/nghiêng/gạch dưới,
+dropdown định dạng khác (strike/code/sub/sup), màu chữ, dropdown danh sách (chấm/số/checkbox), căn
+lề, chèn/bỏ liên kết, chèn bảng, xoá định dạng;
 `pasteMode` text|html; giá trị ngoài + HTML dán tự sanitize,
 URL liên kết chặn `javascript:`; `[(value)]` HTML/CVA). Cả hai IME-safe. Lệnh soạn thảo gói trong
 `rte-commands.ts` (chỗ DUY NHẤT dùng `execCommand` — giữ undo native; trạng thái đọc bằng DOM).

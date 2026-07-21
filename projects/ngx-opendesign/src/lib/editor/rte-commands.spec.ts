@@ -1,4 +1,14 @@
-import { activeBlock, activeLink, activeMarks, safeLinkUrl } from './rte-commands';
+import { SecurityContext } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { DomSanitizer } from '@angular/platform-browser';
+import {
+  activeBlock,
+  activeLink,
+  activeMarks,
+  safeLinkUrl,
+  TASK_DONE_CLASS,
+  TASK_LIST_CLASS,
+} from './rte-commands';
 
 // Dựng một vùng soạn giả rồi đặt con trỏ vào node có `id` cho trước.
 function setup(html: string, caretId: string): HTMLElement {
@@ -78,6 +88,20 @@ describe('rte-commands', () => {
 
     it('trả null khi không nằm trong liên kết', () => {
       expect(activeLink(setup('<p><span id="c">x</span></p>', 'c'))).toBeNull();
+    });
+  });
+
+  // Lý do checklist đánh dấu bằng CLASS chứ không phải <input type="checkbox">.
+  describe('checklist đi qua sanitizer', () => {
+    it('giữ nguyên class, trong khi <input> bị loại bỏ', () => {
+      const sanitizer = TestBed.inject(DomSanitizer);
+      const list = `<ul class="${TASK_LIST_CLASS}"><li class="${TASK_DONE_CLASS}">xong</li></ul>`;
+      const clean = sanitizer.sanitize(SecurityContext.HTML, list) ?? '';
+      expect(clean).toContain(TASK_LIST_CLASS);
+      expect(clean).toContain(TASK_DONE_CLASS);
+
+      const withInput = sanitizer.sanitize(SecurityContext.HTML, '<input type="checkbox">') ?? '';
+      expect(withInput).not.toContain('input');
     });
   });
 

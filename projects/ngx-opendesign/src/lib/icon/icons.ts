@@ -841,3 +841,54 @@ export const gIconTextColor: GIconGlyph = {
   viewBox: VIEW_BOX_24,
   paths: ['M5 21h14', 'M7 16l5-11 5 11', 'M9.2 12h5.6'],
 };
+
+// Gạch ngang chữ (strikethrough).
+export const gIconStrikethrough: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M16 4H9a3 3 0 0 0-2.83 4', 'M14 12a4 4 0 0 1 0 8H6', 'M4 12h16'],
+};
+
+// Chỉ số dưới (subscript) — X nhỏ kèm số dưới chân.
+export const gIconSubscript: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M4 5l8 8',
+    'M12 5l-8 8',
+    'M20 19h-4c0-1.5.44-2 1.5-2.5S20 15.33 20 14c0-.47-.17-.93-.48-1.29a2.11 2.11 0 0 0-2.62-.44c-.42.24-.74.62-.9 1.07',
+  ],
+};
+
+// Chỉ số trên (superscript).
+export const gIconSuperscript: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M4 19l8-8',
+    'M12 19l-8-8',
+    'M20 12h-4c0-1.5.44-2 1.5-2.5S20 8.33 20 7c0-.47-.17-.93-.48-1.29a2.11 2.11 0 0 0-2.62-.44c-.42.24-.74.62-.9 1.07',
+  ],
+};
+
+// Danh sách chấm.
+export const gIconList: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M8 6h13', 'M8 12h13', 'M8 18h13', 'M3 6h.01', 'M3 12h.01', 'M3 18h.01'],
+};
+
+// Danh sách đánh số.
+export const gIconListOrdered: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: [
+    'M10 6h11',
+    'M10 12h11',
+    'M10 18h11',
+    'M4 6h1v4',
+    'M4 10h2',
+    'M6 18H4c0-1 2-2 2-3s-1-1.5-2-1',
+  ],
+};
+
+// Danh sách có ô đánh dấu (checklist).
+export const gIconListChecks: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M3 7l2 2 4-4', 'M3 17l2 2 4-4', 'M13 6h8', 'M13 12h8', 'M13 18h8'],
+};
