@@ -39,6 +39,9 @@
 // định nên mẹo grid 0fr/1fr không cho bề rộng khi mở; max-width thì chắc chắn (bề rộng thực = min của
 // max-width và content). max-width:0 đóng, 40rem mở → bung tới đúng bề rộng nội dung rồi giữ.
 .g-action-expand__actions {
+  // Cao BẰNG pill (không chỉ bằng nút) → overflow:hidden clip ở mép pill, chừa đủ chỗ cho focus ring
+  // của nút (nút thấp hơn pill nên ring nằm trọn trong vùng clip, không bị cắt trên/dưới).
+  align-self: stretch;
   max-width: 0;
   overflow: hidden;
   transition: max-width var(--g-duration-base) var(--g-ease);
@@ -49,6 +52,7 @@
 .g-action-expand__inner {
   display: flex;
   align-items: center;
+  height: 100%;
   gap: var(--g-space-1);
   padding-right: var(--g-space-1);
   white-space: nowrap;
@@ -58,7 +62,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--g-space-1);
-  height: calc(var(--g-control-md) - 10px);
+  // Thấp hơn pill 12px → focus ring (4px) nằm trọn trong vùng clip cao bằng pill.
+  height: calc(var(--g-control-md) - 12px);
   padding: 0 var(--g-space-3);
   white-space: nowrap;
   border: 0;
