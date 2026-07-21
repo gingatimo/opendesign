@@ -203,6 +203,13 @@
     border-left: 3px solid var(--g-border-strong);
     color: var(--g-text-muted);
   }
+  // Lệnh `indent` của Chrome bọc đoạn văn vào `<blockquote style="margin:0 0 0 40px;border:none">`
+  // — đây là khối THỤT LỀ, không phải trích dẫn, nên không tô kiểu quote (chữ vẫn màu thường).
+  blockquote[style*='margin'] {
+    padding-left: 0;
+    border-left: 0;
+    color: inherit;
+  }
   ul,
   ol {
     margin: 0.4em 0;

@@ -73,11 +73,14 @@ export function applyCommand(command: string, argument?: string): boolean {
 }
 
 /**
- * Áp lệnh nhưng ép sinh CSS thay vì tag cũ. Dùng cho `foreColor`: ở chế độ mặc định
- * (`styleWithCSS=false`) Chrome sinh `<font color>` — thẻ đã bỏ khỏi HTML — nên riêng lệnh màu bật
- * CSS mode rồi trả về ngay để các lệnh khác vẫn ra tag ngữ nghĩa.
+ * Áp lệnh nhưng ép sinh CSS thay vì tag cũ, rồi trả chế độ về ngay để các lệnh khác vẫn ra tag ngữ
+ * nghĩa. Cần cho hai lệnh:
+ * - `foreColor`: chế độ mặc định (`styleWithCSS=false`) sinh `<font color>` — thẻ đã bỏ khỏi HTML.
+ * - `indent`/`outdent` NGOÀI danh sách: Firefox cho ra `margin-left` đúng nghĩa "thụt lề". (Chrome
+ *   vẫn bọc `<blockquote>` bất kể chế độ nào, nhưng có kèm inline style vô hiệu viền/padding — CSS
+ *   của editor nhận ra khối đó và không tô kiểu trích dẫn.)
  */
-export function applyStyledCommand(command: string, argument: string): boolean {
+export function applyStyledCommand(command: string, argument?: string): boolean {
   normalizeOutput();
   try {
     document.execCommand('styleWithCSS', false, 'true');

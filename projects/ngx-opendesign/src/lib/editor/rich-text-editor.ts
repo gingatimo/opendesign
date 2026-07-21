@@ -57,6 +57,9 @@ import {
   toggleInlineCode,
 } from './rte-commands';
 
+// Đếm để mỗi editor trên trang có id mô tả a11y riêng.
+let hintCounter = 0;
+
 // Trình soạn RICH-TEXT (Angular-only, 0 thư viện ngoài). Bề mặt là contenteditable; định dạng áp qua
 // lớp lệnh `rte-commands` — file DUY NHẤT chạm `document.execCommand` (đọc phần chú thích ở đó để
 // biết vì sao một API deprecated vẫn là lựa chọn đúng: chỉ nó giữ được undo stack + IME của trình
@@ -330,6 +333,7 @@ import {
         [attr.data-placeholder]="placeholder()"
         [attr.aria-label]="ariaLabel()"
         [attr.aria-invalid]="invalid() || null"
+        [attr.aria-describedby]="hintId"
         role="textbox"
         aria-multiline="true"
         [attr.tabindex]="isDisabled() ? -1 : 0"
@@ -342,6 +346,11 @@ import {
         (mouseup)="updateActive()"
         (blur)="onTouchedFn()"
       ></div>
+
+      <!-- Nói rõ quy ước phím cho screen reader: Tab bị dùng để thụt lề nên cần lối thoát riêng. -->
+      <span class="cdk-visually-hidden" [id]="hintId">
+        Tab để thụt lề, Shift+Tab để lùi ra. Nhấn Escape rồi Tab để rời khỏi vùng soạn.
+      </span>
     </div>
   `,
   styleUrl: './rich-text-editor.scss',
@@ -412,6 +421,7 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   protected readonly iconTextColor = gIconTextColor;
   protected readonly iconTable = gIconTable;
   protected readonly iconList = gIconList;
+  protected readonly hintId = `g-rte-hint-${++hintCounter}`;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
@@ -440,6 +450,8 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   private pendingAt: { node: Node; offset: number } | null = null;
   // href điền sẵn cho ô URL khi mở popover liên kết.
   private linkDraft = '';
+  // Vừa bấm Esc → lần Tab kế tiếp KHÔNG thụt lề mà rời khỏi vùng soạn (lối thoát bàn phím).
+  private tabExits = false;
 
   private readonly editable = viewChild<ElementRef<HTMLElement>>('editable');
   private readonly toolbar = viewChild<ElementRef<HTMLElement>>('toolbar');
@@ -612,20 +624,37 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   }
 
   /**
-   * Tab TRONG danh sách = thụt vào thành danh sách con (Shift+Tab = lùi ra) — dùng lệnh
-   * `indent`/`outdent` nên vẫn nằm trong undo stack.
+   * Tab = THỤT LỀ, Shift+Tab = lùi ra — trong danh sách thì thành danh sách con, ở đoạn văn/tiêu đề
+   * thì tăng `margin-left`. Dùng lệnh `indent`/`outdent` nên vẫn nằm trong undo stack.
    *
-   * CHỈ chặn Tab khi con trỏ đang ở trong danh sách: ở chỗ khác Tab phải giữ nguyên chức năng rời
-   * khỏi vùng soạn, nếu không người dùng bàn phím sẽ bị kẹt trong editor.
+   * Lối thoát bàn phím: Tab bị chiếm thì phải có cách khác rời khỏi vùng soạn, nếu không là bẫy bàn
+   * phím (WCAG 2.1.2). Ở đây quy ước quen thuộc: **Esc rồi Tab** — Esc bật cờ cho đúng lần Tab kế
+   * tiếp đi ra ngoài. Cách này được nói rõ cho screen reader qua `aria-describedby`.
    */
   protected onEditableKeydown(e: KeyboardEvent): void {
-    if (e.key !== 'Tab' || this.isDisabled()) return;
+    if (this.isDisabled()) return;
+    if (e.key === 'Escape') {
+      this.tabExits = true;
+      return;
+    }
+    if (e.key !== 'Tab') {
+      this.tabExits = false;
+      return;
+    }
+    if (this.tabExits) {
+      // Vừa bấm Esc → để nguyên cho trình duyệt chuyển focus ra khỏi editor.
+      this.tabExits = false;
+      return;
+    }
     const el = this.editable()?.nativeElement;
     if (!el) return;
-    const block = activeBlock(el);
-    if (block !== 'ul' && block !== 'ol') return;
     e.preventDefault();
-    applyCommand(e.shiftKey ? 'outdent' : 'indent');
+    const command = e.shiftKey ? 'outdent' : 'indent';
+    const block = activeBlock(el);
+    // Trong danh sách: lệnh mặc định tạo danh sách CON. Ngoài danh sách: phải ở chế độ CSS, nếu không
+    // Chrome bọc đoạn văn vào <blockquote>.
+    if (block === 'ul' || block === 'ol') applyCommand(command);
+    else applyStyledCommand(command);
     this.syncTaskLists(el);
     this.commit();
     this.updateActive();

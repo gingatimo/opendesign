@@ -34,9 +34,10 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   toolbar: **hoàn tác/làm lại**, **Text styles** (Normal text, Heading 1–6, Quote — dùng lại
   `GActionMenu`), đậm/nghiêng/gạch dưới, dropdown **định dạng khác** (Strikethrough, Code,
   Subscript, Superscript — có icon), **màu chữ** (dropdown bảng màu), dropdown **kiểu danh sách**
-  (Bulleted, Numbered, **Checkbox list**; **Tab** thụt vào thành danh sách con, **Shift+Tab** lùi ra),
+  (Bulleted, Numbered, **Checkbox list**),
   **căn trái/giữa/phải**, **chèn & bỏ liên kết**,
-  **chèn bảng**, xoá định dạng; `pasteMode` **text|html**; giá trị ngoài lẫn HTML dán đều **sanitize** chống
+  **chèn bảng**, xoá định dạng; **Tab thụt lề / Shift+Tab lùi ra** (trong danh sách thành danh sách
+  con, ở đoạn văn/tiêu đề thụt cả khối; lối ra bàn phím là **Esc rồi Tab**); `pasteMode` **text|html**; giá trị ngoài lẫn HTML dán đều **sanitize** chống
   XSS, URL liên kết chặn `javascript:`; toolbar theo chuẩn ARIA — **một điểm dừng Tab**, ←/→ chuyển
   nút; IME-safe). Cả hai hỗ trợ `[(value)]` lẫn `formControlName` (CVA).
 - **`rte-commands`**: lớp lệnh của rich text editor — gom **toàn bộ** lời gọi `document.execCommand`
