@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { GLocaleService, provideGLocale } from './locale';
 import { gLocaleEn } from '../locales/en';
 import { gLocaleVi } from '../locales/vi';
+import { weekdayNames } from './locale-format';
 
 describe('GLocaleService', () => {
   it('mặc định là tiếng Anh khi không khai báo gì', () => {
@@ -33,5 +34,24 @@ describe('GLocaleService', () => {
     expect(i18n.firstDayOfWeek()).toBe(0); // en-US: Chủ nhật
     i18n.use(gLocaleVi);
     expect(i18n.firstDayOfWeek()).toBe(1); // vi-VN: Thứ hai
+  });
+
+  it('formatDate đổi theo ngôn ngữ đang dùng', () => {
+    TestBed.configureTestingModule({});
+    const i18n = TestBed.inject(GLocaleService);
+    const d = new Date(2026, 6, 5);
+    expect(i18n.formatDate(d)).toBe('07/05/2026');
+    i18n.use(gLocaleVi);
+    expect(i18n.formatDate(d)).toBe('05/07/2026');
+  });
+
+  it('weekdayNames xoay theo ngày đầu tuần của gói', () => {
+    TestBed.configureTestingModule({});
+    const i18n = TestBed.inject(GLocaleService);
+    i18n.use(gLocaleVi);
+    // So sánh cùng tiếng Việt để tách riêng phép xoay khỏi phép dịch: gLocaleVi có firstDayOfWeek = 1
+    // (Thứ hai), nên vị trí 0 của service phải trùng vị trí 1 của danh sách bắt đầu Chủ nhật.
+    const sunFirst = weekdayNames('vi-VN', 0);
+    expect(i18n.weekdayNames()[0]).toBe(sunFirst[1]);
   });
 });
