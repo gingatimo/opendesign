@@ -263,6 +263,25 @@
   a {
     color: var(--g-chart-5);
   }
+  // Khối code (Text styles → Code block): một hộp riêng, giữ nguyên khoảng trắng.
+  pre {
+    margin: 0.5em 0;
+    padding: var(--g-space-3);
+    border: 1px solid var(--g-border);
+    border-radius: var(--g-radius-sm);
+    background: var(--g-surface);
+    // Cùng ngăn xếp font với GCodeEditor (không có token --g-font-family-mono).
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    font-size: 0.92em;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+  // `code` nằm trong khối code thì không cần nền chip riêng nữa.
+  pre code {
+    padding: 0;
+    background: none;
+    font-size: 1em;
+  }
   code {
     padding: 0.1em 0.35em;
     border-radius: var(--g-radius-sm);

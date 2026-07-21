@@ -31,7 +31,7 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea
   trong suốt đè lên `<pre>` tô màu regex `js/ts/json/css/html`, `highlighter` cắm được, gutter số
   dòng, Tab=spaces; IME native), **`GRichTextEditor`** (`g-rich-text-editor`, contenteditable +
-  toolbar: **hoàn tác/làm lại**, **Text styles** (Normal text, Heading 1–6, Quote — dùng lại
+  toolbar: **hoàn tác/làm lại**, **Text styles** (Normal text, Heading 1–6, Quote, **Code block** — dùng lại
   `GActionMenu`), đậm/nghiêng/gạch dưới, dropdown **định dạng khác** (Strikethrough, Code,
   Subscript, Superscript — có icon), **màu chữ** (dropdown bảng màu), dropdown **kiểu danh sách**
   (Bulleted, Numbered, **Checkbox list**),

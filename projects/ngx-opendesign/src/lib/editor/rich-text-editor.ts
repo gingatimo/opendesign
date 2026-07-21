@@ -386,6 +386,7 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     { label: 'Heading 5', value: 'h5' },
     { label: 'Heading 6', value: 'h6' },
     { label: 'Quote', value: 'blockquote' },
+    { label: 'Code block', value: 'pre' },
   ];
   // Định dạng ít dùng, gộp vào một dropdown. 'code' không có lệnh execCommand nên xử lý riêng.
   protected readonly extraFormats: GActionMenuItem[] = [
@@ -649,8 +650,14 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     const el = this.editable()?.nativeElement;
     if (!el) return;
     e.preventDefault();
-    const command = e.shiftKey ? 'outdent' : 'indent';
     const block = activeBlock(el);
+    // Trong khối code, Tab là để GÕ THỤT ĐẦU DÒNG chứ không phải thụt cả khối.
+    if (block === 'pre' && !e.shiftKey) {
+      applyCommand('insertText', '  ');
+      this.commit();
+      return;
+    }
+    const command = e.shiftKey ? 'outdent' : 'indent';
     // Trong danh sách: lệnh mặc định tạo danh sách CON. Ngoài danh sách: phải ở chế độ CSS, nếu không
     // Chrome bọc đoạn văn vào <blockquote>.
     if (block === 'ul' || block === 'ol') applyCommand(command);

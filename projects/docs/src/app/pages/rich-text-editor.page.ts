@@ -11,12 +11,12 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
     <p>
       Trình soạn <b>văn bản định dạng</b> (WYSIWYG), <b>Angular-only</b>, 0 thư viện ngoài. Bề mặt
       là <code>contenteditable</code>. Toolbar: hoàn tác/làm lại · <b>Text styles</b> (Normal text,
-      Heading 1–6, Quote) · đậm/nghiêng/gạch dưới · dropdown <b>định dạng khác</b> (Strikethrough,
-      Code, Subscript, Superscript) · <b>màu chữ</b> · dropdown <b>kiểu danh sách</b> (Bulleted,
-      Numbered, <b>Checkbox</b>) · căn trái/giữa/phải · chèn & bỏ <b>liên kết</b> · chèn
-      <b>bảng</b> · xoá định dạng. <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán plain-text
-      hoặc HTML đã <b>sanitize</b>, giá trị ngoài cũng được sanitize chống XSS. Hai chiều
-      <code>[(value)]</code> (HTML) hoặc <code>formControlName</code>.
+      Heading 1–6, Quote, <b>Code block</b>) · đậm/nghiêng/gạch dưới · dropdown
+      <b>định dạng khác</b> (Strikethrough, Code, Subscript, Superscript) · <b>màu chữ</b> ·
+      dropdown <b>kiểu danh sách</b> (Bulleted, Numbered, <b>Checkbox</b>) · căn trái/giữa/phải ·
+      chèn & bỏ <b>liên kết</b> · chèn <b>bảng</b> · xoá định dạng. <b>IME-safe</b> (không ghi đè
+      innerHTML lúc gõ), dán plain-text hoặc HTML đã <b>sanitize</b>, giá trị ngoài cũng được
+      sanitize chống XSS. Hai chiều <code>[(value)]</code> (HTML) hoặc <code>formControlName</code>.
     </p>
 
     <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
