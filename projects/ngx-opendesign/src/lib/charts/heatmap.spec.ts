@@ -49,6 +49,15 @@ describe('calendarWeeks', () => {
     expect(weeks[0][3]).not.toBeNull();
   });
 
+  it("weekStart='monday' đẩy hàng đầu sang Thứ hai", () => {
+    const weeks = calendarWeeks(new Date(2026, 6, 1), new Date(2026, 6, 31), 'monday');
+    for (const week of weeks) {
+      const firstReal = week.find((d): d is Date => d !== null)!;
+      // getDay(): 0 = CN → với tuần bắt đầu T2, chỉ số hàng = (getDay() + 6) % 7.
+      expect(week.indexOf(firstReal)).toBe((firstReal.getDay() + 6) % 7);
+    }
+  });
+
   it('phủ đủ mọi ngày trong khoảng', () => {
     const weeks = calendarWeeks(new Date(2026, 0, 1), new Date(2026, 0, 31));
     const days = weeks.flat().filter((d): d is Date => d !== null);

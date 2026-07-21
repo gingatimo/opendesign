@@ -23,8 +23,8 @@ import { CalendarHeatmapDemo } from '../demos/charts/calendar-heatmap.demo';
     <h2>Ghi chú</h2>
     <ul>
       <li>
-        Tuần bắt đầu từ <b>Chủ nhật</b>; ô nằm ngoài khoảng ngày vẫn giữ chỗ (trong suốt) để lưới
-        không lệch hàng.
+        Tuần bắt đầu từ <b>Chủ nhật</b> (mặc định) hoặc <b>Thứ hai</b> qua <code>weekStart</code>; ô
+        nằm ngoài khoảng ngày vẫn giữ chỗ (trong suốt) để lưới không lệch hàng.
       </li>
       <li>
         Ngày quy về <b>giờ địa phương</b> khi gom nhóm — dùng <code>toISOString</code> sẽ lệch một
@@ -55,6 +55,12 @@ export default class CalendarHeatmapPage {
       type: 'string | Date',
       default: '1 năm gần nhất',
       description: 'Khoảng ngày hiển thị. Bỏ trống thì lấy tròn một năm tính ngược từ hôm nay.',
+    },
+    {
+      name: 'weekStart',
+      type: "'sunday' | 'monday'",
+      default: "'sunday'",
+      description: 'Hàng đầu của lưới là Chủ nhật hay Thứ hai (nhãn thứ đổi theo).',
     },
     {
       name: 'color',

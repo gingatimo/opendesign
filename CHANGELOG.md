@@ -46,7 +46,8 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **`GCalendarHeatmap`** (`g-calendar-heatmap`): **lịch nhiệt theo ngày** kiểu biểu đồ đóng góp của
   GitHub — cột là tuần, hàng là thứ, nhãn tháng tự đặt đúng cột, thang Ít → Nhiều. `[data]`
   `{date,value}[]` (nhận `Date` hoặc `YYYY-MM-DD`, cùng ngày thì cộng dồn), `from`/`to` (mặc định một
-  năm gần nhất), `unit` cho tooltip. Ngày gom nhóm theo **giờ địa phương** nên không lệch múi giờ.
+  năm gần nhất), `unit` cho tooltip, **`weekStart`** sunday|monday (nhãn thứ đổi
+  theo). Ngày gom nhóm theo **giờ địa phương** nên không lệch múi giờ.
 - **`chart-utils`**: thêm `heatLevel`/`heatColor` — chia 4 bậc theo TỈ LỆ với giá trị lớn nhất và pha
   màu bằng `color-mix`, nên chỉ cần một token màu là ra cả thang và thang tự đổi theo theme.
 - **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea

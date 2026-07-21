@@ -23,6 +23,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: max-content; // ôm sát lưới để thang màu bên dưới căn đúng mép phải của lưới
 }
 .g-calendar__months {
   display: grid;
@@ -60,10 +61,12 @@
   pointer-events: none;
 }
 
+// Nằm trong khối lưới nên `flex-end` là mép phải của LƯỚI, không phải của card.
 .g-calendar__scale {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  margin-top: var(--g-space-1);
   gap: var(--g-space-1);
   color: var(--g-text-muted);
   font-size: var(--g-font-size-xs);

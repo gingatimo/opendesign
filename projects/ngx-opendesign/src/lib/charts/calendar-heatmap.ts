@@ -39,13 +39,22 @@ export function dayKey(value: string | Date): string {
   return `${d.getFullYear()}-${m}-${day}`;
 }
 
+/** Ngày mở đầu một tuần trong lưới. */
+export type GWeekStart = 'sunday' | 'monday';
+
 /**
- * Chia khoảng [from, to] thành các TUẦN (cột), mỗi tuần 7 ô theo thứ (hàng). Tuần bắt đầu từ Chủ
- * nhật như lịch đóng góp của GitHub; các ô trước `from`/sau `to` để `null` cho lưới không bị lệch.
+ * Chia khoảng [from, to] thành các TUẦN (cột), mỗi tuần 7 ô theo thứ (hàng). `weekStart` quyết định
+ * hàng đầu là Chủ nhật hay Thứ hai; các ô trước `from`/sau `to` để `null` cho lưới không bị lệch.
  */
-export function calendarWeeks(from: Date, to: Date): (Date | null)[][] {
+export function calendarWeeks(
+  from: Date,
+  to: Date,
+  weekStart: GWeekStart = 'sunday',
+): (Date | null)[][] {
+  const offset = weekStart === 'monday' ? 1 : 0;
   const start = startOfDay(from);
-  start.setDate(start.getDate() - start.getDay()); // lùi về Chủ nhật của tuần đầu
+  // Lùi về ngày mở đầu tuần: getDay() trả 0 = CN, nên bắt đầu từ T2 thì phải xoay vòng thêm.
+  start.setDate(start.getDate() - ((start.getDay() - offset + 7) % 7));
   const end = startOfDay(to);
   const weeks: (Date | null)[][] = [];
   for (let cursor = start; cursor <= end;) {
@@ -75,7 +84,7 @@ export function calendarWeeks(from: Date, to: Date): (Date | null)[][] {
       <div class="g-calendar" role="img" [attr.aria-label]="ariaLabel()">
         <div class="g-calendar__weekdays">
           <!-- Chỉ ghi T2/T4/T6 như lịch đóng góp quen thuộc: ghi đủ 7 thứ thì chữ chen nhau. -->
-          @for (label of weekdayLabels; track $index) {
+          @for (label of weekdayLabels(); track $index) {
             <span class="g-calendar__weekday">{{ label }}</span>
           }
         </div>
@@ -104,17 +113,19 @@ export function calendarWeeks(from: Date, to: Date): (Date | null)[][] {
               </div>
             }
           </div>
+          <!-- Thang màu nằm TRONG khối lưới để mép phải của nó trùng mép lưới; đặt ngoài thì nó căn
+               theo bề ngang cả card, nhìn lệch hẳn so với chart. -->
+          @if (showScale()) {
+            <div class="g-calendar__scale">
+              <span>{{ scaleMinLabel() }}</span>
+              @for (level of levels; track level) {
+                <span class="g-calendar__swatch" [style.background]="colorOfLevel(level)"></span>
+              }
+              <span>{{ scaleMaxLabel() }}</span>
+            </div>
+          }
         </div>
       </div>
-      @if (showScale()) {
-        <div class="g-calendar__scale">
-          <span>{{ scaleMinLabel() }}</span>
-          @for (level of levels; track level) {
-            <span class="g-calendar__swatch" [style.background]="colorOfLevel(level)"></span>
-          }
-          <span>{{ scaleMaxLabel() }}</span>
-        </div>
-      }
     </div>
   `,
   styleUrl: './calendar-heatmap.scss',
@@ -126,6 +137,8 @@ export class GCalendarHeatmap {
   /** Ngày đầu/cuối. Bỏ trống thì lấy tròn một năm tính ngược từ hôm nay. */
   readonly from = input<string | Date | undefined>();
   readonly to = input<string | Date | undefined>();
+  /** Hàng đầu của lưới là Chủ nhật hay Thứ hai. */
+  readonly weekStart = input<GWeekStart>('sunday');
   readonly color = input('var(--g-chart-2)');
   readonly showScale = input(true);
   readonly scaleMinLabel = input('Ít');
@@ -140,7 +153,18 @@ export class GCalendarHeatmap {
   protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
   protected readonly levels = Array.from({ length: HEAT_LEVELS + 1 }, (_, i) => i);
-  protected readonly weekdayLabels = WEEKDAYS.map((d, i) => (i % 2 === 1 ? d : ''));
+  /**
+   * Thứ tự hàng đổi theo `weekStart`. Chỉ ghi các thứ CÁCH QUÃNG (T2/T4/T6 hoặc T3/T5/T7) như lịch
+   * đóng góp quen thuộc — ghi đủ 7 thứ thì chữ chen nhau ở cỡ ô 12px.
+   */
+  protected readonly weekdayLabels = computed(() => {
+    const monday = this.weekStart() === 'monday';
+    const order = monday ? [...WEEKDAYS.slice(1), WEEKDAYS[0]] : [...WEEKDAYS];
+    // Luôn ghi T2/T4/T6 (như lịch đóng góp quen thuộc) — vị trí của chúng đổi theo ngày mở đầu tuần:
+    // bắt đầu CN thì chúng nằm ở hàng lẻ, bắt đầu T2 thì nằm ở hàng chẵn.
+    const labelled = monday ? 0 : 1;
+    return order.map((d, i) => (i % 2 === labelled ? d : ''));
+  });
 
   private readonly range = computed(() => {
     const to = this.to() ? startOfDay(this.to()!) : startOfDay(new Date());
@@ -152,7 +176,7 @@ export class GCalendarHeatmap {
 
   protected readonly weeks = computed(() => {
     const { from, to } = this.range();
-    return calendarWeeks(from, to);
+    return calendarWeeks(from, to, this.weekStart());
   });
 
   private readonly byDay = computed(() => {
