@@ -91,5 +91,12 @@ export const gLocaleVi: GLocale = {
       prevYearPage: 'Trang năm trước',
       nextYearPage: 'Trang năm sau',
     },
+    mediaPlayer: {
+      play: 'Phát',
+      pause: 'Tạm dừng',
+      volume: 'Âm lượng',
+      fullscreen: 'Toàn màn hình',
+      exitFullscreen: 'Thoát toàn màn hình',
+    },
   },
 };

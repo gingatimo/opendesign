@@ -91,5 +91,12 @@ export const gLocaleEn: GLocale = {
       prevYearPage: 'Previous years',
       nextYearPage: 'Next years',
     },
+    mediaPlayer: {
+      play: 'Play',
+      pause: 'Pause',
+      volume: 'Volume',
+      fullscreen: 'Enter full screen',
+      exitFullscreen: 'Exit full screen',
+    },
   },
 };

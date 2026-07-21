@@ -63,6 +63,13 @@ export interface GLocaleStrings {
     prevYearPage: string;
     nextYearPage: string;
   };
+  mediaPlayer: {
+    play: string;
+    pause: string;
+    volume: string;
+    fullscreen: string;
+    exitFullscreen: string;
+  };
 }
 
 export interface GLocale {

@@ -10,6 +10,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { GSlider } from '../slider/slider';
 import { gIconMaximize, gIconPause, gIconPlay, gIconVolume, gIconVolumeMute } from '../icon/icons';
@@ -59,7 +60,7 @@ export type GMediaType = 'audio' | 'video';
       <button
         type="button"
         class="g-media-player__btn"
-        [attr.aria-label]="playing() ? 'Tạm dừng' : 'Phát'"
+        [attr.aria-label]="playing() ? t().mediaPlayer.pause : t().mediaPlayer.play"
         (click)="togglePlay()"
       >
         <g-icon [icon]="playing() ? iconPause : iconPlay" size="sm" />
@@ -94,7 +95,7 @@ export type GMediaType = 'audio' | 'video';
         max="1"
         step="0.05"
         [value]="isMuted() ? 0 : volume()"
-        ariaLabel="Âm lượng"
+        [ariaLabel]="t().mediaPlayer.volume"
         (valueChange)="onVolume($event)"
       />
 
@@ -102,7 +103,9 @@ export type GMediaType = 'audio' | 'video';
         <button
           type="button"
           class="g-media-player__btn"
-          [attr.aria-label]="isFullscreen() ? 'Thoát toàn màn hình' : 'Toàn màn hình'"
+          [attr.aria-label]="
+            isFullscreen() ? t().mediaPlayer.exitFullscreen : t().mediaPlayer.fullscreen
+          "
           (click)="toggleFullscreen()"
         >
           <g-icon [icon]="iconMaximize" size="sm" />
@@ -132,6 +135,8 @@ export class GMediaPlayer {
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly media = viewChild<ElementRef<HTMLMediaElement>>('media');
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly playing = signal(false);
   protected readonly currentTime = signal(0);
