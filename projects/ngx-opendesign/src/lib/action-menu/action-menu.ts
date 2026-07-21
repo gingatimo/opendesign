@@ -13,7 +13,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
-import { gIconMoreVertical, GIconGlyph } from '../icon/icons';
+import { gIconChevronDown, gIconChevronUp, GIconGlyph, gIconMoreVertical } from '../icon/icons';
 
 export interface GActionMenuItem {
   label: string;
@@ -39,9 +39,10 @@ const ABOVE: ConnectedPosition = {
   offsetY: -6,
 };
 
-// Dropdown menu HÀNH ĐỘNG mở bằng ICON (mặc định kebab ⋮) — bấm để xổ danh sách lựa chọn xuống DƯỚI,
-// TỰ LẬT LÊN TRÊN khi sát mép dưới viewport (CDK overlay). Bàn phím: ↑/↓ điều hướng, Esc đóng, Enter
-// chọn. Phát `(action)` với item được chọn.
+// Dropdown menu ĐIỀU HƯỚNG / HÀNH ĐỘNG — bấm trigger để xổ danh sách xuống DƯỚI, TỰ LẬT LÊN TRÊN khi
+// sát mép dưới viewport (CDK overlay). Trigger 2 kiểu (`variant`): 'icon' (nút tròn, mặc định kebab ⋮)
+// hoặc 'label' (chữ + mũi tên lên/xuống) — kiểu label dùng lại được cho MENU NGANG. Bàn phím: ↑/↓
+// điều hướng, Home/End, Esc đóng, Enter chọn. Phát `(action)` với item được chọn.
 @Component({
   selector: 'g-action-menu',
   imports: [GIcon, CdkConnectedOverlay, CdkTrapFocus],
@@ -50,12 +51,19 @@ const ABOVE: ConnectedPosition = {
       #trigger
       type="button"
       class="g-action-menu__trigger"
-      [attr.aria-label]="label()"
+      [class.g-action-menu__trigger--label]="variant() === 'label'"
+      [attr.aria-label]="variant() === 'icon' ? label() : null"
       aria-haspopup="menu"
       [attr.aria-expanded]="open()"
       (click)="toggle()"
     >
-      <g-icon [icon]="icon()" />
+      @if (variant() === 'label') {
+        <span>{{ label() }}</span>
+        <!-- Mũi tên lật theo trạng thái: xuống khi đóng, lên khi mở (như menu ngang quen thuộc). -->
+        <g-icon [icon]="open() ? iconUp : iconDown" size="sm" />
+      } @else {
+        <g-icon [icon]="icon()" />
+      }
     </button>
 
     <ng-template
@@ -100,14 +108,19 @@ const ABOVE: ConnectedPosition = {
   host: { class: 'g-action-menu' },
 })
 export class GActionMenu {
-  // Icon trigger (mặc định ⋮ kebab).
+  // Kiểu trigger: 'icon' (nút tròn chỉ icon) hoặc 'label' (chữ + mũi tên lên/xuống — hợp menu ngang).
+  readonly variant = input<'icon' | 'label'>('icon');
+  // Icon trigger khi variant='icon' (mặc định ⋮ kebab).
   readonly icon = input<GIconGlyph>(gIconMoreVertical);
   readonly items = input<readonly GActionMenuItem[]>([]);
+  // Nhãn: a11y khi variant='icon'; là CHỮ HIỂN THỊ khi variant='label'.
   readonly label = input('Menu');
   // Hướng ưu tiên: 'auto'/'bottom' (dưới, lật lên nếu bị cắt) hoặc 'top' (trên, lật xuống nếu bị cắt).
   readonly placement = input<'auto' | 'bottom' | 'top'>('auto');
   readonly action = output<GActionMenuItem>();
 
+  protected readonly iconDown = gIconChevronDown;
+  protected readonly iconUp = gIconChevronUp;
   protected readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly open = signal(false);
   private readonly triggerRef = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');

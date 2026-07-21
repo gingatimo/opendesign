@@ -24,6 +24,22 @@
   box-shadow: var(--g-focus-ring);
 }
 
+// Biến thể LABEL: chữ + mũi tên, phẳng như mục menu ngang (không viền/đổ bóng như nút tròn).
+.g-action-menu__trigger--label {
+  width: auto;
+  gap: var(--g-space-2);
+  padding: 0 var(--g-space-3);
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+  color: var(--g-text);
+}
+.g-action-menu__trigger--label:hover {
+  background: var(--g-surface);
+}
+
 // Panel nằm trong CDK overlay nhưng render từ <ng-template> của component nên GIỮ ViewEncapsulation
 // → style scoped này vẫn áp (giống panel của GDatepicker).
 .g-action-menu__panel {

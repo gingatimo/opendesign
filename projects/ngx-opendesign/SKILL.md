@@ -106,9 +106,7 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
 **Nút:** `GButton` `button[g-button]`/`a[g-button]` (`variant` primary|secondary|outline|ghost|danger,
 `size` sm|md|lg, `[loading]`) · `GIconButton` `button[g-icon-button]` (cần `aria-label`) · `GFab` `button[g-fab]`
 (`position` fixed, `extended`) · `GActionExpand` `g-action-expand` (nút bung: 1 hành động nhiều type,
-thu gọn icon tròn → hover/focus bung nút lựa chọn; `[actions]` `GActionExpandItem[]`, `align` start|end, `(action)`) ·
-`GActionMenu` `g-action-menu` (dropdown menu mở bằng icon ⋮; xổ xuống/lật lên theo viewport qua CDK
-overlay; `[items]` `GActionMenuItem[]`, `placement` auto|top|bottom, `(action)`).
+thu gọn icon tròn → hover/focus bung nút lựa chọn; `[actions]` `GActionExpandItem[]`, `align` start|end, `(action)`).
 
 **Form:** `GInput` `input[gInput]` · `GTextarea` `textarea[gTextarea]` · `GInputGroup` `g-input-group`
 (bọc `<input gInput>` + `<g-icon gInputPrefix/gInputSuffix>`) · `GCheckbox` `g-checkbox` ·
@@ -144,7 +142,9 @@ tâm điểm: khung 3 card, card giữa phóng to, 2 bên peek; `[(active)]`; `l
 (`side`, `[(open)]`) · `GContextMenu` `[gContextMenu]="tpl"` (attribute, chuột phải mở menu tại con trỏ;
 tpl là `<ng-template>` chứa `<button g-menu-item>`).
 
-**Điều hướng:** `GTabs`+`GTab` `g-tabs`/`g-tab` (`tablistLabel`, `label`) · `GTopbar` `g-topbar`
+**Điều hướng:** `GActionMenu` `g-action-menu` (dropdown mở bằng trigger: `variant` icon (nút tròn ⋮)
+hoặc label (chữ + mũi tên — dùng cho MENU NGANG); xổ xuống/TỰ LẬT lên theo viewport qua CDK overlay;
+`[items]` `GActionMenuItem[]`, `placement` auto|top|bottom, `(action)`) · `GTabs`+`GTab` `g-tabs`/`g-tab` (`tablistLabel`, `label`) · `GTopbar` `g-topbar`
 (+`gTopbarStart`/`gTopbarCenter`/`gTopbarEnd`) · `GSidebar` `g-sidebar`
 (+`a[g-sidebar-item]`, `gSidebarItemIcon`/`gSidebarItemLabel`, `gSidebarHeader`/`gSidebarFooter`,
 `GSidebarToggle`) · `GStepper`+`GStep` `g-stepper`/`g-step` · `GLink` `a[gLink]` · `GPagination`

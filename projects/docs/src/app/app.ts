@@ -83,7 +83,6 @@ export class App {
         { path: '/components/icon-button', label: 'Icon Button', icon: 'icon-button' },
         { path: '/components/fab', label: 'Fab', icon: 'fab' },
         { path: '/components/action-expand', label: 'Action Expand', icon: 'action-expand' },
-        { path: '/components/action-menu', label: 'Action Menu', icon: 'action-menu' },
       ]),
     },
     {
@@ -156,6 +155,7 @@ export class App {
         { path: '/components/sidebar', label: 'Sidebar', icon: 'sidebar' },
         { path: '/components/link', label: 'Link', icon: 'link' },
         { path: '/components/menu', label: 'Menu', icon: 'menu' },
+        { path: '/components/action-menu', label: 'Action Menu', icon: 'action-menu' },
         { path: '/components/breadcrumb', label: 'Breadcrumb', icon: 'breadcrumb' },
         { path: '/components/accordion', label: 'Accordion', icon: 'accordion' },
         { path: '/components/dock-menu', label: 'Dock Menu', icon: 'dock-menu' },

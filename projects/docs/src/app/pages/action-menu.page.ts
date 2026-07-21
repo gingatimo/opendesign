@@ -9,9 +9,11 @@ import { ActionMenuBasicDemo } from '../demos/action-menu/action-menu-basic.demo
   template: `
     <h1>Action Menu</h1>
     <p>
-      Dropdown menu <b>hành động</b> mở bằng <b>icon</b> (mặc định kebab <code>⋮</code>): bấm để xổ
-      danh sách lựa chọn xuống dưới, <b>TỰ LẬT lên trên</b> khi sát mép dưới viewport (dùng CDK
-      overlay — <code>FlexibleConnectedPositionStrategy</code> chọn vị trí vừa màn hình). Phát
+      Dropdown menu <b>điều hướng / hành động</b>: bấm trigger để xổ danh sách xuống dưới,
+      <b>TỰ LẬT lên trên</b> khi sát mép dưới viewport (dùng CDK overlay —
+      <code>FlexibleConnectedPositionStrategy</code> chọn vị trí vừa màn hình). Trigger có 2 kiểu
+      qua <code>variant</code>: <b>icon</b> (nút tròn, mặc định kebab <code>⋮</code>) hoặc
+      <b>label</b> (chữ + mũi tên lên/xuống) — kiểu label <b>tái dùng cho menu ngang</b>. Phát
       <code>(action)</code> với item được chọn. Khác <code>Action Expand</code> (bung ngang, không
       overlay) và <code>Context Menu</code> (chuột phải).
     </p>
@@ -48,10 +50,17 @@ export default class ActionMenuPage {
       description: 'Các mục { label, value, icon?, disabled? }.',
     },
     {
+      name: 'variant',
+      type: "'icon' | 'label'",
+      default: "'icon'",
+      description:
+        "'icon' = nút tròn chỉ icon; 'label' = chữ (lấy từ `label`) + mũi tên lên/xuống theo trạng thái — hợp menu ngang.",
+    },
+    {
       name: 'icon',
       type: 'GIconGlyph',
       default: 'gIconMoreVertical',
-      description: 'Icon trigger (mặc định ⋮ kebab).',
+      description: "Icon trigger khi variant='icon' (mặc định ⋮ kebab).",
     },
     {
       name: 'placement',
@@ -63,7 +72,7 @@ export default class ActionMenuPage {
       name: 'label',
       type: 'string',
       default: "'Menu'",
-      description: 'Nhãn a11y cho trigger + panel.',
+      description: "Nhãn a11y khi variant='icon'; là CHỮ HIỂN THỊ khi variant='label'.",
     },
     {
       name: '(action)',

@@ -9,11 +9,12 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 
 ### Added
 
-- **`GActionMenu`** (`g-action-menu`): dropdown menu **hành động** mở bằng **icon** (mặc định kebab
-  ⋮) — xổ danh sách xuống dưới, **tự lật lên trên** khi sát mép dưới viewport (CDK overlay
-  `FlexibleConnectedPositionStrategy`). `[items]` `GActionMenuItem[]`, `placement` auto|top|bottom,
-  `(action)` phát item chọn. Bàn phím ↑/↓/Home/End/Esc, `role="menu"`/`menuitem`, focus trap +
-  trả focus về trigger.
+- **`GActionMenu`** (`g-action-menu`, nhóm **Điều hướng**): dropdown menu **điều hướng / hành động** —
+  xổ danh sách xuống dưới, **tự lật lên trên** khi sát mép dưới viewport (CDK overlay
+  `FlexibleConnectedPositionStrategy`). Trigger 2 kiểu qua **`variant`**: `icon` (nút tròn, mặc định
+  kebab ⋮) hoặc `label` (chữ + mũi tên lên/xuống theo trạng thái) — kiểu `label` **tái dùng cho menu
+  ngang**. `[items]` `GActionMenuItem[]`, `placement` auto|top|bottom, `(action)` phát item chọn.
+  Bàn phím ↑/↓/Home/End/Esc, `role="menu"`/`menuitem`, focus trap + trả focus về trigger.
 - **`GActionExpand`** (`g-action-expand`): nút **hành động bung** — cùng hành động, nhiều "type" (vd.
   Tải xuống → PDF/SVG/PNG). Thu gọn thành icon tròn; **rê chuột / focus / chạm** → bung sang phải lộ
   các nút lựa chọn kiểu tab. `[actions]` `GActionExpandItem[]`, `(action)` phát item chọn; trigger là
