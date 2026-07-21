@@ -1,5 +1,6 @@
 import {
   arcPath,
+  CHART_COLORS,
   chartColor,
   formatChartNumber,
   linePath,
@@ -95,9 +96,11 @@ describe('chart-utils', () => {
   });
 
   describe('chartColor', () => {
-    it('lấy vòng bảng --g-chart-1..8', () => {
+    it('lấy vòng bảng --g-chart-1..18', () => {
       expect(chartColor(0)).toBe('var(--g-chart-1)');
-      expect(chartColor(8)).toBe('var(--g-chart-1)');
+      expect(chartColor(CHART_COLORS - 1)).toBe(`var(--g-chart-${CHART_COLORS})`);
+      // Vượt quá bảng thì quay lại màu đầu — đây là chỗ SINH RA trùng màu, cố ý và có ghi trong docs.
+      expect(chartColor(CHART_COLORS)).toBe('var(--g-chart-1)');
       expect(chartColor(2, '#abc')).toBe('#abc');
     });
   });
