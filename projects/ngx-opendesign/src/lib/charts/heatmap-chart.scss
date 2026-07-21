@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+// `justify-content: start` để lưới ôm sát nội dung: cột đã có bề rộng tối đa nên nếu để giãn đều,
+// phần thừa sẽ đẩy các ô rời nhau ra.
+.g-heatmap {
+  display: grid;
+  gap: 3px;
+  align-items: center;
+  justify-content: start;
+}
+.g-heatmap__cell {
+  aspect-ratio: 1;
+  min-width: 12px;
+  border-radius: var(--g-radius-sm);
+  transition: outline-color var(--g-duration-fast) var(--g-ease);
+  outline: 1px solid transparent;
+}
+.g-heatmap__cell:hover {
+  outline-color: var(--g-border-strong);
+}
+.g-heatmap__col-label,
+.g-heatmap__row-label {
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-xs);
+  white-space: nowrap;
+}
+.g-heatmap__col-label {
+  text-align: center;
+}
+.g-heatmap__row-label {
+  padding-right: var(--g-space-2);
+  text-align: right;
+}
+
+// Thang màu: nhãn hai đầu + các ô mẫu từ nhạt tới đậm.
+.g-heatmap__scale {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--g-space-1);
+  color: var(--g-text-muted);
+  font-size: var(--g-font-size-xs);
+}
+.g-heatmap__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--g-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-heatmap__cell {
+    transition: none;
+  }
+}

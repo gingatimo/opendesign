@@ -158,6 +158,28 @@ export function chartColor(index: number, override?: GChartColor): string {
   return override ?? `var(--g-chart-${(index % 8) + 1})`;
 }
 
+/** Số bậc màu của heatmap — 0 nghĩa là "không có gì", còn lại chia đều theo giá trị lớn nhất. */
+export const HEAT_LEVELS = 4;
+
+/**
+ * Bậc màu (0..HEAT_LEVELS) của một ô heatmap. Chia theo TỈ LỆ với giá trị lớn nhất chứ không theo
+ * ngưỡng tuyệt đối, nhờ vậy cùng một bộ màu dùng được cho mọi thang dữ liệu.
+ */
+export function heatLevel(value: number, max: number): number {
+  if (value <= 0 || max <= 0) return 0;
+  return Math.min(HEAT_LEVELS, Math.ceil((value / max) * HEAT_LEVELS));
+}
+
+/**
+ * Màu của một bậc heatmap: bậc 0 là nền trống, các bậc sau pha `--g-chart-2` với nền theo độ đậm
+ * tăng dần. Dùng `color-mix` để chỉ cần MỘT token màu là ra cả thang, và thang tự đổi theo theme.
+ */
+export function heatColor(level: number, base = 'var(--g-chart-2)'): string {
+  if (level <= 0) return 'var(--g-secondary-bg)';
+  const strength = (level / HEAT_LEVELS) * 100;
+  return `color-mix(in srgb, ${base} ${strength}%, var(--g-surface))`;
+}
+
 // Làm tròn tọa độ 2 chữ số → path gọn, không sai lệch thị giác.
 function r(v: number): number {
   return Math.round(v * 100) / 100;

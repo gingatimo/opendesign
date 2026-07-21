@@ -188,6 +188,13 @@ export class App {
         { path: '/components/bar-chart', label: 'Bar Chart', icon: 'bar-chart' },
         { path: '/components/pie-chart', label: 'Pie Chart', icon: 'pie-chart' },
         { path: '/components/donut-chart', label: 'Donut Chart', icon: 'donut-chart' },
+        { path: '/components/stacked-bar', label: 'Stacked Bar', icon: 'stacked-bar' },
+        { path: '/components/heatmap-chart', label: 'Heatmap', icon: 'heatmap-chart' },
+        {
+          path: '/components/calendar-heatmap',
+          label: 'Calendar Heatmap',
+          icon: 'calendar-heatmap',
+        },
       ]),
     },
     {

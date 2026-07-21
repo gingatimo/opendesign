@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+// Thanh + chú giải luôn xếp DỌC (không có biến thể legend trái/phải như các chart khác).
+.g-stacked-bar__plot {
+  flex-direction: column;
+  gap: var(--g-space-3);
+}
+.g-stacked-bar__svg {
+  display: block;
+}
+.g-stacked-bar__segment {
+  transition: opacity var(--g-duration-fast) var(--g-ease);
+}
+.g-stacked-bar__segment:hover {
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-stacked-bar__segment {
+    transition: none;
+  }
+}

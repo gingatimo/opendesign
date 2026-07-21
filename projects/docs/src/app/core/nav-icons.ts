@@ -76,6 +76,9 @@ export type NavIcon =
   | 'bar-chart'
   | 'pie-chart'
   | 'donut-chart'
+  | 'stacked-bar'
+  | 'heatmap-chart'
+  | 'calendar-heatmap'
   | 'code-editor'
   | 'rich-text-editor'
   | 'scroll-panel'
@@ -368,6 +371,28 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       { cx: 12, cy: 12, r: 9 },
       { cx: 12, cy: 12, r: 3.5 },
     ],
+  },
+  'stacked-bar': {
+    viewBox: VB,
+    rects: [
+      { x: 3, y: 10, width: 9, height: 4, rx: 2 },
+      { x: 13, y: 10, width: 5, height: 4, rx: 2 },
+      { x: 19, y: 10, width: 2, height: 4, rx: 1 },
+    ],
+  },
+  'heatmap-chart': {
+    viewBox: VB,
+    rects: [
+      { x: 4, y: 4, width: 6, height: 6, rx: 1 },
+      { x: 14, y: 4, width: 6, height: 6, rx: 1 },
+      { x: 4, y: 14, width: 6, height: 6, rx: 1 },
+      { x: 14, y: 14, width: 6, height: 6, rx: 1 },
+    ],
+  },
+  'calendar-heatmap': {
+    viewBox: VB,
+    paths: ['M8 3v3', 'M16 3v3', 'M3 10h18'],
+    rects: [{ x: 3, y: 5, width: 18, height: 16, rx: 2 }],
   },
   'code-editor': {
     viewBox: VB,

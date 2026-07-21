@@ -343,6 +343,21 @@ export const routes: Routes = [
     title: 'Donut Chart — OpenDesign',
   },
   {
+    path: 'components/stacked-bar',
+    loadComponent: () => import('./pages/stacked-bar.page'),
+    title: 'Stacked Bar — OpenDesign',
+  },
+  {
+    path: 'components/heatmap-chart',
+    loadComponent: () => import('./pages/heatmap-chart.page'),
+    title: 'Heatmap — OpenDesign',
+  },
+  {
+    path: 'components/calendar-heatmap',
+    loadComponent: () => import('./pages/calendar-heatmap.page'),
+    title: 'Calendar Heatmap — OpenDesign',
+  },
+  {
     path: 'components/code-editor',
     loadComponent: () => import('./pages/code-editor.page'),
     title: 'Code Editor — OpenDesign',

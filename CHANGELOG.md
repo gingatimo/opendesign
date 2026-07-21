@@ -33,6 +33,18 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
   đã tính vào inline style** (biến `--g-chart-*` không tồn tại ngoài trang) và **vẽ lại tiêu đề +
   chú giải** trong chính SVG, vì hai thứ này là HTML nằm ngoài `<svg>`. Rê chuột vào múi pie/donut hiện **tên múi + giá trị + %** (thẻ `<title>` của SVG). Kèm `chart-utils`
   (niceTicks, linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
+- **`GStackedBar`** (`g-stacked-bar`): **thanh tỉ lệ một dòng** (kiểu thanh "Languages" của GitHub) —
+  cả tập dữ liệu trên một thanh ngang, mỗi phần rộng theo tỉ lệ, chú giải kèm **phần trăm**, tooltip
+  từng đoạn. `[data]` `GChartSlice[]`, `barHeight`, `showPercent`, `exportable`, `zoomable`.
+- **`GHeatmapChart`** (`g-heatmap-chart`): **bản đồ nhiệt ma trận** hàng × cột, ô đậm dần theo giá
+  trị, thang màu 4 bậc + nhãn hai đầu. `[data]` `GHeatmapCell[] {row,col,value}`, `rows`/`columns`
+  (thứ tự), `cellSize`, `color`.
+- **`GCalendarHeatmap`** (`g-calendar-heatmap`): **lịch nhiệt theo ngày** kiểu biểu đồ đóng góp của
+  GitHub — cột là tuần, hàng là thứ, nhãn tháng tự đặt đúng cột, thang Ít → Nhiều. `[data]`
+  `{date,value}[]` (nhận `Date` hoặc `YYYY-MM-DD`, cùng ngày thì cộng dồn), `from`/`to` (mặc định một
+  năm gần nhất), `unit` cho tooltip. Ngày gom nhóm theo **giờ địa phương** nên không lệch múi giờ.
+- **`chart-utils`**: thêm `heatLevel`/`heatColor` — chia 4 bậc theo TỈ LỆ với giá trị lớn nhất và pha
+  màu bằng `color-mix`, nên chỉ cần một token màu là ra cả thang và thang tự đổi theo theme.
 - **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea
   trong suốt đè lên `<pre>` tô màu regex `js/ts/json/css/html`, `highlighter` cắm được, gutter số
   dòng, Tab=spaces; IME native), **`GRichTextEditor`** (`g-rich-text-editor`, contenteditable +
