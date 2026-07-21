@@ -79,5 +79,17 @@ export const gLocaleVi: GLocale = {
       hex: 'Mã màu hex',
     },
     timePicker: { open: 'Chọn giờ', hours: 'Giờ', minutes: 'Phút' },
+    datepicker: {
+      open: 'Chọn ngày',
+      openRange: 'Chọn khoảng ngày',
+      selectMonth: 'Chọn tháng',
+      selectYear: 'Chọn năm',
+      prevMonth: 'Tháng trước',
+      nextMonth: 'Tháng sau',
+      prevYear: 'Năm trước',
+      nextYear: 'Năm sau',
+      prevYearPage: 'Trang năm trước',
+      nextYearPage: 'Trang năm sau',
+    },
   },
 };

@@ -51,6 +51,18 @@ export interface GLocaleStrings {
   };
   colorPicker: { open: string; area: string; hue: string; hex: string };
   timePicker: { open: string; hours: string; minutes: string };
+  datepicker: {
+    open: string;
+    openRange: string;
+    selectMonth: string;
+    selectYear: string;
+    prevMonth: string;
+    nextMonth: string;
+    prevYear: string;
+    nextYear: string;
+    prevYearPage: string;
+    nextYearPage: string;
+  };
 }
 
 export interface GLocale {

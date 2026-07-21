@@ -17,6 +17,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { GLocaleService } from '../core/locale';
 import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconCalendar, gIconChevronLeft, gIconChevronRight } from '../icon/icons';
@@ -25,7 +26,6 @@ import {
   addMonths,
   addMonthsClamped,
   buildMonthGrid,
-  formatDate,
   inRange,
   isBeforeDay,
   isBetween,
@@ -42,7 +42,6 @@ const POSITIONS: ConnectedPosition[] = [
   { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 },
   { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 },
 ];
-const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
 // Chọn khoảng ngày: input read-only + popover 1 lịch (CDK overlay). Click 1 = start (xoá end), click
 // 2 = end (nếu sau start; ngược lại dời start). Tô dải ngày ở giữa + xem trước khi hover. value =
@@ -81,7 +80,7 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
       <div
         class="g-date-range-picker__panel"
         role="dialog"
-        aria-label="Chọn khoảng ngày"
+        [attr.aria-label]="t().datepicker.openRange"
         cdkTrapFocus
         (keydown)="onKeydown($event)"
         (mouseleave)="hovered.set(null)"
@@ -118,7 +117,7 @@ const WEEKDAYS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
         @switch (viewMode()) {
           @case ('days') {
             <div class="g-date-range-picker__weekdays">
-              @for (w of weekdays; track w) {
+              @for (w of weekdays(); track w) {
                 <span class="g-date-range-picker__weekday">{{ w }}</span>
               }
             </div>
@@ -203,6 +202,7 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
   protected readonly elementRef = inject(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
 
   private readonly formDisabled = signal(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
@@ -212,7 +212,9 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
   private onTouchedFn: () => void = () => undefined;
 
   protected readonly positions = POSITIONS;
-  protected readonly weekdays = WEEKDAYS;
+  protected readonly t = this.i18n.strings;
+  // Tên thứ đã xoay theo firstDayOfWeek của gói ngôn ngữ đang dùng — không còn hằng số cứng.
+  protected readonly weekdays = this.i18n.weekdayNames;
   protected readonly iconCalendar = gIconCalendar;
   protected readonly iconPrev = gIconChevronLeft;
   protected readonly iconNext = gIconChevronRight;
@@ -225,10 +227,12 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
 
   private readonly dayButtons = viewChildren<ElementRef<HTMLButtonElement>>('dayBtn');
 
-  protected readonly grid = computed(() => buildMonthGrid(this.viewMonth()));
+  protected readonly grid = computed(() =>
+    buildMonthGrid(this.viewMonth(), this.i18n.firstDayOfWeek()),
+  );
   protected readonly display = computed(() => {
     const { start, end } = this.value();
-    return `${start ? formatDate(start) : '…'} – ${end ? formatDate(end) : '…'}`;
+    return `${start ? this.i18n.formatDate(start) : '…'} – ${end ? this.i18n.formatDate(end) : '…'}`;
   });
 
   // Khi có start chưa có end và đang hover một ngày sau start: dùng ngày hover làm "end tạm" để xem
@@ -253,7 +257,7 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
     const d = this.viewMonth();
     switch (this.viewMode()) {
       case 'days':
-        return `Tháng ${d.getMonth() + 1} ${d.getFullYear()}`;
+        return `${this.i18n.monthNames()[d.getMonth()]} ${d.getFullYear()}`;
       case 'months':
         return `${d.getFullYear()}`;
       default:
@@ -261,21 +265,25 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
     }
   });
   protected readonly titleLabel = computed(() =>
-    this.viewMode() === 'days' ? 'Chọn tháng' : this.viewMode() === 'months' ? 'Chọn năm' : '',
+    this.viewMode() === 'days'
+      ? this.t().datepicker.selectMonth
+      : this.viewMode() === 'months'
+        ? this.t().datepicker.selectYear
+        : '',
   );
   protected readonly stepPrevLabel = computed(() =>
     this.viewMode() === 'days'
-      ? 'Tháng trước'
+      ? this.t().datepicker.prevMonth
       : this.viewMode() === 'months'
-        ? 'Năm trước'
-        : 'Trang năm trước',
+        ? this.t().datepicker.prevYear
+        : this.t().datepicker.prevYearPage,
   );
   protected readonly stepNextLabel = computed(() =>
     this.viewMode() === 'days'
-      ? 'Tháng sau'
+      ? this.t().datepicker.nextMonth
       : this.viewMode() === 'months'
-        ? 'Năm sau'
-        : 'Trang năm sau',
+        ? this.t().datepicker.nextYear
+        : this.t().datepicker.nextYearPage,
   );
 
   constructor() {
@@ -496,6 +504,6 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
     return inRange(d, this.min(), this.max());
   }
   protected dayLabel(d: Date): string {
-    return `${d.getDate()} tháng ${d.getMonth() + 1} ${d.getFullYear()}`;
+    return this.i18n.formatDate(d);
   }
 }

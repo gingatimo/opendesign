@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { GLocaleService } from '../core/locale';
+import { formatDateFor } from '../core/locale-format';
+import { gLocaleVi } from '../locales/vi';
 import { GDatepicker } from './datepicker';
-import { formatDate } from './date-utils';
 
 interface Dp {
   open: () => boolean;
@@ -28,7 +30,8 @@ describe('GDatepicker', () => {
     f.detectChanges();
     cmp.openPanel();
     expect(cmp.open()).toBe(true);
-    expect(formatDate(cmp.viewMonth())).toBe('01/07/2026');
+    // formatDateFor chỉ dùng làm tiện ích so sánh Date trong test, không liên quan locale hiển thị.
+    expect(formatDateFor('vi-VN', cmp.viewMonth())).toBe('01/07/2026');
     cmp.close();
     expect(cmp.open()).toBe(false);
   });
@@ -37,7 +40,7 @@ describe('GDatepicker', () => {
     const { cmp } = make();
     cmp.openPanel();
     cmp.select(new Date(2026, 6, 20));
-    expect(formatDate(cmp.value()!)).toBe('20/07/2026');
+    expect(formatDateFor('vi-VN', cmp.value()!)).toBe('20/07/2026');
     expect(cmp.open()).toBe(false);
   });
 
@@ -50,7 +53,7 @@ describe('GDatepicker', () => {
     cmp.select(new Date(2026, 6, 5)); // trước min
     expect(cmp.value()).toBeNull();
     cmp.select(new Date(2026, 6, 15));
-    expect(formatDate(cmp.value()!)).toBe('15/07/2026');
+    expect(formatDateFor('vi-VN', cmp.value()!)).toBe('15/07/2026');
   });
 
   it('shiftMonth đổi viewMonth', () => {
@@ -59,13 +62,35 @@ describe('GDatepicker', () => {
     f.detectChanges();
     cmp.openPanel();
     cmp.shiftMonth(1);
-    expect(formatDate(cmp.viewMonth())).toBe('01/08/2026');
+    expect(formatDateFor('vi-VN', cmp.viewMonth())).toBe('01/08/2026');
   });
 
   it('hiển thị placeholder khi chưa chọn', () => {
     const { f } = make();
     const el = f.nativeElement.querySelector('.g-datepicker__value') as HTMLElement;
     expect(el.textContent!.trim()).toBe('dd/MM/yyyy');
+  });
+
+  // Gói mặc định là tiếng Anh (en-US, firstDayOfWeek=0) nên cột đầu là Chủ nhật; đổi sang vi-VN
+  // (firstDayOfWeek=1) thì cột đầu đổi thành Thứ hai — đây là breaking change của lưới lịch.
+  // Panel là nội dung CDK overlay (gắn vào document.body, không phải con của fixture.nativeElement)
+  // nên phải dò qua fixture.debugElement (theo cây view của Angular), như select.spec.ts đã làm.
+  it('đổi gói ngôn ngữ thì đổi cả nhãn thứ lẫn cột đầu tuần', () => {
+    TestBed.configureTestingModule({});
+    const fixture = TestBed.createComponent(GDatepicker);
+    fixture.detectChanges();
+    const cmp = fixture.componentInstance as unknown as Dp;
+    cmp.openPanel();
+    fixture.detectChanges();
+    const head = () =>
+      fixture.debugElement
+        .queryAll(By.css('.g-datepicker__weekday'))
+        .map((el) => (el.nativeElement as HTMLElement).textContent?.trim());
+    expect(head()[0]).toBe('Sun');
+
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    fixture.detectChanges();
+    expect(head()[0]).not.toBe('Sun'); // vi bắt đầu Thứ hai
   });
 });
 
@@ -91,14 +116,15 @@ describe('GDatepicker (CVA)', () => {
     const { f, host } = setup();
     f.componentInstance.control.setValue(new Date(2026, 6, 20));
     f.detectChanges();
-    expect(host.querySelector('.g-datepicker__value')!.textContent!.trim()).toBe('20/07/2026');
+    // Locale mặc định en-US → MM/dd/yyyy (khác dd/MM/yyyy của formatDateFor('vi-VN', …) dùng ở trên).
+    expect(host.querySelector('.g-datepicker__value')!.textContent!.trim()).toBe('07/20/2026');
   });
 
   it('chọn ngày cập nhật FormControl (onChange)', () => {
     const { f, cmp } = setup();
     cmp.openPanel();
     cmp.select(new Date(2026, 6, 20));
-    expect(formatDate(f.componentInstance.control.value!)).toBe('20/07/2026');
+    expect(formatDateFor('vi-VN', f.componentInstance.control.value!)).toBe('20/07/2026');
   });
 
   it('invalid + markAsTouched: có class g-datepicker--invalid', () => {

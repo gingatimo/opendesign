@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { formatDateFor } from '../core/locale-format';
 import { GDateRange, GDateRangePicker } from './date-range-picker';
-import { formatDate } from '../datepicker/date-utils';
 
 interface Rp {
   open: () => boolean;
@@ -29,12 +29,13 @@ describe('GDateRangePicker', () => {
     const { cmp } = make();
     cmp.openPanel();
     cmp.select(new Date(2026, 6, 10));
-    expect(formatDate(cmp.value().start!)).toBe('10/07/2026');
+    // formatDateFor chỉ dùng làm tiện ích so sánh Date trong test, không liên quan locale hiển thị.
+    expect(formatDateFor('vi-VN', cmp.value().start!)).toBe('10/07/2026');
     expect(cmp.value().end).toBeNull();
     expect(cmp.open()).toBe(true);
 
     cmp.select(new Date(2026, 6, 20));
-    expect(formatDate(cmp.value().end!)).toBe('20/07/2026');
+    expect(formatDateFor('vi-VN', cmp.value().end!)).toBe('20/07/2026');
     expect(cmp.open()).toBe(false);
   });
 
@@ -43,7 +44,7 @@ describe('GDateRangePicker', () => {
     cmp.openPanel();
     cmp.select(new Date(2026, 6, 15));
     cmp.select(new Date(2026, 6, 5)); // trước start
-    expect(formatDate(cmp.value().start!)).toBe('05/07/2026');
+    expect(formatDateFor('vi-VN', cmp.value().start!)).toBe('05/07/2026');
     expect(cmp.value().end).toBeNull();
   });
 
@@ -54,7 +55,7 @@ describe('GDateRangePicker', () => {
     cmp.select(new Date(2026, 6, 20)); // đủ dải
     cmp.openPanel();
     cmp.select(new Date(2026, 7, 1)); // dải mới
-    expect(formatDate(cmp.value().start!)).toBe('01/08/2026');
+    expect(formatDateFor('vi-VN', cmp.value().start!)).toBe('01/08/2026');
     expect(cmp.value().end).toBeNull();
   });
 

@@ -1,11 +1,5 @@
 // Hàm ngày thuần (không phụ thuộc Angular) cho GDatepicker. So sánh theo NGÀY (bỏ giờ/phút).
 
-export function formatDate(d: Date): string {
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  return `${dd}/${mm}/${d.getFullYear()}`;
-}
-
 export function isSameDay(a: Date, b: Date): boolean {
   return (
     a.getFullYear() === b.getFullYear() &&
@@ -56,11 +50,14 @@ export function isBetween(d: Date, a: Date | null, b: Date | null): boolean {
   return isBeforeDay(lo, d) && isBeforeDay(d, hi);
 }
 
-// Lưới 6 tuần (42 ô) bắt đầu từ Thứ Hai của tuần chứa ngày 1 của tháng.
-export function buildMonthGrid(month: Date): Date[] {
-  const first = startOfMonth(month);
-  // getDay(): 0=CN..6=T7. Muốn tuần bắt đầu T2 → offset = (getDay()+6)%7.
-  const offset = (first.getDay() + 6) % 7;
-  const start = addDays(first, -offset);
-  return Array.from({ length: 42 }, (_, i) => addDays(start, i));
+/** 42 ô (6 tuần) phủ trọn tháng chứa `anchor`. `firstDayOfWeek` theo locale: 0 = Chủ nhật. */
+export function buildMonthGrid(anchor: Date, firstDayOfWeek: number): Date[] {
+  const first = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+  // Lùi về ngày đầu tuần chứa mùng 1. Cộng 7 trước khi lấy dư để không ra số âm.
+  const offset = (first.getDay() - firstDayOfWeek + 7) % 7;
+  const start = new Date(first.getFullYear(), first.getMonth(), 1 - offset);
+  return Array.from(
+    { length: 42 },
+    (_, i) => new Date(start.getFullYear(), start.getMonth(), start.getDate() + i),
+  );
 }

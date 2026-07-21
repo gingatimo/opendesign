@@ -79,5 +79,17 @@ export const gLocaleEn: GLocale = {
       hex: 'Hex colour code',
     },
     timePicker: { open: 'Pick a time', hours: 'Hours', minutes: 'Minutes' },
+    datepicker: {
+      open: 'Pick a date',
+      openRange: 'Pick a date range',
+      selectMonth: 'Pick a month',
+      selectYear: 'Pick a year',
+      prevMonth: 'Previous month',
+      nextMonth: 'Next month',
+      prevYear: 'Previous year',
+      nextYear: 'Next year',
+      prevYearPage: 'Previous years',
+      nextYearPage: 'Next years',
+    },
   },
 };
