@@ -218,6 +218,10 @@
     position: relative;
     padding-left: 1.8em;
   }
+  // Checklist con (Tab để thụt vào) vẫn phải lùi vào trong như danh sách thường.
+  ul.g-rte-tasks ul.g-rte-tasks {
+    padding-left: 1.5em;
+  }
   ul.g-rte-tasks > li::before {
     content: '';
     position: absolute;

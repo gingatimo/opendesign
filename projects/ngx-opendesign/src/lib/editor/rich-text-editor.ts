@@ -335,6 +335,7 @@ import {
         [attr.tabindex]="isDisabled() ? -1 : 0"
         [style.min-height.px]="minHeight()"
         (input)="onInput()"
+        (keydown)="onEditableKeydown($event)"
         (click)="onEditableClick($event)"
         (paste)="onPaste($event)"
         (keyup)="updateActive()"
@@ -608,6 +609,33 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
       this.commit();
       this.updateActive();
     });
+  }
+
+  /**
+   * Tab TRONG danh sách = thụt vào thành danh sách con (Shift+Tab = lùi ra) — dùng lệnh
+   * `indent`/`outdent` nên vẫn nằm trong undo stack.
+   *
+   * CHỈ chặn Tab khi con trỏ đang ở trong danh sách: ở chỗ khác Tab phải giữ nguyên chức năng rời
+   * khỏi vùng soạn, nếu không người dùng bàn phím sẽ bị kẹt trong editor.
+   */
+  protected onEditableKeydown(e: KeyboardEvent): void {
+    if (e.key !== 'Tab' || this.isDisabled()) return;
+    const el = this.editable()?.nativeElement;
+    if (!el) return;
+    const block = activeBlock(el);
+    if (block !== 'ul' && block !== 'ol') return;
+    e.preventDefault();
+    applyCommand(e.shiftKey ? 'outdent' : 'indent');
+    this.syncTaskLists(el);
+    this.commit();
+    this.updateActive();
+  }
+
+  /** Danh sách con do trình duyệt tạo lúc thụt lề KHÔNG mang class checklist → gắn lại cho khớp cha. */
+  private syncTaskLists(root: HTMLElement): void {
+    root
+      .querySelectorAll(`ul.${TASK_LIST_CLASS} ul`)
+      .forEach((list) => list.classList.add(TASK_LIST_CLASS));
   }
 
   /** Bấm vào ô vuông bên trái một mục checklist thì tick/bỏ tick (phần còn lại vẫn gõ chữ). */

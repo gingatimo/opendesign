@@ -103,6 +103,12 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         Nút toolbar chặn <code>mousedown</code> nên bấm chuột <b>không cướp con trỏ</b> đang bôi
         đen.
       </li>
+      <li>
+        <b>Tab</b> trong danh sách = thụt vào thành <b>danh sách con</b>, <b>Shift+Tab</b> lùi ra
+        (áp dụng cho cả 3 kiểu, kể cả checklist). Ngoài danh sách, Tab giữ nguyên chức năng
+        <b>rời khỏi vùng soạn</b> — nếu chiếm Tab ở mọi chỗ thì người dùng bàn phím sẽ kẹt lại trong
+        editor.
+      </li>
     </ul>
 
     <h2>Ghi chú</h2>
