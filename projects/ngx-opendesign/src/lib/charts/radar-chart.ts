@@ -21,6 +21,7 @@ import {
   polar,
 } from './chart-utils';
 import { GChartZoom } from './chart-zoom';
+import { GLocaleService } from '../core/locale';
 
 // Biểu đồ RADAR (spider/web, SVG thuần): mỗi trục toả từ tâm là một tiêu chí, mỗi chuỗi nối các điểm
 // thành một đa giác. Đọc được HÌNH DÁNG tổng thể — mạnh/yếu ở tiêu chí nào — và so sánh vài chuỗi
@@ -65,7 +66,7 @@ import { GChartZoom } from './chart-zoom';
           width="100%"
           [attr.height]="plotHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           <!-- Lưới vẽ trước để nằm dưới các đa giác: vòng giá trị + nan hoa theo từng trục. -->
           @for (ring of rings(); track ring.value) {
@@ -151,7 +152,7 @@ export class GRadarChart {
   readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly title = input('');
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Biểu đồ radar');
+  readonly ariaLabel = input('');
   readonly exportable = input(false);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
   readonly zoomable = input(false);
@@ -167,6 +168,12 @@ export class GRadarChart {
   );
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.radar,
+  );
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
 
   constructor() {

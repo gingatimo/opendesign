@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconMaximize, gIconMinimize } from '../icon/icons';
+import { GLocaleService } from '../core/locale';
 
 // Nút PHÓNG TO chart — bật/tắt trạng thái `zoomed` của khung chart (khung sẽ phủ gần kín màn hình,
 // SVG tự giãn theo vì đã responsive). Đặt cạnh nút tải xuống ở góc trên-phải.
@@ -22,7 +23,7 @@ import { gIconMaximize, gIconMinimize } from '../icon/icons';
     <button
       type="button"
       class="g-chart-zoom__btn"
-      [attr.aria-label]="zoomed() ? 'Thu nhỏ biểu đồ' : 'Phóng to biểu đồ'"
+      [attr.aria-label]="zoomed() ? t().chart.zoomOut : t().chart.zoomIn"
       [attr.aria-pressed]="zoomed()"
       (click)="toggle()"
     >
@@ -38,6 +39,8 @@ export class GChartZoom {
   protected readonly iconIn = gIconMaximize;
   protected readonly iconOut = gIconMinimize;
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   constructor() {
     // Esc để thoát: phóng to che gần hết màn hình nên phải có lối ra quen thuộc, không bắt người

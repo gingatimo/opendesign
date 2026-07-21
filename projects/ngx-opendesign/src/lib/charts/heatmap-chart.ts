@@ -14,6 +14,7 @@ import { GChartExport } from './chart-export';
 import { maxTextWidth } from './chart-text';
 import { HEAT_LEVELS, heatColor, heatLevel } from './chart-utils';
 import { GChartZoom } from './chart-zoom';
+import { GLocaleService } from '../core/locale';
 
 /** Một ô của heatmap: giá trị tại giao của hàng `row` và cột `col`. */
 export interface GHeatmapCell {
@@ -63,7 +64,7 @@ const SCALE_SWATCH = 12;
           width="100%"
           [attr.height]="svgHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           @for (col of colLabels(); track col.name) {
             <text
@@ -106,7 +107,7 @@ const SCALE_SWATCH = 12;
               [attr.y]="scale().textY"
               [attr.font-size]="labelSize()"
             >
-              {{ scaleMinLabel() }}
+              {{ resolvedScaleMinLabel() }}
             </text>
             @for (s of scale().swatches; track s.level) {
               <rect
@@ -125,7 +126,7 @@ const SCALE_SWATCH = 12;
               [attr.y]="scale().textY"
               [attr.font-size]="labelSize()"
             >
-              {{ scaleMaxLabel() }}
+              {{ resolvedScaleMaxLabel() }}
             </text>
           }
         </svg>
@@ -146,11 +147,11 @@ export class GHeatmapChart {
   /** Cạnh tối đa của một ô (px). Ô luôn vuông; lưới hẹp hơn thì ô co lại theo. */
   readonly cellSize = input(28);
   readonly showScale = input(true);
-  readonly scaleMinLabel = input('Ít');
-  readonly scaleMaxLabel = input('Nhiều');
+  readonly scaleMinLabel = input('');
+  readonly scaleMaxLabel = input('');
   readonly title = input('');
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Bản đồ nhiệt');
+  readonly ariaLabel = input('');
   readonly exportable = input(false);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
   readonly zoomable = input(false);
@@ -162,6 +163,18 @@ export class GHeatmapChart {
   protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.heatmap,
+  );
+  protected readonly resolvedScaleMinLabel = computed(
+    () => this.scaleMinLabel() || this.t().chart.scaleLow,
+  );
+  protected readonly resolvedScaleMaxLabel = computed(
+    () => this.scaleMaxLabel() || this.t().chart.scaleHigh,
+  );
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
 
   constructor() {
@@ -260,13 +273,13 @@ export class GHeatmapChart {
     const size = this.labelSize();
     const count = HEAT_LEVELS + 1;
     const swatchesWidth = count * (SCALE_SWATCH + 4) - 4;
-    const maxX = this.gridRight() - maxTextWidth([this.scaleMaxLabel()], size);
+    const maxX = this.gridRight() - maxTextWidth([this.resolvedScaleMaxLabel()], size);
     const firstSwatchX = maxX - 6 - swatchesWidth;
     const textY = this.gridBottom() + 14 + size * 0.8;
     return {
       textY,
       swatchY: textY - SCALE_SWATCH * 0.85,
-      minX: firstSwatchX - 6 - maxTextWidth([this.scaleMinLabel()], size),
+      minX: firstSwatchX - 6 - maxTextWidth([this.resolvedScaleMinLabel()], size),
       maxX,
       swatches: Array.from({ length: count }, (_, level) => ({
         level,

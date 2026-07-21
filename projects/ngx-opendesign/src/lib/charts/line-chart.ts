@@ -24,6 +24,7 @@ import {
   Point,
   smoothPath,
 } from './chart-utils';
+import { GLocaleService } from '../core/locale';
 
 // Biểu đồ ĐƯỜNG (SVG thuần, 0 thư viện ngoài). Nối các mốc bằng đường THẲNG (`curve="straight"`) hoặc
 // đường CONG trơn (`curve="smooth"`, spline Catmull-Rom). Trục y tự chọn vạch "đẹp" + gridline, trục x
@@ -68,7 +69,7 @@ import {
           width="100%"
           [attr.height]="plotHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           @if (showGrid()) {
             @for (g of gridLines(); track $index) {
@@ -136,7 +137,7 @@ export class GLineChart {
   readonly title = input('');
   /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Biểu đồ đường');
+  readonly ariaLabel = input('');
 
   // Lề: trái cho nhãn y, dưới cho nhãn x.
   private readonly ML = 44;
@@ -145,8 +146,14 @@ export class GLineChart {
   private readonly MB = 28;
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(640);
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.line,
+  );
 
   constructor() {
     afterNextRender(() => {

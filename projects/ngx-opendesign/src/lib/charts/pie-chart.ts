@@ -21,6 +21,7 @@ import {
   legendDirection,
   polar,
 } from './chart-utils';
+import { GLocaleService } from '../core/locale';
 
 // Biểu đồ TRÒN (pie, SVG thuần). Mỗi múi là một hình quạt tỉ lệ theo giá trị; kèm nhãn % trên múi đủ
 // lớn. Legend 4 phía (`legendPosition`), export PNG/SVG (`exportable`). Bản có vành rỗng + tổng giữa là
@@ -64,7 +65,7 @@ import {
           width="100%"
           [attr.height]="plotHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           @for (s of slices(); track s.name) {
             <path class="g-pie-chart__slice" [attr.d]="s.d" [style.fill]="s.color">
@@ -114,11 +115,17 @@ export class GPieChart {
   readonly title = input('');
   /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Biểu đồ tròn');
+  readonly ariaLabel = input('');
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(320);
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.pie,
+  );
 
   constructor() {
     afterNextRender(() => {

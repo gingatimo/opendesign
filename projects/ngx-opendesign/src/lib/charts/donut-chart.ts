@@ -21,6 +21,7 @@ import {
   legendDirection,
 } from './chart-utils';
 import { pieSlices } from './pie-chart';
+import { GLocaleService } from '../core/locale';
 
 // Biểu đồ VÀNH KHUYÊN (donut, SVG thuần). Như pie nhưng có lỗ giữa (hiện TỔNG). Legend 4 phía
 // (`legendPosition`), export PNG/SVG (`exportable`, mặc định BẬT). `thickness` = tỉ lệ bán kính lỗ.
@@ -63,7 +64,7 @@ import { pieSlices } from './pie-chart';
           width="100%"
           [attr.height]="plotHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           @for (s of slices(); track s.name) {
             <path class="g-donut-chart__slice" [attr.d]="s.d" [style.fill]="s.color">
@@ -119,11 +120,17 @@ export class GDonutChart {
   readonly title = input('');
   /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Biểu đồ vành khuyên');
+  readonly ariaLabel = input('');
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(320);
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.donut,
+  );
 
   constructor() {
     afterNextRender(() => {

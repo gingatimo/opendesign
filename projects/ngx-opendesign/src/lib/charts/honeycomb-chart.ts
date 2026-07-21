@@ -13,6 +13,7 @@ import {
 import { GChartExport } from './chart-export';
 import { chartColor, GChartSlice, heatColor, heatLevel, polar } from './chart-utils';
 import { GChartZoom } from './chart-zoom';
+import { GLocaleService } from '../core/locale';
 
 // Biểu đồ TỔ ONG (honeycomb/hexagon): mỗi hạng mục là một ô lục giác, xếp so le như tổ ong. Đọc
 // nhanh "cái nào nổi bật" trong một tập nhiều hạng mục cùng loại — công nghệ trong dự án, kho hàng
@@ -53,7 +54,7 @@ import { GChartZoom } from './chart-zoom';
           width="100%"
           [attr.height]="svgHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           @for (cell of cells(); track cell.name) {
             <g class="g-honeycomb__cell">
@@ -104,7 +105,7 @@ export class GHoneycombChart {
   readonly showValues = input(true);
   readonly title = input('');
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Biểu đồ tổ ong');
+  readonly ariaLabel = input('');
   readonly exportable = input(false);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
   readonly zoomable = input(false);
@@ -115,6 +116,12 @@ export class GHoneycombChart {
   protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.honeycomb,
+  );
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
 
   constructor() {

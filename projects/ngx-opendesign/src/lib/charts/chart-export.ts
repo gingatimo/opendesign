@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { GActionExpand, GActionExpandItem } from '../action-expand/action-expand';
 import { gIconImage } from '../icon/icons';
+import { GLocaleService } from '../core/locale';
 import { GChartLegendItem } from './chart-legend';
 import { exportChartSvg, GChartExportFormat } from './export-chart';
 
@@ -12,7 +13,7 @@ import { exportChartSvg, GChartExportFormat } from './export-chart';
   template: `
     <g-action-expand
       align="end"
-      label="Tải xuống"
+      [label]="t().chart.download"
       [actions]="formats"
       (action)="onExport($event)"
     />
@@ -25,6 +26,9 @@ export class GChartExport {
   // Tiêu đề và chú giải là HTML nằm ngoài <svg> nên phải truyền vào để vẽ lại trong file xuất ra.
   readonly title = input('');
   readonly legend = input<readonly GChartLegendItem[]>([]);
+
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly formats: GActionExpandItem[] = [
     { label: 'PNG', value: 'png', icon: gIconImage },

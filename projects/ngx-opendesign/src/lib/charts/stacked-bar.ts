@@ -14,6 +14,7 @@ import { GChartExport } from './chart-export';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
 import { chartColor, GChartSlice } from './chart-utils';
 import { GChartZoom } from './chart-zoom';
+import { GLocaleService } from '../core/locale';
 
 // Thanh TỈ LỆ một dòng (stacked bar, SVG thuần) — kiểu thanh "Languages" của GitHub: cả tập dữ liệu
 // nằm trên MỘT thanh ngang, mỗi phần rộng theo tỉ lệ, chú giải kèm phần trăm bên dưới. Hợp khi chỉ
@@ -51,7 +52,7 @@ import { GChartZoom } from './chart-zoom';
           width="100%"
           [attr.height]="barHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           <!-- Bo hai đầu thanh bằng clipPath: từng đoạn vẫn là hình chữ nhật vuông góc, chỉ mép
                ngoài cùng của CẢ thanh mới bo — nếu bo từng đoạn thì giữa các đoạn sẽ hở khe. -->
@@ -100,7 +101,7 @@ export class GStackedBar {
   readonly title = input('');
   /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Thanh tỉ lệ');
+  readonly ariaLabel = input('');
   readonly exportable = input(false);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
   readonly zoomable = input(false);
@@ -114,6 +115,12 @@ export class GStackedBar {
   protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.stackedBar,
+  );
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
 
   constructor() {

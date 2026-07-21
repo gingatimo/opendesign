@@ -21,6 +21,7 @@ import {
   legendDirection,
   niceTicks,
 } from './chart-utils';
+import { GLocaleService } from '../core/locale';
 
 interface Bar {
   x: number;
@@ -85,7 +86,7 @@ interface CatLabel {
           width="100%"
           [attr.height]="plotHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           @if (showGrid()) {
             @for (g of layout().grids; track $index) {
@@ -158,15 +159,21 @@ export class GBarChart {
   readonly title = input('');
   /** Vị trí tiêu đề trong hàng đầu: sát trái (mặc định) hay giữa khung. */
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Biểu đồ cột');
+  readonly ariaLabel = input('');
 
   private readonly MT = 12;
   private readonly MR = 16;
   private readonly MB = 28;
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(640);
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.bar,
+  );
 
   constructor() {
     afterNextRender(() => {

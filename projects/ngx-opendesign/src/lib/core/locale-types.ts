@@ -70,6 +70,26 @@ export interface GLocaleStrings {
     fullscreen: string;
     exitFullscreen: string;
   };
+  chart: {
+    download: string;
+    zoomIn: string;
+    zoomOut: string;
+    scaleLow: string;
+    scaleHigh: string;
+    contributionUnit: string;
+    aria: {
+      line: string;
+      bar: string;
+      stackedBar: string;
+      pie: string;
+      donut: string;
+      polar: string;
+      radar: string;
+      honeycomb: string;
+      heatmap: string;
+      calendarHeatmap: string;
+    };
+  };
 }
 
 export interface GLocale {

@@ -22,6 +22,7 @@ import {
   polar,
 } from './chart-utils';
 import { GChartZoom } from './chart-zoom';
+import { GLocaleService } from '../core/locale';
 
 // Biểu đồ CỰC (polar area, SVG thuần): mỗi phần chiếm góc BẰNG NHAU, còn BÁN KÍNH mới thay đổi theo
 // giá trị — khác pie (góc thay đổi, bán kính bằng nhau). Hợp khi muốn so sánh độ lớn của các hạng mục
@@ -67,7 +68,7 @@ import { GChartZoom } from './chart-zoom';
           width="100%"
           [attr.height]="plotHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           <!-- Lưới: các vòng tròn ứng với vạch giá trị, vẽ TRƯỚC để nằm dưới các múi. -->
           @for (ring of rings(); track ring.value) {
@@ -125,7 +126,7 @@ export class GPolarChart {
   readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly title = input('');
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Biểu đồ cực');
+  readonly ariaLabel = input('');
   readonly exportable = input(false);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
   readonly zoomable = input(false);
@@ -141,6 +142,12 @@ export class GPolarChart {
   );
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.polar,
+  );
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
 
   constructor() {

@@ -14,6 +14,8 @@ import { GChartExport } from './chart-export';
 import { maxTextWidth } from './chart-text';
 import { HEAT_LEVELS, heatColor, heatLevel } from './chart-utils';
 import { GChartZoom } from './chart-zoom';
+import { GLocaleService } from '../core/locale';
+import { weekdayNames } from '../core/locale-format';
 
 /** Một ngày có dữ liệu. `date` nhận `Date` hoặc chuỗi `YYYY-MM-DD`. */
 export interface GCalendarHeatmapDay {
@@ -24,21 +26,6 @@ export interface GCalendarHeatmapDay {
 const DAY_MS = 86_400_000;
 const GAP = 3;
 const LABEL_SIZE = 12;
-const MONTHS = [
-  'Th1',
-  'Th2',
-  'Th3',
-  'Th4',
-  'Th5',
-  'Th6',
-  'Th7',
-  'Th8',
-  'Th9',
-  'Th10',
-  'Th11',
-  'Th12',
-];
-const WEEKDAYS = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
 
 /** Chuẩn hoá về nửa đêm giờ địa phương — so sánh ngày thì giờ/phút chỉ gây lệch. */
 function startOfDay(value: string | Date): Date {
@@ -122,7 +109,7 @@ export function calendarWeeks(
           width="100%"
           [attr.height]="svgHeight()"
           role="img"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="resolvedAriaLabel()"
         >
           @for (m of monthLabels(); track m.index) {
             <text
@@ -171,7 +158,7 @@ export function calendarWeeks(
               [attr.y]="scale().textY"
               [attr.font-size]="labelSize()"
             >
-              {{ scaleMinLabel() }}
+              {{ resolvedScaleMinLabel() }}
             </text>
             @for (s of scale().swatches; track s.level) {
               <rect
@@ -190,7 +177,7 @@ export function calendarWeeks(
               [attr.y]="scale().textY"
               [attr.font-size]="labelSize()"
             >
-              {{ scaleMaxLabel() }}
+              {{ resolvedScaleMaxLabel() }}
             </text>
           }
         </svg>
@@ -210,13 +197,13 @@ export class GCalendarHeatmap {
   readonly weekStart = input<GWeekStart>('sunday');
   readonly color = input('var(--g-chart-2)');
   readonly showScale = input(true);
-  readonly scaleMinLabel = input('Ít');
-  readonly scaleMaxLabel = input('Nhiều');
+  readonly scaleMinLabel = input('');
+  readonly scaleMaxLabel = input('');
   /** Đơn vị trong tooltip: "12 đóng góp vào 03/07/2026". */
-  readonly unit = input('đóng góp');
+  readonly unit = input('');
   readonly title = input('');
   readonly titlePosition = input<'left' | 'center'>('left');
-  readonly ariaLabel = input('Lịch nhiệt theo ngày');
+  readonly ariaLabel = input('');
   readonly exportable = input(false);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
   readonly zoomable = input(false);
@@ -228,6 +215,19 @@ export class GCalendarHeatmap {
   protected readonly titleCentered = computed(() => this.titlePosition() === 'center');
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+  // Input có giá trị thì thắng; rỗng thì lấy từ gói ngôn ngữ. Giữ API cũ, không có hai nguồn sự thật.
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() || this.t().chart.aria.calendarHeatmap,
+  );
+  protected readonly resolvedScaleMinLabel = computed(
+    () => this.scaleMinLabel() || this.t().chart.scaleLow,
+  );
+  protected readonly resolvedScaleMaxLabel = computed(
+    () => this.scaleMaxLabel() || this.t().chart.scaleHigh,
+  );
+  protected readonly resolvedUnit = computed(() => this.unit() || this.t().chart.contributionUnit);
   protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
 
   constructor() {
@@ -263,8 +263,11 @@ export class GCalendarHeatmap {
   });
   private readonly max = computed(() => Math.max(0, ...this.byDay().values()));
 
-  private readonly weekdayOrder = computed(() =>
-    this.weekStart() === 'monday' ? [...WEEKDAYS.slice(1), WEEKDAYS[0]] : [...WEEKDAYS],
+  // `weekdayNames` đã tự trả đúng thứ tự bắt đầu từ `firstDayOfWeek` truyền vào, nên không cần tự
+  // xoay vòng mảng như bản cũ nữa. Tham số thứ hai lấy từ `weekStart` của CHÍNH component (lựa chọn
+  // tường minh của consumer), không phải `firstDayOfWeek` của locale.
+  private readonly weekdayLabels = computed(() =>
+    weekdayNames(this.i18n.tag(), this.weekStart() === 'monday' ? 1 : 0),
   );
 
   /**
@@ -275,12 +278,14 @@ export class GCalendarHeatmap {
 
   /** Cạnh ô nếu chừa chỗ nhãn theo cỡ chữ GỐC — chỉ dùng để suy ra cỡ chữ, tránh vòng lặp. */
   private readonly baseCell = computed(() =>
-    fitCell(this.w(), maxTextWidth(WEEKDAYS, LABEL_SIZE) + 8, this.weekCount()),
+    fitCell(this.w(), maxTextWidth(this.weekdayLabels(), LABEL_SIZE) + 8, this.weekCount()),
   );
   protected readonly labelSize = computed(() =>
     Math.round(Math.min(20, Math.max(LABEL_SIZE, this.baseCell() * 0.95))),
   );
-  protected readonly labelWidth = computed(() => maxTextWidth(WEEKDAYS, this.labelSize()) + 8);
+  protected readonly labelWidth = computed(
+    () => maxTextWidth(this.weekdayLabels(), this.labelSize()) + 8,
+  );
 
   /**
    * Cạnh ô CHỐT LẠI theo bề ngang nhãn THẬT. Tính hai bước như vậy vì cỡ chữ phụ thuộc cạnh ô, mà
@@ -294,7 +299,7 @@ export class GCalendarHeatmap {
   /** Nhãn thứ: chỉ ghi cách quãng (T2/T4/T6) như lịch đóng góp quen thuộc, ghi đủ 7 thì chữ chen nhau. */
   protected readonly weekdayRows = computed(() => {
     const labelled = this.weekStart() === 'monday' ? 0 : 1;
-    return this.weekdayOrder().map((label, index) => ({
+    return this.weekdayLabels().map((label, index) => ({
       index,
       label: index % 2 === labelled ? label : '',
       y: this.headerHeight() + index * (this.cell() + GAP),
@@ -303,6 +308,7 @@ export class GCalendarHeatmap {
 
   /** Nhãn tháng đặt tại cột của tuần ĐẦU TIÊN thuộc tháng đó. */
   protected readonly monthLabels = computed(() => {
+    const months = this.i18n.monthNames();
     const labels: { index: number; x: number; label: string }[] = [];
     let previous = -1;
     this.weeks().forEach((week, column) => {
@@ -313,7 +319,7 @@ export class GCalendarHeatmap {
         labels.push({
           index: labels.length,
           x: this.labelWidth() + column * (this.cell() + GAP),
-          label: MONTHS[month],
+          label: months[month],
         });
         previous = month;
       }
@@ -331,13 +337,13 @@ export class GCalendarHeatmap {
     const size = this.labelSize();
     const count = HEAT_LEVELS + 1;
     const swatchesWidth = count * (this.cell() + GAP) - GAP;
-    const maxX = this.gridRight() - maxTextWidth([this.scaleMaxLabel()], size);
+    const maxX = this.gridRight() - maxTextWidth([this.resolvedScaleMaxLabel()], size);
     const firstSwatchX = maxX - 6 - swatchesWidth;
     const textY = this.gridBottom() + 14 + size * 0.8;
     return {
       textY,
       swatchY: textY - this.cell() * 0.85,
-      minX: firstSwatchX - 6 - maxTextWidth([this.scaleMinLabel()], size),
+      minX: firstSwatchX - 6 - maxTextWidth([this.resolvedScaleMinLabel()], size),
       maxX,
       swatches: Array.from({ length: count }, (_, level) => ({
         level,
@@ -357,7 +363,7 @@ export class GCalendarHeatmap {
 
   protected tooltipFor(day: Date): string {
     const value = this.byDay().get(dayKey(day)) ?? 0;
-    return `${value} ${this.unit()} vào ${day.toLocaleDateString('vi-VN')}`;
+    return `${value} ${this.resolvedUnit()} vào ${this.i18n.formatDate(day)}`;
   }
 }
 
