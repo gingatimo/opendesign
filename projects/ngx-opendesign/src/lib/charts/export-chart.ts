@@ -39,11 +39,21 @@ export interface GChartExportMeta {
   legend?: readonly GChartLegendItem[];
 }
 
-/** Đổi `var(--token)` thành màu thật, đọc từ phần tử sống trên trang. */
+/**
+ * Đổi một màu CSS bất kỳ thành giá trị đã tính (`rgb(...)`).
+ *
+ * Không dò `var(--x)` bằng regex: người dùng đặt được mọi thứ `fill` nhận — `var()` có fallback,
+ * `color-mix()`, `oklch()`, tên màu… Thả một phần tử đo NGAY TRONG chart rồi hỏi trình duyệt là cách
+ * duy nhất đúng cho mọi dạng, và cũng ăn theo token đang có hiệu lực tại chỗ đó.
+ */
 function resolveColor(value: string, reference: Element): string {
-  const token = /^var\((--[\w-]+)\)$/.exec(value.trim());
-  if (!token) return value;
-  return getComputedStyle(reference).getPropertyValue(token[1]).trim() || value;
+  const probe = document.createElement('span');
+  probe.style.display = 'none';
+  probe.style.color = value;
+  (reference.parentElement ?? document.body).appendChild(probe);
+  const resolved = getComputedStyle(probe).color;
+  probe.remove();
+  return resolved || value;
 }
 
 /** Ước lượng bề ngang một mục chú giải — đủ để xếp hàng, không cần đo chữ chính xác. */
