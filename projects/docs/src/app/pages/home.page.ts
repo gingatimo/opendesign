@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GBadge, GButton, GCard, GCardHeader, GLink } from 'ngx-opendesign';
+import { NAV_GROUPS } from '../core/nav';
 import { CodeBlock } from '../shared/code-block';
 
 interface FeatureCard {
@@ -8,9 +9,12 @@ interface FeatureCard {
   body: string;
 }
 
-interface ComponentGroup {
+/** Một mảng nội dung lớn của thư viện, kèm đường dẫn để bấm thẳng vào xem. */
+interface HighlightCard {
   title: string;
-  links: { path: string; label: string }[];
+  body: string;
+  path: string;
+  cta: string;
 }
 
 @Component({
@@ -20,6 +24,8 @@ interface ComponentGroup {
       <div class="hero__badges">
         <g-badge>v{{ version }}</g-badge>
         <g-badge variant="success">{{ componentCount }} component</g-badge>
+        <g-badge>{{ chartCount }} loại chart</g-badge>
+        <g-badge>{{ iconCount }} icon</g-badge>
         <g-badge>Angular {{ angularVersion }}</g-badge>
       </div>
       <h1>OpenDesign</h1>
@@ -32,8 +38,26 @@ interface ComponentGroup {
       <div class="hero__actions">
         <a g-button routerLink="/components/button">Xem component</a>
         <a g-button variant="outline" href="#cai-dat">Cài đặt</a>
+        <a g-button variant="ghost" routerLink="/playbook/dashboard">Xem màn hình mẫu</a>
       </div>
     </section>
+
+    <h2>Trong hộp có gì</h2>
+    <p>
+      Không chỉ là bộ control cơ bản: biểu đồ, trình soạn thảo, icon set và cả những màn hình mẫu
+      ráp sẵn đều nằm trong cùng một package.
+    </p>
+    <div class="features">
+      @for (item of highlights; track item.title) {
+        <g-card>
+          <div gCardHeader>{{ item.title }}</div>
+          <p class="features__body">{{ item.body }}</p>
+          <p class="features__cta">
+            <a gLink [routerLink]="item.path">{{ item.cta }} →</a>
+          </p>
+        </g-card>
+      }
+    </div>
 
     <h2>Vì sao dùng OpenDesign</h2>
     <div class="features">
@@ -116,7 +140,7 @@ interface ComponentGroup {
     <div class="catalog">
       @for (group of componentGroups; track group.title) {
         <div class="catalog__group">
-          <h3 class="catalog__title">{{ group.title }}</h3>
+          <h3 class="catalog__title">{{ group.title }} ({{ group.links.length }})</h3>
           <ul class="catalog__list">
             @for (link of group.links; track link.path) {
               <li>
@@ -127,6 +151,19 @@ interface ComponentGroup {
         </div>
       }
     </div>
+
+    <h2>Playbook — ráp lại thành màn hình thật</h2>
+    <p>
+      Biết từng component rồi thì phần khó còn lại là ghép chúng cho ra một màn hình dùng được.
+      Playbook là {{ playbook.links.length }} màn hình hoàn chỉnh, code đọc thẳng từ file nguồn:
+    </p>
+    <ul class="catalog__list catalog__list--inline">
+      @for (link of playbook.links; track link.path) {
+        <li>
+          <a gLink [routerLink]="link.path">{{ link.label }}</a>
+        </li>
+      }
+    </ul>
 
     <h2>Yêu cầu</h2>
     <ul>
@@ -182,6 +219,12 @@ interface ComponentGroup {
       margin-bottom: var(--g-space-6);
     }
 
+    /* Card cao bằng nhau (ô lưới kéo giãn), nên xếp dọc để đẩy được link xuống đáy. */
+    .features g-card {
+      display: flex;
+      flex-direction: column;
+    }
+
     .features__body {
       margin: 0;
       color: var(--g-text-muted);
@@ -189,16 +232,29 @@ interface ComponentGroup {
       line-height: 1.6;
     }
 
+    /* margin-top: auto — link nằm sát đáy card, các thẻ trên cùng hàng thẳng nhau dù mô tả dài ngắn khác nhau. */
+    .features__cta {
+      margin: auto 0 0;
+      padding-top: var(--g-space-3);
+      font-size: var(--g-font-size-sm);
+    }
+
     .note {
       color: var(--g-text-muted);
       font-size: var(--g-font-size-sm);
     }
 
+    /* Chia cột kiểu báo (không phải grid): các nhóm dài ngắn rất khác nhau — Form 19 mục còn Nút 4 —
+       nên lưới sẽ để lại mảng trống lớn, còn cột báo thì tự rót tiếp nhóm sau vào chỗ trống. */
     .catalog {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: var(--g-space-5);
+      columns: 180px 4;
+      column-gap: var(--g-space-5);
       margin-bottom: var(--g-space-6);
+    }
+
+    .catalog__group {
+      break-inside: avoid;
+      margin-bottom: var(--g-space-5);
     }
 
     .catalog__title {
@@ -215,13 +271,73 @@ interface ComponentGroup {
       flex-direction: column;
       gap: var(--g-space-1);
     }
+
+    .catalog__list--inline {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--g-space-2) var(--g-space-4);
+      margin-bottom: var(--g-space-6);
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class HomePage {
-  protected readonly version = '1.0.0';
+  protected readonly version = '1.1.0';
   protected readonly angularVersion = 22;
-  protected readonly componentCount = 72;
+
+  // Danh mục lấy thẳng từ mục lục của sidebar: bỏ nhóm "Bắt đầu" (chỉ có link về đây) và tách
+  // "Playbook" ra mục riêng vì đó là màn hình ráp sẵn, không phải component.
+  protected readonly componentGroups = NAV_GROUPS.filter(
+    (g) => g.title !== 'Bắt đầu' && g.title !== 'Playbook',
+  );
+  protected readonly playbook = NAV_GROUPS.find((g) => g.title === 'Playbook')!;
+
+  // Đếm từ mục lục thay vì gõ tay — thêm component mới là con số tự đúng.
+  protected readonly componentCount = NAV_GROUPS.flatMap((g) => g.links).filter((l) =>
+    l.path.startsWith('/components/'),
+  ).length;
+  protected readonly chartCount = NAV_GROUPS.find((g) => g.title === 'Charts')?.links.length ?? 0;
+  /** Số icon trong `ngx-opendesign` — xem trang Icon. Không import cả bộ vào đây cho nhẹ bundle. */
+  protected readonly iconCount = 116;
+
+  protected readonly highlights: HighlightCard[] = [
+    {
+      title: `${this.chartCount} loại chart, SVG thuần`,
+      body: 'Line, bar, stacked bar, pie, donut, polar, radar, honeycomb, heatmap và calendar heatmap. Chung một khung: tiêu đề, chú giải bốn phía, phóng to gần kín màn hình và xuất ra PNG hoặc SVG — màu, tiêu đề, chú giải đều được in vào file.',
+      path: '/components/line-chart',
+      cta: 'Xem chart',
+    },
+    {
+      title: 'Hai trình soạn thảo',
+      body: 'Rich Text Editor với thanh công cụ đầy đủ: heading, khối code, danh sách checkbox, bảng, link, màu chữ, thụt lề bằng Tab. Code Editor tô sáng cú pháp kèm số dòng, gõ tiếng Việt (IME) không mất chữ.',
+      path: '/components/rich-text-editor',
+      cta: 'Xem editor',
+    },
+    {
+      title: `${this.iconCount} icon tree-shakable`,
+      body: 'Mỗi icon là một hằng số rời, chỉ icon nào bạn import mới nằm trong bundle. Vẽ theo lưới 24px, dùng currentColor nên tự đổi màu theo ngữ cảnh.',
+      path: '/components/icon',
+      cta: 'Xem icon set',
+    },
+    {
+      title: 'Dữ liệu dạng bảng và sơ đồ',
+      body: 'Table sắp xếp/chọn dòng, Organization Chart cho sơ đồ tổ chức, Reorder List kéo thả đổi thứ tự — kèm Splitter và Scroll Panel để dựng khung làm việc nhiều vùng.',
+      path: '/components/table',
+      cta: 'Xem Table',
+    },
+    {
+      title: 'Nền tảng token',
+      body: 'Bốn trang giải thích bảng màu, typography, radius và spacing, cùng cách hoạt động của chế độ tối. Mọi token đều là CSS variable nên ghi đè được bằng CSS thuần.',
+      path: '/nen-tang/mau-sac',
+      cta: 'Xem nền tảng',
+    },
+    {
+      title: 'Playbook màn hình mẫu',
+      body: 'Đăng nhập, dashboard, danh sách, chi tiết, thêm mới, chatbot và workspace chat + terminal — mỗi màn ghép từ chính các component ở trên, xem được cả code.',
+      path: '/playbook/dashboard',
+      cta: 'Xem playbook',
+    },
+  ];
 
   protected readonly features: FeatureCard[] = [
     {
@@ -247,95 +363,6 @@ export default class HomePage {
     {
       title: 'Tài liệu tiếng Việt',
       body: 'Mọi trang đều có demo sống, code mẫu đọc thẳng từ file nguồn (không bao giờ lệch với thực tế) và ghi chú accessibility.',
-    },
-  ];
-
-  protected readonly componentGroups: ComponentGroup[] = [
-    {
-      title: 'Nút',
-      links: [
-        { path: '/components/button', label: 'Button' },
-        { path: '/components/fab', label: 'Fab' },
-        { path: '/components/icon-button', label: 'Icon Button' },
-      ],
-    },
-    {
-      title: 'Form',
-      links: [
-        { path: '/components/checkbox', label: 'Checkbox' },
-        { path: '/components/datepicker', label: 'Datepicker' },
-        { path: '/components/file-input', label: 'File Input' },
-        { path: '/components/input', label: 'Input' },
-        { path: '/components/radio', label: 'Radio' },
-        { path: '/components/search-field', label: 'Search Field' },
-        { path: '/components/cascade-select', label: 'Cascade Select' },
-        { path: '/components/chips', label: 'Chips' },
-        { path: '/components/color-picker', label: 'Color Picker' },
-        { path: '/components/input-otp', label: 'Input OTP' },
-        { path: '/components/tree-select', label: 'Tree Select' },
-        { path: '/components/date-range-picker', label: 'Date Range Picker' },
-        { path: '/components/select', label: 'Select' },
-        { path: '/components/slider', label: 'Slider' },
-        { path: '/components/textarea', label: 'Textarea' },
-        { path: '/components/time-picker', label: 'Time Picker' },
-        { path: '/components/toggle', label: 'Toggle' },
-      ],
-    },
-    {
-      title: 'Hiển thị',
-      links: [
-        { path: '/components/avatar', label: 'Avatar' },
-        { path: '/components/badge', label: 'Badge' },
-        { path: '/components/card', label: 'Card' },
-        { path: '/components/chip', label: 'Chip' },
-        { path: '/components/divider', label: 'Divider' },
-        { path: '/components/icon', label: 'Icon' },
-        { path: '/components/image-preview', label: 'Image Preview' },
-        { path: '/components/image-slider', label: 'Image Slider' },
-        { path: '/components/media-player', label: 'Media Player' },
-        { path: '/components/progress', label: 'Progress' },
-        { path: '/components/skeleton', label: 'Skeleton' },
-        { path: '/components/timeline', label: 'Timeline' },
-        { path: '/components/spinner', label: 'Spinner' },
-      ],
-    },
-    {
-      title: 'Overlay',
-      links: [
-        { path: '/components/dialog', label: 'Dialog' },
-        { path: '/components/drawer', label: 'Drawer' },
-        { path: '/components/toast', label: 'Toast' },
-        { path: '/components/tooltip', label: 'Tooltip' },
-      ],
-    },
-    {
-      title: 'Điều hướng',
-      links: [
-        { path: '/components/accordion', label: 'Accordion' },
-        { path: '/components/breadcrumb', label: 'Breadcrumb' },
-        { path: '/components/dock-menu', label: 'Dock Menu' },
-        { path: '/components/link', label: 'Link' },
-        { path: '/components/menu', label: 'Menu' },
-        { path: '/components/pagination', label: 'Pagination' },
-        { path: '/components/sidebar', label: 'Sidebar' },
-        { path: '/components/stepper', label: 'Stepper' },
-        { path: '/components/tabs', label: 'Tabs' },
-        { path: '/components/topbar', label: 'Topbar' },
-      ],
-    },
-    {
-      title: 'Cấu trúc',
-      links: [
-        { path: '/components/container', label: 'Container' },
-        { path: '/components/grid', label: 'Grid' },
-        { path: '/components/stack', label: 'Stack' },
-        { path: '/components/layout', label: 'Layout' },
-        { path: '/components/scroll-panel', label: 'Scroll Panel' },
-      ],
-    },
-    {
-      title: 'Dữ liệu',
-      links: [{ path: '/components/table', label: 'Table' }],
     },
   ];
 
