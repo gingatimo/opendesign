@@ -9,6 +9,7 @@ import {
   input,
   numberAttribute,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 
 @Component({
   selector: 'g-progress',
@@ -36,12 +37,14 @@ export class GProgress {
   });
 
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   constructor() {
     afterNextRender(() => {
       const el = this.elementRef.nativeElement;
       if (!el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')) {
-        el.setAttribute('aria-label', 'Tiến độ');
+        el.setAttribute('aria-label', this.t().progress.label);
       }
     });
   }

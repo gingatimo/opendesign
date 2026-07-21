@@ -42,7 +42,7 @@ describe('GChip', () => {
     const button = chip.querySelector('button');
     expect(button).not.toBeNull();
     expect(button?.getAttribute('type')).toBe('button');
-    expect(button?.getAttribute('aria-label')).toBe('Xóa');
+    expect(button?.getAttribute('aria-label')).toBe('Remove');
     expect(button?.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
   });
 

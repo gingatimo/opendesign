@@ -38,15 +38,15 @@ describe('GSidebarToggle', () => {
     ).nativeElement;
 
     expect(nut.tagName).toBe('BUTTON');
-    expect(nut.getAttribute('aria-label')).toBe('Thu gọn thanh bên');
+    expect(nut.getAttribute('aria-label')).toBe('Collapse sidebar');
     // Host là custom element không role → ARIA trên nó bị bỏ qua (bài học GAvatar, Plan 3).
     expect(host.getAttribute('aria-label')).toBeNull();
     expect(host.getAttribute('aria-expanded')).toBeNull();
   });
 
-  it('mặc định (đang mở): aria-label "Thu gọn thanh bên", aria-expanded true', () => {
+  it('mặc định (đang mở): aria-label "Collapse sidebar", aria-expanded true', () => {
     const { nut } = setup();
-    expect(nut.getAttribute('aria-label')).toBe('Thu gọn thanh bên');
+    expect(nut.getAttribute('aria-label')).toBe('Collapse sidebar');
     expect(nut.getAttribute('aria-expanded')).toBe('true');
   });
 
@@ -57,7 +57,7 @@ describe('GSidebarToggle', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.thuGon()).toBe(true);
-    expect(nut.getAttribute('aria-label')).toBe('Mở rộng thanh bên');
+    expect(nut.getAttribute('aria-label')).toBe('Expand sidebar');
     expect(nut.getAttribute('aria-expanded')).toBe('false');
   });
 
@@ -65,7 +65,7 @@ describe('GSidebarToggle', () => {
     const { fixture, nut } = setup();
     fixture.componentInstance.thuGon.set(true);
     fixture.detectChanges();
-    expect(nut.getAttribute('aria-label')).toBe('Mở rộng thanh bên');
+    expect(nut.getAttribute('aria-label')).toBe('Expand sidebar');
     expect(nut.getAttribute('aria-expanded')).toBe('false');
   });
 

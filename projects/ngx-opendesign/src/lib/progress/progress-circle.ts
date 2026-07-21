@@ -8,6 +8,7 @@ import {
   input,
   numberAttribute,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 
 // Vòng tròn tiến độ (determinate): value 0..100 vẽ cung tròn, phần còn lại là track mờ. Nhãn ở GIỮA
 // qua <ng-content /> (vd. số đếm ngược, phần trăm). Cần indeterminate quay tròn thì dùng GSpinner.
@@ -69,12 +70,14 @@ export class GProgressCircle {
   protected readonly viewBox = computed(() => `0 0 ${this.size()} ${this.size()}`);
 
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   constructor() {
     afterNextRender(() => {
       const el = this.elementRef.nativeElement;
       if (!el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')) {
-        el.setAttribute('aria-label', 'Tiến độ');
+        el.setAttribute('aria-label', this.t().progress.label);
       }
     });
   }

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { gDevWarning } from '../core/dev-warning';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { gIconPanelLeftClose, gIconPanelLeftOpen } from '../icon/icons';
 import { GSidebar } from './sidebar';
@@ -32,7 +33,7 @@ import { GSidebar } from './sidebar';
     <button
       type="button"
       class="g-sidebar-toggle__button g-sidebar-item"
-      [attr.aria-label]="nhan()"
+      [attr.aria-label]="toggleLabel()"
       [attr.aria-expanded]="!daThuGon()"
       (click)="doiTrangThai($event)"
     >
@@ -57,10 +58,12 @@ export class GSidebarToggle {
   // optional: đặt ngoài <g-sidebar> là lỗi dùng sai, nhưng phải cảnh báo tử tế thay vì để
   // Angular ném lỗi injector khó hiểu.
   private readonly sidebar = inject(GSidebar, { optional: true });
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly daThuGon = computed(() => this.sidebar?.collapsed() ?? false);
-  protected readonly nhan = computed(() =>
-    this.daThuGon() ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên',
+  protected readonly toggleLabel = computed(() =>
+    this.daThuGon() ? this.t().sidebar.expand : this.t().sidebar.collapse,
   );
 
   constructor() {

@@ -6,6 +6,7 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 
 export type GSpinnerSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
@@ -32,12 +33,14 @@ export class GSpinner {
   readonly size = input<GSpinnerSize>('md');
 
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   constructor() {
     afterNextRender(() => {
       const el = this.elementRef.nativeElement;
       if (!el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')) {
-        el.setAttribute('aria-label', 'Đang tải');
+        el.setAttribute('aria-label', this.t().common.loading);
       }
     });
   }

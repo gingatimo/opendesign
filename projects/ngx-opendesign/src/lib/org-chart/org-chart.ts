@@ -4,11 +4,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   contentChild,
+  inject,
   input,
   model,
   signal,
   TemplateRef,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { gIconMinus, gIconPlus } from '../icon/icons';
 
@@ -58,7 +60,7 @@ export interface GOrgChartNode {
               type="button"
               class="g-org-chart__toggle"
               [attr.aria-expanded]="!isCollapsed(node)"
-              aria-label="Thu gọn / mở nhánh con"
+              [attr.aria-label]="t().orgChart.toggleBranch"
               (click)="onToggleCollapse($event, node)"
             >
               <g-icon [icon]="isCollapsed(node) ? iconExpand : iconCollapse" size="sm" />
@@ -94,6 +96,9 @@ export class GOrgChart {
   // Template tuỳ biến nội dung node (nếu consumer chiếu vào <ng-template let-node>). Không có thì dùng
   // mặc định label + sublabel.
   protected readonly nodeTemplate = contentChild(TemplateRef);
+
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly iconExpand = gIconPlus;
   protected readonly iconCollapse = gIconMinus;

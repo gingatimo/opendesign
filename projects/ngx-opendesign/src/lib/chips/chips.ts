@@ -17,6 +17,7 @@ import {
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { GChip } from '../chip/chip';
 import { trackControlInvalid } from '../core/control-invalid';
+import { GLocaleService } from '../core/locale';
 
 // Ô nhập nhiều giá trị dạng chip (tags input). Gõ + Enter/dấu phẩy để thêm, × hoặc Backspace (khi ô
 // rỗng) để xoá. value = string[] (CVA). Chống trùng trừ khi allowDuplicate; max giới hạn số chip.
@@ -28,7 +29,7 @@ import { trackControlInvalid } from '../core/control-invalid';
       @for (chip of chips(); track $index) {
         <g-chip
           removable
-          [removeLabel]="'Xóa ' + chip"
+          [removeLabel]="t().chips.remove(chip)"
           [disabled]="disabled()"
           (removed)="removeAt($index)"
         >
@@ -40,7 +41,7 @@ import { trackControlInvalid } from '../core/control-invalid';
         class="g-chips__input"
         [placeholder]="chips().length ? '' : placeholder()"
         [disabled]="disabled()"
-        aria-label="Thêm mục"
+        [attr.aria-label]="t().chips.add"
         (keydown)="onKeydown($event)"
         (blur)="onTouchedFn()"
       />
@@ -73,6 +74,8 @@ export class GChips implements ControlValueAccessor, OnInit {
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   private readonly fieldRef = viewChild.required<ElementRef<HTMLElement>>('field');
   // Ô đã xuống nhiều dòng chưa → đổi bo góc pill (1 dòng) ↔ chữ nhật (nhiều dòng).

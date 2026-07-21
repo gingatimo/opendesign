@@ -10,9 +10,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   contentChild,
+  inject,
   model,
   TemplateRef,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 
 // Danh sách KÉO-THẢ để sắp xếp lại thứ tự (dùng CDK drag-drop). `[(items)]` hai chiều — thả xong tự
 // cập nhật mảng. Mỗi hàng render bằng <ng-template let-item let-i="index"> consumer chiếu vào (không có
@@ -28,7 +30,7 @@ import {
             type="button"
             cdkDragHandle
             class="g-reorder-list__handle"
-            aria-label="Kéo để sắp xếp lại"
+            [attr.aria-label]="t().reorderList.dragHandle"
           >
             <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true" fill="currentColor">
               <circle cx="2" cy="3" r="1.3" />
@@ -60,6 +62,9 @@ export class GReorderList<T> {
 
   // Template hàng do consumer chiếu vào (context `$implicit` = item, `index` = vị trí). Không có → item.
   protected readonly itemTemplate = contentChild(TemplateRef);
+
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected onDrop(e: CdkDragDrop<T[]>): void {
     const arr = [...this.items()];

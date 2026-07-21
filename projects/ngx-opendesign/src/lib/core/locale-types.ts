@@ -11,6 +11,18 @@ export interface GLocaleStrings {
     search: string;
     loading: string;
   };
+  alert: {
+    neutral: string;
+    success: string;
+    warning: string;
+    danger: string;
+    close: string;
+  };
+  chips: { add: string; remove: (label: string) => string };
+  progress: { label: string };
+  sidebar: { expand: string; collapse: string };
+  orgChart: { toggleBranch: string };
+  reorderList: { dragHandle: string };
 }
 
 export interface GLocale {

@@ -14,5 +14,17 @@ export const gLocaleEn: GLocale = {
       search: 'Search',
       loading: 'Loading',
     },
+    alert: {
+      neutral: 'Note',
+      success: 'Success',
+      warning: 'Warning',
+      danger: 'Error',
+      close: 'Dismiss',
+    },
+    chips: { add: 'Add item', remove: (label: string) => `Remove ${label}` },
+    progress: { label: 'Progress' },
+    sidebar: { expand: 'Expand sidebar', collapse: 'Collapse sidebar' },
+    orgChart: { toggleBranch: 'Collapse or expand branch' },
+    reorderList: { dragHandle: 'Drag to reorder' },
   },
 };

@@ -1,4 +1,13 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  output,
+} from '@angular/core';
+import { GLocaleService } from '../core/locale';
 
 @Component({
   selector: 'g-chip',
@@ -8,7 +17,7 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input, output } f
       <button
         type="button"
         class="g-chip__remove"
-        [attr.aria-label]="removeLabel()"
+        [attr.aria-label]="resolvedRemoveLabel()"
         [disabled]="disabled()"
         (click)="removed.emit()"
       >
@@ -34,7 +43,16 @@ import { booleanAttribute, ChangeDetectionStrategy, Component, input, output } f
 export class GChip {
   readonly removable = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
-  readonly removeLabel = input('Xóa');
+  readonly removeLabel = input('');
 
   readonly removed = output<void>();
+
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+
+  // Input thắng nếu consumer truyền tay; rỗng thì lấy theo gói ngôn ngữ hiện tại — giữ nguyên API
+  // cũ (input `removeLabel`) mà không có hai nguồn sự thật.
+  protected readonly resolvedRemoveLabel = computed(
+    () => this.removeLabel() || this.t().common.remove,
+  );
 }

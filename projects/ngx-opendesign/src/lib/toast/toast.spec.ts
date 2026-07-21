@@ -71,7 +71,7 @@ describe('GToastService', () => {
     TestBed.tick();
     const closeBtn = document.querySelector('.g-toast button') as HTMLButtonElement;
     expect(closeBtn).not.toBeNull();
-    expect(closeBtn.getAttribute('aria-label')).toBe('Đóng');
+    expect(closeBtn.getAttribute('aria-label')).toBe('Close');
     closeBtn.click();
     TestBed.tick();
     expect(document.querySelector('.g-toast')).toBeNull();

@@ -10,6 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { gNextId } from '../core/id-generator';
+import { GLocaleService } from '../core/locale';
 
 export type GToastVariant = 'neutral' | 'success' | 'warning' | 'danger';
 
@@ -57,7 +58,7 @@ const DEFAULT_DURATION = 4000;
         <button
           type="button"
           class="g-toast__close"
-          aria-label="Đóng"
+          [attr.aria-label]="t().common.close"
           (click)="toastService.dismiss(toast.id)"
         >
           <svg
@@ -86,6 +87,8 @@ const DEFAULT_DURATION = 4000;
 })
 class GToastContainer {
   protected readonly toastService = inject(GToastService);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly alignStart = computed(() => this.toastService.position().endsWith('left'));
   protected readonly alignCenter = computed(() => this.toastService.position().endsWith('center'));

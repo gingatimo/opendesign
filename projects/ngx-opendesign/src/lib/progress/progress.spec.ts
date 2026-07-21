@@ -67,8 +67,8 @@ describe('GProgress', () => {
     expect(progress.classList).toContain('g-progress--indeterminate');
   });
 
-  it('có aria-label mặc định tiếng Việt khi consumer không đặt', () => {
+  it('có aria-label mặc định theo gói ngôn ngữ khi consumer không đặt', () => {
     const { progress } = setup();
-    expect(progress.getAttribute('aria-label')).toBe('Tiến độ');
+    expect(progress.getAttribute('aria-label')).toBe('Progress');
   });
 });

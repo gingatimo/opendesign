@@ -3,9 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   model,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { GIconButton } from '../icon-button/icon-button';
 import {
@@ -19,18 +21,13 @@ import {
 
 export type GAlertVariant = 'neutral' | 'success' | 'warning' | 'danger';
 
-// Icon + tiền tố cho screen reader theo mức độ (neutral = ghi chú, danger = lỗi).
+// Icon theo mức độ (neutral = ghi chú, danger = lỗi). Tiền tố cho screen reader lấy từ gói ngôn
+// ngữ (t().alert), khoá trùng tên biến thể nên tra thẳng bằng variant() không cần bảng riêng.
 const ICON: Record<GAlertVariant, GIconGlyph> = {
   neutral: gIconInfo,
   success: gIconSuccess,
   warning: gIconWarning,
   danger: gIconError,
-};
-const SR_LABEL: Record<GAlertVariant, string> = {
-  neutral: 'Lưu ý',
-  success: 'Thành công',
-  warning: 'Cảnh báo',
-  danger: 'Lỗi',
 };
 
 // Thông báo dạng khối INLINE (callout) trong nội dung: icon + nhãn tuỳ chọn + nội dung, tô màu theo
@@ -54,7 +51,7 @@ const SR_LABEL: Record<GAlertVariant, string> = {
         g-icon-button
         size="sm"
         class="g-alert__close"
-        aria-label="Đóng thông báo"
+        [attr.aria-label]="t().alert.close"
         (click)="open.set(false)"
       >
         <g-icon [icon]="iconClose" size="sm" />
@@ -80,7 +77,10 @@ export class GAlert {
   /** Hiển thị hay không — nút đóng đặt về false; hai chiều để consumer điều khiển. */
   readonly open = model(true);
 
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+
   protected readonly iconClose = gIconX;
   protected readonly icon = computed(() => ICON[this.variant()]);
-  protected readonly srLabel = computed(() => SR_LABEL[this.variant()]);
+  protected readonly srLabel = computed(() => this.t().alert[this.variant()]);
 }
