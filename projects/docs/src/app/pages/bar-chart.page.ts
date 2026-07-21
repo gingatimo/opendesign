@@ -49,6 +49,18 @@ export default class BarChartPage {
       description: 'Bật/tắt lưới, chú giải.',
     },
     {
+      name: 'legendPosition',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      default: "'bottom'",
+      description: 'Vị trí chú giải quanh chart (căn giữa cùng card).',
+    },
+    {
+      name: 'exportable / filename',
+      type: 'boolean / string',
+      default: "false / 'bar-chart'",
+      description: 'Hiện nút export PNG/SVG + tên file khi tải.',
+    },
+    {
       name: 'ariaLabel',
       type: 'string',
       default: "'Biểu đồ cột'",

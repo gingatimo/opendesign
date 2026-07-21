@@ -21,6 +21,14 @@ export interface Point {
   y: number;
 }
 
+/** Vị trí đặt chú giải quanh chart. */
+export type GChartLegendPosition = 'top' | 'right' | 'bottom' | 'left';
+
+/** Legend nằm trái/phải → xếp DỌC; trên/dưới → xếp NGANG. */
+export function legendDirection(pos: GChartLegendPosition): 'horizontal' | 'vertical' {
+  return pos === 'left' || pos === 'right' ? 'vertical' : 'horizontal';
+}
+
 // ----- Trục số: chọn bước "đẹp" (1/2/5 × 10^n) và sinh danh sách vạch tròn trịa -----
 
 function niceNum(range: number, round: boolean): number {

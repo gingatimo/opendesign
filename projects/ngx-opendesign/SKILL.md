@@ -166,8 +166,9 @@ tuỳ biến qua `<ng-template let-node>`; `selectable` + `[(selected)]` bấm c
 **Charts (SVG thuần, 0 dep):** `GLineChart` `g-line-chart` (`[series]` `GChartSeries[]`, `[labels]`,
 `curve` straight|smooth) · `GBarChart` `g-bar-chart` (`orientation` vertical|horizontal, grouped) ·
 `GPieChart` `g-pie-chart` (`[data]` `GChartSlice[]`) · `GDonutChart` `g-donut-chart` (vành khuyên +
-legend + tổng giữa + export PNG/SVG) · `GChartLegend` `g-chart-legend`. Data: `GChartSeries {name,
-values, color?}`, `GChartSlice {name, value, color?}`; màu tự lấy palette `--g-chart-1..8`.
+tổng giữa) · `GChartLegend` `g-chart-legend` · `GChartExport` `g-chart-export`. **Cả 4 chart:** chú
+giải căn giữa + `legendPosition` (top|right|bottom|left) + `exportable` (nút PNG/SVG). Data:
+`GChartSeries {name, values, color?}`, `GChartSlice {name, value, color?}`; màu palette `--g-chart-1..8`.
 
 **Editor (Angular-only):** `GCodeEditor` `g-code-editor` (soạn code, textarea-overlay + tô màu regex
 `language`, `highlighter` cắm được; `[(value)]`/CVA) · `GRichTextEditor` `g-rich-text-editor` (WYSIWYG

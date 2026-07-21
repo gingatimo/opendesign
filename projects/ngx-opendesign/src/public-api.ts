@@ -83,6 +83,7 @@ export * from './lib/tree-select/tree-select';
 export * from './lib/org-chart/org-chart';
 export * from './lib/charts/chart-utils';
 export * from './lib/charts/chart-legend';
+export * from './lib/charts/chart-export';
 export * from './lib/charts/export-chart';
 export * from './lib/charts/line-chart';
 export * from './lib/charts/bar-chart';

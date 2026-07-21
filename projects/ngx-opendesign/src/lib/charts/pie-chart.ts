@@ -8,33 +8,58 @@ import {
   inject,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
-import { arcPath, chartColor, GChartSlice, polar } from './chart-utils';
+import { GChartExport } from './chart-export';
+import { GChartLegend, GChartLegendItem } from './chart-legend';
+import {
+  arcPath,
+  chartColor,
+  GChartLegendPosition,
+  GChartSlice,
+  legendDirection,
+  polar,
+} from './chart-utils';
 
 // Biểu đồ TRÒN (pie, SVG thuần). Mỗi múi là một hình quạt tỉ lệ theo giá trị; kèm nhãn % trên múi đủ
-// lớn. Dùng chung `GChartSlice[]`. (Bản có vành rỗng + legend + export là `g-donut-chart`.)
+// lớn. Legend 4 phía (`legendPosition`), export PNG/SVG (`exportable`). Bản có vành rỗng + tổng giữa là
+// `g-donut-chart`.
 @Component({
   selector: 'g-pie-chart',
+  imports: [GChartLegend, GChartExport],
   template: `
-    <svg
-      class="g-pie-chart__svg"
-      [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
-      width="100%"
-      [attr.height]="height()"
-      role="img"
-      [attr.aria-label]="ariaLabel()"
-    >
-      @for (s of slices(); track s.name) {
-        <path class="g-pie-chart__slice" [attr.d]="s.d" [style.fill]="s.color" />
-      }
-      @if (showLabels()) {
-        @for (s of slices(); track s.name) {
-          @if (s.frac >= 0.05) {
-            <text class="g-pie-chart__label" [attr.x]="s.lx" [attr.y]="s.ly">{{ s.pct }}%</text>
+    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
+      <div class="g-chart-frame__plot">
+        <svg
+          #chartSvg
+          class="g-pie-chart__svg g-chart-frame__svg"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
+          width="100%"
+          [attr.height]="height()"
+          role="img"
+          [attr.aria-label]="ariaLabel()"
+        >
+          @for (s of slices(); track s.name) {
+            <path class="g-pie-chart__slice" [attr.d]="s.d" [style.fill]="s.color" />
           }
+          @if (showLabels()) {
+            @for (s of slices(); track s.name) {
+              @if (s.frac >= 0.05) {
+                <text class="g-pie-chart__label" [attr.x]="s.lx" [attr.y]="s.ly">{{ s.pct }}%</text>
+              }
+            }
+          }
+        </svg>
+
+        @if (showLegend() && data().length) {
+          <g-chart-legend [items]="legendItems()" [direction]="legendDir()" />
         }
+      </div>
+
+      @if (exportable()) {
+        <g-chart-export [target]="svgEl()?.nativeElement" [filename]="filename()" />
       }
-    </svg>
+    </div>
   `,
   styleUrl: './pie-chart.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,15 +69,20 @@ export class GPieChart {
   readonly data = input<readonly GChartSlice[]>([]);
   readonly height = input(280);
   readonly showLabels = input(true);
+  readonly showLegend = input(true);
+  readonly legendPosition = input<GChartLegendPosition>('bottom');
+  readonly exportable = input(false);
+  readonly filename = input('pie-chart');
   readonly ariaLabel = input('Biểu đồ tròn');
 
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(320);
 
   constructor() {
     afterNextRender(() => {
-      const el = this.host.nativeElement;
+      const el = this.svgEl()?.nativeElement;
+      if (!el) return;
       const ro = new ResizeObserver((entries) => {
         const width = Math.round(entries[0].contentRect.width);
         if (width > 0) this.w.set(width);
@@ -62,7 +92,11 @@ export class GPieChart {
     });
   }
 
+  protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
   protected readonly slices = computed(() => pieSlices(this.data(), this.w(), this.height(), 0));
+  protected readonly legendItems = computed<GChartLegendItem[]>(() =>
+    this.data().map((d, i) => ({ name: d.name, color: chartColor(i, d.color) })),
+  );
 }
 
 // Tính các múi (dùng lại cho cả pie lẫn donut). rInnerRatio=0 → pie; >0 → donut.

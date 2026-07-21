@@ -8,12 +8,16 @@ import {
   inject,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
+import { GChartExport } from './chart-export';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
 import {
   chartColor,
   formatChartNumber,
+  GChartLegendPosition,
   GChartSeries,
+  legendDirection,
   linePath,
   niceTicks,
   Point,
@@ -22,59 +26,69 @@ import {
 
 // Biểu đồ ĐƯỜNG (SVG thuần, 0 thư viện ngoài). Nối các mốc bằng đường THẲNG (`curve="straight"`) hoặc
 // đường CONG trơn (`curve="smooth"`, spline Catmull-Rom). Trục y tự chọn vạch "đẹp" + gridline, trục x
-// theo `labels`. Responsive: đo bề rộng host bằng ResizeObserver → viewBox khớp pixel (chữ không méo).
+// theo `labels`. Legend đặt được 4 phía (`legendPosition`), export PNG/SVG (`exportable`). Đo bề rộng
+// SVG bằng ResizeObserver → viewBox khớp pixel (chữ không méo, kể cả khi legend chiếm chỗ hai bên).
 @Component({
   selector: 'g-line-chart',
-  imports: [GChartLegend],
+  imports: [GChartLegend, GChartExport],
   template: `
-    <svg
-      class="g-line-chart__svg"
-      [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
-      width="100%"
-      [attr.height]="height()"
-      role="img"
-      [attr.aria-label]="ariaLabel()"
-    >
-      @if (showGrid()) {
-        @for (g of gridLines(); track $index) {
-          <line
-            class="g-line-chart__grid"
-            [attr.x1]="area().left"
-            [attr.y1]="g.y"
-            [attr.x2]="area().right"
-            [attr.y2]="g.y"
-          />
-        }
-      }
-      @for (g of gridLines(); track $index) {
-        <text class="g-line-chart__ylabel" [attr.x]="area().left - 8" [attr.y]="g.y">
-          {{ g.label }}
-        </text>
-      }
-      @for (xl of xLabels(); track $index) {
-        <text class="g-line-chart__xlabel" [attr.x]="xl.x" [attr.y]="height() - 8">
-          {{ xl.label }}
-        </text>
-      }
-      @for (s of seriesRender(); track s.name) {
-        <path class="g-line-chart__line" [attr.d]="s.d" [style.stroke]="s.color" />
-        @if (showDots()) {
-          @for (p of s.points; track $index) {
-            <circle
-              class="g-line-chart__dot"
-              [attr.cx]="p.x"
-              [attr.cy]="p.y"
-              r="3"
-              [style.fill]="s.color"
-            />
+    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
+      <div class="g-chart-frame__plot">
+        <svg
+          #chartSvg
+          class="g-line-chart__svg g-chart-frame__svg"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
+          width="100%"
+          [attr.height]="height()"
+          role="img"
+          [attr.aria-label]="ariaLabel()"
+        >
+          @if (showGrid()) {
+            @for (g of gridLines(); track $index) {
+              <line
+                class="g-line-chart__grid"
+                [attr.x1]="area().left"
+                [attr.y1]="g.y"
+                [attr.x2]="area().right"
+                [attr.y2]="g.y"
+              />
+            }
           }
-        }
-      }
-    </svg>
+          @for (g of gridLines(); track $index) {
+            <text class="g-line-chart__ylabel" [attr.x]="area().left - 8" [attr.y]="g.y">
+              {{ g.label }}
+            </text>
+          }
+          @for (xl of xLabels(); track $index) {
+            <text class="g-line-chart__xlabel" [attr.x]="xl.x" [attr.y]="height() - 8">
+              {{ xl.label }}
+            </text>
+          }
+          @for (s of seriesRender(); track s.name) {
+            <path class="g-line-chart__line" [attr.d]="s.d" [style.stroke]="s.color" />
+            @if (showDots()) {
+              @for (p of s.points; track $index) {
+                <circle
+                  class="g-line-chart__dot"
+                  [attr.cx]="p.x"
+                  [attr.cy]="p.y"
+                  r="3"
+                  [style.fill]="s.color"
+                />
+              }
+            }
+          }
+        </svg>
 
-    @if (showLegend() && seriesRender().length > 1) {
-      <g-chart-legend [items]="legendItems()" />
-    }
+        @if (showLegend() && seriesRender().length > 1) {
+          <g-chart-legend [items]="legendItems()" [direction]="legendDir()" />
+        }
+      </div>
+
+      @if (exportable()) {
+        <g-chart-export [target]="svgEl()?.nativeElement" [filename]="filename()" />
+      }
+    </div>
   `,
   styleUrl: './line-chart.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -88,6 +102,9 @@ export class GLineChart {
   readonly showGrid = input(true);
   readonly showDots = input(true);
   readonly showLegend = input(true);
+  readonly legendPosition = input<GChartLegendPosition>('bottom');
+  readonly exportable = input(false);
+  readonly filename = input('line-chart');
   readonly ariaLabel = input('Biểu đồ đường');
 
   // Lề: trái cho nhãn y, dưới cho nhãn x.
@@ -96,13 +113,14 @@ export class GLineChart {
   private readonly MT = 12;
   private readonly MB = 28;
 
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(640);
 
   constructor() {
     afterNextRender(() => {
-      const el = this.host.nativeElement;
+      const el = this.svgEl()?.nativeElement;
+      if (!el) return;
       const ro = new ResizeObserver((entries) => {
         const width = Math.round(entries[0].contentRect.width);
         if (width > 0) this.w.set(width);
@@ -111,6 +129,8 @@ export class GLineChart {
       this.destroyRef.onDestroy(() => ro.disconnect());
     });
   }
+
+  protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
 
   protected readonly area = computed(() => ({
     left: this.ML,

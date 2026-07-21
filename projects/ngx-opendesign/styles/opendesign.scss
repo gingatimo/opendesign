@@ -1152,3 +1152,35 @@ a.g-breadcrumb-item:hover {
 .g-tok-fn {
   color: var(--g-chart-5);
 }
+
+// Khung bố cục chung cho charts — đặt legend quanh vùng vẽ (top|right|bottom|left) + hàng export.
+// GLOBAL vì dùng chung nhiều chart component; legend căn giữa theo trục ngang (top/bottom) hoặc dọc
+// (left/right, nhờ align-items:center). Đo bề rộng SVG (không phải host) nên left/right không méo.
+.g-chart-frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-3);
+}
+.g-chart-frame__plot {
+  display: flex;
+  gap: var(--g-space-4);
+  min-width: 0;
+}
+.g-chart-frame__svg {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.g-chart-frame--bottom .g-chart-frame__plot {
+  flex-direction: column;
+}
+.g-chart-frame--top .g-chart-frame__plot {
+  flex-direction: column-reverse;
+}
+.g-chart-frame--left .g-chart-frame__plot {
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.g-chart-frame--right .g-chart-frame__plot {
+  flex-direction: row;
+  align-items: center;
+}

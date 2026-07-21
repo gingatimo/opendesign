@@ -8,9 +8,18 @@ import {
   inject,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
+import { GChartExport } from './chart-export';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
-import { chartColor, formatChartNumber, GChartSeries, niceTicks } from './chart-utils';
+import {
+  chartColor,
+  formatChartNumber,
+  GChartLegendPosition,
+  GChartSeries,
+  legendDirection,
+  niceTicks,
+} from './chart-utils';
 
 interface Bar {
   x: number;
@@ -38,62 +47,71 @@ interface CatLabel {
 // series → cột NHÓM cạnh nhau; một series → tô màu theo từng mốc. Miền giá trị luôn gồm 0 (chân cột).
 @Component({
   selector: 'g-bar-chart',
-  imports: [GChartLegend],
+  imports: [GChartLegend, GChartExport],
   template: `
-    <svg
-      class="g-bar-chart__svg"
-      [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
-      width="100%"
-      [attr.height]="height()"
-      role="img"
-      [attr.aria-label]="ariaLabel()"
-    >
-      @if (showGrid()) {
-        @for (g of layout().grids; track $index) {
-          <line
-            class="g-bar-chart__grid"
-            [attr.x1]="g.x1"
-            [attr.y1]="g.y1"
-            [attr.x2]="g.x2"
-            [attr.y2]="g.y2"
-          />
-        }
-      }
-      @for (g of layout().grids; track $index) {
-        <text
-          class="g-bar-chart__vlabel"
-          [class.g-bar-chart__vlabel--h]="orientation() === 'horizontal'"
-          [attr.x]="g.tx"
-          [attr.y]="g.ty"
+    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
+      <div class="g-chart-frame__plot">
+        <svg
+          #chartSvg
+          class="g-bar-chart__svg g-chart-frame__svg"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
+          width="100%"
+          [attr.height]="height()"
+          role="img"
+          [attr.aria-label]="ariaLabel()"
         >
-          {{ g.label }}
-        </text>
-      }
-      @for (c of layout().catLabels; track $index) {
-        <text
-          class="g-bar-chart__catlabel"
-          [class.g-bar-chart__catlabel--h]="orientation() === 'horizontal'"
-          [attr.x]="c.x"
-          [attr.y]="c.y"
-        >
-          {{ c.text }}
-        </text>
-      }
-      @for (b of layout().bars; track $index) {
-        <rect
-          class="g-bar-chart__bar"
-          [attr.x]="b.x"
-          [attr.y]="b.y"
-          [attr.width]="b.w"
-          [attr.height]="b.h"
-          [style.fill]="b.color"
-        />
-      }
-    </svg>
+          @if (showGrid()) {
+            @for (g of layout().grids; track $index) {
+              <line
+                class="g-bar-chart__grid"
+                [attr.x1]="g.x1"
+                [attr.y1]="g.y1"
+                [attr.x2]="g.x2"
+                [attr.y2]="g.y2"
+              />
+            }
+          }
+          @for (g of layout().grids; track $index) {
+            <text
+              class="g-bar-chart__vlabel"
+              [class.g-bar-chart__vlabel--h]="orientation() === 'horizontal'"
+              [attr.x]="g.tx"
+              [attr.y]="g.ty"
+            >
+              {{ g.label }}
+            </text>
+          }
+          @for (c of layout().catLabels; track $index) {
+            <text
+              class="g-bar-chart__catlabel"
+              [class.g-bar-chart__catlabel--h]="orientation() === 'horizontal'"
+              [attr.x]="c.x"
+              [attr.y]="c.y"
+            >
+              {{ c.text }}
+            </text>
+          }
+          @for (b of layout().bars; track $index) {
+            <rect
+              class="g-bar-chart__bar"
+              [attr.x]="b.x"
+              [attr.y]="b.y"
+              [attr.width]="b.w"
+              [attr.height]="b.h"
+              [style.fill]="b.color"
+            />
+          }
+        </svg>
 
-    @if (showLegend() && series().length > 1) {
-      <g-chart-legend [items]="legendItems()" />
-    }
+        @if (showLegend() && series().length > 1) {
+          <g-chart-legend [items]="legendItems()" [direction]="legendDir()" />
+        }
+      </div>
+
+      @if (exportable()) {
+        <g-chart-export [target]="svgEl()?.nativeElement" [filename]="filename()" />
+      }
+    </div>
   `,
   styleUrl: './bar-chart.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -106,19 +124,23 @@ export class GBarChart {
   readonly height = input(280);
   readonly showGrid = input(true);
   readonly showLegend = input(true);
+  readonly legendPosition = input<GChartLegendPosition>('bottom');
+  readonly exportable = input(false);
+  readonly filename = input('bar-chart');
   readonly ariaLabel = input('Biểu đồ cột');
 
   private readonly MT = 12;
   private readonly MR = 16;
   private readonly MB = 28;
 
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(640);
 
   constructor() {
     afterNextRender(() => {
-      const el = this.host.nativeElement;
+      const el = this.svgEl()?.nativeElement;
+      if (!el) return;
       const ro = new ResizeObserver((entries) => {
         const width = Math.round(entries[0].contentRect.width);
         if (width > 0) this.w.set(width);
@@ -127,6 +149,8 @@ export class GBarChart {
       this.destroyRef.onDestroy(() => ro.disconnect());
     });
   }
+
+  protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
 
   private readonly ticks = computed(() => {
     const vals = this.series().flatMap((s) => [...s.values]);

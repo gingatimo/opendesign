@@ -47,6 +47,12 @@ export default class DonutChartPage {
       description: 'Tổng ở giữa + nhãn dưới nó.',
     },
     {
+      name: 'legendPosition',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      default: "'bottom'",
+      description: 'Vị trí chú giải (căn giữa cùng card).',
+    },
+    {
       name: 'showLegend',
       type: 'boolean',
       default: 'true',

@@ -10,55 +10,58 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { GButton } from '../button/button';
-import { GIcon } from '../icon/icon';
-import { gIconDownload } from '../icon/icons';
+import { GChartExport } from './chart-export';
 import { GChartLegend, GChartLegendItem } from './chart-legend';
-import { chartColor, formatChartNumber, GChartSlice } from './chart-utils';
-import { exportChartSvg } from './export-chart';
+import {
+  chartColor,
+  formatChartNumber,
+  GChartLegendPosition,
+  GChartSlice,
+  legendDirection,
+} from './chart-utils';
 import { pieSlices } from './pie-chart';
 
-// Biểu đồ VÀNH KHUYÊN (donut, SVG thuần). Như pie nhưng có lỗ giữa (hiện TỔNG), kèm LEGEND và nút
-// EXPORT ra PNG/SVG (người dùng bấm để tải). `thickness` = tỉ lệ bán kính lỗ (0.6 mặc định).
+// Biểu đồ VÀNH KHUYÊN (donut, SVG thuần). Như pie nhưng có lỗ giữa (hiện TỔNG). Legend 4 phía
+// (`legendPosition`), export PNG/SVG (`exportable`, mặc định BẬT). `thickness` = tỉ lệ bán kính lỗ.
 @Component({
   selector: 'g-donut-chart',
-  imports: [GChartLegend, GButton, GIcon],
+  imports: [GChartLegend, GChartExport],
   template: `
-    <svg
-      #chartSvg
-      class="g-donut-chart__svg"
-      [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
-      width="100%"
-      [attr.height]="height()"
-      role="img"
-      [attr.aria-label]="ariaLabel()"
-    >
-      @for (s of slices(); track s.name) {
-        <path class="g-donut-chart__slice" [attr.d]="s.d" [style.fill]="s.color" />
-      }
-      @if (showTotal()) {
-        <text class="g-donut-chart__total" [attr.x]="w() / 2" [attr.y]="height() / 2 - 2">
-          {{ totalText() }}
-        </text>
-        <text class="g-donut-chart__total-label" [attr.x]="w() / 2" [attr.y]="height() / 2 + 16">
-          {{ totalLabel() }}
-        </text>
-      }
-    </svg>
+    <div class="g-chart-frame" [class]="'g-chart-frame--' + legendPosition()">
+      <div class="g-chart-frame__plot">
+        <svg
+          #chartSvg
+          class="g-donut-chart__svg g-chart-frame__svg"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
+          width="100%"
+          [attr.height]="height()"
+          role="img"
+          [attr.aria-label]="ariaLabel()"
+        >
+          @for (s of slices(); track s.name) {
+            <path class="g-donut-chart__slice" [attr.d]="s.d" [style.fill]="s.color" />
+          }
+          @if (showTotal()) {
+            <text class="g-donut-chart__total" [attr.x]="w() / 2" [attr.y]="height() / 2 - 2">
+              {{ totalText() }}
+            </text>
+            <text
+              class="g-donut-chart__total-label"
+              [attr.x]="w() / 2"
+              [attr.y]="height() / 2 + 16"
+            >
+              {{ totalLabel() }}
+            </text>
+          }
+        </svg>
 
-    <div class="g-donut-chart__foot">
-      @if (showLegend()) {
-        <g-chart-legend [items]="legendItems()" />
-      }
+        @if (showLegend() && data().length) {
+          <g-chart-legend [items]="legendItems()" [direction]="legendDir()" />
+        }
+      </div>
+
       @if (exportable()) {
-        <div class="g-donut-chart__export">
-          <button g-button variant="outline" size="sm" (click)="export('png')">
-            <g-icon [icon]="iconDownload" size="sm" /> PNG
-          </button>
-          <button g-button variant="outline" size="sm" (click)="export('svg')">
-            <g-icon [icon]="iconDownload" size="sm" /> SVG
-          </button>
-        </div>
+        <g-chart-export [target]="svgEl()?.nativeElement" [filename]="filename()" />
       }
     </div>
   `,
@@ -71,22 +74,21 @@ export class GDonutChart {
   readonly height = input(280);
   readonly thickness = input(0.6);
   readonly showLegend = input(true);
+  readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly showTotal = input(true);
   readonly totalLabel = input('Tổng');
   readonly exportable = input(true);
   readonly filename = input('donut-chart');
   readonly ariaLabel = input('Biểu đồ vành khuyên');
 
-  protected readonly iconDownload = gIconDownload;
-
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly svgRef = viewChild.required<ElementRef<SVGSVGElement>>('chartSvg');
+  protected readonly svgEl = viewChild<ElementRef<SVGSVGElement>>('chartSvg');
   protected readonly w = signal(320);
 
   constructor() {
     afterNextRender(() => {
-      const el = this.host.nativeElement;
+      const el = this.svgEl()?.nativeElement;
+      if (!el) return;
       const ro = new ResizeObserver((entries) => {
         const width = Math.round(entries[0].contentRect.width);
         if (width > 0) this.w.set(width);
@@ -96,6 +98,7 @@ export class GDonutChart {
     });
   }
 
+  protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
   protected readonly slices = computed(() =>
     pieSlices(this.data(), this.w(), this.height(), this.thickness()),
   );
@@ -105,8 +108,4 @@ export class GDonutChart {
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.data().map((d, i) => ({ name: d.name, color: chartColor(i, d.color) })),
   );
-
-  protected export(format: 'png' | 'svg'): void {
-    void exportChartSvg(this.svgRef().nativeElement, this.filename(), format);
-  }
 }

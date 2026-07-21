@@ -12,8 +12,9 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 - **Charts** (SVG thuần, 0 thư viện ngoài): **`GLineChart`** (`g-line-chart`, nối `straight`/`smooth`
   Catmull-Rom, trục + gridline, responsive), **`GBarChart`** (`g-bar-chart`, `orientation`
   vertical/horizontal, grouped), **`GPieChart`** (`g-pie-chart`), **`GDonutChart`** (`g-donut-chart`,
-  vành khuyên + tổng giữa + `GChartLegend` + **export** PNG/SVG). Kèm `chart-utils` (niceTicks,
-  linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
+  vành khuyên + tổng giữa). Cả 4 chart: **chú giải căn giữa**, đặt được 4 phía (`legendPosition`
+  top|right|bottom|left) và **export PNG/SVG** (`exportable`, qua `GChartExport`). Kèm `chart-utils`
+  (niceTicks, linePath, smoothPath, arcPath, chartColor) và palette `--g-chart-1..8` (sáng/tối).
 - **Editor** (Angular-only): **`GCodeEditor`** (`g-code-editor`, kỹ thuật textarea-overlay: textarea
   trong suốt đè lên `<pre>` tô màu regex `js/ts/json/css/html`, `highlighter` cắm được, gutter số
   dòng, Tab=spaces; IME native), **`GRichTextEditor`** (`g-rich-text-editor`, contenteditable +

@@ -10,9 +10,9 @@ import { PieChartDemo } from '../demos/charts/pie-chart.demo';
     <h1>Pie Chart</h1>
     <p>
       Biểu đồ <b>tròn</b> (SVG thuần). Mỗi múi là hình quạt tỉ lệ theo giá trị, kèm nhãn % trên múi
-      đủ lớn. Nhận <code>data</code> là <code>GChartSlice[]</code>. Chú giải dùng riêng
-      <code>&lt;g-chart-legend&gt;</code> (xem code demo); bản có vành rỗng + legend + export sẵn là
-      <code>Donut Chart</code>.
+      đủ lớn. Nhận <code>data</code> là <code>GChartSlice[]</code>. Chú giải sẵn (căn giữa), đặt
+      được 4 phía qua <code>legendPosition</code>; bật <code>exportable</code> để tải PNG/SVG. Bản
+      có vành rỗng + tổng giữa là <code>Donut Chart</code>.
     </p>
 
     <docs-demo-section>
@@ -45,6 +45,18 @@ export default class PieChartPage {
       type: 'boolean',
       default: 'true',
       description: 'Hiện % trên múi (chỉ múi ≥ 5%).',
+    },
+    {
+      name: 'legendPosition',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      default: "'bottom'",
+      description: 'Vị trí chú giải quanh chart (căn giữa cùng card).',
+    },
+    {
+      name: 'exportable / filename',
+      type: 'boolean / string',
+      default: "false / 'pie-chart'",
+      description: 'Hiện nút export PNG/SVG + tên file khi tải.',
     },
     {
       name: 'ariaLabel',
