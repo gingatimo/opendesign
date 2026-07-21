@@ -24,6 +24,7 @@ const PAINT_PROPS = [
 ] as const;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
+const FONT_STACK = 'system-ui, -apple-system, Segoe UI, sans-serif';
 const PAD = 16;
 const TITLE_SIZE = 15;
 const TITLE_GAP = 12;
@@ -56,9 +57,13 @@ function resolveColor(value: string, reference: Element): string {
   return resolved || value;
 }
 
-/** Ước lượng bề ngang một mục chú giải — đủ để xếp hàng, không cần đo chữ chính xác. */
-function legendItemWidth(name: string): number {
-  return SWATCH + 6 + name.length * 6.6 + LEGEND_GAP;
+/**
+ * Bề ngang một mục chú giải. ĐO chữ bằng canvas thay vì nhân số ký tự: tiếng Việt có dấu và các chữ
+ * rộng/hẹp khác nhau nhiều, ước lượng thô làm các mục so le rồi hàng nào cũng thừa khoảng trống.
+ */
+function legendItemWidth(name: string, measure: CanvasRenderingContext2D | null): number {
+  const text = measure ? measure.measureText(name).width : name.length * 6.6;
+  return SWATCH + 6 + text + LEGEND_GAP;
 }
 
 function createText(
@@ -104,12 +109,14 @@ export async function exportChartSvg(
   });
 
   // Xếp chú giải thành các hàng vừa bề ngang chart.
+  const measure = document.createElement('canvas').getContext('2d');
+  if (measure) measure.font = `${LEGEND_SIZE}px ${FONT_STACK}`;
   const legend = meta.legend ?? [];
   const rows: GChartLegendItem[][] = [];
   let row: GChartLegendItem[] = [];
   let rowWidth = 0;
   for (const item of legend) {
-    const width = legendItemWidth(item.name);
+    const width = legendItemWidth(item.name, measure);
     if (row.length && rowWidth + width > chartWidth) {
       rows.push(row);
       row = [];
@@ -150,11 +157,11 @@ export async function exportChartSvg(
   clone.setAttribute('height', String(chartHeight));
   out.appendChild(clone);
 
-  // Chú giải: ô màu bo góc + tên, mỗi hàng căn giữa như trên giao diện.
+  // Chú giải: ô màu bo góc + tên, các hàng CĂN TRÁI — hàng cuối thường ít mục, căn giữa sẽ thành
+  // thụt vào giữa chừng trông như lỗi.
   let y = PAD + titleHeight + chartHeight + 4;
   for (const line of rows) {
-    const lineWidth = line.reduce((sum, item) => sum + legendItemWidth(item.name), 0) - LEGEND_GAP;
-    let x = PAD + Math.max(0, (chartWidth - lineWidth) / 2);
+    let x = PAD;
     for (const item of line) {
       const swatch = document.createElementNS(SVG_NS, 'rect');
       swatch.setAttribute('x', String(x));
@@ -167,7 +174,7 @@ export async function exportChartSvg(
       out.appendChild(
         createText(item.name, x + SWATCH + 6, y + LEGEND_SIZE + 1, LEGEND_SIZE, textColor),
       );
-      x += legendItemWidth(item.name);
+      x += legendItemWidth(item.name, measure);
     }
     y += LEGEND_LINE;
   }
