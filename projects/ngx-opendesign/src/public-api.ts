@@ -1,6 +1,10 @@
 export const OPENDESIGN_VERSION = '1.1.0';
 export * from './lib/core/dev-warning';
 export * from './lib/core/id-generator';
+export * from './lib/core/locale-types';
+export * from './lib/core/locale';
+export * from './lib/locales/en';
+export * from './lib/locales/vi';
 export * from './lib/button/button';
 export * from './lib/icon-button/icon-button';
 export * from './lib/action-expand/action-expand';
