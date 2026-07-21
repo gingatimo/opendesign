@@ -1255,6 +1255,18 @@ a.g-breadcrumb-item:hover {
   aspect-ratio: 1;
 }
 
+// Thanh tỉ lệ chỉ dày vài chục px. Lúc phóng to KHÔNG kéo giãn ô vẽ theo chiều cao: thanh vẫn vẽ
+// đúng độ dày của nó nên sẽ trôi giữa một khoảng trống mênh mông, còn chú giải bị đẩy xuống tận đáy.
+// Giữ nguyên chiều cao rồi căn giữa CẢ CỤM (thanh + chú giải) — chú giải nằm ngay dưới thanh.
+.g-chart-frame--zoom .g-stacked-bar__plot {
+  flex: 0 0 auto;
+  margin: auto 0;
+}
+.g-chart-frame--zoom .g-stacked-bar__svg {
+  flex: 0 0 auto;
+  height: auto;
+}
+
 // Cho SVG lấp đầy khung phóng to. KHÔNG dùng `height: 100%`: phần trăm cần một mốc chiều cao xác
 // định, mà chiều cao ô chứa lại do chính nội dung quyết định → vòng lặp, SVG co lại còn vài px.
 // Giãn bằng flex + `align-self: stretch` thì đúng cho cả legend dọc lẫn ngang; viewBox lo tỉ lệ.
