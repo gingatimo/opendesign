@@ -65,5 +65,19 @@ export const gLocaleVi: GLocale = {
       previous: 'Ảnh trước',
       next: 'Ảnh sau',
     },
+    select: { searchPlaceholder: 'Tìm...', noResults: 'Không có kết quả' },
+    searchField: { fieldLabel: 'Trường tìm kiếm', valueLabel: 'Giá trị tìm kiếm' },
+    otp: { charLabel: (position: number) => `Ký tự ${position}` },
+    rating: {
+      label: 'Đánh giá',
+      valueText: (value: string, max: number) => `${value} trên ${max} sao`,
+    },
+    colorPicker: {
+      open: 'Chọn màu',
+      area: 'Độ bão hoà và độ sáng',
+      hue: 'Màu sắc (hue)',
+      hex: 'Mã màu hex',
+    },
+    timePicker: { open: 'Chọn giờ', hours: 'Giờ', minutes: 'Phút' },
   },
 };

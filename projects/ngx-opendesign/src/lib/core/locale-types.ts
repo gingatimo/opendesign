@@ -40,6 +40,17 @@ export interface GLocaleStrings {
     zoom: string;
   };
   lightbox: { label: string; zoomIn: string; zoomOut: string; previous: string; next: string };
+  select: { searchPlaceholder: string; noResults: string };
+  searchField: { fieldLabel: string; valueLabel: string };
+  otp: { charLabel: (position: number) => string };
+  rating: {
+    label: string;
+    // value là CHUỖI ĐÃ ĐỊNH DẠNG (qua GLocaleService.formatNumber), không phải number — gói ngôn
+    // ngữ là dữ liệu thuần, không được phụ thuộc service nên không thể tự quyết dấu thập phân.
+    valueText: (value: string, max: number) => string;
+  };
+  colorPicker: { open: string; area: string; hue: string; hex: string };
+  timePicker: { open: string; hours: string; minutes: string };
 }
 
 export interface GLocale {

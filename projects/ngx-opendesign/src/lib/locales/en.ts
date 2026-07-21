@@ -65,5 +65,19 @@ export const gLocaleEn: GLocale = {
       previous: 'Previous image',
       next: 'Next image',
     },
+    select: { searchPlaceholder: 'Search…', noResults: 'No results' },
+    searchField: { fieldLabel: 'Search field', valueLabel: 'Search value' },
+    otp: { charLabel: (position: number) => `Character ${position}` },
+    rating: {
+      label: 'Rating',
+      valueText: (value: string, max: number) => `${value} out of ${max} stars`,
+    },
+    colorPicker: {
+      open: 'Pick a colour',
+      area: 'Saturation and brightness',
+      hue: 'Hue',
+      hex: 'Hex colour code',
+    },
+    timePicker: { open: 'Pick a time', hours: 'Hours', minutes: 'Minutes' },
   },
 };

@@ -3,12 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  inject,
   input,
   model,
   output,
   untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { GLocaleService } from '../core/locale';
 import { GInput } from '../input/input';
 import { GOption } from '../select/option';
 import { GSelect } from '../select/select';
@@ -31,7 +33,7 @@ export interface GSearchFieldOption {
         [ngModel]="field()"
         (ngModelChange)="field.set($event)"
         [disabled]="disabled()"
-        aria-label="Trường tìm kiếm"
+        [attr.aria-label]="t().searchField.fieldLabel"
       >
         @for (f of fields(); track f.value) {
           <g-option [value]="f.value">{{ f.label }}</g-option>
@@ -44,7 +46,7 @@ export interface GSearchFieldOption {
         [value]="query()"
         [placeholder]="placeholder()"
         [disabled]="disabled()"
-        aria-label="Giá trị tìm kiếm"
+        [attr.aria-label]="t().searchField.valueLabel"
         (input)="query.set($any($event.target).value)"
         (keydown.enter)="submit($event)"
       />
@@ -63,6 +65,9 @@ export class GSearchField {
   // <input type=search> nên không đụng độ thật với DOM event `search` — tắt rule cho đúng ý API.
   // eslint-disable-next-line @angular-eslint/no-output-native
   readonly search = output<{ field: unknown; value: string }>();
+
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   constructor() {
     // Mặc định chọn trường ĐẦU TIÊN khi chưa có field. Chỉ phụ thuộc fields() (untracked cho phần

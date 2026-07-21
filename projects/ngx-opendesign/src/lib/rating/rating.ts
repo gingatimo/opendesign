@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { trackControlInvalid } from '../core/control-invalid';
+import { GLocaleService } from '../core/locale';
 
 // Sao 5 cánh TÔ ĐẶC (viewBox 0 0 24 24) — vẽ trong component để kiểm soát fill (GIcon chỉ vẽ outline).
 const STAR_PATH =
@@ -75,11 +76,13 @@ export class GRating implements ControlValueAccessor, OnInit {
   readonly allowHalf = input(false, { transform: booleanAttribute });
   readonly size = input<'sm' | 'md' | 'lg'>('md');
   readonly disabled = input(false, { transform: booleanAttribute });
-  // Nhãn screen reader cho chế độ chọn (readonly tự sinh "{value} trên {max} sao").
-  readonly label = input('Đánh giá');
+  // Nhãn screen reader cho chế độ chọn (readonly tự sinh theo khoá rating.valueText).
+  readonly label = input('');
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   private readonly formDisabled = signal(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
@@ -103,10 +106,16 @@ export class GRating implements ControlValueAccessor, OnInit {
       return { i, fill: Math.max(0, Math.min(100, (dv - (i - 1)) * 100)) };
     });
   });
+  // Nhãn chế độ readonly: số dùng formatNumber của service (dấu thập phân đúng locale) rồi truyền
+  // CHUỖI đã định dạng vào khoá valueText — gói ngôn ngữ không phụ thuộc service nên không thể tự
+  // quyết dấu thập phân nếu nhận number.
+  protected readonly srText = computed(() =>
+    this.t().rating.valueText(this.i18n.formatNumber(this.value()), this.max()),
+  );
+  // Nhãn chế độ chọn: input thắng nếu consumer truyền tay, rỗng thì lấy theo gói ngôn ngữ hiện tại.
+  protected readonly resolvedLabel = computed(() => this.label() || this.t().rating.label);
   protected readonly effectiveLabel = computed(() =>
-    this.readonly()
-      ? `${String(this.value()).replace('.', ',')} trên ${this.max()} sao`
-      : this.label(),
+    this.readonly() ? this.srText() : this.resolvedLabel(),
   );
 
   constructor() {

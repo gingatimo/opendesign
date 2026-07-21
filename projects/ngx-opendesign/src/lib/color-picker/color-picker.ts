@@ -13,6 +13,7 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 import { GSlider } from '../slider/slider';
 import { hexToRgb, hsvToRgb, rgbToHex, rgbToHsv } from './color-utils';
 
@@ -70,7 +71,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
       <div
         class="g-color-picker__panel"
         role="dialog"
-        aria-label="Chọn màu"
+        [attr.aria-label]="t().colorPicker.open"
         cdkTrapFocus
         [cdkTrapFocusAutoCapture]="true"
         (keydown)="onPanelKey($event)"
@@ -79,7 +80,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
           class="g-color-picker__sv"
           role="slider"
           tabindex="0"
-          aria-label="Độ bão hoà và độ sáng"
+          [attr.aria-label]="t().colorPicker.area"
           aria-valuemin="0"
           aria-valuemax="100"
           [attr.aria-valuenow]="svValueNow()"
@@ -103,7 +104,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
           min="0"
           max="360"
           [value]="hue()"
-          ariaLabel="Màu sắc (hue)"
+          [ariaLabel]="t().colorPicker.hue"
           [style.--g-slider-track]="hueTrack"
           (valueChange)="onHue($event)"
         />
@@ -114,7 +115,7 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
             class="g-color-picker__hex"
             type="text"
             spellcheck="false"
-            aria-label="Mã màu hex"
+            [attr.aria-label]="t().colorPicker.hex"
             [value]="value()"
             (change)="onHexInput($event)"
           />
@@ -143,6 +144,8 @@ export class GColorPicker {
   readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   protected readonly positions = POSITIONS;
   protected readonly hueTrack = HUE_TRACK;
   protected readonly swatches = SWATCHES;

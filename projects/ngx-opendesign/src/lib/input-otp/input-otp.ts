@@ -16,6 +16,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { trackControlInvalid } from '../core/control-invalid';
+import { GLocaleService } from '../core/locale';
 
 // Ô nhập mã OTP/PIN: length ô một ký tự, tự nhảy ô khi gõ, Backspace lùi, ←→ di chuyển, dán rải chuỗi
 // vào các ô. integerOnly chỉ nhận số, mask hiển thị dấu chấm. value = chuỗi ghép các ô (CVA).
@@ -32,7 +33,7 @@ import { trackControlInvalid } from '../core/control-invalid';
         maxlength="1"
         [value]="charAt(i)"
         [disabled]="disabled()"
-        [attr.aria-label]="'Ký tự ' + (i + 1)"
+        [attr.aria-label]="t().otp.charLabel(i + 1)"
         (input)="onInput(i, $event)"
         (keydown)="onKeydown(i, $event)"
         (paste)="onPaste($event)"
@@ -65,6 +66,8 @@ export class GInputOtp implements ControlValueAccessor, OnInit {
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   ngOnInit(): void {
     trackControlInvalid(this.ngControl, this.destroyRef, this.invalid);

@@ -19,6 +19,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { trackControlInvalid } from '../core/control-invalid';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { gIconClock } from '../icon/icons';
 
@@ -65,11 +66,11 @@ function pad(n: number): string {
       <div
         class="g-timepicker__panel"
         role="dialog"
-        aria-label="Chọn giờ"
+        [attr.aria-label]="t().timePicker.open"
         cdkTrapFocus
         (keydown)="onKeydown($event)"
       >
-        <div class="g-timepicker__col" role="listbox" aria-label="Giờ">
+        <div class="g-timepicker__col" role="listbox" [attr.aria-label]="t().timePicker.hours">
           @for (h of hours; track h) {
             <button
               #hourBtn
@@ -86,7 +87,7 @@ function pad(n: number): string {
             </button>
           }
         </div>
-        <div class="g-timepicker__col" role="listbox" aria-label="Phút">
+        <div class="g-timepicker__col" role="listbox" [attr.aria-label]="t().timePicker.minutes">
           @for (m of minutes(); track m) {
             <button
               #minuteBtn
@@ -122,6 +123,8 @@ export class GTimePicker implements ControlValueAccessor, OnInit {
   protected readonly elementRef = inject(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   protected readonly positions = POSITIONS;
   protected readonly iconClock = gIconClock;
   protected readonly pad = pad;

@@ -18,6 +18,7 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { CdkConnectedOverlay, ConnectedPosition } from '@angular/cdk/overlay';
 import { trackControlInvalid } from '../core/control-invalid';
 import { gNextId } from '../core/id-generator';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { gIconChevronDown } from '../icon/icons';
 import { GOption } from './option';
@@ -65,8 +66,8 @@ function normalize(s: string): string {
             type="text"
             class="g-select__search"
             [value]="search()"
-            [placeholder]="searchPlaceholder()"
-            aria-label="Tìm kiếm"
+            [placeholder]="resolvedSearchPlaceholder()"
+            [attr.aria-label]="t().common.search"
             aria-autocomplete="list"
             [attr.aria-controls]="listboxId"
             [attr.aria-activedescendant]="activeDescendantId()"
@@ -77,7 +78,7 @@ function normalize(s: string): string {
         <div class="g-select__options" role="listbox" [attr.id]="listboxId">
           <ng-content />
           @if (searchable() && visibleCount() === 0) {
-            <div class="g-select__empty">Không có kết quả</div>
+            <div class="g-select__empty">{{ t().select.noResults }}</div>
           }
         </div>
       </div>
@@ -107,9 +108,16 @@ export class GSelect implements ControlValueAccessor, OnInit {
   readonly placeholder = input('');
   readonly searchable = input(false, { transform: booleanAttribute });
   readonly multiple = input(false, { transform: booleanAttribute });
-  readonly searchPlaceholder = input('Tìm...');
+  readonly searchPlaceholder = input('');
   /** Hàm so sánh option value (tham số 1) với giá trị đang bind của control (tham số 2). */
   readonly compareWith = input<(a: unknown, b: unknown) => boolean>((a, b) => a === b);
+
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
+  // Input có giá trị thì thắng locale; rỗng thì bắc cầu sang gói ngôn ngữ hiện tại.
+  protected readonly resolvedSearchPlaceholder = computed(
+    () => this.searchPlaceholder() || this.t().select.searchPlaceholder,
+  );
 
   protected readonly open = signal(false);
   // Dùng làm MIN-width của panel (không phải width cứng): panel rộng tối thiểu bằng trigger, nhưng
