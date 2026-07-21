@@ -10,11 +10,13 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
     <h1>Rich Text Editor</h1>
     <p>
       Trình soạn <b>văn bản định dạng</b> (WYSIWYG), <b>Angular-only</b>, 0 thư viện ngoài. Bề mặt
-      là <code>contenteditable</code>. Toolbar: hoàn tác/làm lại, chọn kiểu khối (đoạn, tiêu đề 1–3,
-      trích dẫn), đậm/nghiêng/gạch dưới/gạch ngang, danh sách chấm/số, căn trái/giữa/phải, chèn & bỏ
-      <b>liên kết</b>, xoá định dạng. <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán
-      plain-text hoặc HTML đã <b>sanitize</b>, giá trị ngoài cũng được sanitize chống XSS. Hai chiều
-      <code>[(value)]</code> (HTML) hoặc <code>formControlName</code>.
+      là <code>contenteditable</code>. Toolbar: hoàn tác/làm lại · <b>Text styles</b> (Normal text,
+      Heading 1–6, Quote) · đậm/nghiêng/gạch dưới/gạch ngang ·
+      <b>Code / Subscript / Superscript</b> gộp trong một dropdown · <b>màu chữ</b> · danh sách
+      chấm/số · căn trái/giữa/phải · chèn & bỏ <b>liên kết</b> · chèn <b>bảng</b> · xoá định dạng.
+      <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán plain-text hoặc HTML đã <b>sanitize</b>,
+      giá trị ngoài cũng được sanitize chống XSS. Hai chiều <code>[(value)]</code> (HTML) hoặc
+      <code>formControlName</code>.
     </p>
 
     <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
@@ -59,6 +61,12 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
         không hỗ trợ thì component biết chứ không "im lặng sai".
       </li>
       <li>
+        Hai thứ execCommand <b>không có lệnh</b> — inline <code>code</code> và <b>bảng</b> — vẫn đi
+        qua lệnh có sẵn (<code>insertHTML</code>, <code>removeFormat</code>) thay vì sửa DOM tay, để
+        <b>không mất undo</b>. Riêng màu chữ bật <code>styleWithCSS</code> tạm thời cho ra
+        <code>&lt;span style="color"&gt;</code> thay vì thẻ <code>&lt;font&gt;</code> đã bỏ chuẩn.
+      </li>
+      <li>
         HTML đầu ra được ép <b>ngữ nghĩa</b> (<code>styleWithCSS=false</code> →
         <code>&lt;b&gt;/&lt;i&gt;</code> thay vì <code>&lt;span style&gt;</code>;
         <code>defaultParagraphSeparator=p</code> → <code>&lt;p&gt;</code> thay vì
@@ -94,6 +102,20 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
       <li>
         Nút toolbar chặn <code>mousedown</code> nên bấm chuột <b>không cướp con trỏ</b> đang bôi
         đen.
+      </li>
+    </ul>
+
+    <h2>Ghi chú</h2>
+    <ul>
+      <li>
+        <b>Màu chữ</b> ghi thẳng mã màu vào HTML, nên bảng màu chọn các tông đọc được trên
+        <b>cả nền sáng lẫn tối</b>. Ô đầu tiên (gạch chéo) là <b>Mặc định</b> — trả chữ về
+        <code>color: inherit</code> để đi theo theme.
+      </li>
+      <li>
+        <b>Bảng</b>: nút chèn tạo bảng rỗng (hàng đầu là <code>&lt;th&gt;</code>) kèm một đoạn trống
+        phía sau để con trỏ thoát ra được. Gõ trong ô là contenteditable thường; thêm/xoá hàng cột
+        sau khi chèn thì chưa có — cần thao tác bảng đầy đủ nên dùng engine ProseMirror/TipTap.
       </li>
     </ul>
 

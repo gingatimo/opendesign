@@ -835,3 +835,9 @@ export const gIconUnlink: GIconGlyph = {
   viewBox: VIEW_BOX_24,
   paths: ['M15 7h3a5 5 0 0 1 3.54 8.54', 'M9 17H6A5 5 0 0 1 6 7h3', 'M3 3l18 18'],
 };
+
+// Màu chữ — chữ A trên vạch màu.
+export const gIconTextColor: GIconGlyph = {
+  viewBox: VIEW_BOX_24,
+  paths: ['M5 21h14', 'M7 16l5-11 5 11', 'M9.2 12h5.6'],
+};

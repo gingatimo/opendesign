@@ -25,7 +25,10 @@ import {
   gIconAlignLeft,
   gIconAlignRight,
   gIconLink,
+  gIconMoreHorizontal,
   gIconRedo,
+  gIconTable,
+  gIconTextColor,
   gIconUndo,
   gIconUnlink,
 } from '../icon/icons';
@@ -35,19 +38,11 @@ import {
   activeLink,
   activeMarks,
   applyCommand,
+  applyStyledCommand,
+  insertTable,
   safeLinkUrl,
+  toggleInlineCode,
 } from './rte-commands';
-
-// Nhãn hiển thị trên nút chọn khối, theo tag đang đứng.
-const BLOCK_LABELS: Readonly<Record<string, string>> = {
-  p: 'Đoạn',
-  h1: 'Tiêu đề 1',
-  h2: 'Tiêu đề 2',
-  h3: 'Tiêu đề 3',
-  blockquote: 'Trích dẫn',
-  ul: 'Danh sách',
-  ol: 'Danh sách',
-};
 
 // Trình soạn RICH-TEXT (Angular-only, 0 thư viện ngoài). Bề mặt là contenteditable; định dạng áp qua
 // lớp lệnh `rte-commands` — file DUY NHẤT chạm `document.execCommand` (đọc phần chú thích ở đó để
@@ -96,10 +91,10 @@ const BLOCK_LABELS: Readonly<Record<string, string>> = {
 
         <!-- Chọn kiểu khối: dùng lại GActionMenu. Giữ selection bằng cách chặn mousedown (không cho
              contenteditable mất focus) rồi khôi phục range trước khi áp lệnh. -->
-        <span class="g-rte__block" (mousedown)="saveSelection()">
+        <span class="g-rte__menu g-rte__menu--label" (mousedown)="saveSelection()">
           <g-action-menu
             variant="label"
-            [label]="blockLabel()"
+            label="Text styles"
             [items]="blockItems"
             placement="bottom-left"
             (action)="onBlock($event)"
@@ -122,6 +117,30 @@ const BLOCK_LABELS: Readonly<Record<string, string>> = {
             {{ m.label }}
           </button>
         }
+
+        <!-- Định dạng ít dùng hơn gộp vào một dropdown cho toolbar đỡ chật. -->
+        <span class="g-rte__menu" (mousedown)="saveSelection()">
+          <g-action-menu
+            label="Định dạng khác"
+            [icon]="iconMore"
+            [items]="extraFormats"
+            placement="bottom-left"
+            (action)="onExtraFormat($event)"
+          />
+        </span>
+
+        <button
+          type="button"
+          class="g-rte__btn"
+          [class.g-rte__btn--active]="panel() === 'color'"
+          aria-label="Màu chữ"
+          [attr.aria-expanded]="panel() === 'color'"
+          [disabled]="isDisabled()"
+          (mousedown)="$event.preventDefault()"
+          (click)="togglePanel('color')"
+        >
+          <g-icon [icon]="iconTextColor" size="sm" />
+        </button>
         <span class="g-rte__sep"></span>
 
         <button
@@ -169,9 +188,9 @@ const BLOCK_LABELS: Readonly<Record<string, string>> = {
         <button
           type="button"
           class="g-rte__btn"
-          [class.g-rte__btn--active]="linkOpen()"
+          [class.g-rte__btn--active]="panel() === 'link'"
           aria-label="Chèn liên kết"
-          [attr.aria-expanded]="linkOpen()"
+          [attr.aria-expanded]="panel() === 'link'"
           [disabled]="isDisabled()"
           (mousedown)="$event.preventDefault()"
           (click)="openLink()"
@@ -188,6 +207,18 @@ const BLOCK_LABELS: Readonly<Record<string, string>> = {
         >
           <g-icon [icon]="iconUnlink" size="sm" />
         </button>
+        <button
+          type="button"
+          class="g-rte__btn"
+          [class.g-rte__btn--active]="panel() === 'table'"
+          aria-label="Chèn bảng"
+          [attr.aria-expanded]="panel() === 'table'"
+          [disabled]="isDisabled()"
+          (mousedown)="$event.preventDefault()"
+          (click)="togglePanel('table')"
+        >
+          <g-icon [icon]="iconTable" size="sm" />
+        </button>
         <span class="g-rte__sep"></span>
 
         <button
@@ -202,26 +233,78 @@ const BLOCK_LABELS: Readonly<Record<string, string>> = {
         </button>
       </div>
 
-      @if (linkOpen()) {
-        <div class="g-rte__linkbar">
+      @if (panel() === 'link') {
+        <div class="g-rte__bar">
           <input
             #linkInput
             type="url"
-            class="g-rte__linkinput"
+            class="g-rte__input"
             placeholder="https://vi-du.com"
             aria-label="Địa chỉ liên kết"
             [attr.aria-invalid]="linkError() || null"
-            [class.g-rte__linkinput--invalid]="linkError()"
+            [class.g-rte__input--invalid]="linkError()"
             (keydown.enter)="applyLink(linkInput.value)"
-            (keydown.escape)="closeLink()"
+            (keydown.escape)="closePanel()"
           />
           <button type="button" class="g-rte__btn" (click)="applyLink(linkInput.value)">
             Áp dụng
           </button>
-          <button type="button" class="g-rte__btn" (click)="closeLink()">Huỷ</button>
+          <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
           @if (linkError()) {
-            <span class="g-rte__linkerr">Chỉ nhận http, https, mailto hoặc tel.</span>
+            <span class="g-rte__err">Chỉ nhận http, https, mailto hoặc tel.</span>
           }
+        </div>
+      }
+
+      @if (panel() === 'color') {
+        <div class="g-rte__bar" role="group" aria-label="Màu chữ">
+          @for (c of colors; track c.value) {
+            <button
+              type="button"
+              class="g-rte__swatch"
+              [class.g-rte__swatch--reset]="c.value === 'inherit'"
+              [style.color]="c.value"
+              [attr.aria-label]="c.label"
+              [attr.title]="c.label"
+              (mousedown)="$event.preventDefault()"
+              (click)="applyColor(c.value)"
+            ></button>
+          }
+        </div>
+      }
+
+      @if (panel() === 'table') {
+        <div class="g-rte__bar">
+          <label class="g-rte__field">
+            Hàng
+            <input
+              #rowsInput
+              type="number"
+              class="g-rte__input g-rte__input--num"
+              min="1"
+              max="20"
+              value="3"
+            />
+          </label>
+          <label class="g-rte__field">
+            Cột
+            <input
+              #colsInput
+              type="number"
+              class="g-rte__input g-rte__input--num"
+              min="1"
+              max="10"
+              value="3"
+            />
+          </label>
+          <button
+            type="button"
+            class="g-rte__btn"
+            (click)="applyTable(rowsInput.value, colsInput.value)"
+          >
+            Chèn bảng
+          </button>
+          <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
         </div>
       }
 
@@ -275,16 +358,41 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     { cmd: 'justifyRight', value: 'right', title: 'Căn phải', icon: gIconAlignRight },
   ];
   protected readonly blockItems: GActionMenuItem[] = [
-    { label: 'Đoạn', value: 'p' },
-    { label: 'Tiêu đề 1', value: 'h1' },
-    { label: 'Tiêu đề 2', value: 'h2' },
-    { label: 'Tiêu đề 3', value: 'h3' },
-    { label: 'Trích dẫn', value: 'blockquote' },
+    { label: 'Normal text', value: 'p' },
+    { label: 'Heading 1', value: 'h1' },
+    { label: 'Heading 2', value: 'h2' },
+    { label: 'Heading 3', value: 'h3' },
+    { label: 'Heading 4', value: 'h4' },
+    { label: 'Heading 5', value: 'h5' },
+    { label: 'Heading 6', value: 'h6' },
+    { label: 'Quote', value: 'blockquote' },
+  ];
+  // Định dạng ít dùng, gộp vào một dropdown. 'code' không có lệnh execCommand nên xử lý riêng.
+  protected readonly extraFormats: GActionMenuItem[] = [
+    { label: 'Code', value: 'code' },
+    { label: 'Subscript', value: 'subscript' },
+    { label: 'Superscript', value: 'superscript' },
+  ];
+  // Bảng màu chữ: các tông trung tính đọc được trên CẢ nền sáng lẫn tối (giá trị được ghi thẳng vào
+  // HTML nên không đổi theo theme). 'inherit' = trả về màu chữ mặc định của theme.
+  protected readonly colors = [
+    { label: 'Mặc định', value: 'inherit' },
+    { label: 'Đỏ', value: '#e11d48' },
+    { label: 'Cam', value: '#ea580c' },
+    { label: 'Vàng', value: '#ca8a04' },
+    { label: 'Xanh lá', value: '#16a34a' },
+    { label: 'Xanh ngọc', value: '#0891b2' },
+    { label: 'Xanh dương', value: '#2563eb' },
+    { label: 'Tím', value: '#7c3aed' },
+    { label: 'Xám', value: '#6b7280' },
   ];
   protected readonly iconUndo = gIconUndo;
   protected readonly iconRedo = gIconRedo;
   protected readonly iconLink = gIconLink;
   protected readonly iconUnlink = gIconUnlink;
+  protected readonly iconMore = gIconMoreHorizontal;
+  protected readonly iconTextColor = gIconTextColor;
+  protected readonly iconTable = gIconTable;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
@@ -295,8 +403,8 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   protected readonly active = signal<ReadonlySet<string>>(new Set());
   protected readonly block = signal('');
   protected readonly align = signal('');
-  protected readonly blockLabel = computed(() => BLOCK_LABELS[this.block()] ?? 'Đoạn');
-  protected readonly linkOpen = signal(false);
+  // Khay phụ hiện dưới toolbar: nhập URL, chọn màu, hoặc kích thước bảng.
+  protected readonly panel = signal<'none' | 'link' | 'color' | 'table'>('none');
   protected readonly linkError = signal(false);
   private onChange: (v: string) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
@@ -333,7 +441,7 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     // Ô URL vừa hiện ra thì điền sẵn href cũ và đặt con trỏ vào — viewChild là signal nên effect này
     // chạy đúng lúc phần tử xuất hiện trong DOM.
     effect(() => {
-      if (!this.linkOpen()) return;
+      if (this.panel() !== 'link') return;
       const input = this.linkInput()?.nativeElement;
       if (!input) return;
       input.value = this.linkDraft;
@@ -425,22 +533,70 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     });
   }
 
-  // ----- Liên kết -------------------------------------------------------------------------------
+  // ----- Định dạng khác (Code / Subscript / Superscript) ----------------------------------------
+
+  protected onExtraFormat(item: GActionMenuItem): void {
+    // Như onBlock: đợi GActionMenu trả focus rồi mới giành lại con trỏ trong vùng soạn.
+    queueMicrotask(() => {
+      if (item.value !== 'code') {
+        this.toggleMark(item.value);
+        return;
+      }
+      const el = this.editable()?.nativeElement;
+      if (this.isDisabled() || !el) return;
+      this.restoreSelection();
+      toggleInlineCode(el);
+      this.commit();
+      this.updateActive();
+    });
+  }
+
+  // ----- Khay phụ: liên kết / màu chữ / bảng ----------------------------------------------------
+
+  protected togglePanel(name: 'link' | 'color' | 'table'): void {
+    if (this.isDisabled()) return;
+    if (this.panel() === name) {
+      this.closePanel();
+      return;
+    }
+    this.saveSelection();
+    this.panel.set(name);
+  }
+
+  protected closePanel(): void {
+    this.panel.set('none');
+    this.linkError.set(false);
+    this.restoreSelection();
+  }
+
+  protected applyColor(color: string): void {
+    this.restoreSelection();
+    applyStyledCommand('foreColor', color);
+    this.panel.set('none');
+    this.commit();
+    this.updateActive();
+  }
+
+  protected applyTable(rows: string, cols: string): void {
+    this.restoreSelection();
+    insertTable(Number(rows), Number(cols));
+    this.panel.set('none');
+    this.commit();
+    this.updateActive();
+  }
 
   protected openLink(): void {
     const el = this.editable()?.nativeElement;
     if (this.isDisabled() || !el) return;
+    if (this.panel() === 'link') {
+      this.closePanel();
+      return;
+    }
     this.saveSelection();
     // Đang đứng trong một liên kết thì mở ra để SỬA (điền sẵn href cũ).
     this.linkDraft = activeLink(el)?.getAttribute('href') ?? '';
     this.linkError.set(false);
-    this.linkOpen.set(true);
-  }
-
-  protected closeLink(): void {
-    this.linkOpen.set(false);
-    this.linkError.set(false);
-    this.restoreSelection();
+    this.panel.set('link');
   }
 
   protected applyLink(raw: string): void {
@@ -461,7 +617,7 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     } else {
       applyCommand('createLink', url);
     }
-    this.linkOpen.set(false);
+    this.panel.set('none');
     this.commit();
     this.updateActive();
   }
@@ -531,6 +687,9 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
     this.active.set(set);
     this.block.set(activeBlock(el));
     this.align.set(activeAlign(el));
+    // Luôn giữ range MỚI NHẤT: mở dropdown bằng bàn phím (Enter, không có mousedown) vẫn phải áp lệnh
+    // đúng chỗ — nếu để range cũ, restoreSelection() sẽ kéo con trỏ về vị trí lần trước.
+    this.saveSelection();
   }
 
   // ----- Bàn phím cho toolbar (chuẩn ARIA: 1 điểm dừng Tab, ←/→ chuyển nút) ----------------------

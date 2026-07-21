@@ -88,6 +88,7 @@ import {
   gIconSun,
   gIconTable,
   gIconTag,
+  gIconTextColor,
   gIconThumbsDown,
   gIconThumbsUp,
   gIconTrash,
@@ -235,6 +236,7 @@ const ICON_ENTRIES: readonly IconEntry[] = [
   { name: 'gIconAlignCenter', glyph: gIconAlignCenter },
   { name: 'gIconAlignRight', glyph: gIconAlignRight },
   { name: 'gIconUnlink', glyph: gIconUnlink },
+  { name: 'gIconTextColor', glyph: gIconTextColor },
 ];
 
 @Component({

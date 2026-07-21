@@ -21,10 +21,27 @@ const MARK_TAGS: Readonly<Record<string, readonly string[]>> = {
   italic: ['I', 'EM'],
   underline: ['U'],
   strikeThrough: ['S', 'STRIKE', 'DEL'],
+  code: ['CODE'],
+  subscript: ['SUB'],
+  superscript: ['SUP'],
 };
 
-/** Các tag khối mà toolbar quan tâm (kể cả danh sách). */
-const BLOCK_TAGS = ['P', 'H1', 'H2', 'H3', 'BLOCKQUOTE', 'UL', 'OL', 'PRE'];
+/** Các tag khối mà toolbar quan tâm (kể cả danh sách và ô bảng). */
+const BLOCK_TAGS = [
+  'P',
+  'H1',
+  'H2',
+  'H3',
+  'H4',
+  'H5',
+  'H6',
+  'BLOCKQUOTE',
+  'UL',
+  'OL',
+  'PRE',
+  'TD',
+  'TH',
+];
 
 let normalized = false;
 
@@ -53,6 +70,32 @@ export function applyCommand(command: string, argument?: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Áp lệnh nhưng ép sinh CSS thay vì tag cũ. Dùng cho `foreColor`: ở chế độ mặc định
+ * (`styleWithCSS=false`) Chrome sinh `<font color>` — thẻ đã bỏ khỏi HTML — nên riêng lệnh màu bật
+ * CSS mode rồi trả về ngay để các lệnh khác vẫn ra tag ngữ nghĩa.
+ */
+export function applyStyledCommand(command: string, argument: string): boolean {
+  normalizeOutput();
+  try {
+    document.execCommand('styleWithCSS', false, 'true');
+    return applyCommand(command, argument);
+  } finally {
+    try {
+      document.execCommand('styleWithCSS', false, 'false');
+    } catch {
+      // Không đổi lại được thì lệnh sau chỉ ra <span style> — vẫn hợp lệ, không cần xử lý gì.
+    }
+  }
+}
+
+/** Escape text để nhét an toàn vào chuỗi HTML của `insertHTML` (không nối chuỗi tay). */
+function escapeText(text: string): string {
+  const holder = document.createElement('span');
+  holder.textContent = text;
+  return holder.innerHTML;
 }
 
 /** Node đang chứa con trỏ, nếu nó nằm trong `root`. */
@@ -119,6 +162,61 @@ export function activeLink(root: HTMLElement): HTMLAnchorElement | null {
   const el =
     node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : (node?.parentElement ?? null);
   return (el?.closest('a') as HTMLAnchorElement | null) ?? null;
+}
+
+/** Phần tử tổ tiên gần nhất mang tag cho trước, giới hạn trong vùng soạn. */
+function closestTag(root: HTMLElement, tag: string): HTMLElement | null {
+  const node = selectionNode(root);
+  const start =
+    node?.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : (node?.parentElement ?? null);
+  const found = start?.closest(tag) as HTMLElement | null;
+  return found && root.contains(found) ? found : null;
+}
+
+/**
+ * Bật/tắt `<code>` cho đoạn đang chọn. `execCommand` không có lệnh inline-code, nhưng vẫn giữ được
+ * undo native nếu đi vòng qua hai lệnh có sẵn:
+ * - BẬT: `insertHTML` thay đoạn chọn bằng `<code>…</code>`.
+ * - TẮT: chọn phần bên trong rồi `removeFormat` — `<code>` nằm trong danh sách thẻ mà lệnh này gỡ.
+ *   (Không dùng `insertHTML` để tắt: Chrome chèn chữ NGƯỢC VÀO trong chính thẻ `<code>` đang chọn
+ *   nên trông như không có gì xảy ra.)
+ */
+export function toggleInlineCode(root: HTMLElement): boolean {
+  const sel = document.getSelection();
+  if (!sel?.rangeCount) return false;
+  const code = closestTag(root, 'code');
+  if (code) {
+    const range = document.createRange();
+    range.selectNodeContents(code);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    return applyCommand('removeFormat');
+  }
+  const text = sel.toString();
+  if (!text) return false;
+  return applyCommand('insertHTML', `<code>${escapeText(text)}</code>`);
+}
+
+/**
+ * Chèn bảng rỗng `rows × cols`. Cũng không có lệnh execCommand cho bảng → dựng DOM rồi đưa qua
+ * `insertHTML` để giữ undo. Chèn kèm một đoạn trống phía sau để con trỏ còn lối thoát khỏi bảng.
+ */
+export function insertTable(rows: number, cols: number): boolean {
+  const r = Math.min(Math.max(Math.trunc(rows) || 1, 1), 20);
+  const c = Math.min(Math.max(Math.trunc(cols) || 1, 1), 10);
+  const table = document.createElement('table');
+  const tbody = document.createElement('tbody');
+  for (let i = 0; i < r; i++) {
+    const tr = document.createElement('tr');
+    for (let j = 0; j < c; j++) {
+      const cell = document.createElement(i === 0 ? 'th' : 'td');
+      cell.appendChild(document.createElement('br'));
+      tr.appendChild(cell);
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  return applyCommand('insertHTML', `${table.outerHTML}<p><br></p>`);
 }
 
 /**
