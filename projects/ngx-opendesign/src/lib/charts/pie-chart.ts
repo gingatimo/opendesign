@@ -58,9 +58,9 @@ import {
         <svg
           #chartSvg
           class="g-pie-chart__svg g-chart-frame__svg"
-          [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + plotHeight()"
           width="100%"
-          [attr.height]="height()"
+          [attr.height]="plotHeight()"
           role="img"
           [attr.aria-label]="ariaLabel()"
         >
@@ -107,9 +107,11 @@ export class GPieChart {
     afterNextRender(() => {
       const el = this.svgEl()?.nativeElement;
       if (!el) return;
+      // Đo CẢ hai chiều: chiều cao cần cho chế độ phóng to (xem `plotHeight`).
       const ro = new ResizeObserver((entries) => {
-        const width = Math.round(entries[0].contentRect.width);
-        if (width > 0) this.w.set(width);
+        const { width, height } = entries[0].contentRect;
+        if (width > 0) this.w.set(Math.round(width));
+        if (height > 0) this.measuredHeight.set(Math.round(height));
       });
       ro.observe(el);
       this.destroyRef.onDestroy(() => ro.disconnect());
@@ -117,8 +119,17 @@ export class GPieChart {
   }
 
   protected readonly legendDir = computed(() => legendDirection(this.legendPosition()));
-  protected readonly slices = computed(() => pieSlices(this.data(), this.w(), this.height(), 0));
+  protected readonly slices = computed(() =>
+    pieSlices(this.data(), this.w(), this.plotHeight(), 0),
+  );
   protected readonly zoomed = signal(false);
+  // Chiều cao ô vẽ đo được. Lúc phóng to, hình phải cao theo KHUNG chứ không giữ `height` cố định —
+  // nếu không, tỉ lệ viewBox trùng tỉ lệ ô nên trình duyệt không phóng gì cả, card rộng ra mà chart
+  // vẫn y nguyên (đúng cái đã thấy trên màn hình).
+  private readonly measuredHeight = signal(0);
+  protected readonly plotHeight = computed(() =>
+    this.zoomed() && this.measuredHeight() > 0 ? this.measuredHeight() : this.height(),
+  );
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.data().map((d, i) => ({ name: d.name, color: chartColor(i, d.color) })),
   );

@@ -62,9 +62,9 @@ import {
         <svg
           #chartSvg
           class="g-line-chart__svg g-chart-frame__svg"
-          [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + plotHeight()"
           width="100%"
-          [attr.height]="height()"
+          [attr.height]="plotHeight()"
           role="img"
           [attr.aria-label]="ariaLabel()"
         >
@@ -85,7 +85,7 @@ import {
             </text>
           }
           @for (xl of xLabels(); track $index) {
-            <text class="g-line-chart__xlabel" [attr.x]="xl.x" [attr.y]="height() - 8">
+            <text class="g-line-chart__xlabel" [attr.x]="xl.x" [attr.y]="plotHeight() - 8">
               {{ xl.label }}
             </text>
           }
@@ -145,9 +145,11 @@ export class GLineChart {
     afterNextRender(() => {
       const el = this.svgEl()?.nativeElement;
       if (!el) return;
+      // Đo CẢ hai chiều: chiều cao cần cho chế độ phóng to (xem `plotHeight`).
       const ro = new ResizeObserver((entries) => {
-        const width = Math.round(entries[0].contentRect.width);
-        if (width > 0) this.w.set(width);
+        const { width, height } = entries[0].contentRect;
+        if (width > 0) this.w.set(Math.round(width));
+        if (height > 0) this.measuredHeight.set(Math.round(height));
       });
       ro.observe(el);
       this.destroyRef.onDestroy(() => ro.disconnect());
@@ -160,7 +162,7 @@ export class GLineChart {
     left: this.ML,
     right: this.w() - this.MR,
     top: this.MT,
-    bottom: this.height() - this.MB,
+    bottom: this.plotHeight() - this.MB,
   }));
 
   private readonly ticks = computed(() => {
@@ -203,6 +205,13 @@ export class GLineChart {
   );
 
   protected readonly zoomed = signal(false);
+  // Chiều cao ô vẽ đo được. Lúc phóng to, hình phải cao theo KHUNG chứ không giữ `height` cố định —
+  // nếu không, tỉ lệ viewBox trùng tỉ lệ ô nên trình duyệt không phóng gì cả, card rộng ra mà chart
+  // vẫn y nguyên (đúng cái đã thấy trên màn hình).
+  private readonly measuredHeight = signal(0);
+  protected readonly plotHeight = computed(() =>
+    this.zoomed() && this.measuredHeight() > 0 ? this.measuredHeight() : this.height(),
+  );
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.seriesRender().map((s) => ({ name: s.name, color: s.color })),
   );

@@ -79,9 +79,9 @@ interface CatLabel {
         <svg
           #chartSvg
           class="g-bar-chart__svg g-chart-frame__svg"
-          [attr.viewBox]="'0 0 ' + w() + ' ' + height()"
+          [attr.viewBox]="'0 0 ' + w() + ' ' + plotHeight()"
           width="100%"
-          [attr.height]="height()"
+          [attr.height]="plotHeight()"
           role="img"
           [attr.aria-label]="ariaLabel()"
         >
@@ -165,9 +165,11 @@ export class GBarChart {
     afterNextRender(() => {
       const el = this.svgEl()?.nativeElement;
       if (!el) return;
+      // Đo CẢ hai chiều: chiều cao cần cho chế độ phóng to (xem `plotHeight`).
       const ro = new ResizeObserver((entries) => {
-        const width = Math.round(entries[0].contentRect.width);
-        if (width > 0) this.w.set(width);
+        const { width, height } = entries[0].contentRect;
+        if (width > 0) this.w.set(Math.round(width));
+        if (height > 0) this.measuredHeight.set(Math.round(height));
       });
       ro.observe(el);
       this.destroyRef.onDestroy(() => ro.disconnect());
@@ -201,7 +203,7 @@ export class GBarChart {
         const left = 72;
         const right = this.w() - this.MR;
         const top = this.MT;
-        const bottom = this.height() - this.MB;
+        const bottom = this.plotHeight() - this.MB;
         const mapV = (v: number) => left + ((v - vmin) / span) * (right - left);
         const slotH = (bottom - top) / n;
         for (const tick of t) {
@@ -212,7 +214,7 @@ export class GBarChart {
             x2: x,
             y2: bottom,
             tx: x,
-            ty: this.height() - 8,
+            ty: this.plotHeight() - 8,
             label: formatChartNumber(tick),
           });
         }
@@ -238,7 +240,7 @@ export class GBarChart {
         const left = 44;
         const right = this.w() - this.MR;
         const top = this.MT;
-        const bottom = this.height() - this.MB;
+        const bottom = this.plotHeight() - this.MB;
         const mapV = (v: number) => bottom - ((v - vmin) / span) * (bottom - top);
         const slotW = (right - left) / n;
         for (const tick of t) {
@@ -256,7 +258,7 @@ export class GBarChart {
         const y0 = mapV(0);
         for (let i = 0; i < n; i++) {
           const center = left + (i + 0.5) * slotW;
-          catLabels.push({ x: center, y: this.height() - 8, text: labels[i] ?? '' });
+          catLabels.push({ x: center, y: this.plotHeight() - 8, text: labels[i] ?? '' });
           const groupW = slotW * 0.7;
           const barW = groupW / groups;
           for (let j = 0; j < groups; j++) {
@@ -277,6 +279,13 @@ export class GBarChart {
   );
 
   protected readonly zoomed = signal(false);
+  // Chiều cao ô vẽ đo được. Lúc phóng to, hình phải cao theo KHUNG chứ không giữ `height` cố định —
+  // nếu không, tỉ lệ viewBox trùng tỉ lệ ô nên trình duyệt không phóng gì cả, card rộng ra mà chart
+  // vẫn y nguyên (đúng cái đã thấy trên màn hình).
+  private readonly measuredHeight = signal(0);
+  protected readonly plotHeight = computed(() =>
+    this.zoomed() && this.measuredHeight() > 0 ? this.measuredHeight() : this.height(),
+  );
   protected readonly legendItems = computed<GChartLegendItem[]>(() =>
     this.series().map((s, j) => ({ name: s.name, color: chartColor(j, s.color) })),
   );
