@@ -36,17 +36,28 @@
   </div>
 </main>
 
-<!-- Nút theme nổi góc phải trên (vị trí "hiện tại" người dùng chốt) — không còn topbar để đặt
-  cùng hàng với logo nên tách riêng thành phần tử position: fixed, xem app.scss. -->
-<button
-  class="docs-theme-toggle"
-  g-icon-button
-  aria-label="Đổi giao diện sáng/tối"
-  (click)="themeService.toggle()"
->
-  @if (themeService.theme() === 'light') {
-    <g-icon [icon]="iconMoon" />
-  } @else {
-    <g-icon [icon]="iconSun" />
-  }
-</button>
+<!-- Giữ hai thao tác toàn cục cạnh nhau để việc đổi ngôn ngữ có thể kiểm tra ngay trên mọi demo. -->
+<div class="docs-toolbar-actions">
+  <button
+    type="button"
+    class="docs-language-toggle"
+    [attr.aria-label]="
+      i18n.tag() === localeVi.tag ? 'Chuyển sang tiếng Anh' : 'Chuyển sang tiếng Việt'
+    "
+    (click)="toggleLanguage()"
+  >
+    {{ i18n.tag() === localeVi.tag ? 'EN' : 'VI' }}
+  </button>
+  <button
+    class="docs-theme-toggle"
+    g-icon-button
+    aria-label="Đổi giao diện sáng/tối"
+    (click)="themeService.toggle()"
+  >
+    @if (themeService.theme() === 'light') {
+      <g-icon [icon]="iconMoon" />
+    } @else {
+      <g-icon [icon]="iconSun" />
+    }
+  </button>
+</div>

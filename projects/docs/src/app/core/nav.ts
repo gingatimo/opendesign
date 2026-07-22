@@ -31,6 +31,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/nen-tang/typography', label: 'Typography', icon: 'typography' },
       { path: '/nen-tang/radius-spacing', label: 'Radius & spacing', icon: 'radius-spacing' },
       { path: '/nen-tang/dark-mode', label: 'Dark mode', icon: 'dark-mode' },
+      { path: '/nen-tang/i18n', label: 'i18n', icon: 'i18n' },
     ]),
   },
   {

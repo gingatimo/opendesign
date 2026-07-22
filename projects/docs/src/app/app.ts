@@ -4,8 +4,11 @@ import {
   GIcon,
   GIconButton,
   GIconGlyph,
+  GLocaleService,
   gIconMoon,
   gIconSun,
+  gLocaleEn,
+  gLocaleVi,
   GSidebar,
   GSidebarHeader,
   GSidebarItem,
@@ -38,8 +41,10 @@ import { NAV_GROUPS } from './core/nav';
 })
 export class App {
   protected readonly themeService = inject(ThemeService);
+  protected readonly i18n = inject(GLocaleService);
   protected readonly iconMoon = gIconMoon;
   protected readonly iconSun = gIconSun;
+  protected readonly localeVi = gLocaleVi;
 
   /** Glyph docs-local cho icon nav (xem core/nav-icons.ts) — dùng với <g-icon>. */
   protected navGlyph(icon: NavIcon): GIconGlyph {
@@ -47,4 +52,8 @@ export class App {
   }
 
   protected readonly navGroups = NAV_GROUPS;
+
+  protected toggleLanguage(): void {
+    this.i18n.use(this.i18n.tag() === gLocaleVi.tag ? gLocaleEn : gLocaleVi);
+  }
 }

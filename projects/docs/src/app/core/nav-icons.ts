@@ -15,6 +15,7 @@ export type NavIcon =
   | 'typography'
   | 'radius-spacing'
   | 'dark-mode'
+  | 'i18n'
   | 'button'
   | 'icon-button'
   | 'action-expand'
@@ -115,6 +116,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
   typography: { viewBox: VB, paths: ['M4 7V4h16v3', 'M12 4v16', 'M9 20h6'] },
   'radius-spacing': { viewBox: VB, paths: ['M4 20V9a5 5 0 0 1 5-5h11'] },
   'dark-mode': { viewBox: VB, paths: ['M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z'] },
+  i18n: {
+    viewBox: VB,
+    circles: [{ cx: 12, cy: 12, r: 9 }],
+    paths: ['M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18'],
+  },
   button: { viewBox: VB, rects: [{ x: 4, y: 7, width: 16, height: 10, rx: 5 }] },
   'icon-button': { viewBox: VB, paths: ['M12 9v6M9 12h6'], circles: [{ cx: 12, cy: 12, r: 8 }] },
   'action-expand': {

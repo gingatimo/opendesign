@@ -134,20 +134,43 @@
   padding: var(--g-space-8) var(--g-space-6) var(--g-space-7);
 }
 
-// Nút theme nổi góc phải trên — thay cho vị trí cũ trong <g-topbar> (đã bỏ hẳn topbar). z-index
-// không có token --g-z-* nào sẵn có trong thư viện (đã kiểm: chỉ .docs-skip-link dùng z-index
-// hardcode 1000 trong chính file này); chọn 10 — đủ để nổi trên nội dung thường (không z-index/
-// auto) nhưng thấp hơn hẳn overlay CDK (dialog/tooltip/toast, z-index ~1000) nên dialog vẫn luôn
-// che được nút, không bao giờ ngược lại. Tự thêm background + border + shadow (g-icon-button
-// biến thể mặc định "ghost" chỉ có nền lúc hover, xem icon-button.scss) vì giờ nút nổi trực tiếp
-// trên nội dung trang thay vì nằm sẵn trong khối nền của topbar — không có nền riêng thì chữ/hình
-// bên dưới sẽ xuyên qua, khó đọc.
-.docs-theme-toggle {
+// Hai nút nổi chung một cụm để không che lên nhau khi đổi ngôn ngữ. z-index 10 đủ nổi trên nội
+// dung thường nhưng vẫn thấp hơn overlay CDK, nên dialog và tooltip luôn phủ đúng thứ tự.
+.docs-toolbar-actions {
   position: fixed;
   top: var(--g-space-4);
   right: var(--g-space-4);
   z-index: 10;
+  display: flex;
+  gap: var(--g-space-2);
+}
+
+// Nút chữ cần cùng kích thước với g-icon-button bên cạnh để cụm điều khiển không dịch chuyển.
+.docs-language-toggle,
+.docs-theme-toggle {
   background: var(--g-surface);
   border: 1px solid var(--g-border);
   box-shadow: var(--g-shadow-sm);
+}
+
+.docs-language-toggle {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--g-radius-sm);
+  color: var(--g-text);
+  font: inherit;
+  font-size: var(--g-font-size-xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.docs-language-toggle:hover {
+  background: var(--g-surface-raised);
+  border-color: var(--g-border-strong);
+}
+
+.docs-language-toggle:focus-visible {
+  outline: 2px solid var(--g-primary);
+  outline-offset: 2px;
 }

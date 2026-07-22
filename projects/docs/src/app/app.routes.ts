@@ -23,6 +23,11 @@ export const routes: Routes = [
     title: 'Dark mode — OpenDesign',
   },
   {
+    path: 'nen-tang/i18n',
+    loadComponent: () => import('./pages/foundations/i18n.page'),
+    title: 'i18n — OpenDesign',
+  },
+  {
     path: 'components/button',
     loadComponent: () => import('./pages/button.page'),
     title: 'Button — OpenDesign',
