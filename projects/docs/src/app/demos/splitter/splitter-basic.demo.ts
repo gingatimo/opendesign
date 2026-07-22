@@ -1,30 +1,31 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GSplitter, GSplitterPanel } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GSplitter, GSplitterPanel } from 'ngx-opendesign';
+import { layoutCopyFor } from '../../pages/layout-copy';
 
 @Component({
   selector: 'docs-splitter-basic-demo',
   imports: [GSplitter, GSplitterPanel],
   template: `
-    <p class="sp-demo__caption">Ngang — kéo thanh giữa để đổi chiều rộng hai bên</p>
+    <p class="sp-demo__caption">{{ copy().horizontalCaption }}</p>
     <g-splitter class="sp-demo" [sizes]="[30, 70]">
       <ng-template gSplitterPanel>
-        <div class="sp-demo__panel">Panel 1</div>
+        <div class="sp-demo__panel">{{ copy().panel1 }}</div>
       </ng-template>
       <ng-template gSplitterPanel>
-        <div class="sp-demo__panel">Panel 2</div>
+        <div class="sp-demo__panel">{{ copy().panel2 }}</div>
       </ng-template>
     </g-splitter>
 
-    <p class="sp-demo__caption">Dọc + nhiều panel (kéo từng thanh)</p>
+    <p class="sp-demo__caption">{{ copy().verticalCaption }}</p>
     <g-splitter class="sp-demo" orientation="vertical">
       <ng-template gSplitterPanel>
-        <div class="sp-demo__panel">Trên</div>
+        <div class="sp-demo__panel">{{ copy().top }}</div>
       </ng-template>
       <ng-template gSplitterPanel>
-        <div class="sp-demo__panel">Giữa</div>
+        <div class="sp-demo__panel">{{ copy().middle }}</div>
       </ng-template>
       <ng-template gSplitterPanel>
-        <div class="sp-demo__panel">Dưới</div>
+        <div class="sp-demo__panel">{{ copy().bottom }}</div>
       </ng-template>
     </g-splitter>
   `,
@@ -52,4 +53,7 @@ import { GSplitter, GSplitterPanel } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SplitterBasicDemo {}
+export class SplitterBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => layoutCopyFor(this.i18n.tag()).splitter.demo);
+}

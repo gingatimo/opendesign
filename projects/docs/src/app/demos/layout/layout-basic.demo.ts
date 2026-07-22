@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import {
   GIcon,
   GIconButton,
   gIconSettings,
   GLayout,
+  GLocaleService,
   GSidebar,
   GSidebarItem,
   GSidebarItemIcon,
@@ -13,6 +14,7 @@ import {
   GTopbarStart,
 } from 'ngx-opendesign';
 import { iconBell, iconHomeAlt, iconReport } from '../../core/demo-icons';
+import { layoutCopyFor } from '../../pages/layout-copy';
 
 @Component({
   selector: 'docs-layout-basic-demo',
@@ -31,9 +33,9 @@ import { iconBell, iconHomeAlt, iconReport } from '../../core/demo-icons';
   template: `
     <g-layout>
       <g-topbar>
-        <div gTopbarStart class="brand">Ứng dụng</div>
+        <div gTopbarStart class="brand">{{ copy().app }}</div>
         <div gTopbarEnd>
-          <button g-icon-button aria-label="Thông báo">
+          <button g-icon-button [attr.aria-label]="copy().notifications">
             <g-icon [icon]="iconBell" />
           </button>
         </div>
@@ -42,54 +44,29 @@ import { iconBell, iconHomeAlt, iconReport } from '../../core/demo-icons';
       <g-sidebar>
         <a g-sidebar-item href="#" class="g-active" aria-current="page">
           <g-icon gSidebarItemIcon [icon]="iconHome" />
-          <span gSidebarItemLabel>Trang chủ</span>
+          <span gSidebarItemLabel>{{ copy().home }}</span>
         </a>
         <a g-sidebar-item href="#">
           <g-icon gSidebarItemIcon [icon]="iconReport" />
-          <span gSidebarItemLabel>Báo cáo</span>
+          <span gSidebarItemLabel>{{ copy().reports }}</span>
         </a>
         <a g-sidebar-item href="#">
           <g-icon gSidebarItemIcon [icon]="iconSettings" />
-          <span gSidebarItemLabel>Cài đặt</span>
+          <span gSidebarItemLabel>{{ copy().settings }}</span>
         </a>
       </g-sidebar>
 
       <main>
-        <h2>Tổng quan</h2>
-        <p>
-          Đây là vùng nội dung chính của app-shell — phần DUY NHẤT cuộn khi nội dung dài hơn khung
-          hiển thị. Topbar phía trên và sidebar bên trái đứng yên, không cuộn theo.
-        </p>
-        <p>
-          <code>g-layout</code> tự chọn bố cục lưới dựa trên những region đang có mặt: chỉ cần đặt
-          <code>&lt;g-topbar&gt;</code> và/hoặc <code>&lt;g-sidebar&gt;</code> làm con trực tiếp,
-          phần còn lại (không khớp hai selector đó) tự rơi vào vùng nội dung cuộn được.
-        </p>
-        <h2>Vì sao chỉ content cuộn</h2>
-        <p>
-          Trong một app-shell thật, topbar thường mang logo/điều hướng nhanh, sidebar mang menu
-          chính — cả hai cần đứng yên để người dùng luôn thấy được, kể cả khi đang đọc một trang nội
-          dung rất dài. Cuộn toàn trang (kể cả topbar/sidebar) sẽ khiến các mốc điều hướng đó biến
-          mất ngay khi cuộn xuống.
-        </p>
-        <p>
-          Kỹ thuật: <code>.g-layout</code> cố định chiều cao bằng <code>100vh</code> và
-          <code>overflow: hidden</code>; chỉ <code>.g-layout__main</code> — vùng bọc nội dung mặc
-          định — có <code>overflow: auto</code>.
-        </p>
-        <h2>Thử cuộn</h2>
-        <p>
-          Cuộn xuống trong khung demo này để thấy topbar và sidebar giữ nguyên vị trí, chỉ phần chữ
-          bên dưới di chuyển.
-        </p>
-        <p>
-          Đoạn văn này chỉ để kéo dài nội dung cho đủ chiều cao cuộn — không mang thông tin gì thêm
-          ngoài việc minh hoạ hành vi cuộn độc lập của vùng content.
-        </p>
-        <p>
-          Tiếp tục cuộn xuống dưới cùng để xác nhận toàn bộ nội dung đã hiển thị hết, trong khi
-          topbar và sidebar không hề nhúc nhích.
-        </p>
+        <h2>{{ copy().overview }}</h2>
+        <p>{{ copy().contentIntro }}</p>
+        <p>{{ copy().layoutIntro }}</p>
+        <h2>{{ copy().scrollTitle }}</h2>
+        <p>{{ copy().scrollReason }}</p>
+        <p>{{ copy().technique }}</p>
+        <h2>{{ copy().tryScrollTitle }}</h2>
+        <p>{{ copy().tryScroll }}</p>
+        <p>{{ copy().filler }}</p>
+        <p>{{ copy().bottom }}</p>
       </main>
     </g-layout>
   `,
@@ -102,12 +79,10 @@ import { iconBell, iconHomeAlt, iconReport } from '../../core/demo-icons';
       overflow: hidden;
     }
 
-    // .g-layout mặc định cao 100vh (opendesign.scss) — phá khung 460px cố định của demo này.
-    // Selector thẻ scoped trong style component (không phải ::ng-deep) VẪN áp được lên host của
-    // <g-layout> vì Angular gắn attribute encapsulation của component CHA (demo này) lên mọi host
-    // element được tạo ra trong template của nó — kể cả host của child component. Kết quả là rule
-    // này biên dịch thành "g-layout[_ngcontent-xxx]", có specificity CAO HƠN ".g-layout" toàn cục
-    // (thẻ+attribute > một class), nên luôn thắng bất kể thứ tự nạp stylesheet.
+    // .g-layout defaults to 100vh in opendesign.scss, which would break this fixed 460px demo.
+    // A scoped element selector still reaches the child component host because Angular adds the
+    // parent component's emulated encapsulation attribute to every host element created here.
+    // This compiles to "g-layout[_ngcontent-xxx]", with higher specificity than global ".g-layout".
     g-layout {
       height: 100%;
     }
@@ -119,6 +94,8 @@ import { iconBell, iconHomeAlt, iconReport } from '../../core/demo-icons';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => layoutCopyFor(this.i18n.tag()).layout.demo);
   protected readonly iconBell = iconBell;
   protected readonly iconHome = iconHomeAlt;
   protected readonly iconReport = iconReport;

@@ -1,21 +1,22 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GCard, GGrid } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GCard, GGrid, GLocaleService } from 'ngx-opendesign';
+import { layoutCopyFor } from '../../pages/layout-copy';
 
 @Component({
   selector: 'docs-grid-basic-demo',
   imports: [GGrid, GCard],
   template: `
-    <h4>3 cột đều</h4>
+    <h4>{{ copy().equalTitle }}</h4>
     <g-grid [cols]="3" [gap]="3">
       @for (n of items; track n) {
-        <g-card>Ô {{ n }}</g-card>
+        <g-card>{{ copy().cell(n) }}</g-card>
       }
     </g-grid>
 
-    <h4>Responsive — tự xếp theo bề rộng tối thiểu 160px</h4>
+    <h4>{{ copy().responsiveTitle }}</h4>
     <g-grid minColWidth="160px" [gap]="3">
       @for (n of items; track n) {
-        <g-card>Ô {{ n }}</g-card>
+        <g-card>{{ copy().cell(n) }}</g-card>
       }
     </g-grid>
   `,
@@ -33,5 +34,7 @@ import { GCard, GGrid } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GridBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => layoutCopyFor(this.i18n.tag()).grid.demo);
   protected readonly items = [1, 2, 3, 4, 5, 6];
 }
