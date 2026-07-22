@@ -4,6 +4,7 @@ import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { GLocaleService, gLocaleEn, gLocaleVi, provideGLocale } from 'ngx-opendesign';
+import CascadeSelectPage from './cascade-select.page';
 import CheckboxPage from './checkbox.page';
 import InputPage from './input.page';
 import RadioPage from './radio.page';
@@ -95,5 +96,17 @@ describe('form pages i18n', () => {
     expect(el.querySelector('g-select[placeholder="Choose a country"]')).toBeTruthy();
     expect(text).toContain('Text shown before a value is selected.');
     expect(text).not.toContain('Chọn quốc gia');
+  });
+
+  it('dịch trang Cascade Select và demo sang tiếng Anh', () => {
+    const el = renderEn(CascadeSelectPage);
+    const text = el.textContent ?? '';
+
+    expect(text).toContain('Choose one value through nested categories');
+    expect(text).toContain('Selected: none');
+    expect(el.querySelector('g-cascade-select[placeholder="Choose a region"]')).toBeTruthy();
+    expect(text).toContain('Value is the selected leaf item value.');
+    expect(text).toContain('ArrowRight opens the child column');
+    expect(text).not.toContain('Chọn khu vực');
   });
 });

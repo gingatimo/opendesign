@@ -1,13 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GCascadeOption, GCascadeSelect } from 'ngx-opendesign';
+import { GCascadeSelect, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-cascade-select-basic-demo',
   imports: [GCascadeSelect, ReactiveFormsModule],
   template: `
-    <g-cascade-select [formControl]="city" [options]="options" placeholder="Chọn khu vực" />
-    <p>Đã chọn: {{ city.value ?? 'chưa chọn' }}</p>
+    <g-cascade-select
+      [formControl]="city"
+      [options]="demo().options"
+      [placeholder]="demo().placeholder"
+      [attr.placeholder]="demo().placeholder"
+    />
+    <p>{{ demo().selected(city.value) }}</p>
   `,
   styles: `
     :host {
@@ -25,24 +31,7 @@ import { GCascadeOption, GCascadeSelect } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CascadeSelectBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).cascadeSelect.demo);
   protected readonly city = new FormControl<string | null>(null);
-  protected readonly options: GCascadeOption[] = [
-    {
-      label: 'Châu Á',
-      children: [
-        {
-          label: 'Việt Nam',
-          children: [
-            { label: 'Hà Nội', value: 'hanoi' },
-            { label: 'TP. Hồ Chí Minh', value: 'hcmc' },
-          ],
-        },
-        { label: 'Nhật Bản', value: 'japan' },
-      ],
-    },
-    {
-      label: 'Châu Âu',
-      children: [{ label: 'Pháp', value: 'france' }],
-    },
-  ];
 }

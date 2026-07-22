@@ -1,4 +1,5 @@
 import { ApiRow } from '../shared/api-table';
+import { GCascadeOption } from 'ngx-opendesign';
 
 interface FormPageCopy {
   title: string;
@@ -74,6 +75,14 @@ interface SelectCopy extends FormPageCopy {
   };
 }
 
+interface CascadeSelectCopy extends FormPageCopy {
+  demo: {
+    placeholder: string;
+    options: GCascadeOption[];
+    selected: (value: string | null) => string;
+  };
+}
+
 interface FormCopy {
   input: InputCopy;
   textarea: TextareaCopy;
@@ -81,6 +90,7 @@ interface FormCopy {
   toggle: ToggleCopy;
   radio: RadioCopy;
   select: SelectCopy;
+  cascadeSelect: CascadeSelectCopy;
 }
 
 const cvaTextVi = 'Dùng với [formControl], formControlName, hoặc [(ngModel)].';
@@ -338,6 +348,67 @@ const VI_FORMS: FormCopy = {
         const text = Array.isArray(value) ? value.join(', ') : value;
         return `Đã chọn: ${text || 'chưa chọn'}`;
       },
+    },
+  },
+  cascadeSelect: {
+    title: 'Cascade Select',
+    intro:
+      'Chọn một giá trị qua nhiều cấp danh mục lồng nhau. Trigger mở overlay nhiều cột: di chuột hoặc focus vào mục có con sẽ mở cột con bên phải; chỉ mục lá mới chọn được và đóng panel. Giá trị hai chiều qua ControlValueAccessor.',
+    apiTitle: 'API — GCascadeSelect',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'Trigger mang role="combobox" với aria-haspopup/aria-expanded; mỗi cột là role="listbox", mỗi mục là role="option" có aria-selected.',
+      'Bàn phím: Enter/Space/↓ mở panel; ↑/↓ di chuyển trong cột, → mở cột con, ← quay lại cột trước, Enter chọn mục lá, Esc đóng panel.',
+    ],
+    apiRows: [
+      {
+        name: '(CVA)',
+        type: 'ControlValueAccessor<unknown>',
+        default: '—',
+        description: `${cvaTextVi} Giá trị là value của mục lá đang chọn.`,
+      },
+      {
+        name: 'options',
+        type: 'GCascadeOption[]',
+        default: '[]',
+        description:
+          'Danh sách tuỳ chọn phân cấp { label, value?, children? }. Chỉ mục không có children mới chọn được.',
+      },
+      {
+        name: 'placeholder',
+        type: 'string',
+        default: "''",
+        description: 'Chữ hiển thị khi chưa chọn giá trị nào.',
+      },
+      {
+        name: 'compareWith',
+        type: '(a: unknown, b: unknown) => boolean',
+        default: '(a, b) => a === b',
+        description: 'So sánh value của option với giá trị đang bind để xác định mục đang chọn.',
+      },
+    ],
+    demo: {
+      placeholder: 'Chọn khu vực',
+      options: [
+        {
+          label: 'Châu Á',
+          children: [
+            {
+              label: 'Việt Nam',
+              children: [
+                { label: 'Hà Nội', value: 'hanoi' },
+                { label: 'TP. Hồ Chí Minh', value: 'hcmc' },
+              ],
+            },
+            { label: 'Nhật Bản', value: 'japan' },
+          ],
+        },
+        {
+          label: 'Châu Âu',
+          children: [{ label: 'Pháp', value: 'france' }],
+        },
+      ],
+      selected: (value: string | null) => `Đã chọn: ${value ?? 'chưa chọn'}`,
     },
   },
 };
@@ -599,6 +670,67 @@ const EN_FORMS: FormCopy = {
         const text = Array.isArray(value) ? value.join(', ') : value;
         return `Selected: ${text || 'none'}`;
       },
+    },
+  },
+  cascadeSelect: {
+    title: 'Cascade Select',
+    intro:
+      'Choose one value through nested categories. The trigger opens a multi-column overlay: hovering or focusing a parent item opens the child column to the right; only leaf items can be selected and close the panel. Value binding uses ControlValueAccessor.',
+    apiTitle: 'API — GCascadeSelect',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'The trigger has role="combobox" with aria-haspopup/aria-expanded; each column is role="listbox", and each item is role="option" with aria-selected.',
+      'Keyboard: Enter/Space/ArrowDown opens the panel; ArrowUp/ArrowDown moves within a column, ArrowRight opens the child column, ArrowLeft returns to the previous column, Enter selects a leaf item, and Esc closes the panel.',
+    ],
+    apiRows: [
+      {
+        name: '(CVA)',
+        type: 'ControlValueAccessor<unknown>',
+        default: '—',
+        description: `${cvaTextEn} Value is the selected leaf item value.`,
+      },
+      {
+        name: 'options',
+        type: 'GCascadeOption[]',
+        default: '[]',
+        description:
+          'Hierarchical option list { label, value?, children? }. Only items without children can be selected.',
+      },
+      {
+        name: 'placeholder',
+        type: 'string',
+        default: "''",
+        description: 'Text shown before a value is selected.',
+      },
+      {
+        name: 'compareWith',
+        type: '(a: unknown, b: unknown) => boolean',
+        default: '(a, b) => a === b',
+        description: 'Compare an option value with the current model value to determine selection.',
+      },
+    ],
+    demo: {
+      placeholder: 'Choose a region',
+      options: [
+        {
+          label: 'Asia',
+          children: [
+            {
+              label: 'Vietnam',
+              children: [
+                { label: 'Hanoi', value: 'hanoi' },
+                { label: 'Ho Chi Minh City', value: 'hcmc' },
+              ],
+            },
+            { label: 'Japan', value: 'japan' },
+          ],
+        },
+        {
+          label: 'Europe',
+          children: [{ label: 'France', value: 'france' }],
+        },
+      ],
+      selected: (value: string | null) => `Selected: ${value ?? 'none'}`,
     },
   },
 };
