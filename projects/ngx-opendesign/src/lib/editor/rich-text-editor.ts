@@ -379,7 +379,7 @@ let hintCounter = 0;
                 class="g-rte__btn"
                 (click)="applyTable(rowsInput.value, colsInput.value)"
               >
-                {{ t().editor.tablePanel.insert }}
+                {{ t().common.apply }}
               </button>
               <button type="button" class="g-rte__btn" (click)="closePanel()">
                 {{ t().common.cancel }}
