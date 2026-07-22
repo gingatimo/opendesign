@@ -46,4 +46,10 @@ describe('monthNames', () => {
     expect(en[0]).toBe('Jan');
     expect(monthNames('vi-VN')[0]).not.toBe('Jan');
   });
+
+  it('rút gọn tháng tiếng Việt cho ô lịch hẹp', () => {
+    const vi = monthNames('vi-VN');
+    expect(vi[0]).toBe('Th 1');
+    expect(vi[6]).toBe('Th 7');
+  });
 });

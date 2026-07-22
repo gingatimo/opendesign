@@ -20,7 +20,8 @@ import {
 } from 'ngx-opendesign';
 import { ThemeService } from './core/theme.service';
 import { NAV_ICON_GLYPHS, NavIcon } from './core/nav-icons';
-import { NAV_GROUPS } from './core/nav';
+import { navGroupsFor } from './core/nav';
+import { DocsI18nService } from './core/docs-i18n';
 
 @Component({
   selector: 'docs-root',
@@ -46,6 +47,8 @@ import { NAV_GROUPS } from './core/nav';
 export class App {
   protected readonly themeService = inject(ThemeService);
   protected readonly i18n = inject(GLocaleService);
+  protected readonly docsI18n = inject(DocsI18nService);
+  protected readonly copy = this.docsI18n.copy;
   protected readonly iconMoon = gIconMoon;
   protected readonly iconSun = gIconSun;
   protected readonly languageIndex = computed(() => (this.i18n.tag() === gLocaleVi.tag ? 0 : 1));
@@ -55,7 +58,7 @@ export class App {
     return NAV_ICON_GLYPHS[icon];
   }
 
-  protected readonly navGroups = NAV_GROUPS;
+  protected readonly navGroups = computed(() => navGroupsFor(this.i18n.tag()));
 
   protected useLanguageIndex(index: number): void {
     this.i18n.use(index === 0 ? gLocaleVi : gLocaleEn);

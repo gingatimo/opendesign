@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GBadge, GButton, GCard, GCardHeader, GLink } from 'ngx-opendesign';
-import { NAV_GROUPS } from '../core/nav';
+import { GBadge, GButton, GCard, GCardHeader, GLink, GLocaleService } from 'ngx-opendesign';
+import { navGroupsFor } from '../core/nav';
+import { DocsI18nService } from '../core/docs-i18n';
 import { CodeBlock } from '../shared/code-block';
 
 interface FeatureCard {
@@ -23,32 +24,29 @@ interface HighlightCard {
     <section class="hero">
       <div class="hero__badges">
         <g-badge>v{{ version }}</g-badge>
-        <g-badge variant="success">{{ componentCount }} component</g-badge>
-        <g-badge>{{ chartCount }} loại chart</g-badge>
-        <g-badge>{{ iconCount }} icon</g-badge>
+        <g-badge variant="success">{{ componentCount }} {{ copy().home.componentBadge }}</g-badge>
+        <g-badge>{{ chartCount() }} {{ copy().home.chartBadge }}</g-badge>
+        <g-badge>{{ iconCount }} {{ copy().home.iconBadge }}</g-badge>
         <g-badge>Angular {{ angularVersion }}</g-badge>
       </div>
       <h1>OpenDesign</h1>
       <p class="hero__tagline">
-        Design system cho Angular với thẩm mỹ hiện đại: control dạng pill, bề mặt bo góc nhỏ,
-        sáng/tối sẵn có. Viết bằng signals, standalone và OnPush — không có dependency bên thứ ba
-        nào, chỉ hai peer dependency trong chính hệ Angular:
-        <code>&#64;angular/cdk</code> và <code>&#64;angular/forms</code>.
+        {{ copy().home.tagline }}
+        <code>&#64;angular/cdk</code> {{ copy().home.peerJoin }} <code>&#64;angular/forms</code>.
       </p>
       <div class="hero__actions">
-        <a g-button routerLink="/components/button">Xem component</a>
-        <a g-button variant="outline" href="#cai-dat">Cài đặt</a>
-        <a g-button variant="ghost" routerLink="/playbook/dashboard">Xem màn hình mẫu</a>
+        <a g-button routerLink="/components/button">{{ copy().home.viewComponents }}</a>
+        <a g-button variant="outline" href="#cai-dat">{{ copy().home.install }}</a>
+        <a g-button variant="ghost" routerLink="/playbook/dashboard">{{
+          copy().home.viewPlaybook
+        }}</a>
       </div>
     </section>
 
-    <h2>Trong hộp có gì</h2>
-    <p>
-      Không chỉ là bộ control cơ bản: biểu đồ, trình soạn thảo, icon set và cả những màn hình mẫu
-      ráp sẵn đều nằm trong cùng một package.
-    </p>
+    <h2>{{ copy().home.whatsInside }}</h2>
+    <p>{{ copy().home.whatsInsideBody }}</p>
     <div class="features">
-      @for (item of highlights; track item.title) {
+      @for (item of highlights(); track item.title) {
         <g-card>
           <div gCardHeader>{{ item.title }}</div>
           <p class="features__body">{{ item.body }}</p>
@@ -59,9 +57,9 @@ interface HighlightCard {
       }
     </div>
 
-    <h2>Vì sao dùng OpenDesign</h2>
+    <h2>{{ copy().home.why }}</h2>
     <div class="features">
-      @for (feature of features; track feature.title) {
+      @for (feature of features(); track feature.title) {
         <g-card>
           <div gCardHeader>{{ feature.title }}</div>
           <p class="features__body">{{ feature.body }}</p>
@@ -69,76 +67,39 @@ interface HighlightCard {
       }
     </div>
 
-    <h2 id="cai-dat">Cài đặt</h2>
-    <p>Đúng hai bước. Không cần cấu hình build, không cần cài thêm tooling nào.</p>
+    <h2 id="cai-dat">{{ copy().home.install }}</h2>
+    <p>{{ copy().home.installIntro }}</p>
 
-    <h3>1. Cài package</h3>
+    <h3>{{ copy().home.installPackage }}</h3>
     <docs-code-block [code]="installSnippet" language="bash" />
-    <p class="note">
-      Hai peer dependency ngoài <code>&#64;angular/core</code>/<code>&#64;angular/common</code>:
-      <code>&#64;angular/cdk</code> (overlay của Dialog, Tooltip, Toast, Select) và
-      <code>&#64;angular/forms</code> (các control tương thích <code>ControlValueAccessor</code>:
-      Input, Textarea, Checkbox, Toggle, Radio, Select) — cài kèm như trên nếu dự án chưa có.
-    </p>
+    <p class="note">{{ copy().home.installNote }}</p>
 
-    <h3>2. Import file theme</h3>
-    <p>
-      Thêm CSS của OpenDesign vào <code>angular.json</code> — đây là nơi định nghĩa toàn bộ design
-      token (<code>--g-*</code>) và bảng màu sáng/tối:
-    </p>
+    <h3>{{ copy().home.importTheme }}</h3>
+    <p>{{ copy().home.importThemeBody }}</p>
     <docs-code-block [code]="stylesSnippet" language="json" />
-    <p class="note">
-      Hoặc <code>&#64;import 'ngx-opendesign/styles/opendesign.css';</code> trong
-      <code>styles.scss</code> nếu bạn thích cách đó.
-    </p>
+    <p class="note">{{ copy().home.importThemeNote }}</p>
 
-    <h2>Dùng component đầu tiên</h2>
-    <p>
-      Mọi component đều standalone — import thẳng vào <code>imports</code> của component bạn, không
-      cần NgModule:
-    </p>
+    <h2>{{ copy().home.firstComponent }}</h2>
+    <p>{{ copy().home.firstComponentBody }}</p>
     <docs-code-block [code]="usageSnippet" language="typescript" />
 
-    <h2>Bật chế độ tối</h2>
-    <p>
-      Đặt thuộc tính <code>data-g-theme="dark"</code> lên thẻ <code>&lt;html&gt;</code>. Không có
-      thuộc tính này thì mặc định là giao diện sáng — mọi component đều đọc token nên đổi màu đồng
-      loạt, bạn không phải sửa gì thêm:
-    </p>
+    <h2>{{ copy().home.darkMode }}</h2>
+    <p>{{ copy().home.darkModeBody }}</p>
     <docs-code-block [code]="themeSnippet" language="typescript" />
-    <p class="note">
-      Nút sáng/tối ở góc trên bên phải trang này chạy đúng bằng cơ chế đó — bấm thử để xem cả trang
-      đổi theme.
-    </p>
+    <p class="note">{{ copy().home.darkModeNote }}</p>
 
-    <h3>UI gốc của trình duyệt cũng đổi theo</h3>
-    <p>
-      File theme khai báo sẵn <code>color-scheme: light</code> ở <code>:root</code> và
-      <code>color-scheme: dark</code> trong khối <code>[data-g-theme='dark']</code>. Đây là thứ CSS
-      variable không làm được: nó báo cho trình duyệt biết bề mặt đang sáng hay tối, để những phần
-      giao diện do <em>trình duyệt</em> tự vẽ cũng đi theo — rõ nhất là <strong>thanh cuộn</strong>,
-      ngoài ra còn ô chọn ngày/giờ, nền autofill và gạch chân spellcheck.
-    </p>
-    <p class="note">
-      Nghĩa là bạn không cần tự tô màu thanh cuộn: bật chế độ tối là thanh cuộn tối theo, và vẫn giữ
-      đúng kiểu thanh cuộn quen thuộc của từng hệ điều hành (macOS vẫn là overlay tự ẩn). Nếu muốn
-      thanh cuộn mảnh hơn hoặc đổi màu riêng, dùng <code>scrollbar-width</code> và
-      <code>scrollbar-color</code> ở phía ứng dụng — lưu ý trên macOS phải đặt
-      <code>scrollbar-width</code> thì màu tùy chỉnh mới hiện, và điều đó sẽ ép thanh cuộn luôn hiện
-      thay vì tự ẩn.
-    </p>
+    <h3>{{ copy().home.nativeUi }}</h3>
+    <p>{{ copy().home.nativeUiBody }}</p>
+    <p class="note">{{ copy().home.nativeUiNote }}</p>
 
-    <h2>Tùy biến</h2>
-    <p>
-      Token là CSS custom property nên ghi đè bằng CSS thuần, không cần SCSS hay build tool. Ví dụ
-      đổi màu chủ đạo và bán kính bo góc:
-    </p>
+    <h2>{{ copy().home.customize }}</h2>
+    <p>{{ copy().home.customizeBody }}</p>
     <docs-code-block [code]="customizeSnippet" language="scss" />
 
-    <h2>Danh sách component</h2>
-    <p>Tất cả {{ componentCount }} component, mỗi trang có demo sống, code mẫu và bảng API.</p>
+    <h2>{{ copy().home.componentList }}</h2>
+    <p>{{ copy().home.componentListBody(componentCount) }}</p>
     <div class="catalog">
-      @for (group of componentGroups; track group.title) {
+      @for (group of componentGroups(); track group.title) {
         <div class="catalog__group">
           <h3 class="catalog__title">{{ group.title }} ({{ group.links.length }})</h3>
           <ul class="catalog__list">
@@ -152,32 +113,21 @@ interface HighlightCard {
       }
     </div>
 
-    <h2>Playbook — ráp lại thành màn hình thật</h2>
-    <p>
-      Biết từng component rồi thì phần khó còn lại là ghép chúng cho ra một màn hình dùng được.
-      Playbook là {{ playbook.links.length }} màn hình hoàn chỉnh, code đọc thẳng từ file nguồn:
-    </p>
+    <h2>{{ copy().home.playbookTitle }}</h2>
+    <p>{{ copy().home.playbookBody(playbook().links.length) }}</p>
     <ul class="catalog__list catalog__list--inline">
-      @for (link of playbook.links; track link.path) {
+      @for (link of playbook().links; track link.path) {
         <li>
           <a gLink [routerLink]="link.path">{{ link.label }}</a>
         </li>
       }
     </ul>
 
-    <h2>Yêu cầu</h2>
+    <h2>{{ copy().home.requirements }}</h2>
     <ul>
-      <li>Angular {{ angularVersion }} trở lên (standalone components, signals).</li>
-      <li>
-        Peer dependencies: <code>&#64;angular/core</code>, <code>&#64;angular/common</code>,
-        <code>&#64;angular/cdk</code> (overlay của Dialog, Tooltip, Toast, Select),
-        <code>&#64;angular/forms</code> (các control CVA: Input, Textarea, Checkbox, Toggle, Radio,
-        Select).
-      </li>
-      <li>
-        Không phụ thuộc <code>&#64;angular/router</code> — component điều hướng như Sidebar dùng
-        attribute selector để bạn tự gắn <code>routerLink</code>.
-      </li>
+      <li>{{ copy().home.angularRequirement(angularVersion) }}</li>
+      <li>{{ copy().home.peerRequirement }}</li>
+      <li>{{ copy().home.routerRequirement }}</li>
     </ul>
   `,
   styles: `
@@ -282,89 +232,171 @@ interface HighlightCard {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class HomePage {
+  private readonly i18n = inject(GLocaleService);
+  private readonly docsI18n = inject(DocsI18nService);
+
+  protected readonly copy = this.docsI18n.copy;
   protected readonly version = '2.0.0';
   protected readonly angularVersion = 22;
 
   // Danh mục lấy thẳng từ mục lục của sidebar: bỏ nhóm "Bắt đầu" (chỉ có link về đây) và tách
   // "Playbook" ra mục riêng vì đó là màn hình ráp sẵn, không phải component.
-  protected readonly componentGroups = NAV_GROUPS.filter(
-    (g) => g.title !== 'Bắt đầu' && g.title !== 'Playbook',
+  private readonly navGroups = computed(() => navGroupsFor(this.i18n.tag()));
+  private readonly startGroupTitle = computed(() =>
+    this.i18n.tag() === 'vi-VN' ? 'Bắt đầu' : 'Start',
   );
-  protected readonly playbook = NAV_GROUPS.find((g) => g.title === 'Playbook')!;
+  protected readonly componentGroups = computed(() =>
+    this.navGroups().filter((g) => g.title !== this.startGroupTitle() && g.title !== 'Playbook'),
+  );
+  protected readonly playbook = computed(() =>
+    this.navGroups().find((g) => g.title === 'Playbook')!,
+  );
 
   // Đếm từ mục lục thay vì gõ tay — thêm component mới là con số tự đúng.
-  protected readonly componentCount = NAV_GROUPS.flatMap((g) => g.links).filter((l) =>
-    l.path.startsWith('/components/'),
-  ).length;
-  protected readonly chartCount = NAV_GROUPS.find((g) => g.title === 'Charts')?.links.length ?? 0;
+  protected readonly componentCount = navGroupsFor('vi-VN')
+    .flatMap((g) => g.links)
+    .filter((l) => l.path.startsWith('/components/')).length;
+  protected readonly chartCount = computed(
+    () => this.navGroups().find((g) => g.title === 'Charts')?.links.length ?? 0,
+  );
   /** Số icon trong `ngx-opendesign` — xem trang Icon. Không import cả bộ vào đây cho nhẹ bundle. */
   protected readonly iconCount = 116;
 
-  protected readonly highlights: HighlightCard[] = [
-    {
-      title: `${this.chartCount} loại chart, SVG thuần`,
-      body: 'Line, bar, stacked bar, pie, donut, polar, radar, honeycomb, heatmap và calendar heatmap. Chung một khung: tiêu đề, chú giải bốn phía, phóng to gần kín màn hình và xuất ra PNG hoặc SVG — màu, tiêu đề, chú giải đều được in vào file.',
-      path: '/components/line-chart',
-      cta: 'Xem chart',
-    },
-    {
-      title: 'Hai trình soạn thảo',
-      body: 'Rich Text Editor với thanh công cụ đầy đủ: heading, khối code, danh sách checkbox, bảng, link, màu chữ, thụt lề bằng Tab. Code Editor tô sáng cú pháp kèm số dòng, gõ tiếng Việt (IME) không mất chữ.',
-      path: '/components/rich-text-editor',
-      cta: 'Xem editor',
-    },
-    {
-      title: `${this.iconCount} icon tree-shakable`,
-      body: 'Mỗi icon là một hằng số rời, chỉ icon nào bạn import mới nằm trong bundle. Vẽ theo lưới 24px, dùng currentColor nên tự đổi màu theo ngữ cảnh.',
-      path: '/components/icon',
-      cta: 'Xem icon set',
-    },
-    {
-      title: 'Dữ liệu dạng bảng và sơ đồ',
-      body: 'Table sắp xếp/chọn dòng, Organization Chart cho sơ đồ tổ chức, Reorder List kéo thả đổi thứ tự — kèm Splitter và Scroll Panel để dựng khung làm việc nhiều vùng.',
-      path: '/components/table',
-      cta: 'Xem Table',
-    },
-    {
-      title: 'Nền tảng token',
-      body: 'Bốn trang giải thích bảng màu, typography, radius và spacing, cùng cách hoạt động của chế độ tối. Mọi token đều là CSS variable nên ghi đè được bằng CSS thuần.',
-      path: '/nen-tang/mau-sac',
-      cta: 'Xem nền tảng',
-    },
-    {
-      title: 'Playbook màn hình mẫu',
-      body: 'Đăng nhập, dashboard, danh sách, chi tiết, thêm mới, chatbot và workspace chat + terminal — mỗi màn ghép từ chính các component ở trên, xem được cả code.',
-      path: '/playbook/dashboard',
-      cta: 'Xem playbook',
-    },
-  ];
+  protected readonly highlights = computed<HighlightCard[]>(() =>
+    this.i18n.tag() === 'vi-VN'
+      ? [
+          {
+            title: `${this.chartCount()} loại chart, SVG thuần`,
+            body: 'Line, bar, stacked bar, pie, donut, polar, radar, honeycomb, heatmap và calendar heatmap. Chung một khung: tiêu đề, chú giải bốn phía, phóng to gần kín màn hình và xuất ra PNG hoặc SVG — màu, tiêu đề, chú giải đều được in vào file.',
+            path: '/components/line-chart',
+            cta: 'Xem chart',
+          },
+          {
+            title: 'Hai trình soạn thảo',
+            body: 'Rich Text Editor với thanh công cụ đầy đủ: heading, khối code, danh sách checkbox, bảng, link, màu chữ, thụt lề bằng Tab. Code Editor tô sáng cú pháp kèm số dòng, gõ tiếng Việt (IME) không mất chữ.',
+            path: '/components/rich-text-editor',
+            cta: 'Xem editor',
+          },
+          {
+            title: `${this.iconCount} icon tree-shakable`,
+            body: 'Mỗi icon là một hằng số rời, chỉ icon nào bạn import mới nằm trong bundle. Vẽ theo lưới 24px, dùng currentColor nên tự đổi màu theo ngữ cảnh.',
+            path: '/components/icon',
+            cta: 'Xem icon set',
+          },
+          {
+            title: 'Dữ liệu dạng bảng và sơ đồ',
+            body: 'Table sắp xếp/chọn dòng, Organization Chart cho sơ đồ tổ chức, Reorder List kéo thả đổi thứ tự — kèm Splitter và Scroll Panel để dựng khung làm việc nhiều vùng.',
+            path: '/components/table',
+            cta: 'Xem Table',
+          },
+          {
+            title: 'Nền tảng token',
+            body: 'Bốn trang giải thích bảng màu, typography, radius và spacing, cùng cách hoạt động của chế độ tối. Mọi token đều là CSS variable nên ghi đè được bằng CSS thuần.',
+            path: '/nen-tang/mau-sac',
+            cta: 'Xem nền tảng',
+          },
+          {
+            title: 'Playbook màn hình mẫu',
+            body: 'Đăng nhập, dashboard, danh sách, chi tiết, thêm mới, chatbot và workspace chat + terminal — mỗi màn ghép từ chính các component ở trên, xem được cả code.',
+            path: '/playbook/dashboard',
+            cta: 'Xem playbook',
+          },
+        ]
+      : [
+          {
+            title: `${this.chartCount()} chart types, pure SVG`,
+            body: 'Line, bar, stacked bar, pie, donut, polar, radar, honeycomb, heatmap, and calendar heatmap. One shared frame covers titles, four-side legends, near-fullscreen zoom, and PNG/SVG export with colors, titles, and legends included in the file.',
+            path: '/components/line-chart',
+            cta: 'View charts',
+          },
+          {
+            title: 'Two editors',
+            body: 'Rich Text Editor includes heading, code block, checkbox lists, tables, links, text color, and Tab indentation. Code Editor adds syntax highlighting, line numbers, and Vietnamese IME-safe typing.',
+            path: '/components/rich-text-editor',
+            cta: 'View editors',
+          },
+          {
+            title: `${this.iconCount} tree-shakable icons`,
+            body: 'Each icon is a standalone constant, so only imported icons enter the bundle. They are drawn on a 24px grid and use currentColor to follow their context.',
+            path: '/components/icon',
+            cta: 'View icon set',
+          },
+          {
+            title: 'Tables and diagrams',
+            body: 'Table supports sorting and row selection, Organization Chart covers org diagrams, and Reorder List handles drag sorting, with Splitter and Scroll Panel for multi-pane workspaces.',
+            path: '/components/table',
+            cta: 'View Table',
+          },
+          {
+            title: 'Token foundations',
+            body: 'Four pages explain color, typography, radius, spacing, and dark mode. Every token is a CSS variable, so plain CSS overrides are enough.',
+            path: '/nen-tang/mau-sac',
+            cta: 'View foundations',
+          },
+          {
+            title: 'Sample-screen playbook',
+            body: 'Login, dashboard, list, detail, create, chatbot, and chat + terminal workspace screens are composed from the same components, with source code available.',
+            path: '/playbook/dashboard',
+            cta: 'View playbook',
+          },
+        ],
+  );
 
-  protected readonly features: FeatureCard[] = [
-    {
-      title: 'Thẩm mỹ pill nhất quán',
-      body: 'Button, input, chip, select bo tròn hoàn toàn; card và textarea bo góc nhỏ; icon button tròn tuyệt đối. Một ngôn ngữ hình khối áp dụng xuyên suốt.',
-    },
-    {
-      title: 'Sáng/tối có sẵn',
-      body: 'Hai bảng màu định nghĩa bằng CSS variable. Đổi theme bằng một thuộc tính trên thẻ html — không cần build lại, không cần sửa component.',
-    },
-    {
-      title: 'Accessibility nghiêm túc',
-      body: 'ARIA đúng pattern, điều hướng bàn phím đầy đủ, focus trap cho dialog, live region cho toast. Component thiếu tên cho screen reader sẽ cảnh báo ngay ở dev mode.',
-    },
-    {
-      title: 'Angular hiện đại',
-      body: 'Standalone, signal inputs, OnPush, sẵn sàng cho zoneless. Không NgModule, không decorator cũ.',
-    },
-    {
-      title: 'Nhẹ về dependency',
-      body: 'Không có dependency bên thứ ba nào — chỉ hai peer dependency trong chính hệ Angular: @angular/cdk cho overlay và focus management, @angular/forms cho các control tương thích ReactiveForms/NgModel.',
-    },
-    {
-      title: 'Tài liệu tiếng Việt',
-      body: 'Mọi trang đều có demo sống, code mẫu đọc thẳng từ file nguồn (không bao giờ lệch với thực tế) và ghi chú accessibility.',
-    },
-  ];
+  protected readonly features = computed<FeatureCard[]>(() =>
+    this.i18n.tag() === 'vi-VN'
+      ? [
+          {
+            title: 'Thẩm mỹ pill nhất quán',
+            body: 'Button, input, chip, select bo tròn hoàn toàn; card và textarea bo góc nhỏ; icon button tròn tuyệt đối. Một ngôn ngữ hình khối áp dụng xuyên suốt.',
+          },
+          {
+            title: 'Sáng/tối có sẵn',
+            body: 'Hai bảng màu định nghĩa bằng CSS variable. Đổi theme bằng một thuộc tính trên thẻ html — không cần build lại, không cần sửa component.',
+          },
+          {
+            title: 'Accessibility nghiêm túc',
+            body: 'ARIA đúng pattern, điều hướng bàn phím đầy đủ, focus trap cho dialog, live region cho toast. Component thiếu tên cho screen reader sẽ cảnh báo ngay ở dev mode.',
+          },
+          {
+            title: 'Angular hiện đại',
+            body: 'Standalone, signal inputs, OnPush, sẵn sàng cho zoneless. Không NgModule, không decorator cũ.',
+          },
+          {
+            title: 'Nhẹ về dependency',
+            body: 'Không có dependency bên thứ ba nào — chỉ hai peer dependency trong chính hệ Angular: @angular/cdk cho overlay và focus management, @angular/forms cho các control tương thích ReactiveForms/NgModel.',
+          },
+          {
+            title: 'Tài liệu tiếng Việt',
+            body: 'Mọi trang đều có demo sống, code mẫu đọc thẳng từ file nguồn (không bao giờ lệch với thực tế) và ghi chú accessibility.',
+          },
+        ]
+      : [
+          {
+            title: 'Consistent pill aesthetic',
+            body: 'Buttons, inputs, chips, and selects are fully rounded; cards and textareas use smaller radii; icon buttons are circular. The shape language is consistent throughout.',
+          },
+          {
+            title: 'Light and dark included',
+            body: 'Two color palettes are defined as CSS variables. Switch theme with one attribute on html, with no rebuild and no component edits.',
+          },
+          {
+            title: 'Serious accessibility',
+            body: 'ARIA follows the right patterns, keyboard navigation is complete, dialogs use focus trap, and toast uses live regions. Components that need screen-reader names warn in dev mode.',
+          },
+          {
+            title: 'Modern Angular',
+            body: 'Standalone components, signal inputs, OnPush, and zoneless-ready APIs. No NgModule and no old decorator patterns.',
+          },
+          {
+            title: 'Dependency-light',
+            body: 'No third-party runtime dependencies. The only Angular peers are @angular/cdk for overlays/focus management and @angular/forms for ReactiveForms/NgModel-compatible controls.',
+          },
+          {
+            title: 'Bilingual docs',
+            body: 'Pages include live demos, source-backed code samples, and accessibility notes, with docs copy switching between Vietnamese and English.',
+          },
+        ],
+  );
 
   protected readonly installSnippet = `npm install ngx-opendesign @angular/cdk @angular/forms`;
 

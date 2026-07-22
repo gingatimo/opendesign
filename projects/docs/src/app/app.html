@@ -1,4 +1,4 @@
-<a href="#main-content" class="docs-skip-link">Bỏ qua tới nội dung chính</a>
+<a href="#main-content" class="docs-skip-link">{{ copy().shell.skipLink }}</a>
 
 <!--
   Task 2 (viết lại): bỏ hẳn topbar full-width — sidebar giờ full-height, tự chứa logo. Header +
@@ -9,8 +9,8 @@
 <g-sidebar>
   <a gSidebarHeader routerLink="/" class="docs-brand">OpenDesign</a>
   <g-sidebar-toggle />
-  <nav aria-label="Điều hướng chính" class="docs-nav">
-    @for (group of navGroups; track group.title) {
+  <nav [attr.aria-label]="copy().shell.navLabel" class="docs-nav">
+    @for (group of navGroups(); track group.title) {
       <div class="docs-nav-group">
         <div class="docs-nav-group__title">{{ group.title }}</div>
         @for (link of group.links; track link.path) {
@@ -40,7 +40,7 @@
 <div class="docs-toolbar-actions">
   <g-tabs
     class="docs-language-tabs"
-    tablistLabel="Ngôn ngữ"
+    [tablistLabel]="copy().shell.languageLabel"
     [selectedIndex]="languageIndex()"
     (selectedIndexChange)="useLanguageIndex($event)"
   >
@@ -50,7 +50,7 @@
   <button
     class="docs-theme-toggle"
     g-icon-button
-    aria-label="Đổi giao diện sáng/tối"
+    [attr.aria-label]="copy().shell.themeToggle"
     (click)="themeService.toggle()"
   >
     @if (themeService.theme() === 'light') {

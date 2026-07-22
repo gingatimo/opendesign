@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DocsI18nService } from '../../core/docs-i18n';
 import { CodeBlock } from '../../shared/code-block';
 
 interface LocaleStringGroup {
@@ -10,55 +11,32 @@ interface LocaleStringGroup {
   imports: [CodeBlock],
   template: `
     <h1>i18n</h1>
-    <p>
-      OpenDesign dùng gói locale để dịch nhãn có sẵn, định dạng số/ngày và xác định ngày đầu tuần.
-      Mặc định là tiếng Anh; docs này đăng ký tiếng Việt để tất cả demo hiển thị đúng ngôn ngữ.
-    </p>
+    <p>{{ copy().i18n.intro }}</p>
 
-    <h2>Khai báo gói lúc khởi tạo</h2>
-    <p>
-      Thêm <code>provideGLocale()</code> vào <code>providers</code> của cấu hình ứng dụng. Hai gói
-      có sẵn là <code>gLocaleVi</code> và <code>gLocaleEn</code>.
-    </p>
+    <h2>{{ copy().i18n.provideTitle }}</h2>
+    <p>{{ copy().i18n.provideBody }}</p>
     <docs-code-block [code]="provideSnippet" language="typescript" />
 
-    <h2>Đổi ngôn ngữ lúc chạy</h2>
-    <p>
-      Inject <code>GLocaleService</code> rồi gọi <code>use()</code>. Service dùng signal nên các
-      component OpenDesign đang hiển thị tự cập nhật, không cần tải lại trang. Nút
-      <code>VI</code>/<code>EN</code>
-      ở góc phải của docs đang dùng đúng cơ chế này.
-    </p>
+    <h2>{{ copy().i18n.switchTitle }}</h2>
+    <p>{{ copy().i18n.switchBody }}</p>
     <docs-code-block [code]="switchSnippet" language="typescript" />
 
-    <h2>Ưu tiên input hơn locale</h2>
-    <p>
-      Locale chỉ cấp nhãn mặc định. Khi component có input nhãn, giá trị input luôn thắng để ứng
-      dụng có thể đặt câu chữ theo ngữ cảnh riêng. Ví dụ <code>ariaLabel</code> truyền vào chart
-      không bị thay bởi nhãn mặc định của locale.
-    </p>
+    <h2>{{ copy().i18n.priorityTitle }}</h2>
+    <p>{{ copy().i18n.priorityBody }}</p>
     <docs-code-block [code]="inputPrioritySnippet" language="html" />
 
-    <h2>Tự viết gói ngôn ngữ khác</h2>
-    <p>
-      Một gói chỉ cần <code>tag</code>, <code>firstDayOfWeek</code> và <code>strings</code>. Sao
-      chép <code>gLocaleEn</code>, dịch toàn bộ <code>strings</code>; TypeScript sẽ báo thiếu khoá.
-      Không thêm tên tháng hay thứ vào gói: <code>Intl</code> của trình duyệt lo phần đó từ
-      <code>tag</code>.
-    </p>
+    <h2>{{ copy().i18n.customTitle }}</h2>
+    <p>{{ copy().i18n.customBody }}</p>
     <docs-code-block [code]="customLocaleSnippet" language="typescript" />
 
-    <h2>Toàn bộ khoá strings</h2>
-    <p>
-      Các khoá dưới đây là hợp đồng đầy đủ của <code>GLocaleStrings</code>. Khoá có tham số được ghi
-      cùng tên tham số để gói tự viết giữ được nội dung động.
-    </p>
+    <h2>{{ copy().i18n.keysTitle }}</h2>
+    <p>{{ copy().i18n.keysBody }}</p>
     <div class="docs-locale-table-wrap">
       <table class="docs-locale-table">
         <thead>
           <tr>
-            <th>Nhóm</th>
-            <th>Khoá</th>
+            <th>{{ copy().i18n.tableGroup }}</th>
+            <th>{{ copy().i18n.tableKey }}</th>
           </tr>
         </thead>
         <tbody>
@@ -110,6 +88,9 @@ interface LocaleStringGroup {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class I18nPage {
+  private readonly docsI18n = inject(DocsI18nService);
+  protected readonly copy = this.docsI18n.copy;
+
   protected readonly provideSnippet = `import { ApplicationConfig } from '@angular/core';
 import { gLocaleVi, provideGLocale } from 'ngx-opendesign';
 
