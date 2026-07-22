@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GBarChart, GButton, GChartSeries } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GBarChart, GButton, GLocaleService } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-bar-chart-demo',
@@ -12,7 +13,7 @@ import { GBarChart, GButton, GChartSeries } from 'ngx-opendesign';
         [variant]="dir() === 'vertical' ? 'primary' : 'outline'"
         (click)="dir.set('vertical')"
       >
-        Cột đứng
+        {{ copy().vertical }}
       </button>
       <button
         g-button
@@ -20,20 +21,20 @@ import { GBarChart, GButton, GChartSeries } from 'ngx-opendesign';
         [variant]="dir() === 'horizontal' ? 'primary' : 'outline'"
         (click)="dir.set('horizontal')"
       >
-        Cột nằm
+        {{ copy().horizontal }}
       </button>
     </div>
 
     <g-bar-chart
-      title="Số đơn theo quý"
-      [series]="series"
-      [labels]="labels"
+      [title]="copy().title"
+      [series]="copy().series"
+      [labels]="copy().labels"
       [orientation]="dir()"
       [height]="dir() === 'horizontal' ? 320 : 280"
       [exportable]="true"
       [zoomable]="true"
-      filename="don-theo-quy"
-      ariaLabel="Số đơn theo quý, hai khu vực"
+      [filename]="copy().filename"
+      [ariaLabel]="copy().ariaLabel"
     />
   `,
   styles: `
@@ -49,10 +50,7 @@ import { GBarChart, GButton, GChartSeries } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarChartDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).bar.demo);
   protected readonly dir = signal<'vertical' | 'horizontal'>('vertical');
-  protected readonly labels = ['Q1', 'Q2', 'Q3', 'Q4'];
-  protected readonly series: GChartSeries[] = [
-    { name: 'Miền Bắc', values: [120, 145, 132, 168] },
-    { name: 'Miền Nam', values: [98, 110, 125, 140] },
-  ];
 }

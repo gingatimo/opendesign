@@ -1,28 +1,29 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GButton, GChartSlice, GHoneycombChart } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GButton, GHoneycombChart, GLocaleService } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-honeycomb-chart-demo',
   imports: [GHoneycombChart, GButton],
   template: `
     <g-honeycomb-chart
-      title="Số việc theo thành viên"
-      [data]="data"
+      [title]="copy().title"
+      [data]="copy().data"
       [columns]="5"
       [colorMode]="mode()"
       [exportable]="true"
       [zoomable]="true"
-      ariaLabel="Số việc đã xử lý theo thành viên"
+      [ariaLabel]="copy().ariaLabel"
     />
     <div class="hc-demo__opts">
-      <span>Tô màu:</span>
+      <span>{{ copy().colorMode }}</span>
       <button
         g-button
         size="sm"
         [variant]="mode() === 'heat' ? 'primary' : 'outline'"
         (click)="mode.set('heat')"
       >
-        Theo độ lớn
+        {{ copy().heat }}
       </button>
       <button
         g-button
@@ -30,7 +31,7 @@ import { GButton, GChartSlice, GHoneycombChart } from 'ngx-opendesign';
         [variant]="mode() === 'category' ? 'primary' : 'outline'"
         (click)="mode.set('category')"
       >
-        Phân loại
+        {{ copy().category }}
       </button>
     </div>
   `,
@@ -50,17 +51,7 @@ import { GButton, GChartSlice, GHoneycombChart } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HoneycombChartDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).honeycomb.demo);
   protected readonly mode = signal<'heat' | 'category'>('heat');
-  protected readonly data: GChartSlice[] = [
-    { name: 'An', value: 42 },
-    { name: 'Bình', value: 28 },
-    { name: 'Chi', value: 35 },
-    { name: 'Dũng', value: 12 },
-    { name: 'Giang', value: 47 },
-    { name: 'Hà', value: 19 },
-    { name: 'Khánh', value: 31 },
-    { name: 'Linh', value: 8 },
-    { name: 'Minh', value: 24 },
-    { name: 'Nam', value: 39 },
-  ];
 }

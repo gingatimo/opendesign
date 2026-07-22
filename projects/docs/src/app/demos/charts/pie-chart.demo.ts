@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GChartSlice, GPieChart } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GPieChart } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-pie-chart-demo',
@@ -7,14 +8,14 @@ import { GChartSlice, GPieChart } from 'ngx-opendesign';
   template: `
     <div class="pc-demo">
       <g-pie-chart
-        title="Nguồn truy cập"
-        [data]="data"
+        [title]="copy().title"
+        [data]="copy().data"
         [height]="260"
         legendPosition="right"
         [exportable]="true"
         [zoomable]="true"
-        filename="nguon-truy-cap"
-        ariaLabel="Tỉ trọng nguồn truy cập"
+        [filename]="copy().filename ?? 'pie-chart'"
+        [ariaLabel]="copy().ariaLabel"
       />
     </div>
   `,
@@ -29,10 +30,6 @@ import { GChartSlice, GPieChart } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PieChartDemo {
-  protected readonly data: GChartSlice[] = [
-    { name: 'Trực tiếp', value: 38 },
-    { name: 'Tìm kiếm', value: 27 },
-    { name: 'Mạng xã hội', value: 21 },
-    { name: 'Giới thiệu', value: 14 },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).pie.demo);
 }

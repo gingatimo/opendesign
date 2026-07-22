@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GButton, GChartLegendPosition, GChartSeries, GLineChart } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GButton, GChartLegendPosition, GLineChart, GLocaleService } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-line-chart-demo',
@@ -12,7 +13,7 @@ import { GButton, GChartLegendPosition, GChartSeries, GLineChart } from 'ngx-ope
         [variant]="curve() === 'straight' ? 'primary' : 'outline'"
         (click)="curve.set('straight')"
       >
-        Nối thẳng
+        {{ copy().straight }}
       </button>
       <button
         g-button
@@ -20,12 +21,12 @@ import { GButton, GChartLegendPosition, GChartSeries, GLineChart } from 'ngx-ope
         [variant]="curve() === 'smooth' ? 'primary' : 'outline'"
         (click)="curve.set('smooth')"
       >
-        Nối cong
+        {{ copy().smooth }}
       </button>
     </div>
 
     <div class="lc-demo__ctrls">
-      <span class="lc-demo__lbl">Legend:</span>
+      <span class="lc-demo__lbl">{{ copy().legend }}</span>
       @for (p of positions; track p) {
         <button
           g-button
@@ -39,15 +40,15 @@ import { GButton, GChartLegendPosition, GChartSeries, GLineChart } from 'ngx-ope
     </div>
 
     <g-line-chart
-      title="Doanh thu & chi phí"
-      [series]="series"
-      [labels]="labels"
+      [title]="copy().title"
+      [series]="copy().series"
+      [labels]="copy().labels"
       [curve]="curve()"
       [legendPosition]="legendPos()"
       [exportable]="true"
       [zoomable]="true"
-      filename="doanh-thu-chi-phi"
-      ariaLabel="Doanh thu và chi phí 6 tháng"
+      [filename]="copy().filename"
+      [ariaLabel]="copy().ariaLabel"
     />
   `,
   styles: `
@@ -69,12 +70,9 @@ import { GButton, GChartLegendPosition, GChartSeries, GLineChart } from 'ngx-ope
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LineChartDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).line.demo);
   protected readonly curve = signal<'straight' | 'smooth'>('smooth');
   protected readonly positions: GChartLegendPosition[] = ['top', 'right', 'bottom', 'left'];
   protected readonly legendPos = signal<GChartLegendPosition>('bottom');
-  protected readonly labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
-  protected readonly series: GChartSeries[] = [
-    { name: 'Doanh thu', values: [42, 55, 48, 72, 66, 88] },
-    { name: 'Chi phí', values: [30, 34, 38, 40, 45, 52] },
-  ];
 }

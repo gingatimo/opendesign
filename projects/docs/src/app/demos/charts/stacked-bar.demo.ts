@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GChartSlice, GStackedBar } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GStackedBar } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-stacked-bar-demo',
@@ -7,15 +8,15 @@ import { GChartSlice, GStackedBar } from 'ngx-opendesign';
   template: `
     <div class="sb-demo">
       <g-stacked-bar
-        title="Ngôn ngữ"
-        [data]="languages"
+        [title]="copy().languagesTitle"
+        [data]="copy().languages"
         [exportable]="true"
         [zoomable]="true"
-        ariaLabel="Tỉ lệ ngôn ngữ trong dự án"
+        [ariaLabel]="copy().languagesAriaLabel"
       />
       <g-stacked-bar
-        title="Trạng thái đơn (thanh dày, không hiện %)"
-        [data]="orders"
+        [title]="copy().ordersTitle"
+        [data]="copy().orders"
         [barHeight]="20"
         [showPercent]="false"
       />
@@ -34,15 +35,6 @@ import { GChartSlice, GStackedBar } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StackedBarDemo {
-  protected readonly languages: GChartSlice[] = [
-    { name: 'TypeScript', value: 86.1 },
-    { name: 'SCSS', value: 13.5 },
-    { name: 'Khác', value: 0.4 },
-  ];
-  protected readonly orders: GChartSlice[] = [
-    { name: 'Hoàn tất', value: 412 },
-    { name: 'Đang giao', value: 168 },
-    { name: 'Chờ xác nhận', value: 94 },
-    { name: 'Huỷ', value: 37 },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).stackedBar.demo);
 }

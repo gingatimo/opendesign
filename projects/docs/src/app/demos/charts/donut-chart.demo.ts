@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GChartSlice, GDonutChart } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GDonutChart, GLocaleService } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-donut-chart-demo',
@@ -8,12 +9,12 @@ import { GChartSlice, GDonutChart } from 'ngx-opendesign';
     <div class="dc-demo">
       <g-donut-chart
         [zoomable]="true"
-        title="Đơn theo kênh"
-        [data]="data"
+        [title]="copy().title"
+        [data]="copy().data"
         [height]="280"
-        totalLabel="Đơn"
-        filename="don-hang-theo-kenh"
-        ariaLabel="Đơn hàng theo kênh"
+        [totalLabel]="copy().totalLabel ?? ''"
+        [filename]="copy().filename ?? 'donut-chart'"
+        [ariaLabel]="copy().ariaLabel"
       />
     </div>
   `,
@@ -28,10 +29,6 @@ import { GChartSlice, GDonutChart } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DonutChartDemo {
-  protected readonly data: GChartSlice[] = [
-    { name: 'Website', value: 1240 },
-    { name: 'App', value: 860 },
-    { name: 'Đại lý', value: 540 },
-    { name: 'Khác', value: 210 },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).donut.demo);
 }

@@ -1,29 +1,30 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GButton, GChartSeries, GRadarChart } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GButton, GLocaleService, GRadarChart } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-radar-chart-demo',
   imports: [GRadarChart, GButton],
   template: `
     <g-radar-chart
-      title="Đánh giá ứng viên"
-      [labels]="labels"
-      [series]="series"
+      [title]="copy().title"
+      [labels]="copy().labels"
+      [series]="copy().series"
       [shape]="shape()"
       [height]="360"
       [exportable]="true"
       [zoomable]="true"
-      ariaLabel="So sánh kỹ năng hai ứng viên"
+      [ariaLabel]="copy().ariaLabel"
     />
     <div class="rd-demo__opts">
-      <span>Lưới:</span>
+      <span>{{ copy().grid }}</span>
       <button
         g-button
         size="sm"
         [variant]="shape() === 'circle' ? 'primary' : 'outline'"
         (click)="shape.set('circle')"
       >
-        Vòng tròn
+        {{ copy().circle }}
       </button>
       <button
         g-button
@@ -31,7 +32,7 @@ import { GButton, GChartSeries, GRadarChart } from 'ngx-opendesign';
         [variant]="shape() === 'polygon' ? 'primary' : 'outline'"
         (click)="shape.set('polygon')"
       >
-        Đa giác
+        {{ copy().polygon }}
       </button>
     </div>
   `,
@@ -51,17 +52,7 @@ import { GButton, GChartSeries, GRadarChart } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadarChartDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).radar.demo);
   protected readonly shape = signal<'circle' | 'polygon'>('circle');
-  protected readonly labels = [
-    'Kỹ thuật',
-    'Giao tiếp',
-    'Thiết kế',
-    'Chủ động',
-    'Cộng tác',
-    'Tốc độ',
-  ];
-  protected readonly series: GChartSeries[] = [
-    { name: 'Ứng viên A', values: [9, 6, 7, 8, 5, 7] },
-    { name: 'Ứng viên B', values: [6, 9, 5, 6, 9, 8] },
-  ];
 }

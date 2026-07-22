@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GButton, GCalendarHeatmap, GCalendarHeatmapDay, GWeekStart } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GButton, GCalendarHeatmap, GLocaleService, GWeekStart } from 'ngx-opendesign';
+import { chartsCopyFor } from '../../pages/charts-copy';
 
 @Component({
   selector: 'docs-calendar-heatmap-demo',
@@ -8,22 +9,22 @@ import { GButton, GCalendarHeatmap, GCalendarHeatmapDay, GWeekStart } from 'ngx-
     <g-calendar-heatmap
       [exportable]="true"
       [zoomable]="true"
-      title="Hoạt động một năm qua"
-      [data]="data"
+      [title]="copy().title"
+      [data]="copy().data"
       [from]="from"
       [to]="to"
-      unit="lần commit"
+      [unit]="copy().unit"
       [weekStart]="weekStart()"
     />
     <div class="ch-demo__opts">
-      <span>Tuần bắt đầu từ:</span>
+      <span>{{ copy().weekStartsOn }}</span>
       <button
         g-button
         size="sm"
         [variant]="weekStart() === 'sunday' ? 'primary' : 'outline'"
         (click)="weekStart.set('sunday')"
       >
-        Chủ nhật
+        {{ copy().sunday }}
       </button>
       <button
         g-button
@@ -31,7 +32,7 @@ import { GButton, GCalendarHeatmap, GCalendarHeatmapDay, GWeekStart } from 'ngx-
         [variant]="weekStart() === 'monday' ? 'primary' : 'outline'"
         (click)="weekStart.set('monday')"
       >
-        Thứ hai
+        {{ copy().monday }}
       </button>
     </div>
   `,
@@ -51,15 +52,9 @@ import { GButton, GCalendarHeatmap, GCalendarHeatmapDay, GWeekStart } from 'ngx-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarHeatmapDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => chartsCopyFor(this.i18n.tag()).calendarHeatmap.demo);
   protected readonly weekStart = signal<GWeekStart>('sunday');
   protected readonly to = new Date(2026, 6, 21);
   protected readonly from = new Date(2025, 6, 22);
-  // Dữ liệu mẫu: thưa dần về quá khứ, nghỉ cuối tuần — đủ để thấy các bậc màu.
-  protected readonly data: GCalendarHeatmapDay[] = Array.from({ length: 365 }, (_, i) => {
-    const date = new Date(this.from.getTime() + i * 86_400_000);
-    const weekend = date.getDay() === 0 || date.getDay() === 6;
-    const recent = i / 365;
-    const base = Math.round(((i * 7919) % 11) * recent);
-    return { date, value: weekend ? Math.max(0, base - 6) : base };
-  });
 }
