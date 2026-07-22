@@ -42,21 +42,25 @@ describe('App', () => {
     expect(main.getAttribute('tabindex')).toBe('-1');
   });
 
-  it('khởi tạo tiếng Việt và nút ngôn ngữ đổi sang tiếng Anh mà không điều hướng', () => {
+  it('khởi tạo tiếng Việt và bộ đổi ngôn ngữ hiển thị trạng thái đang chọn', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const i18n = TestBed.inject(GLocaleService);
     const el: HTMLElement = fixture.nativeElement;
-    const languageToggle = el.querySelector('.docs-language-toggle') as HTMLButtonElement;
+    const options = Array.from(el.querySelectorAll<HTMLButtonElement>('.docs-language-option'));
+    const [viOption, enOption] = options;
 
     expect(i18n.tag()).toBe('vi-VN');
-    expect(languageToggle.textContent?.trim()).toBe('EN');
+    expect(options.map((option) => option.textContent?.trim())).toEqual(['VI', 'EN']);
+    expect(viOption.getAttribute('aria-pressed')).toBe('true');
+    expect(enOption.getAttribute('aria-pressed')).toBe('false');
 
-    languageToggle.click();
+    enOption.click();
     fixture.detectChanges();
 
     expect(i18n.tag()).toBe('en-US');
-    expect(languageToggle.textContent?.trim()).toBe('VI');
+    expect(viOption.getAttribute('aria-pressed')).toBe('false');
+    expect(enOption.getAttribute('aria-pressed')).toBe('true');
   });
 
   it('trang i18n liệt kê các khoá locale mới nhất', () => {

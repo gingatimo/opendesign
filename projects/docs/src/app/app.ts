@@ -44,6 +44,7 @@ export class App {
   protected readonly i18n = inject(GLocaleService);
   protected readonly iconMoon = gIconMoon;
   protected readonly iconSun = gIconSun;
+  protected readonly localeEn = gLocaleEn;
   protected readonly localeVi = gLocaleVi;
 
   /** Glyph docs-local cho icon nav (xem core/nav-icons.ts) — dùng với <g-icon>. */
@@ -53,7 +54,7 @@ export class App {
 
   protected readonly navGroups = NAV_GROUPS;
 
-  protected toggleLanguage(): void {
-    this.i18n.use(this.i18n.tag() === gLocaleVi.tag ? gLocaleEn : gLocaleVi);
+  protected useLanguage(locale: 'vi' | 'en'): void {
+    this.i18n.use(locale === 'vi' ? gLocaleVi : gLocaleEn);
   }
 }
