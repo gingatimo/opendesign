@@ -1,25 +1,29 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GTab, GTabs } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GTab, GTabs } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-tabs-basic-demo',
   imports: [GTabs, GTab],
   template: `
-    <g-tabs tablistLabel="Ví dụ tabs">
-      <g-tab label="Tổng quan">
-        <p>Nội dung tổng quan của tab.</p>
+    <g-tabs [tablistLabel]="copy().tablistLabel">
+      <g-tab [label]="copy().overview">
+        <p>{{ copy().overviewContent }}</p>
       </g-tab>
-      <g-tab label="Cài đặt">
-        <p>Nội dung cài đặt của tab.</p>
+      <g-tab [label]="copy().settings">
+        <p>{{ copy().settingsContent }}</p>
       </g-tab>
-      <g-tab label="Nâng cao" [disabled]="true">
-        <p>Nội dung nâng cao — tab này đang bị vô hiệu hoá.</p>
+      <g-tab [label]="copy().advanced" [disabled]="true">
+        <p>{{ copy().advancedContent }}</p>
       </g-tab>
-      <g-tab label="Lịch sử">
-        <p>Nội dung lịch sử của tab.</p>
+      <g-tab [label]="copy().history">
+        <p>{{ copy().historyContent }}</p>
       </g-tab>
     </g-tabs>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TabsBasicDemo {}
+export class TabsBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).tabs.demo);
+}

@@ -1,38 +1,39 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GMenu, GMenuItem, GSubmenu } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GMenu, GMenuItem, GSubmenu } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-menu-basic-demo',
   imports: [GMenu, GMenuItem, GSubmenu],
   template: `
     <div>
-      <h4>Dọc — mở/gập (accordion)</h4>
+      <h4>{{ copy().verticalTitle }}</h4>
       <g-menu class="demo-menu-vertical">
-        <a g-menu-item href="#">Tổng quan</a>
-        <g-submenu label="Cài đặt">
-          <a g-menu-item href="#">Hồ sơ</a>
-          <a g-menu-item href="#">Bảo mật</a>
-          <g-submenu label="Nâng cao">
+        <a g-menu-item href="#">{{ copy().overview }}</a>
+        <g-submenu [label]="copy().settings">
+          <a g-menu-item href="#">{{ copy().profile }}</a>
+          <a g-menu-item href="#">{{ copy().security }}</a>
+          <g-submenu [label]="copy().advanced">
             <a g-menu-item href="#">API keys</a>
             <a g-menu-item href="#">Webhooks</a>
           </g-submenu>
         </g-submenu>
-        <a g-menu-item href="#">Trợ giúp</a>
+        <a g-menu-item href="#">{{ copy().help }}</a>
       </g-menu>
     </div>
 
     <div>
-      <h4>Ngang — dropdown</h4>
+      <h4>{{ copy().horizontalTitle }}</h4>
       <g-menu orientation="horizontal">
-        <a g-menu-item href="#">Trang chủ</a>
-        <g-submenu label="Sản phẩm">
-          <a g-menu-item href="#">Điện thoại</a>
-          <a g-menu-item href="#">Máy tính</a>
-          <a g-menu-item href="#">Phụ kiện</a>
+        <a g-menu-item href="#">{{ copy().home }}</a>
+        <g-submenu [label]="copy().products">
+          <a g-menu-item href="#">{{ copy().phones }}</a>
+          <a g-menu-item href="#">{{ copy().computers }}</a>
+          <a g-menu-item href="#">{{ copy().accessories }}</a>
         </g-submenu>
-        <g-submenu label="Hỗ trợ">
-          <a g-menu-item href="#">Liên hệ</a>
-          <a g-menu-item href="#">Tài liệu</a>
+        <g-submenu [label]="copy().support">
+          <a g-menu-item href="#">{{ copy().contact }}</a>
+          <a g-menu-item href="#">{{ copy().docs }}</a>
         </g-submenu>
       </g-menu>
     </div>
@@ -55,4 +56,7 @@ import { GMenu, GMenuItem, GSubmenu } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuBasicDemo {}
+export class MenuBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).menu.demo);
+}

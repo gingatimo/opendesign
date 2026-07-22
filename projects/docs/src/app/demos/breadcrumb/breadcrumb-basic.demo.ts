@@ -1,17 +1,21 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GBreadcrumb, GBreadcrumbItem } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GBreadcrumb, GBreadcrumbItem, GLocaleService } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-breadcrumb-basic-demo',
   imports: [GBreadcrumb, GBreadcrumbItem],
   template: `
     <nav g-breadcrumb aria-label="Breadcrumb">
-      <a g-breadcrumb-item href="#">Trang chủ</a>
-      <a g-breadcrumb-item href="#">Sản phẩm</a>
-      <a g-breadcrumb-item href="#">Điện thoại</a>
-      <span g-breadcrumb-item aria-current="page">iPhone 17</span>
+      <a g-breadcrumb-item href="#">{{ copy().home }}</a>
+      <a g-breadcrumb-item href="#">{{ copy().products }}</a>
+      <a g-breadcrumb-item href="#">{{ copy().phones }}</a>
+      <span g-breadcrumb-item aria-current="page">{{ copy().current }}</span>
     </nav>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BreadcrumbBasicDemo {}
+export class BreadcrumbBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).breadcrumb.demo);
+}

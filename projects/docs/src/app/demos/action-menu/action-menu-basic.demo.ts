@@ -1,52 +1,55 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
   GActionMenu,
   GActionMenuItem,
   GActionMenuPlacement,
+  GLocaleService,
   gIconCopy,
   gIconEdit,
   gIconTrash,
 } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-action-menu-basic-demo',
   imports: [GActionMenu],
   template: `
-    <p class="am-demo__cap">Mặc định — trigger là nút tròn chỉ có icon (⋮)</p>
+    <p class="am-demo__cap">{{ copy().defaultCaption }}</p>
     <div class="am-demo">
-      <g-action-menu label="Tác vụ" [items]="items" (action)="onPick($event)" />
+      <g-action-menu [label]="copy().actionLabel" [items]="items()" (action)="onPick($event)" />
       <span class="am-demo__msg">
         @if (picked()) {
-          Đã chọn: <b>{{ picked() }}</b>
+          {{ copy().selected }} <b>{{ picked() }}</b>
         } @else {
-          Bấm icon ⋮ để mở menu (tự lật lên nếu sát mép dưới).
+          {{ copy().prompt }}
         }
       </span>
     </div>
 
-    <p class="am-demo__cap">
-      <code>variant="label"</code> — chữ + mũi tên lên/xuống, dùng cho <b>menu ngang</b>
-    </p>
+    <p class="am-demo__cap">{{ copy().labelCaption }}</p>
     <nav class="am-demo__nav">
-      <span class="am-demo__link">Trang chủ</span>
+      <span class="am-demo__link">{{ copy().home }}</span>
       <g-action-menu
         variant="label"
-        label="Sản phẩm"
-        [items]="products"
+        [label]="copy().products"
+        [items]="products()"
         (action)="onPick($event)"
       />
-      <g-action-menu variant="label" label="Hỗ trợ" [items]="support" (action)="onPick($event)" />
+      <g-action-menu
+        variant="label"
+        [label]="copy().supportLabel"
+        [items]="support()"
+        (action)="onPick($event)"
+      />
     </nav>
 
-    <p class="am-demo__cap">
-      <code>placement</code> — 4 góc; góc nào bị mép viewport cắt thì <b>tự lật</b> sang góc còn chỗ
-    </p>
+    <p class="am-demo__cap">{{ copy().placementCaption }}</p>
     <div class="am-demo__corners">
       @for (p of placements; track p) {
         <g-action-menu
           [placement]="p"
           [label]="p"
-          [items]="items"
+          [items]="items()"
           variant="label"
           (action)="onPick($event)"
         />
@@ -97,20 +100,15 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionMenuBasicDemo {
-  protected readonly items: GActionMenuItem[] = [
-    { label: 'Sửa', value: 'edit', icon: gIconEdit },
-    { label: 'Nhân bản', value: 'duplicate', icon: gIconCopy },
-    { label: 'Xoá', value: 'delete', icon: gIconTrash },
-  ];
-  protected readonly products: GActionMenuItem[] = [
-    { label: 'Bảng giá', value: 'pricing' },
-    { label: 'Tính năng', value: 'features' },
-    { label: 'Tích hợp', value: 'integrations' },
-  ];
-  protected readonly support: GActionMenuItem[] = [
-    { label: 'Liên hệ', value: 'contact' },
-    { label: 'Tài liệu', value: 'docs' },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).actionMenu.demo);
+  protected readonly items = computed<GActionMenuItem[]>(() => [
+    { ...this.copy().items[0], icon: gIconEdit },
+    { ...this.copy().items[1], icon: gIconCopy },
+    { ...this.copy().items[2], icon: gIconTrash },
+  ]);
+  protected readonly products = computed<GActionMenuItem[]>(() => this.copy().productsItems);
+  protected readonly support = computed<GActionMenuItem[]>(() => this.copy().supportItems);
   protected readonly placements: GActionMenuPlacement[] = [
     'bottom-left',
     'bottom-right',

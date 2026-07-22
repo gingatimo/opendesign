@@ -1,37 +1,39 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import {
   GIcon,
   GIconButton,
+  GLocaleService,
   GTopbar,
   GTopbarCenter,
   GTopbarEnd,
   GTopbarStart,
 } from 'ngx-opendesign';
 import { iconBell } from '../../core/demo-icons';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-topbar-basic-demo',
   imports: [GTopbar, GTopbarStart, GTopbarCenter, GTopbarEnd, GIconButton, GIcon],
   template: `
-    <p class="demo-caption">Đủ 3 slot: start, center, end.</p>
+    <p class="demo-caption">{{ copy().fullCaption }}</p>
     <g-topbar>
       <div gTopbarStart class="brand">OpenDesign</div>
-      <nav gTopbarCenter aria-label="Điều hướng demo" class="links">
-        <a href="#">Tài liệu</a>
-        <a href="#">Blog</a>
+      <nav gTopbarCenter [attr.aria-label]="copy().navLabel" class="links">
+        <a href="#">{{ copy().docs }}</a>
+        <a href="#">{{ copy().blog }}</a>
       </nav>
       <div gTopbarEnd>
-        <button g-icon-button aria-label="Thông báo">
+        <button g-icon-button [attr.aria-label]="copy().notifications">
           <g-icon [icon]="iconBell" />
         </button>
       </div>
     </g-topbar>
 
-    <p class="demo-caption">Biến thể thiếu slot center: end vẫn nằm sát phải.</p>
+    <p class="demo-caption">{{ copy().noCenterCaption }}</p>
     <g-topbar>
       <div gTopbarStart class="brand">OpenDesign</div>
       <div gTopbarEnd>
-        <button g-icon-button aria-label="Thông báo">
+        <button g-icon-button [attr.aria-label]="copy().notifications">
           <g-icon [icon]="iconBell" />
         </button>
       </div>
@@ -64,5 +66,7 @@ import { iconBell } from '../../core/demo-icons';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopbarBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).topbar.demo);
   protected readonly iconBell = iconBell;
 }

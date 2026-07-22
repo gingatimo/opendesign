@@ -1,16 +1,21 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GLink } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLink, GLocaleService } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-link-basic-demo',
   imports: [GLink],
   template: `
     <p>
-      Đọc thêm về triết lý thiết kế tại
-      <a gLink href="https://example.com">tài liệu OpenDesign</a>, hoặc quay lại
-      <a gLink href="/">trang chủ</a>.
+      {{ copy().before }}
+      <a gLink href="https://example.com">{{ copy().docs }}</a
+      >{{ copy().middle }} <a gLink href="/">{{ copy().home }}</a
+      >{{ copy().after }}
     </p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LinkBasicDemo {}
+export class LinkBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).link.demo);
+}

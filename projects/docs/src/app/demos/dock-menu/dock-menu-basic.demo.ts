@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import {
   GDockItem,
   GDockMenu,
+  GLocaleService,
   gIconBell,
   gIconCopy,
   gIconGrid,
   gIconImage,
   gIconLink,
 } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-dock-menu-basic-demo',
   imports: [GDockMenu],
-  template: `<g-dock-menu [items]="items" />`,
+  template: `<g-dock-menu [items]="items()" />`,
   styles: `
     :host {
       display: block;
@@ -21,11 +23,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DockMenuBasicDemo {
-  protected readonly items: GDockItem[] = [
-    { icon: gIconGrid, label: 'Bảng điều khiển' },
-    { icon: gIconImage, label: 'Hình ảnh' },
-    { icon: gIconLink, label: 'Liên kết' },
-    { icon: gIconCopy, label: 'Sao chép' },
-    { icon: gIconBell, label: 'Thông báo' },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  private readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).dockMenu.demo);
+  protected readonly items = computed<GDockItem[]>(() => [
+    { icon: gIconGrid, label: this.copy().dashboard },
+    { icon: gIconImage, label: this.copy().images },
+    { icon: gIconLink, label: this.copy().links },
+    { icon: gIconCopy, label: this.copy().copy },
+    { icon: gIconBell, label: this.copy().notifications },
+  ]);
 }

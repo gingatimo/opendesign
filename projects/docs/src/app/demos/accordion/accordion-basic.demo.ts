@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GAccordion, GAccordionPanel } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GAccordion, GAccordionPanel, GLocaleService } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-accordion-basic-demo',
@@ -7,23 +8,20 @@ import { GAccordion, GAccordionPanel } from 'ngx-opendesign';
   template: `
     <g-accordion>
       <g-accordion-panel>
-        <span gAccordionHeader>OpenDesign là gì?</span>
+        <span gAccordionHeader>{{ copy().whatTitle }}</span>
         <p>
-          Một thư viện component Angular với thẩm mỹ hiện đại, xây dựng bằng signal và tuân thủ các
-          pattern ARIA.
+          {{ copy().whatBody }}
         </p>
       </g-accordion-panel>
       <g-accordion-panel [open]="true">
-        <span gAccordionHeader>Có hỗ trợ bàn phím không?</span>
+        <span gAccordionHeader>{{ copy().keyboardTitle }}</span>
         <p>
-          Có. Header điều hướng bằng
-          <code>↑</code>/<code>↓</code>/<code>Home</code>/<code>End</code>, mở/đóng bằng
-          <code>Enter</code> hoặc <code>Space</code>.
+          {{ copy().keyboardBody }}
         </p>
       </g-accordion-panel>
       <g-accordion-panel>
-        <span gAccordionHeader>Có thể mở nhiều panel cùng lúc?</span>
-        <p>Có, thêm thuộc tính <code>multiple</code> trên <code>g-accordion</code>.</p>
+        <span gAccordionHeader>{{ copy().multipleTitle }}</span>
+        <p>{{ copy().multipleBody }}</p>
       </g-accordion-panel>
     </g-accordion>
   `,
@@ -40,4 +38,7 @@ import { GAccordion, GAccordionPanel } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccordionBasicDemo {}
+export class AccordionBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).accordion.demo);
+}

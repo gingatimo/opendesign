@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
   GIcon,
   gIconMenu,
   gIconSettings,
   gIconUser,
+  GLocaleService,
   GSidebar,
   GSidebarFooter,
   GSidebarHeader,
@@ -12,6 +13,7 @@ import {
   GSidebarItemLabel,
   GSidebarToggle,
 } from 'ngx-opendesign';
+import { navigationCopyFor } from '../../pages/navigation-copy';
 
 @Component({
   selector: 'docs-sidebar-basic-demo',
@@ -33,18 +35,18 @@ import {
 
         <a g-sidebar-item href="#" class="g-active" aria-current="page">
           <g-icon gSidebarItemIcon [icon]="iconMenu" />
-          <span gSidebarItemLabel>Trang chủ</span>
+          <span gSidebarItemLabel>{{ copy().home }}</span>
         </a>
         <a g-sidebar-item href="#">
           <g-icon gSidebarItemIcon [icon]="iconSettings" />
-          <span gSidebarItemLabel>Cài đặt</span>
+          <span gSidebarItemLabel>{{ copy().settings }}</span>
         </a>
         <a g-sidebar-item href="#">
           <g-icon gSidebarItemIcon [icon]="iconUser" />
-          <span gSidebarItemLabel>Thành viên</span>
+          <span gSidebarItemLabel>{{ copy().members }}</span>
         </a>
 
-        <div gSidebarFooter>Trợ giúp &amp; phản hồi</div>
+        <div gSidebarFooter>{{ copy().footer }}</div>
       </g-sidebar>
     </div>
   `,
@@ -59,6 +61,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).sidebar.demo);
   protected readonly collapsed = signal(false);
   protected readonly iconMenu = gIconMenu;
   protected readonly iconSettings = gIconSettings;
