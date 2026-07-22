@@ -1,13 +1,18 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GChips } from 'ngx-opendesign';
+import { GChips, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-chips-basic-demo',
   imports: [GChips, ReactiveFormsModule],
   template: `
-    <g-chips [formControl]="tags" placeholder="Nhập rồi Enter" />
-    <p>Đã thêm: {{ (tags.value ?? []).join(', ') || 'chưa có' }}</p>
+    <g-chips
+      [formControl]="tags"
+      [placeholder]="demo().placeholder"
+      [attr.placeholder]="demo().placeholder"
+    />
+    <p>{{ demo().added(tags.value ?? []) }}</p>
   `,
   styles: `
     :host {
@@ -25,5 +30,7 @@ import { GChips } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChipsBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).chips.demo);
   protected readonly tags = new FormControl<string[]>([], { nonNullable: true });
 }

@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GInputOtp } from 'ngx-opendesign';
+import { GInputOtp, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-input-otp-basic-demo',
   imports: [GInputOtp, ReactiveFormsModule],
   template: `
     <g-input-otp [formControl]="code" [length]="6" integerOnly />
-    <p>Mã đã nhập: {{ code.value || 'chưa nhập' }}</p>
+    <p>{{ demo().entered(code.value) }}</p>
   `,
   styles: `
     :host {
@@ -24,5 +25,7 @@ import { GInputOtp } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputOtpBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).inputOtp.demo);
   protected readonly code = new FormControl('', { nonNullable: true });
 }

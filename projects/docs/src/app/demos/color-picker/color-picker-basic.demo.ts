@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GColorPicker } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GColorPicker, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-color-picker-basic-demo',
@@ -7,7 +8,7 @@ import { GColorPicker } from 'ngx-opendesign';
   template: `
     <g-color-picker [(value)]="color" />
     <p>
-      Đã chọn: <code>{{ color() }}</code>
+      {{ demo().selected(color()) }}
     </p>
   `,
   styles: `
@@ -25,5 +26,7 @@ import { GColorPicker } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorPickerBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).colorPicker.demo);
   protected readonly color = signal('#3b82f6');
 }

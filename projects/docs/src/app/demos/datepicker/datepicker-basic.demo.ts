@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GDatepicker } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GDatepicker, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-datepicker-basic-demo',
   imports: [GDatepicker],
   template: `
     <g-datepicker [(value)]="date" />
-    <p>Đã chọn: {{ date() ? label() : 'chưa chọn' }}</p>
+    <p>{{ demo().selected(date() ? label() : null) }}</p>
   `,
   styles: `
     :host {
@@ -23,6 +24,8 @@ import { GDatepicker } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatepickerBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).datepicker.demo);
   protected readonly date = signal<Date | null>(null);
   protected label(): string {
     const d = this.date()!;

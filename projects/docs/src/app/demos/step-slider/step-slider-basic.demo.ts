@@ -1,21 +1,23 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GStepSlider } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GLocaleService, GStepSlider } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-step-slider-basic-demo',
   imports: [GStepSlider],
   template: `
-    <p class="ss-demo__cap">Cỡ md (mặc định)</p>
+    <p class="ss-demo__cap">{{ demo().md }}</p>
     <g-step-slider
       class="ss-demo"
       [steps]="6"
       [(value)]="level"
       startLabel="Faster"
       endLabel="Smarter"
-      ariaLabel="Nhanh hơn hay thông minh hơn"
+      [ariaLabel]="demo().ariaMd"
+      [attr.ariaLabel]="demo().ariaMd"
     />
 
-    <p class="ss-demo__cap">Cỡ sm</p>
+    <p class="ss-demo__cap">{{ demo().sm }}</p>
     <g-step-slider
       class="ss-demo"
       size="sm"
@@ -23,10 +25,11 @@ import { GStepSlider } from 'ngx-opendesign';
       [(value)]="level"
       startLabel="Faster"
       endLabel="Smarter"
-      ariaLabel="Nhanh hơn hay thông minh hơn (nhỏ)"
+      [ariaLabel]="demo().ariaSm"
+      [attr.ariaLabel]="demo().ariaSm"
     />
 
-    <p class="ss-demo__cap">Cỡ xs</p>
+    <p class="ss-demo__cap">{{ demo().xs }}</p>
     <g-step-slider
       class="ss-demo"
       size="xs"
@@ -34,11 +37,12 @@ import { GStepSlider } from 'ngx-opendesign';
       [(value)]="level"
       startLabel="Faster"
       endLabel="Smarter"
-      ariaLabel="Nhanh hơn hay thông minh hơn (rất nhỏ)"
+      [ariaLabel]="demo().ariaXs"
+      [attr.ariaLabel]="demo().ariaXs"
     />
 
     <p class="ss-demo__val">
-      Bậc đang chọn: <b>{{ level() + 1 }} / 6</b>
+      {{ demo().selected(level() + 1, 6) }}
     </p>
   `,
   styles: `
@@ -65,5 +69,7 @@ import { GStepSlider } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StepSliderBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).stepSlider.demo);
   protected readonly level = signal(3);
 }

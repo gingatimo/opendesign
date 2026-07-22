@@ -1,13 +1,20 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GTreeNode, GTreeSelect } from 'ngx-opendesign';
+import { GLocaleService, GTreeSelect } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-tree-select-multiple-demo',
   imports: [GTreeSelect, ReactiveFormsModule],
   template: `
-    <g-tree-select multiple [formControl]="perms" [options]="options" placeholder="Chọn quyền" />
-    <p>Đã chọn: {{ (perms.value ?? []).join(', ') || 'chưa chọn' }}</p>
+    <g-tree-select
+      multiple
+      [formControl]="perms"
+      [options]="demo().multipleOptions"
+      [placeholder]="demo().multiplePlaceholder"
+      [attr.placeholder]="demo().multiplePlaceholder"
+    />
+    <p>{{ demo().selected(perms.value ?? []) }}</p>
   `,
   styles: `
     :host {
@@ -25,23 +32,7 @@ import { GTreeNode, GTreeSelect } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeSelectMultipleDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).treeSelect.demo);
   protected readonly perms = new FormControl<string[]>([]);
-  protected readonly options: GTreeNode[] = [
-    {
-      label: 'Nội dung',
-      children: [
-        { label: 'Xem bài viết', value: 'post:read' },
-        { label: 'Sửa bài viết', value: 'post:write' },
-        { label: 'Xoá bài viết', value: 'post:delete' },
-      ],
-    },
-    {
-      label: 'Người dùng',
-      children: [
-        { label: 'Xem người dùng', value: 'user:read' },
-        { label: 'Mời người dùng', value: 'user:invite' },
-      ],
-    },
-    { label: 'Cài đặt hệ thống', value: 'settings' },
-  ];
 }

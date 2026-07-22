@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GTimePicker } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GLocaleService, GTimePicker } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-time-picker-basic-demo',
   imports: [GTimePicker],
   template: `
     <g-timepicker [(value)]="time" [minuteStep]="5" />
-    <p>Đã chọn: {{ time() ?? 'chưa chọn' }}</p>
+    <p>{{ demo().selected(time()) }}</p>
   `,
   styles: `
     :host {
@@ -23,5 +24,7 @@ import { GTimePicker } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimePickerBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).timePicker.demo);
   protected readonly time = signal<string | null>(null);
 }

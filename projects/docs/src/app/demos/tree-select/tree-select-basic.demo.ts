@@ -1,13 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GTreeNode, GTreeSelect } from 'ngx-opendesign';
+import { GLocaleService, GTreeSelect } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-tree-select-basic-demo',
   imports: [GTreeSelect, ReactiveFormsModule],
   template: `
-    <g-tree-select [formControl]="folder" [options]="options" placeholder="Chọn mục" />
-    <p>Đã chọn: {{ folder.value ?? 'chưa chọn' }}</p>
+    <g-tree-select
+      [formControl]="folder"
+      [options]="demo().options"
+      [placeholder]="demo().placeholder"
+      [attr.placeholder]="demo().placeholder"
+    />
+    <p>{{ demo().selected(folder.value) }}</p>
   `,
   styles: `
     :host {
@@ -25,15 +31,7 @@ import { GTreeNode, GTreeSelect } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeSelectBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).treeSelect.demo);
   protected readonly folder = new FormControl<string | null>(null);
-  protected readonly options: GTreeNode[] = [
-    {
-      label: 'Tài liệu',
-      children: [
-        { label: 'Báo cáo', value: 'reports' },
-        { label: 'Hợp đồng', value: 'contracts' },
-      ],
-    },
-    { label: 'Hình ảnh', value: 'images' },
-  ];
 }

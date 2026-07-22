@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { GDateRange, GDateRangePicker } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GDateRange, GDateRangePicker, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 function fmt(d: Date | null): string {
   if (!d) return '…';
@@ -28,10 +29,12 @@ function fmt(d: Date | null): string {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateRangePickerBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  private readonly demo = computed(() => formCopyFor(this.i18n.tag()).dateRangePicker.demo);
   protected readonly range = signal<GDateRange>({ start: null, end: null });
   protected readonly label = computed(() => {
     const { start, end } = this.range();
-    if (!start && !end) return 'Chưa chọn khoảng';
-    return `Từ ${fmt(start)} đến ${fmt(end)}`;
+    if (!start && !end) return this.demo().empty;
+    return this.demo().range(fmt(start), fmt(end));
   });
 }

@@ -1,33 +1,34 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GRating } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GLocaleService, GRating } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-rating-basic-demo',
   imports: [GRating],
   template: `
-    <p class="rt-demo__cap">Chọn điểm (bấm hoặc rê, phím ←/→)</p>
+    <p class="rt-demo__cap">{{ demo().choose }}</p>
     <div class="rt-demo__row">
-      <g-rating [(value)]="score" label="Chất lượng sản phẩm" />
+      <g-rating [(value)]="score" [label]="demo().productLabel" />
       <span class="rt-demo__val">{{ score() }} / 5</span>
     </div>
 
-    <p class="rt-demo__cap">Các cỡ</p>
+    <p class="rt-demo__cap">{{ demo().sizes }}</p>
     <div class="rt-demo__row">
       <g-rating size="sm" [(value)]="score" />
       <g-rating size="md" [(value)]="score" />
       <g-rating size="lg" [(value)]="score" />
     </div>
 
-    <p class="rt-demo__cap">Nửa sao (allowHalf) — rê nửa trái/phải của sao</p>
+    <p class="rt-demo__cap">{{ demo().half }}</p>
     <div class="rt-demo__row">
-      <g-rating allowHalf [(value)]="half" size="lg" label="Độ hài lòng" />
+      <g-rating allowHalf [(value)]="half" size="lg" [label]="demo().satisfactionLabel" />
       <span class="rt-demo__val">{{ half() }} / 5</span>
     </div>
 
-    <p class="rt-demo__cap">Chỉ đọc (readonly)</p>
+    <p class="rt-demo__cap">{{ demo().readonly }}</p>
     <div class="rt-demo__row">
       <g-rating [value]="4.5" allowHalf readonly />
-      <span class="rt-demo__val">Đánh giá trung bình 4,5</span>
+      <span class="rt-demo__val">{{ demo().average }}</span>
     </div>
   `,
   styles: `
@@ -55,6 +56,8 @@ import { GRating } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RatingBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).rating.demo);
   protected readonly score = signal(3);
   protected readonly half = signal(2.5);
 }

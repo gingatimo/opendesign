@@ -1,13 +1,15 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GSearchField, GSearchFieldOption } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GLocaleService, GSearchField } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-search-field-basic-demo',
   imports: [GSearchField],
   template: `
     <g-search-field
-      [fields]="fields"
-      placeholder="Nhập giá trị rồi Enter"
+      [fields]="demo().fields"
+      [placeholder]="demo().placeholder"
+      [attr.placeholder]="demo().placeholder"
       (search)="onSearch($event)"
     />
     <p>{{ result() }}</p>
@@ -28,14 +30,12 @@ import { GSearchField, GSearchFieldOption } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchFieldBasicDemo {
-  protected readonly fields: GSearchFieldOption[] = [
-    { value: 'cusId', label: 'Mã khách hàng' },
-    { value: 'citizenId', label: 'CCCD' },
-    { value: 'username', label: 'Tên đăng nhập' },
-  ];
-  protected readonly result = signal('Chọn trường, nhập giá trị rồi nhấn Enter.');
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).searchField.demo);
+  protected readonly result = computed(() => this.submitted() ?? this.demo().initial);
+  private readonly submitted = signal<string | null>(null);
 
   protected onSearch(e: { field: unknown; value: string }): void {
-    this.result.set(`Tìm theo trường "${e.field}" = "${e.value || '(rỗng)'}"`);
+    this.submitted.set(this.demo().searched(e.field, e.value));
   }
 }

@@ -1,14 +1,13 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GFileInput } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GFileInput, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-file-input-multi-demo',
   imports: [GFileInput],
   template: `
     <g-file-input [(files)]="files" [multiple]="true" />
-    <p class="hint">
-      {{ files().length }} tệp — chọn thêm để nối vào danh sách, bấm × để xoá từng tệp.
-    </p>
+    <p class="hint">{{ demo().multiHint(files().length) }}</p>
   `,
   styles: `
     :host {
@@ -25,5 +24,7 @@ import { GFileInput } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileInputMultiDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).fileInput.demo);
   protected readonly files = signal<File[]>([]);
 }
