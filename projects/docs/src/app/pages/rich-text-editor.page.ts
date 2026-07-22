@@ -1,24 +1,16 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ApiRow, ApiTable } from '../shared/api-table';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
+import { ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
+import { editorsCopyFor } from './editors-copy';
 
 @Component({
   imports: [RichTextEditorDemo, ApiTable, CodeBlock, DemoSection],
   template: `
-    <h1>Rich Text Editor</h1>
-    <p>
-      Trình soạn <b>văn bản định dạng</b> (WYSIWYG), <b>Angular-only</b>, 0 thư viện ngoài. Bề mặt
-      là <code>contenteditable</code>. Toolbar: hoàn tác/làm lại · <b>Text styles</b> (Normal text,
-      Heading 1–6, Quote, <b>Code block</b>) · đậm/nghiêng/gạch dưới · dropdown
-      <b>định dạng khác</b> (Strikethrough, Inline code, Subscript, Superscript) · <b>màu chữ</b> ·
-      dropdown <b>kiểu danh sách</b> (Bulleted, Numbered, <b>Checkbox</b>) · căn trái/giữa/phải ·
-      thụt/lùi lề · chèn & bỏ <b>liên kết</b> · chèn <b>bảng</b> · xoá định dạng.
-      <b>IME-safe</b> (không ghi đè innerHTML lúc gõ), dán plain-text hoặc HTML đã <b>sanitize</b>,
-      giá trị ngoài cũng được sanitize chống XSS. Hai chiều <code>[(value)]</code> (HTML) hoặc
-      <code>formControlName</code>.
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
 
     <docs-demo-section>
       <docs-rich-text-editor-demo />
@@ -26,152 +18,46 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
 
     <docs-code-block src="demo-sources/editor/rich-text-editor.demo.ts" />
 
-    <h2>API — GRichTextEditor</h2>
-    <docs-api-table [rows]="apiRows" />
+    <h2>{{ page().apiTitle }}</h2>
+    <docs-api-table [rows]="page().apiRows" />
 
-    <h2>Accessibility</h2>
+    <h2>{{ page().accessibilityTitle }}</h2>
     <ul>
-      <li>
-        Vùng soạn là <code>role="textbox"</code> + <code>aria-multiline</code>; toolbar là
-        <code>role="toolbar"</code>, nút bật/tắt có <code>aria-pressed</code> đồng bộ theo con trỏ.
-      </li>
-      <li>
-        Toolbar theo chuẩn ARIA: <b>một điểm dừng Tab duy nhất</b>, dùng <b>←/→</b> (và Home/End) để
-        đi giữa các nút — Tab tiếp theo nhảy thẳng vào vùng soạn, không phải bấm qua 15 nút.
-      </li>
-      <li>
-        Nút toolbar chặn <code>mousedown</code> nên bấm chuột <b>không cướp con trỏ</b> đang bôi
-        đen.
-      </li>
-      <li>
-        <b>Tab</b> = thụt lề, <b>Shift+Tab</b> = lùi ra (hai nút thụt/lùi trên toolbar làm đúng việc
-        này). Trong danh sách thì thành <b>danh sách con</b> (cả 3 kiểu, kể cả checklist); ở đoạn
-        văn/tiêu đề thì thụt cả khối <b>1.5em mỗi bậc</b> — đúng bằng mức thụt của danh sách, vẫn
-        giữ thẻ h1–h6; trong <b>Code block</b> thì gõ 2 dấu cách.
-      </li>
-      <li>
-        Vì Tab đã bị chiếm, lối ra bàn phím là <b>Esc rồi Tab</b> — Esc báo cho đúng lần Tab kế tiếp
-        đi ra khỏi vùng soạn (WCAG 2.1.2, không tạo bẫy bàn phím). Quy ước này được đọc cho screen
-        reader qua <code>aria-describedby</code>.
-      </li>
+      @for (item of page().accessibility; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
 
-    <h2>Ghi chú</h2>
+    <h2>{{ page().notesTitle }}</h2>
     <ul>
-      <li>
-        Có <b>hai</b> kiểu code, không trùng nhau. <b>Inline code</b> (dropdown định dạng) là chip
-        nhỏ <b>giữa câu</b> — bôi nhiều dòng sẽ ra nhiều chip rời. <b>Code block</b> (Text styles)
-        đổi <b>cả khối</b> thành <code>&lt;pre&gt;</code> — một hộp riêng, giữ nguyên khoảng trắng
-        và xuống dòng.
-      </li>
-      <li>
-        <b>Màu chữ</b> ghi thẳng mã màu vào HTML, nên bảng màu chọn các tông đọc được trên
-        <b>cả nền sáng lẫn tối</b>. Ô đầu tiên (gạch chéo) là <b>Mặc định</b> — trả chữ về
-        <code>color: inherit</code> để đi theo theme.
-      </li>
-      <li>
-        <b>Checkbox list</b>: ô tick đánh dấu bằng <b>class trên <code>&lt;li&gt;</code></b>
-        (<code>g-rte-task--done</code>), ô vuông và dấu tick do CSS vẽ. Không dùng
-        <code>&lt;input type="checkbox"&gt;</code> vì sanitizer của Angular loại bỏ thẻ form — giá
-        trị nạp lại từ ngoài sẽ mất sạch ô tick. Bấm vào ô vuông để tick, bấm vào chữ để gõ.
-      </li>
-      <li>
-        <b>Liên kết</b>: popover có <b>hai ô</b> — văn bản hiển thị và địa chỉ. Bôi đen sẵn thì chữ
-        được điền vào ô đầu và con trỏ nhảy thẳng sang ô địa chỉ. Giữ nguyên chữ thì dùng
-        <code>createLink</code> nên định dạng bên trong (đậm, màu…) còn nguyên; đổi chữ hoặc chưa
-        chọn gì thì chèn thẻ <code>&lt;a&gt;</code> mới. Đứng trong một liên kết rồi mở lại =
-        <b>sửa</b> (điền sẵn cả hai ô).
-      </li>
-      <li>
-        <b>Thụt lề</b>: Chrome hardcode 40px cho lệnh <code>indent</code> — con số của trình duyệt,
-        không thuộc thang khoảng cách của design system và nhìn quá rộng. Component ghi đè về
-        <b>1.5em</b> ngay trên thẻ bọc, nên HTML lưu ra cũng mang đúng bậc thụt đó khi render ở nơi
-        khác.
-      </li>
-      <li>
-        <b>Bảng</b>: nút chèn tạo bảng rỗng (hàng đầu là <code>&lt;th&gt;</code>) kèm một đoạn trống
-        phía sau để con trỏ thoát ra được. Gõ trong ô là contenteditable thường; thêm/xoá hàng cột
-        sau khi chèn thì chưa có — cần thao tác bảng đầy đủ nên dùng engine ProseMirror/TipTap.
-      </li>
+      @for (item of page().notes; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
 
-    <h2>Bảo mật</h2>
+    <h2>{{ page().securityTitle }}</h2>
     <ul>
-      <li>
-        Giá trị HTML nạp từ ngoài (<code>[(value)]</code>, form) đi qua
-        <code>DomSanitizer</code> trước khi render.
-      </li>
-      <li>
-        URL nhập vào ô liên kết chỉ nhận <code>http</code>, <code>https</code>, <code>mailto</code>,
-        <code>tel</code> — chặn <code>javascript:</code> (nếu lọt sẽ thành XSS ngay trong app của
-        bạn); thiếu scheme thì tự thêm <code>https://</code>.
-      </li>
-      <li>
-        <code>pasteMode="html"</code> giữ định dạng khi dán nhưng vẫn sanitize, vì clipboard là
-        nguồn không tin cậy.
-      </li>
+      @for (item of page().security; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
 
-    <h2>Vì sao vẫn dùng <code>document.execCommand</code> dù nó deprecated?</h2>
-    <p>
-      Câu hỏi đúng chỗ — và câu trả lời không phải "vì tiện".
-      <b>Deprecated ở đây không đồng nghĩa sắp bị gỡ:</b> execCommand nằm ngoài chuẩn từ lâu nhưng
-      Chrome/Safari/Firefox không thể bỏ vì quá nhiều dịch vụ đang phụ thuộc. Chính MDN ghi rõ vẫn
-      còn use case hợp lệ <b>chưa có phương án thay thế</b> — và đó đúng là trường hợp của trình
-      soạn thảo:
-    </p>
+    <h2>{{ page().execTitle }}</h2>
+    @for (paragraph of page().execIntro; track $index) {
+      <p>{{ paragraph }}</p>
+    }
     <ul>
-      <li>
-        <b>Undo/redo native.</b> Sửa DOM tay bằng Range API sẽ <b>xoá sạch</b> lịch sử undo của
-        trình duyệt: Ctrl+Z sau đó nhảy lung tung hoặc mất chữ. execCommand là cách duy nhất còn giữ
-        được undo stack đó.
-      </li>
-      <li>
-        <b>IME.</b> Gõ tiếng Việt/Nhật/Trung đi qua composition của trình duyệt. Tự dựng pipeline
-        nhập liệu là nơi editor tự viết hay vỡ nhất.
-      </li>
-      <li>
-        <b>Không có API thay thế 1–1.</b> Cách "hiện đại" (ProseMirror, Lexical, Slate) không phải
-        là gọi API khác — mà là <b>tự dựng document model + history + selection + IME</b>, cỡ hàng
-        chục nghìn dòng. Đó là một sản phẩm riêng, không phải một component của design system.
-      </li>
+      @for (item of page().execReasons; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
-    <p>Nên hướng xử lý ở đây là <b>khoanh vùng</b> thay vì né tránh:</p>
+    <p>{{ page().containmentIntro }}</p>
     <ul>
-      <li>
-        Toàn bộ lời gọi execCommand nằm trong
-        <b>một file duy nhất</b> (<code>rte-commands.ts</code>) — đổi engine sau này chỉ sửa một
-        chỗ, không lan ra component.
-      </li>
-      <li>
-        Phần <b>đọc trạng thái</b> (đang đậm? đang ở tiêu đề mấy? căn lề nào? có đang trong liên kết
-        không?) đã bỏ hẳn <code>queryCommandState</code>/<code>queryCommandValue</code>, chuyển sang
-        dò DOM bằng <b>Selection/Range API tiêu chuẩn</b> — vừa hết deprecated ở nhánh này, vừa hết
-        cảnh mỗi trình duyệt trả một kiểu.
-      </li>
-      <li>
-        Mọi lệnh đi qua <code>queryCommandSupported</code> và trả về boolean, nên trình duyệt nào
-        không hỗ trợ thì component biết chứ không "im lặng sai".
-      </li>
-      <li>
-        Hai thứ execCommand <b>không có lệnh</b> — inline <code>code</code> và <b>bảng</b> — vẫn đi
-        qua lệnh có sẵn (<code>insertHTML</code>, <code>removeFormat</code>) thay vì sửa DOM tay, để
-        <b>không mất undo</b>. Riêng màu chữ bật <code>styleWithCSS</code> tạm thời cho ra
-        <code>&lt;span style="color"&gt;</code> thay vì thẻ <code>&lt;font&gt;</code> đã bỏ chuẩn.
-      </li>
-      <li>
-        HTML đầu ra được ép <b>ngữ nghĩa</b> (<code>styleWithCSS=false</code> →
-        <code>&lt;b&gt;/&lt;i&gt;</code> thay vì <code>&lt;span style&gt;</code>;
-        <code>defaultParagraphSeparator=p</code> → <code>&lt;p&gt;</code> thay vì
-        <code>&lt;div&gt;</code>).
-      </li>
+      @for (item of page().containment; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
-    <p class="rte-note">
-      <b>Khi nào nên đổi:</b> cần <b>cộng tác thời gian thực</b> (nhiều người sửa cùng lúc), schema
-      nội dung chặt chẽ, hay các khối tuỳ biến (bảng, nhúng, mention) — lúc đó hãy dùng
-      ProseMirror/TipTap ở package riêng. Vì <code>[(value)]</code> chỉ là chuỗi HTML nên đổi engine
-      không kéo theo đổi API phía bạn.
-    </p>
+    <p class="rte-note">{{ page().migrationNote }}</p>
   `,
   styles: `
     .rte-note {
@@ -185,44 +71,6 @@ import { RichTextEditorDemo } from '../demos/editor/rich-text-editor.demo';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class RichTextEditorPage {
-  protected readonly apiRows: ApiRow[] = [
-    {
-      name: 'value',
-      type: 'string (HTML)',
-      default: "''",
-      description:
-        'Nội dung HTML — `[(value)]` hoặc `formControlName`. Giá trị ngoài được sanitize.',
-    },
-    {
-      name: 'pasteMode',
-      type: "'text' | 'html'",
-      default: "'text'",
-      description:
-        "'text' = dán bỏ hết định dạng (tránh rác từ Word/web); 'html' = giữ định dạng, đã sanitize.",
-    },
-    {
-      name: 'minHeight',
-      type: 'number',
-      default: '160',
-      description: 'Chiều cao tối thiểu vùng soạn (px).',
-    },
-    {
-      name: 'placeholder',
-      type: 'string',
-      default: "'Nhập nội dung…'",
-      description: 'Gợi ý khi rỗng.',
-    },
-    {
-      name: 'disabled',
-      type: 'boolean',
-      default: 'false',
-      description: 'Vô hiệu hoá (cũng theo form.disable()).',
-    },
-    {
-      name: 'ariaLabel',
-      type: 'string',
-      default: "'Trình soạn văn bản'",
-      description: 'Nhãn a11y (role=textbox).',
-    },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => editorsCopyFor(this.i18n.tag()).richTextEditor);
 }

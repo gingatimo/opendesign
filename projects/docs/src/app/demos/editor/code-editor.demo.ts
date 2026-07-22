@@ -1,73 +1,43 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GCodeEditor, GTab, GTabs } from 'ngx-opendesign';
-
-// Mỗi ngôn ngữ một mẫu code — chuyển tab sẽ hiện code editor đúng language + nội dung tương ứng.
-const TS_SAMPLE = `// Ví dụ TypeScript
-import { signal } from '@angular/core';
-
-export function tao(dem = 0) {
-  const count = signal(dem);
-  const tang = () => count.set(count() + 1);
-  return { count, tang };
-}
-
-const { count, tang } = tao(10);
-tang();
-console.log(\`Giá trị: \${count()}\`);
-`;
-
-const JSON_SAMPLE = `{
-  "name": "ngx-opendesign",
-  "version": "1.0.0",
-  "private": false,
-  "keywords": ["angular", "design-system", "pill"],
-  "peerDependencies": {
-    "@angular/cdk": ">=22.0.0",
-    "@angular/forms": ">=22.0.0"
-  }
-}
-`;
-
-const CSS_SAMPLE = `.g-button {
-  height: var(--g-control-md);
-  padding: 0 var(--g-space-4);
-  border-radius: var(--g-radius-pill);
-  background: var(--g-primary);
-  color: #ffffff;
-  transition: background-color 120ms ease;
-}
-.g-button:hover {
-  background: var(--g-primary-hover);
-}
-`;
-
-const PLAIN_SAMPLE = `OpenDesign — design system cho Angular
-- 71 component, 116 icon
-- 0 dependency bên thứ ba
-- sáng/tối qua thuộc tính data-g-theme
-`;
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GCodeEditor, GLocaleService, GTab, GTabs } from 'ngx-opendesign';
+import { editorsCopyFor } from '../../pages/editors-copy';
 
 @Component({
   selector: 'docs-code-editor-demo',
   imports: [GCodeEditor, GTabs, GTab],
   template: `
-    <g-tabs tablistLabel="Ngôn ngữ code">
-      <g-tab label="TypeScript">
+    <g-tabs [tablistLabel]="copy().tablistLabel">
+      <g-tab [label]="copy().typescriptLabel">
         <g-code-editor
           language="typescript"
-          [value]="ts"
+          [value]="copy().typescript"
           [height]="240"
-          ariaLabel="Ví dụ TypeScript"
+          [ariaLabel]="copy().typescriptAriaLabel"
         />
       </g-tab>
-      <g-tab label="JSON">
-        <g-code-editor language="json" [value]="json" [height]="240" ariaLabel="Ví dụ JSON" />
+      <g-tab [label]="copy().jsonLabel">
+        <g-code-editor
+          language="json"
+          [value]="copy().json"
+          [height]="240"
+          [ariaLabel]="copy().jsonAriaLabel"
+        />
       </g-tab>
-      <g-tab label="CSS">
-        <g-code-editor language="css" [value]="css" [height]="240" ariaLabel="Ví dụ CSS" />
+      <g-tab [label]="copy().cssLabel">
+        <g-code-editor
+          language="css"
+          [value]="copy().css"
+          [height]="240"
+          [ariaLabel]="copy().cssAriaLabel"
+        />
       </g-tab>
-      <g-tab label="Plain">
-        <g-code-editor language="plain" [value]="plain" [height]="240" ariaLabel="Ví dụ Plain" />
+      <g-tab [label]="copy().plainLabel">
+        <g-code-editor
+          language="plain"
+          [value]="copy().plain"
+          [height]="240"
+          [ariaLabel]="copy().plainAriaLabel"
+        />
       </g-tab>
     </g-tabs>
   `,
@@ -79,8 +49,6 @@ const PLAIN_SAMPLE = `OpenDesign — design system cho Angular
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeEditorDemo {
-  protected readonly ts = TS_SAMPLE;
-  protected readonly json = JSON_SAMPLE;
-  protected readonly css = CSS_SAMPLE;
-  protected readonly plain = PLAIN_SAMPLE;
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => editorsCopyFor(this.i18n.tag()).codeEditor.demo);
 }
