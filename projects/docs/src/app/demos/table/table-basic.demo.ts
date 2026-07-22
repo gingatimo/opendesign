@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GTable } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GTable } from 'ngx-opendesign';
+import { dataCopyFor } from '../../pages/data-copy';
 
 @Component({
   selector: 'docs-table-basic-demo',
@@ -9,31 +10,26 @@ import { GTable } from 'ngx-opendesign';
       <table gTable [striped]="true">
         <thead>
           <tr>
-            <th scope="col">Tên</th>
-            <th scope="col">Email</th>
-            <th scope="col">Vai trò</th>
+            <th scope="col">{{ copy().columns.name }}</th>
+            <th scope="col">{{ copy().columns.email }}</th>
+            <th scope="col">{{ copy().columns.role }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Nguyễn Văn An</td>
-            <td>an.nguyen&#64;example.com</td>
-            <td>Quản trị viên</td>
-          </tr>
-          <tr>
-            <td>Trần Thị Bình</td>
-            <td>binh.tran&#64;example.com</td>
-            <td>Biên tập viên</td>
-          </tr>
-          <tr>
-            <td>Lê Hoàng Cường</td>
-            <td>cuong.le&#64;example.com</td>
-            <td>Thành viên</td>
-          </tr>
+          @for (row of copy().basicRows; track row.email) {
+            <tr>
+              <td>{{ row.name }}</td>
+              <td>{{ row.email }}</td>
+              <td>{{ row.role }}</td>
+            </tr>
+          }
         </tbody>
       </table>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableBasicDemo {}
+export class TableBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => dataCopyFor(this.i18n.tag()).table.demo);
+}

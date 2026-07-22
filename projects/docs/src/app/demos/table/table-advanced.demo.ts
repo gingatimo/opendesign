@@ -1,81 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { GFreezeColumn, GFreezeRow, GSortHeader, GTable } from 'ngx-opendesign';
-
-interface Employee {
-  name: string;
-  department: string;
-  email: string;
-  phone: string;
-  position: string;
-  note: string;
-}
-
-const EMPLOYEES: Employee[] = [
-  {
-    name: 'Nguyễn Văn An',
-    department: 'Kỹ thuật',
-    email: 'an.nguyen@example.com',
-    phone: '090 123 4567',
-    position: 'Kỹ sư phần mềm',
-    note: 'Phụ trách module thanh toán',
-  },
-  {
-    name: 'Trần Thị Bình',
-    department: 'Thiết kế',
-    email: 'binh.tran@example.com',
-    phone: '090 234 5678',
-    position: 'Trưởng nhóm thiết kế',
-    note: 'Đang nghỉ phép đến hết tuần',
-  },
-  {
-    name: 'Lê Hoàng Cường',
-    department: 'Kinh doanh',
-    email: 'cuong.le@example.com',
-    phone: '090 345 6789',
-    position: 'Chuyên viên kinh doanh',
-    note: '—',
-  },
-  {
-    name: 'Phạm Thu Hà',
-    department: 'Vận hành',
-    email: 'ha.pham@example.com',
-    phone: '090 456 7890',
-    position: 'Điều phối vận hành',
-    note: 'Mới chuyển từ chi nhánh Đà Nẵng',
-  },
-  {
-    name: 'Đỗ Minh Khang',
-    department: 'Kỹ thuật',
-    email: 'khang.do@example.com',
-    phone: '090 567 8901',
-    position: 'Kỹ sư kiểm thử',
-    note: '—',
-  },
-  {
-    name: 'Vũ Lan Phương',
-    department: 'Thiết kế',
-    email: 'phuong.vu@example.com',
-    phone: '090 678 9012',
-    position: 'Nhà thiết kế UX',
-    note: 'Đang dẫn dắt dự án redesign',
-  },
-  {
-    name: 'Hoàng Đức Mạnh',
-    department: 'Nhân sự',
-    email: 'manh.hoang@example.com',
-    phone: '090 789 0123',
-    position: 'Chuyên viên tuyển dụng',
-    note: '—',
-  },
-  {
-    name: 'Bùi Thị Ngọc',
-    department: 'Tài chính',
-    email: 'ngoc.bui@example.com',
-    phone: '090 890 1234',
-    position: 'Kế toán trưởng',
-    note: 'Phê duyệt ngân sách quý',
-  },
-];
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GFreezeColumn, GFreezeRow, GLocaleService, GSortHeader, GTable } from 'ngx-opendesign';
+import { dataCopyFor } from '../../pages/data-copy';
 
 @Component({
   selector: 'docs-table-advanced-demo',
@@ -89,14 +14,14 @@ const EMPLOYEES: Employee[] = [
           <tr gFreezeRow>
             <th scope="col" gFreezeColumn [gSortHeader]="sortDir()">
               <button type="button" class="table-advanced-demo__sort-btn" (click)="toggleSort()">
-                Tên
+                {{ copy().columns.name }}
               </button>
             </th>
-            <th scope="col">Phòng ban</th>
-            <th scope="col">Email</th>
-            <th scope="col">Điện thoại</th>
-            <th scope="col">Vị trí</th>
-            <th scope="col">Ghi chú</th>
+            <th scope="col">{{ copy().columns.department }}</th>
+            <th scope="col">{{ copy().columns.email }}</th>
+            <th scope="col">{{ copy().columns.phone }}</th>
+            <th scope="col">{{ copy().columns.position }}</th>
+            <th scope="col">{{ copy().columns.note }}</th>
           </tr>
         </thead>
         <tbody>
@@ -127,12 +52,15 @@ const EMPLOYEES: Employee[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableAdvancedDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => dataCopyFor(this.i18n.tag()).table.demo);
   protected readonly sortDir = signal<'asc' | 'desc' | null>('asc');
 
   protected readonly rows = computed(() => {
     const dir = this.sortDir();
-    if (dir === null) return EMPLOYEES;
-    const sorted = [...EMPLOYEES].sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+    const employees = this.copy().employees;
+    if (dir === null) return employees;
+    const sorted = [...employees].sort((a, b) => a.name.localeCompare(b.name, this.i18n.tag()));
     return dir === 'asc' ? sorted : sorted.reverse();
   });
 

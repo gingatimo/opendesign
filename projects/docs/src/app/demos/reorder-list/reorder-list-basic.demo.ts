@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { GReorderList } from 'ngx-opendesign';
-
-interface Task {
-  id: number;
-  name: string;
-}
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+import { GLocaleService, GReorderList } from 'ngx-opendesign';
+import { dataCopyFor } from '../../pages/data-copy';
 
 @Component({
   selector: 'docs-reorder-list-basic-demo',
@@ -18,7 +21,7 @@ interface Task {
     </g-reorder-list>
 
     <p class="rl-demo__order">
-      Thứ tự hiện tại: <b>{{ order() }}</b>
+      {{ copy().currentOrder }} <b>{{ order() }}</b>
     </p>
   `,
   styles: `
@@ -48,17 +51,19 @@ interface Task {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReorderListBasicDemo {
-  protected readonly tasks = signal<Task[]>([
-    { id: 1, name: 'Thiết kế giao diện' },
-    { id: 2, name: 'Dựng API' },
-    { id: 3, name: 'Viết test' },
-    { id: 4, name: 'Kiểm thử QA' },
-    { id: 5, name: 'Phát hành' },
-  ]);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => dataCopyFor(this.i18n.tag()).reorderList.demo);
+  protected readonly tasks = signal(this.copy().tasks);
 
   protected readonly order = computed(() =>
     this.tasks()
       .map((t) => t.name)
       .join(' → '),
   );
+
+  constructor() {
+    effect(() => {
+      this.tasks.set([...this.copy().tasks]);
+    });
+  }
 }
