@@ -161,6 +161,8 @@ export const gLocaleExample: GLocale = {
     { group: 'reorderList', keys: ['dragHandle'] },
     { group: 'actionExpand', keys: ['label'] },
     { group: 'fileInput', keys: ['choose', 'remove(name)', 'noFile', 'selectedCount(count)'] },
+    { group: 'terminal', keys: ['commandInput'] },
+    { group: 'stepSlider', keys: ['label'] },
     {
       group: 'stepper',
       keys: [
@@ -268,6 +270,7 @@ export const gLocaleExample: GLocale = {
         'moreFormats',
         'listStyle',
         'richTextLabel',
+        'placeholder',
         'codeLabel',
         'normalText',
         'heading1',

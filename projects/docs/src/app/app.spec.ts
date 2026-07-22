@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { GLocaleService } from 'ngx-opendesign';
 import { appConfig } from './app.config';
 import { App } from './app';
+import I18nPage from './pages/foundations/i18n.page';
 
 describe('App', () => {
   beforeEach(() => {
@@ -56,5 +57,21 @@ describe('App', () => {
 
     expect(i18n.tag()).toBe('en-US');
     expect(languageToggle.textContent?.trim()).toBe('VI');
+  });
+
+  it('trang i18n liệt kê các khoá locale mới nhất', () => {
+    const fixture = TestBed.createComponent(I18nPage);
+    fixture.detectChanges();
+    const text = fixture.nativeElement.textContent as string;
+    const codes = Array.from(fixture.nativeElement.querySelectorAll('code')).map((el) =>
+      (el as HTMLElement).textContent?.trim(),
+    );
+
+    expect(text).toContain('terminal');
+    expect(codes).toContain('commandInput');
+    expect(text).toContain('stepSlider');
+    expect(codes).toContain('label');
+    expect(text).toContain('editor');
+    expect(codes).toContain('placeholder');
   });
 });
