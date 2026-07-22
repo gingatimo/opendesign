@@ -1,29 +1,36 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GActionExpand, GActionExpandItem, gIconFileText, gIconImage } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  GActionExpand,
+  GActionExpandItem,
+  GLocaleService,
+  gIconFileText,
+  gIconImage,
+} from 'ngx-opendesign';
+import { buttonCopyFor } from '../../pages/button-copy';
 
 @Component({
   selector: 'docs-action-expand-basic-demo',
   imports: [GActionExpand],
   template: `
-    <p class="ae-demo__cap">Mặc định — bung sang phải</p>
+    <p class="ae-demo__cap">{{ demo().defaultCaption }}</p>
     <div class="ae-demo">
-      <g-action-expand label="Tải xuống" [actions]="downloads" (action)="onPick($event)" />
+      <g-action-expand [label]="demo().label" [actions]="downloads" (action)="onPick($event)" />
       <span class="ae-demo__msg">
         @if (picked()) {
-          Đã chọn tải: <b>{{ picked() }}</b>
+          {{ demo().picked(picked()) }}
         } @else {
-          Rê chuột hoặc Tab vào nút tròn để bung.
+          {{ demo().empty }}
         }
       </span>
     </div>
 
     <p class="ae-demo__cap">
-      <code>align="end"</code> — bung sang trái (đặt sát mép phải, vd. góc chart)
+      {{ demo().endCaption }}
     </p>
     <div class="ae-demo ae-demo--right">
       <g-action-expand
         align="end"
-        label="Tải xuống"
+        [label]="demo().label"
         [actions]="downloads"
         (action)="onPick($event)"
       />
@@ -57,6 +64,9 @@ import { GActionExpand, GActionExpandItem, gIconFileText, gIconImage } from 'ngx
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActionExpandBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+
+  protected readonly demo = computed(() => buttonCopyFor(this.i18n.tag()).actionExpand.demo);
   protected readonly downloads: GActionExpandItem[] = [
     { label: 'PDF', value: 'pdf', icon: gIconFileText },
     { label: 'SVG', value: 'svg', icon: gIconImage },

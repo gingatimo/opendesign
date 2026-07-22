@@ -1,17 +1,18 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GIcon, GIconButton, gIconPlus, gIconSearch, gIconX } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GIcon, GIconButton, GLocaleService, gIconPlus, gIconSearch, gIconX } from 'ngx-opendesign';
+import { buttonCopyFor } from '../../pages/button-copy';
 
 @Component({
   selector: 'docs-icon-button-basic-demo',
   imports: [GIconButton, GIcon],
   template: `
-    <button g-icon-button aria-label="Thêm mới">
+    <button g-icon-button [attr.aria-label]="demo().add">
       <g-icon [icon]="iconPlus" />
     </button>
-    <button g-icon-button variant="primary" aria-label="Tìm kiếm">
+    <button g-icon-button variant="primary" [attr.aria-label]="demo().search">
       <g-icon [icon]="iconSearch" />
     </button>
-    <button g-icon-button variant="outline" size="lg" aria-label="Đóng">
+    <button g-icon-button variant="outline" size="lg" [attr.aria-label]="demo().close">
       <g-icon [icon]="iconX" size="lg" />
     </button>
   `,
@@ -25,6 +26,9 @@ import { GIcon, GIconButton, gIconPlus, gIconSearch, gIconX } from 'ngx-opendesi
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconButtonBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+
+  protected readonly demo = computed(() => buttonCopyFor(this.i18n.tag()).iconButton.demo);
   protected readonly iconPlus = gIconPlus;
   protected readonly iconSearch = gIconSearch;
   protected readonly iconX = gIconX;

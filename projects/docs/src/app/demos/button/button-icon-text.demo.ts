@@ -1,5 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GButton, gIconDownload, GIcon, gIconPlus, gIconTrash } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  GButton,
+  gIconDownload,
+  GIcon,
+  GLocaleService,
+  gIconPlus,
+  gIconTrash,
+} from 'ngx-opendesign';
+import { buttonCopyFor } from '../../pages/button-copy';
 
 @Component({
   selector: 'docs-button-icon-text-demo',
@@ -7,15 +15,15 @@ import { GButton, gIconDownload, GIcon, gIconPlus, gIconTrash } from 'ngx-opende
   template: `
     <button g-button>
       <g-icon [icon]="gIconPlus" />
-      Thêm mới
+      {{ demo().create }}
     </button>
     <button g-button variant="outline">
       <g-icon [icon]="gIconDownload" />
-      Tải xuống
+      {{ demo().download }}
     </button>
     <button g-button variant="danger">
       <g-icon [icon]="gIconTrash" />
-      Xóa
+      {{ demo().delete }}
     </button>
   `,
   styles: `
@@ -29,6 +37,9 @@ import { GButton, gIconDownload, GIcon, gIconPlus, gIconTrash } from 'ngx-opende
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonIconTextDemo {
+  private readonly i18n = inject(GLocaleService);
+
+  protected readonly demo = computed(() => buttonCopyFor(this.i18n.tag()).button.demo);
   protected readonly gIconPlus = gIconPlus;
   protected readonly gIconDownload = gIconDownload;
   protected readonly gIconTrash = gIconTrash;

@@ -1,23 +1,16 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ApiRow, ApiTable } from '../shared/api-table';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
+import { ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { ActionExpandBasicDemo } from '../demos/action-expand/action-expand-basic.demo';
+import { buttonCopyFor } from './button-copy';
 
 @Component({
   imports: [ActionExpandBasicDemo, ApiTable, CodeBlock, DemoSection],
   template: `
-    <h1>Action Expand</h1>
-    <p>
-      Nút <b>hành động bung</b>: cùng một hành động nhưng <b>nhiều "type"</b> (vd. Tải xuống →
-      PDF/SVG/PNG). Lúc đầu thu gọn thành <b>icon tròn</b>; khi <b>rê chuột / focus</b> (bàn phím)
-      hoặc chạm → bung, lộ các nút lựa chọn kiểu tab. <code>align</code> chỉnh hướng bung:
-      <b>phải</b> (<code>start</code>, mặc định) hoặc <b>trái</b> (<code>end</code>, hợp khi đặt sát
-      mép phải như góc chart). Phát <code>(action)</code> với item được chọn (<code>{{
-        '{ label, value, icon? }'
-      }}</code
-      >).
-    </p>
+    <h1>{{ actionExpand().title }}</h1>
+    <p>{{ actionExpand().intro }}</p>
 
     <docs-demo-section>
       <docs-action-expand-basic-demo />
@@ -25,53 +18,19 @@ import { ActionExpandBasicDemo } from '../demos/action-expand/action-expand-basi
 
     <docs-code-block src="demo-sources/action-expand/action-expand-basic.demo.ts" />
 
-    <h2>API — GActionExpand</h2>
-    <docs-api-table [rows]="apiRows" />
+    <h2>{{ actionExpand().apiTitle }}</h2>
+    <docs-api-table [rows]="actionExpand().apiRows" />
 
-    <h2>Accessibility</h2>
+    <h2>{{ actionExpand().accessibilityTitle }}</h2>
     <ul>
-      <li>
-        Nút tròn (trigger) là điểm vào bàn phím: Tab tới nó → bung (<code>aria-expanded</code>) →
-        Tab tiếp vào các nút lựa chọn. Khi thu gọn, các nút lựa chọn có
-        <code>tabindex="-1"</code> nên không lọt vào tab order.
-      </li>
-      <li>Cả cụm là <code>role="group"</code> với <code>aria-label</code>.</li>
+      @for (item of actionExpand().accessibility; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ActionExpandPage {
-  protected readonly apiRows: ApiRow[] = [
-    {
-      name: 'actions',
-      type: 'GActionExpandItem[]',
-      default: '[]',
-      description: 'Các lựa chọn { label, value, icon? } hiện khi bung.',
-    },
-    {
-      name: 'icon',
-      type: 'GIconGlyph',
-      default: 'gIconDownload',
-      description: 'Icon lúc thu gọn (tròn).',
-    },
-    {
-      name: 'label',
-      type: 'string',
-      default: "'Hành động'",
-      description: 'Nhãn a11y cho cụm + trigger.',
-    },
-    {
-      name: 'align',
-      type: "'start' | 'end'",
-      default: "'start'",
-      description:
-        "Hướng bung: 'start' (trigger trái, bung phải) hoặc 'end' (trigger phải, bung sang trái — hợp khi đặt sát mép phải như góc chart).",
-    },
-    {
-      name: '(action)',
-      type: 'GActionExpandItem',
-      default: '—',
-      description: 'Phát item được chọn.',
-    },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly actionExpand = computed(() => buttonCopyFor(this.i18n.tag()).actionExpand);
 }

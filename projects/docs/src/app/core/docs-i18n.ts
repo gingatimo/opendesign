@@ -64,6 +64,12 @@ interface DocsCopy {
     value: string;
     description: string;
   };
+  apiTable: {
+    name: string;
+    type: string;
+    default: string;
+    description: string;
+  };
 }
 
 const VI: DocsCopy = {
@@ -151,6 +157,12 @@ const VI: DocsCopy = {
     value: 'Giá trị',
     description: 'Mô tả',
   },
+  apiTable: {
+    name: 'Tên',
+    type: 'Kiểu',
+    default: 'Mặc định',
+    description: 'Mô tả',
+  },
 };
 
 const EN: DocsCopy = {
@@ -236,6 +248,12 @@ const EN: DocsCopy = {
   },
   tokenTable: {
     value: 'Value',
+    description: 'Description',
+  },
+  apiTable: {
+    name: 'Name',
+    type: 'Type',
+    default: 'Default',
     description: 'Description',
   },
 };

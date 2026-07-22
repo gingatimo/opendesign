@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { DocsI18nService } from '../core/docs-i18n';
 
 export interface ApiRow {
   name: string;
@@ -13,10 +14,10 @@ export interface ApiRow {
     <table class="docs-api-table">
       <thead>
         <tr>
-          <th>Tên</th>
-          <th>Kiểu</th>
-          <th>Mặc định</th>
-          <th>Mô tả</th>
+          <th>{{ copy().apiTable.name }}</th>
+          <th>{{ copy().apiTable.type }}</th>
+          <th>{{ copy().apiTable.default }}</th>
+          <th>{{ copy().apiTable.description }}</th>
         </tr>
       </thead>
       <tbody>
@@ -60,5 +61,8 @@ export interface ApiRow {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApiTable {
+  private readonly docsI18n = inject(DocsI18nService);
+  protected readonly copy = this.docsI18n.copy;
+
   readonly rows = input.required<ApiRow[]>();
 }

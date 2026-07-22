@@ -1,15 +1,16 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GFab, GIcon, gIconPlus } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GFab, GIcon, GLocaleService, gIconPlus } from 'ngx-opendesign';
+import { buttonCopyFor } from '../../pages/button-copy';
 
 @Component({
   selector: 'docs-fab-basic-demo',
   imports: [GFab, GIcon],
   template: `
-    <p>Nút hành động nổi cố định ở góc phải-dưới màn hình (cuộn trang vẫn giữ nguyên vị trí).</p>
-    <button g-fab aria-label="Thêm mới" (click)="count.set(count() + 1)">
+    <p>{{ demo().intro }}</p>
+    <button g-fab [attr.aria-label]="demo().add" (click)="count.set(count() + 1)">
       <g-icon [icon]="iconPlus" />
     </button>
-    <p>Đã bấm: {{ count() }} lần.</p>
+    <p>{{ demo().clicked(count()) }}</p>
   `,
   styles: `
     p {
@@ -19,6 +20,9 @@ import { GFab, GIcon, gIconPlus } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FabBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+
+  protected readonly demo = computed(() => buttonCopyFor(this.i18n.tag()).fab.demo);
   protected readonly iconPlus = gIconPlus;
   protected readonly count = signal(0);
 }

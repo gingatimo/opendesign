@@ -1,19 +1,20 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GLink } from 'ngx-opendesign';
-import { ApiRow, ApiTable } from '../shared/api-table';
+import { GLink, GLocaleService } from 'ngx-opendesign';
+import { ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { IconButtonBasicDemo } from '../demos/icon-button/icon-button-basic.demo';
+import { buttonCopyFor } from './button-copy';
 
 @Component({
   imports: [IconButtonBasicDemo, CodeBlock, ApiTable, DemoSection, RouterLink, GLink],
   template: `
-    <h1>Icon Button</h1>
+    <h1>{{ iconButton().title }}</h1>
     <p>
-      Nút tròn chỉ chứa icon, chiếu vào qua <code>&lt;ng-content&gt;</code> — dùng
-      <code>&lt;g-icon&gt;</code> (như demo dưới) từ
-      <a gLink routerLink="/components/icon">icon set có sẵn</a> của OpenDesign, hoặc SVG tự viết.
+      {{ iconButton().introPrefix }}
+      <a gLink routerLink="/components/icon">{{ iconButton().iconSetLink }}</a>
+      {{ iconButton().introSuffix }}
     </p>
 
     <docs-demo-section>
@@ -22,33 +23,19 @@ import { IconButtonBasicDemo } from '../demos/icon-button/icon-button-basic.demo
 
     <docs-code-block src="demo-sources/icon-button/icon-button-basic.demo.ts" />
 
-    <h2>API — GIconButton</h2>
-    <docs-api-table [rows]="apiRows" />
+    <h2>{{ iconButton().apiTitle }}</h2>
+    <docs-api-table [rows]="iconButton().apiRows" />
 
-    <h2>Accessibility</h2>
+    <h2>{{ iconButton().accessibilityTitle }}</h2>
     <ul>
-      <li>
-        Bắt buộc có <code>aria-label</code> hoặc <code>aria-labelledby</code> — thiếu sẽ có cảnh báo
-        console ở dev mode.
-      </li>
-      <li>Icon SVG bên trong nên đặt <code>aria-hidden="true"</code>.</li>
+      @for (item of iconButton().accessibility; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class IconButtonPage {
-  protected readonly apiRows: ApiRow[] = [
-    {
-      name: 'variant',
-      type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'",
-      default: "'ghost'",
-      description: 'Kiểu hiển thị của nút.',
-    },
-    {
-      name: 'size',
-      type: "'sm' | 'md' | 'lg'",
-      default: "'md'",
-      description: 'Cỡ nút (vuông, bo tròn 50%).',
-    },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly iconButton = computed(() => buttonCopyFor(this.i18n.tag()).iconButton);
 }
