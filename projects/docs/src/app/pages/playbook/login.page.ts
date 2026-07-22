@@ -1,19 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
 import { CodeBlock } from '../../shared/code-block';
 import { DemoSection } from '../../shared/demo-section';
 import { LoginFormDemo } from '../../demos/playbook/login-form.demo';
+import { playbookCopyFor } from './playbook-copy';
 
 @Component({
   imports: [LoginFormDemo, CodeBlock, DemoSection],
   template: `
-    <h1>Đăng nhập</h1>
-    <p>
-      Màn đăng nhập tối giản dựng bằng <code>GCard</code> + <code>GInput</code> +
-      <code>GCheckbox</code> + <code>GButton</code>. Reactive forms với
-      <code>Validators.required</code> và <code>Validators.email</code>; lỗi chỉ hiện khi trường đã
-      touched và invalid. Nút submit chuyển sang trạng thái <code>loading</code> thật trong lúc "gọi
-      API" để chặn double-submit.
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
     <docs-demo-section>
       <docs-login-form-demo />
     </docs-demo-section>
@@ -21,4 +17,7 @@ import { LoginFormDemo } from '../../demos/playbook/login-form.demo';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class PlaybookLoginPage {}
+export default class PlaybookLoginPage {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => playbookCopyFor(this.i18n.tag()).login);
+}

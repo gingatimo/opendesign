@@ -1,18 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
 import { CodeBlock } from '../../shared/code-block';
 import { DemoSection } from '../../shared/demo-section';
 import { DashboardLayoutDemo } from '../../demos/playbook/dashboard-layout.demo';
+import { playbookCopyFor } from './playbook-copy';
 
 @Component({
   imports: [DashboardLayoutDemo, CodeBlock, DemoSection],
   template: `
-    <h1>Dashboard</h1>
-    <p>
-      <code>GTopbar</code> + <code>GSidebar</code> + vùng nội dung ghép thành một layout dashboard
-      hoàn chỉnh (thẻ số liệu, thanh tiến độ, danh sách hoạt động). Demo thu nhỏ trong khung có
-      chiều cao cố định để không phá layout của chính trang docs này — vốn cũng dùng topbar/sidebar
-      thật ở shell bên ngoài.
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
     <docs-demo-section>
       <docs-dashboard-layout-demo />
     </docs-demo-section>
@@ -20,4 +17,7 @@ import { DashboardLayoutDemo } from '../../demos/playbook/dashboard-layout.demo'
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class PlaybookDashboardPage {}
+export default class PlaybookDashboardPage {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => playbookCopyFor(this.i18n.tag()).dashboard);
+}

@@ -1,20 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
 import { CodeBlock } from '../../shared/code-block';
 import { DemoSection } from '../../shared/demo-section';
 import { ListPageDemo } from '../../demos/playbook/list-page.demo';
+import { playbookCopyFor } from './playbook-copy';
 
 @Component({
   imports: [ListPageDemo, CodeBlock, DemoSection],
   template: `
-    <h1>Danh sách</h1>
-    <p>
-      Màn danh sách đầy đủ ba khối: <b>tìm kiếm</b> theo tên, <b>lọc</b> theo trạng thái (nút) và
-      vai trò (chip bật/tắt — bộ lọc đang áp hiện thành chip <code>removable</code> để gỡ nhanh), và
-      <b>bảng kết quả</b>. Bảng đóng băng cột <b>Tên</b> + hàng tiêu đề để cuộn ngang/dọc không mất
-      mốc, cột trạng thái dùng <code>GBadge</code>, thời gian format qua <code>DatePipe</code>, hành
-      động là hai <code>GIconButton</code>. Phân trang thật ở dưới — đổi bộ lọc/tìm kiếm thì tự quay
-      về trang 1.
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
     <docs-demo-section>
       <docs-list-page-demo />
     </docs-demo-section>
@@ -22,4 +17,7 @@ import { ListPageDemo } from '../../demos/playbook/list-page.demo';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class PlaybookListPage {}
+export default class PlaybookListPage {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => playbookCopyFor(this.i18n.tag()).list);
+}

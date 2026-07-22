@@ -1,40 +1,46 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GButton, GCard, GCardHeader, GCheckbox, GInput } from 'ngx-opendesign';
+import { GButton, GCard, GCardHeader, GCheckbox, GInput, GLocaleService } from 'ngx-opendesign';
+import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
 
 @Component({
   selector: 'docs-login-form-demo',
   imports: [GCard, GCardHeader, GInput, GCheckbox, GButton, ReactiveFormsModule],
   template: `
     <g-card class="login-form-demo__card">
-      <div gCardHeader>Đăng nhập</div>
+      <div gCardHeader>{{ copy().cardTitle }}</div>
       <form [formGroup]="form" (ngSubmit)="submit()" class="login-form-demo__form">
         <label class="login-form-demo__field">
-          <span class="login-form-demo__label">Email</span>
-          <input gInput type="email" formControlName="email" placeholder="ban@vidu.com" />
+          <span class="login-form-demo__label">{{ copy().email }}</span>
+          <input
+            gInput
+            type="email"
+            formControlName="email"
+            [placeholder]="copy().emailPlaceholder"
+          />
           @if (form.controls.email.invalid && form.controls.email.touched) {
             <span class="login-form-demo__error">
               @if (form.controls.email.hasError('required')) {
-                Vui lòng nhập email.
+                {{ copy().requiredEmail }}
               } @else {
-                Email không đúng định dạng.
+                {{ copy().invalidEmail }}
               }
             </span>
           }
         </label>
 
         <label class="login-form-demo__field">
-          <span class="login-form-demo__label">Mật khẩu</span>
+          <span class="login-form-demo__label">{{ copy().password }}</span>
           <input gInput type="password" formControlName="password" placeholder="••••••••" />
           @if (form.controls.password.invalid && form.controls.password.touched) {
-            <span class="login-form-demo__error">Vui lòng nhập mật khẩu.</span>
+            <span class="login-form-demo__error">{{ copy().requiredPassword }}</span>
           }
         </label>
 
-        <g-checkbox formControlName="remember">Ghi nhớ đăng nhập</g-checkbox>
+        <g-checkbox formControlName="remember">{{ copy().remember }}</g-checkbox>
 
         <button g-button type="submit" [loading]="submitting()">
-          {{ submitting() ? 'Đang đăng nhập…' : 'Đăng nhập' }}
+          {{ submitting() ? copy().submitting : copy().submit }}
         </button>
       </form>
     </g-card>
@@ -66,7 +72,9 @@ import { GButton, GCard, GCardHeader, GCheckbox, GInput } from 'ngx-opendesign';
 })
 export class LoginFormDemo {
   private readonly fb = inject(FormBuilder);
+  private readonly i18n = inject(GLocaleService);
 
+  protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).login);
   protected readonly submitting = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
@@ -81,7 +89,7 @@ export class LoginFormDemo {
       return;
     }
     this.submitting.set(true);
-    // Giả lập gọi API — minh họa trạng thái loading thật của GButton (chặn double-submit).
+    // Simulate an API call so the loading button state is visible and prevents double submit.
     setTimeout(() => this.submitting.set(false), 1200);
   }
 }

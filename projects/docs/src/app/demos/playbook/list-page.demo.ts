@@ -1,8 +1,14 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   GBadge,
-  GBadgeVariant,
   GChip,
   GFreezeColumn,
   GFreezeRow,
@@ -15,130 +21,12 @@ import {
   GSortHeader,
   GTable,
   GTableContainer,
+  GLocaleService,
   gIconEdit,
   gIconSearch,
   gIconTrash,
 } from 'ngx-opendesign';
-
-interface Row {
-  name: string;
-  role: string;
-  status: 'active' | 'invited' | 'inactive';
-  updatedAt: Date;
-}
-
-const STATUS_LABEL: Record<Row['status'], string> = {
-  active: 'Đang hoạt động',
-  invited: 'Đã mời',
-  inactive: 'Ngừng hoạt động',
-};
-
-const STATUS_VARIANT: Record<Row['status'], GBadgeVariant> = {
-  active: 'success',
-  invited: 'warning',
-  inactive: 'neutral',
-};
-
-const ROLES = ['Kỹ thuật', 'Thiết kế', 'Kinh doanh', 'Vận hành'] as const;
-
-const ROWS: Row[] = [
-  {
-    name: 'Nguyễn Văn An',
-    role: 'Kỹ thuật',
-    status: 'active',
-    updatedAt: new Date(2026, 6, 15, 9, 30),
-  },
-  {
-    name: 'Trần Thị Bình',
-    role: 'Thiết kế',
-    status: 'invited',
-    updatedAt: new Date(2026, 6, 10, 14, 5),
-  },
-  {
-    name: 'Lê Hoàng Cường',
-    role: 'Kinh doanh',
-    status: 'active',
-    updatedAt: new Date(2026, 5, 28, 8, 15),
-  },
-  {
-    name: 'Phạm Thu Hà',
-    role: 'Vận hành',
-    status: 'inactive',
-    updatedAt: new Date(2026, 4, 2, 11, 40),
-  },
-  {
-    name: 'Đỗ Minh Khang',
-    role: 'Kỹ thuật',
-    status: 'active',
-    updatedAt: new Date(2026, 6, 1, 16, 20),
-  },
-  {
-    name: 'Vũ Lan Phương',
-    role: 'Thiết kế',
-    status: 'invited',
-    updatedAt: new Date(2026, 6, 12, 10, 0),
-  },
-  {
-    name: 'Hoàng Đức Mạnh',
-    role: 'Kinh doanh',
-    status: 'active',
-    updatedAt: new Date(2026, 3, 18, 9, 0),
-  },
-  {
-    name: 'Bùi Thị Ngọc',
-    role: 'Vận hành',
-    status: 'inactive',
-    updatedAt: new Date(2026, 2, 22, 13, 45),
-  },
-  {
-    name: 'Ngô Quốc Bảo',
-    role: 'Kỹ thuật',
-    status: 'active',
-    updatedAt: new Date(2026, 5, 5, 7, 50),
-  },
-  {
-    name: 'Đặng Thị Lan',
-    role: 'Thiết kế',
-    status: 'invited',
-    updatedAt: new Date(2026, 6, 16, 15, 30),
-  },
-  {
-    name: 'Trịnh Văn Đạt',
-    role: 'Kinh doanh',
-    status: 'active',
-    updatedAt: new Date(2026, 1, 14, 9, 10),
-  },
-  {
-    name: 'Lý Thị Hồng',
-    role: 'Vận hành',
-    status: 'inactive',
-    updatedAt: new Date(2026, 0, 29, 17, 0),
-  },
-  {
-    name: 'Phan Văn Hùng',
-    role: 'Kỹ thuật',
-    status: 'active',
-    updatedAt: new Date(2026, 4, 20, 10, 25),
-  },
-  {
-    name: 'Đinh Thị Kim',
-    role: 'Thiết kế',
-    status: 'invited',
-    updatedAt: new Date(2026, 5, 30, 12, 15),
-  },
-  {
-    name: 'Vương Minh Tuấn',
-    role: 'Kinh doanh',
-    status: 'active',
-    updatedAt: new Date(2026, 6, 8, 8, 40),
-  },
-  {
-    name: 'Châu Thị Mai',
-    role: 'Vận hành',
-    status: 'inactive',
-    updatedAt: new Date(2026, 3, 5, 14, 50),
-  },
-];
+import { PlaybookStatus, playbookCopyFor } from '../../pages/playbook/playbook-copy';
 
 const PAGE_SIZE = 5;
 
@@ -166,14 +54,18 @@ const PAGE_SIZE = 5;
         <input
           gInput
           type="text"
-          placeholder="Tìm theo tên…"
+          [placeholder]="copy().searchPlaceholder"
           [value]="search()"
           (input)="search.set($any($event.target).value)"
         />
         <g-icon gInputSuffix [icon]="iconSearch" size="sm" />
       </g-input-group>
 
-      <div class="list-page-demo__status-filter" role="group" aria-label="Lọc theo trạng thái">
+      <div
+        class="list-page-demo__status-filter"
+        role="group"
+        [attr.aria-label]="copy().statusFilterLabel"
+      >
         <button
           type="button"
           class="list-page-demo__status-btn"
@@ -181,7 +73,7 @@ const PAGE_SIZE = 5;
           [attr.aria-pressed]="statusFilter() === 'all'"
           (click)="statusFilter.set('all')"
         >
-          Tất cả
+          {{ copy().all }}
         </button>
         <button
           type="button"
@@ -190,7 +82,7 @@ const PAGE_SIZE = 5;
           [attr.aria-pressed]="statusFilter() === 'active'"
           (click)="statusFilter.set('active')"
         >
-          <g-badge variant="success">Đang hoạt động</g-badge>
+          <g-badge variant="success">{{ copy().statuses.active }}</g-badge>
         </button>
         <button
           type="button"
@@ -199,7 +91,7 @@ const PAGE_SIZE = 5;
           [attr.aria-pressed]="statusFilter() === 'invited'"
           (click)="statusFilter.set('invited')"
         >
-          <g-badge variant="warning">Đã mời</g-badge>
+          <g-badge variant="warning">{{ copy().statuses.invited }}</g-badge>
         </button>
         <button
           type="button"
@@ -208,13 +100,13 @@ const PAGE_SIZE = 5;
           [attr.aria-pressed]="statusFilter() === 'inactive'"
           (click)="statusFilter.set('inactive')"
         >
-          <g-badge variant="neutral">Ngừng hoạt động</g-badge>
+          <g-badge variant="neutral">{{ copy().statuses.inactive }}</g-badge>
         </button>
       </div>
     </div>
 
-    <div class="list-page-demo__roles" role="group" aria-label="Lọc theo vai trò">
-      @for (role of roles; track role) {
+    <div class="list-page-demo__roles" role="group" [attr.aria-label]="copy().roleFilterLabel">
+      @for (role of copy().roles; track $index) {
         <g-chip
           class="list-page-demo__chip"
           [class.list-page-demo__chip--active]="activeRoles().has(role)"
@@ -231,9 +123,13 @@ const PAGE_SIZE = 5;
 
     @if (activeRoles().size > 0) {
       <div class="list-page-demo__applied">
-        <span class="list-page-demo__applied-label">Đang lọc vai trò:</span>
+        <span class="list-page-demo__applied-label">{{ copy().appliedRoles }}</span>
         @for (role of activeRoles(); track role) {
-          <g-chip [removable]="true" [removeLabel]="'Bỏ lọc ' + role" (removed)="toggleRole(role)">
+          <g-chip
+            [removable]="true"
+            [removeLabel]="copy().removeRole(role)"
+            (removed)="toggleRole(role)"
+          >
             {{ role }}
           </g-chip>
         }
@@ -246,13 +142,13 @@ const PAGE_SIZE = 5;
           <tr gFreezeRow>
             <th scope="col" gFreezeColumn [gSortHeader]="sortDir()">
               <button type="button" class="list-page-demo__sort-btn" (click)="toggleSort()">
-                Tên
+                {{ copy().columns.name }}
               </button>
             </th>
-            <th scope="col">Vai trò</th>
-            <th scope="col">Trạng thái</th>
-            <th scope="col">Cập nhật</th>
-            <th scope="col">Hành động</th>
+            <th scope="col">{{ copy().columns.role }}</th>
+            <th scope="col">{{ copy().columns.status }}</th>
+            <th scope="col">{{ copy().columns.updatedAt }}</th>
+            <th scope="col">{{ copy().columns.actions }}</th>
           </tr>
         </thead>
         <tbody>
@@ -265,19 +161,19 @@ const PAGE_SIZE = 5;
                   statusLabel(row.status)
                 }}</g-badge>
               </td>
-              <td>{{ row.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ row.updatedAt | date: copy().dateFormat }}</td>
               <td>
-                <button type="button" g-icon-button aria-label="Sửa">
+                <button type="button" g-icon-button [attr.aria-label]="copy().edit">
                   <g-icon [icon]="iconEdit" />
                 </button>
-                <button type="button" g-icon-button aria-label="Xoá">
+                <button type="button" g-icon-button [attr.aria-label]="copy().delete">
                   <g-icon [icon]="iconTrash" />
                 </button>
               </td>
             </tr>
           } @empty {
             <tr>
-              <td colspan="5" class="list-page-demo__empty">Không có dữ liệu khớp bộ lọc.</td>
+              <td colspan="5" class="list-page-demo__empty">{{ copy().empty }}</td>
             </tr>
           }
         </tbody>
@@ -303,8 +199,7 @@ const PAGE_SIZE = 5;
       flex: 1;
       min-width: 200px;
     }
-    /* Icon kính lúp ở suffix là trang trí -> tô nhạt như placeholder (GInputGroup chỉ tự làm mờ
-       prefix, giả định suffix là nút tự quản màu). */
+    /* The search suffix icon is decorative, so mute it like placeholder text. */
     .list-page-demo__search [gInputSuffix] {
       color: var(--g-text-muted);
     }
@@ -377,10 +272,11 @@ const PAGE_SIZE = 5;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListPageDemo {
-  protected readonly roles = ROLES;
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).list);
 
   protected readonly search = signal('');
-  protected readonly statusFilter = signal<Row['status'] | 'all'>('all');
+  protected readonly statusFilter = signal<PlaybookStatus | 'all'>('all');
   protected readonly activeRoles = signal<ReadonlySet<string>>(new Set());
   protected readonly sortDir = signal<'asc' | 'desc' | null>(null);
   protected readonly page = signal(1);
@@ -394,7 +290,7 @@ export class ListPageDemo {
     const term = this.search().trim().toLowerCase();
     const status = this.statusFilter();
     const roles = this.activeRoles();
-    return ROWS.filter((row) => {
+    return this.copy().rows.filter((row) => {
       const matchesTerm = !term || row.name.toLowerCase().includes(term);
       const matchesStatus = status === 'all' || row.status === status;
       const matchesRole = roles.size === 0 || roles.has(row.role);
@@ -405,7 +301,7 @@ export class ListPageDemo {
   private readonly sorted = computed(() => {
     const dir = this.sortDir();
     if (!dir) return this.filtered();
-    const list = [...this.filtered()].sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+    const list = [...this.filtered()].sort((a, b) => a.name.localeCompare(b.name, this.i18n.tag()));
     return dir === 'asc' ? list : list.reverse();
   });
 
@@ -419,14 +315,19 @@ export class ListPageDemo {
   });
 
   constructor() {
-    // search/statusFilter/activeRoles đổi -> danh sách lọc ngắn lại, trang hiện tại có thể vượt quá
-    // pageCount mới. Quay về trang 1 để tránh bảng trống. Effect chỉ ĐỌC bộ lọc, chỉ GHI page —
-    // không đọc lại page() nên không tự kích hoạt lại chính nó (không vòng lặp).
     effect(() => {
       this.search();
       this.statusFilter();
       this.activeRoles();
+      this.copy();
       this.page.set(1);
+    });
+
+    effect(() => {
+      const roles = this.copy().roles;
+      this.activeRoles.update(
+        (current) => new Set([...current].filter((role) => roles.includes(role))),
+      );
     });
   }
 
@@ -446,18 +347,16 @@ export class ListPageDemo {
     });
   }
 
-  // Space cuộn trang theo mặc định trên phần tử role="button" — chặn trước khi toggle, giống cách
-  // GCheckbox/GToggle của thư viện tự làm.
   protected onRoleSpace(event: Event, role: string): void {
     event.preventDefault();
     this.toggleRole(role);
   }
 
-  protected statusLabel(status: Row['status']): string {
-    return STATUS_LABEL[status];
+  protected statusLabel(status: PlaybookStatus): string {
+    return this.copy().statuses[status];
   }
 
-  protected statusVariant(status: Row['status']): GBadgeVariant {
-    return STATUS_VARIANT[status];
+  protected statusVariant(status: PlaybookStatus) {
+    return this.copy().statusVariants[status];
   }
 }

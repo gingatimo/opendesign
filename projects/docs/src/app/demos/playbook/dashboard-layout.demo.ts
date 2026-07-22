@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
   GBadge,
   GCard,
@@ -18,8 +18,10 @@ import {
   GTopbar,
   GTopbarEnd,
   GTopbarStart,
+  GLocaleService,
 } from 'ngx-opendesign';
 import { iconBell } from '../../core/demo-icons';
+import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
 
 @Component({
   selector: 'docs-dashboard-layout-demo',
@@ -46,7 +48,7 @@ import { iconBell } from '../../core/demo-icons';
             g-icon-button
             variant="ghost"
             size="sm"
-            [attr.aria-label]="collapsed() ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên'"
+            [attr.aria-label]="collapsed() ? copy().expandSidebar : copy().collapseSidebar"
             (click)="collapsed.set(!collapsed())"
           >
             <g-icon [icon]="collapsed() ? iconPanelOpen : iconPanelClose" size="sm" />
@@ -54,7 +56,7 @@ import { iconBell } from '../../core/demo-icons';
           <span class="dashboard-layout-demo__brand">Acme Inc.</span>
         </div>
         <div gTopbarEnd>
-          <button g-icon-button aria-label="Thông báo" size="sm">
+          <button g-icon-button [attr.aria-label]="copy().notifications" size="sm">
             <g-icon [icon]="iconBell" size="sm" />
           </button>
         </div>
@@ -64,35 +66,35 @@ import { iconBell } from '../../core/demo-icons';
         <g-sidebar [(collapsed)]="collapsed">
           <a g-sidebar-item href="#" class="g-active" aria-current="page">
             <g-icon gSidebarItemIcon [icon]="iconMenu" />
-            <span gSidebarItemLabel>Tổng quan</span>
+            <span gSidebarItemLabel>{{ copy().overview }}</span>
           </a>
           <a g-sidebar-item href="#">
             <g-icon gSidebarItemIcon [icon]="iconCart" />
-            <span gSidebarItemLabel>Đơn hàng</span>
+            <span gSidebarItemLabel>{{ copy().orders }}</span>
           </a>
           <a g-sidebar-item href="#">
             <g-icon gSidebarItemIcon [icon]="iconUser" />
-            <span gSidebarItemLabel>Khách hàng</span>
+            <span gSidebarItemLabel>{{ copy().customers }}</span>
           </a>
         </g-sidebar>
 
         <main class="dashboard-layout-demo__main">
           <div class="dashboard-layout-demo__stats">
             <g-card>
-              <div gCardHeader>Doanh thu tháng</div>
-              <p class="dashboard-layout-demo__stat-value">128,4tr ₫</p>
-              <g-badge variant="success">+12% so với tháng trước</g-badge>
+              <div gCardHeader>{{ copy().monthlyRevenue }}</div>
+              <p class="dashboard-layout-demo__stat-value">{{ copy().revenueValue }}</p>
+              <g-badge variant="success">{{ copy().revenueDelta }}</g-badge>
             </g-card>
 
             <g-card>
-              <div gCardHeader>Đơn hàng mới</div>
-              <p class="dashboard-layout-demo__stat-value">342</p>
-              <g-badge variant="warning">-4% so với tháng trước</g-badge>
+              <div gCardHeader>{{ copy().newOrders }}</div>
+              <p class="dashboard-layout-demo__stat-value">{{ copy().ordersValue }}</p>
+              <g-badge variant="warning">{{ copy().ordersDelta }}</g-badge>
             </g-card>
 
             <g-card>
-              <div gCardHeader>Tiến độ mục tiêu quý</div>
-              <g-progress [value]="68" aria-label="Tiến độ mục tiêu quý" />
+              <div gCardHeader>{{ copy().quarterGoal }}</div>
+              <g-progress [value]="68" [attr.aria-label]="copy().quarterGoal" />
             </g-card>
           </div>
         </main>
@@ -108,13 +110,8 @@ import { iconBell } from '../../core/demo-icons';
       border-radius: var(--g-radius-sm);
       overflow: hidden;
     }
-    // Toggle icon trong topbar (padding mặc định --g-space-6 = 24px) lệch cột với icon nav
-    // trong sidebar thu gọn. Đo trực tiếp trên trình duyệt thật (Chromium, xem
-    // tt-align-report.md) — KHÔNG suy từ CSS trên giấy: item thu gọn thực tế không co giãn hết
-    // bề rộng .g-sidebar__body (width:100% của item chỉ ra 40px dù body rộng 55px, item nằm sát
-    // trái), nên tâm icon nav đo được cách mép sidebar 28px chứ không phải 36px như tính lý
-    // thuyết (sidebarWidth/2). Padding-left 24px cho toggle cx lệch nav icon cx 8px; đổi còn
-    // --g-space-3 (12px) khớp đúng 28px (±0px khi đo cx thật).
+    // Align the topbar toggle with collapsed sidebar icons based on measured Chromium pixels,
+    // not paper math: collapsed items do not stretch to the full sidebar body width.
     .dashboard-layout-demo__topbar {
       padding-left: var(--g-space-3);
     }
@@ -152,6 +149,8 @@ import { iconBell } from '../../core/demo-icons';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardLayoutDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).dashboard);
   protected readonly collapsed = signal(false);
   protected readonly iconPanelOpen = gIconPanelLeftOpen;
   protected readonly iconPanelClose = gIconPanelLeftClose;

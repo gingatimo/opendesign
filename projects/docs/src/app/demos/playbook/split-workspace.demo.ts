@@ -2,7 +2,10 @@ import {
   afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
+  effect,
+  inject,
   signal,
   viewChild,
 } from '@angular/core';
@@ -13,20 +16,15 @@ import {
   GInput,
   GInputGroup,
   GInputSuffix,
+  GLocaleService,
   GSplitter,
   GSplitterPanel,
   GTerminal,
   GTerminalLine,
   gIconSend,
 } from 'ngx-opendesign';
+import { PlaybookMessage, playbookCopyFor } from '../../pages/playbook/playbook-copy';
 
-interface ChatMsg {
-  id: number;
-  role: 'bot' | 'user';
-  text: string;
-}
-
-// Playbook: GSplitter chia đôi — trái là khung CHAT, phải là GTerminal. Kéo thanh giữa để đổi tỉ lệ.
 @Component({
   selector: 'docs-split-workspace-demo',
   imports: [
@@ -45,8 +43,8 @@ interface ChatMsg {
       <ng-template gSplitterPanel>
         <div class="sw-chat">
           <div class="sw-chat__head">
-            <g-avatar name="Trợ lý" size="sm" />
-            <b>Trợ lý OpenDesign</b>
+            <g-avatar [name]="copy().assistantShortName" size="sm" />
+            <b>{{ copy().assistantName }}</b>
           </div>
           <div #chatScroll class="sw-chat__msgs">
             @for (m of messages(); track m.id) {
@@ -58,18 +56,18 @@ interface ChatMsg {
               <input
                 gInput
                 type="text"
-                placeholder="Hỏi gì đó…"
+                [placeholder]="copy().placeholder"
                 [value]="draft()"
                 (input)="draft.set($any($event.target).value)"
                 (keydown.enter)="sendChat($event)"
-                aria-label="Tin nhắn"
+                [attr.aria-label]="copy().inputLabel"
               />
               <button
                 type="button"
                 g-icon-button
                 gInputSuffix
                 size="sm"
-                aria-label="Gửi"
+                [attr.aria-label]="copy().send"
                 (click)="sendChat()"
               >
                 <g-icon [icon]="iconSend" size="sm" />
@@ -89,7 +87,6 @@ interface ChatMsg {
       height: 420px;
     }
 
-    /* --- Chat (trái) --- */
     .sw-chat {
       display: flex;
       flex-direction: column;
@@ -125,12 +122,10 @@ interface ChatMsg {
       background: var(--g-primary);
       color: var(--g-on-primary);
     }
-    /* Padding ở FOOT (không margin trên input-group vốn width:100% → tràn panel, bị cắt). */
     .sw-chat__foot {
       padding: var(--g-space-3);
     }
 
-    /* GTerminal tự lấp đầy panel phải. */
     .sw-term {
       height: 100%;
       border-radius: 0;
@@ -139,23 +134,28 @@ interface ChatMsg {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SplitWorkspaceDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).workspace);
   protected readonly iconSend = gIconSend;
 
-  protected readonly messages = signal<ChatMsg[]>([
-    { id: 1, role: 'bot', text: 'Chào bạn 👋 Bên phải là terminal — thử gõ một lệnh xem.' },
+  protected readonly messages = signal<PlaybookMessage[]>([
+    { id: 1, role: 'bot', text: this.copy().initialMessage },
   ]);
   protected readonly draft = signal('');
   private chatId = 2;
 
-  protected readonly terminal = signal<GTerminalLine[]>([
-    { text: 'opendesign@dev ~ %', kind: 'output' },
-    { text: 'npm run build:lib', kind: 'command' },
-    { text: 'Build complete. [1245ms]', kind: 'success' },
-  ]);
+  protected readonly terminal = signal<GTerminalLine[]>(this.copy().terminal);
 
   private readonly chatScroll = viewChild<ElementRef<HTMLElement>>('chatScroll');
 
   constructor() {
+    effect(() => {
+      this.messages.set([{ id: 1, role: 'bot', text: this.copy().initialMessage }]);
+      this.terminal.set(this.copy().terminal);
+      this.draft.set('');
+      this.chatId = 2;
+    });
+
     afterRenderEffect(() => {
       this.messages();
       const el = this.chatScroll()?.nativeElement;
@@ -164,7 +164,6 @@ export class SplitWorkspaceDemo {
   }
 
   protected sendChat(e?: Event): void {
-    // Bỏ qua Enter khi bộ gõ (IME) đang ghép ký tự — tránh gửi 2 lần khi gõ tiếng Việt.
     if ((e as KeyboardEvent | undefined)?.isComposing) return;
     const t = this.draft().trim();
     if (!t) return;
@@ -173,7 +172,7 @@ export class SplitWorkspaceDemo {
     setTimeout(() => {
       this.messages.update((l) => [
         ...l,
-        { id: this.chatId++, role: 'bot', text: 'Đã nhận: "' + t + '". (phản hồi mẫu)' },
+        { id: this.chatId++, role: 'bot', text: this.copy().receivedReply(t) },
       ]);
     }, 500);
   }
@@ -182,7 +181,7 @@ export class SplitWorkspaceDemo {
     this.terminal.update((l) => [
       ...l,
       { text: '$ ' + cmd, kind: 'command' },
-      { text: 'Đã chạy: ' + cmd + ' (kết quả mẫu)', kind: 'output' },
+      { text: this.copy().commandOutput(cmd), kind: 'output' },
     ]);
   }
 }

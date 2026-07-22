@@ -4,6 +4,8 @@ import {
   Component,
   computed,
   ElementRef,
+  effect,
+  inject,
   signal,
   viewChild,
 } from '@angular/core';
@@ -17,33 +19,17 @@ import {
   GInput,
   GInputGroup,
   GInputSuffix,
+  GLocaleService,
   GScrollPanel,
   gIconMic,
   gIconSend,
 } from 'ngx-opendesign';
+import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
 
 interface Msg {
   id: number;
   role: 'bot' | 'user';
   text: string;
-}
-
-// Bot trả lời mẫu theo từ khoá — demo, không gọi API thật.
-function botReply(text: string): string {
-  const t = text.toLowerCase();
-  if (t.includes('dark') || t.includes('tối')) {
-    return 'OpenDesign có sẵn sáng/tối: đặt data-g-theme="dark" lên <html> là mọi component đổi màu ngay, không cần build lại.';
-  }
-  if (t.includes('component') || t.includes('bao nhiêu')) {
-    return 'Thư viện hiện có hơn 50 component (Button, Input, Select, Table, Dialog…), tất cả standalone + OnPush + signals.';
-  }
-  if (t.includes('giới thiệu') || t.includes('opendesign') || t.includes('là gì')) {
-    return 'OpenDesign là design system cho Angular 22: thẩm mỹ pill, token --g-*, 0 dependency ngoài @angular/cdk và @angular/forms.';
-  }
-  if (t.includes('chào') || t.includes('hello')) {
-    return 'Chào bạn 👋 Mình có thể giúp gì về OpenDesign?';
-  }
-  return `Mình đã ghi nhận: "${text}". Đây là demo nên phản hồi là câu mẫu — ghép GScrollPanel + GAvatar + GInput + GIconButton.`;
 }
 
 @Component({
@@ -63,10 +49,10 @@ function botReply(text: string): string {
   template: `
     <g-card class="chatbot">
       <div class="chatbot__header">
-        <g-avatar name="Trợ lý OpenDesign" size="sm" />
+        <g-avatar [name]="copy().assistantName" size="sm" />
         <div class="chatbot__ident">
-          <span class="chatbot__name">Trợ lý OpenDesign</span>
-          <g-badge variant="success">Đang hoạt động</g-badge>
+          <span class="chatbot__name">{{ copy().assistantName }}</span>
+          <g-badge variant="success">{{ copy().online }}</g-badge>
         </div>
       </div>
 
@@ -74,7 +60,7 @@ function botReply(text: string): string {
         @for (m of messages(); track m.id) {
           <div class="chatbot__row" [class.chatbot__row--user]="m.role === 'user'">
             @if (m.role === 'bot') {
-              <g-avatar name="Trợ lý OpenDesign" size="sm" />
+              <g-avatar [name]="copy().assistantName" size="sm" />
             }
             <div class="chatbot__bubble" [class.chatbot__bubble--user]="m.role === 'user'">
               {{ m.text }}
@@ -83,8 +69,12 @@ function botReply(text: string): string {
         }
         @if (typing()) {
           <div class="chatbot__row">
-            <g-avatar name="Trợ lý OpenDesign" size="sm" />
-            <div class="chatbot__bubble chatbot__typing" role="status" aria-label="Đang soạn tin">
+            <g-avatar [name]="copy().assistantName" size="sm" />
+            <div
+              class="chatbot__bubble chatbot__typing"
+              role="status"
+              [attr.aria-label]="copy().typing"
+            >
               <span></span><span></span><span></span>
             </div>
           </div>
@@ -92,7 +82,7 @@ function botReply(text: string): string {
       </g-scroll-panel>
 
       <div class="chatbot__quick">
-        @for (q of quickReplies; track q) {
+        @for (q of copy().quickReplies; track q) {
           <g-chip
             class="chatbot__chip"
             role="button"
@@ -109,20 +99,19 @@ function botReply(text: string): string {
         <input
           gInput
           type="text"
-          placeholder="Nhập tin nhắn…"
+          [placeholder]="copy().placeholder"
           [value]="draft()"
           (input)="draft.set($any($event.target).value)"
           (keydown.enter)="send($event)"
-          aria-label="Nội dung tin nhắn"
+          [attr.aria-label]="copy().inputLabel"
         />
-        <!-- Suffix: mặc định icon micro (ghi âm), có chữ thì đổi sang icon gửi. -->
         <button
           type="button"
           g-icon-button
           gInputSuffix
           size="sm"
           [class.chatbot__send--active]="hasText()"
-          [attr.aria-label]="hasText() ? 'Gửi' : 'Ghi âm'"
+          [attr.aria-label]="hasText() ? copy().send : copy().record"
           [disabled]="typing()"
           (click)="onSuffix()"
         >
@@ -226,8 +215,7 @@ function botReply(text: string): string {
       outline: none;
       box-shadow: var(--g-focus-ring);
     }
-    /* Tô màu chính cho icon gửi khi đã có chữ để nút nổi lên như hành động chính. (Nút suffix nép
-       sát mép phải là do GInputGroup tự xử lý khi suffix là <button> — xem opendesign.scss.) */
+    /* Highlight the send icon once text is available; GInputGroup handles suffix positioning. */
     .chatbot__send--active {
       color: var(--g-primary);
     }
@@ -235,31 +223,29 @@ function botReply(text: string): string {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatbotDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).chatbot);
   protected readonly iconSend = gIconSend;
   protected readonly iconMic = gIconMic;
-  protected readonly quickReplies = [
-    'Giới thiệu OpenDesign',
-    'Hỗ trợ dark mode?',
-    'Có bao nhiêu component?',
-  ];
 
   protected readonly messages = signal<Msg[]>([
-    { id: 1, role: 'bot', text: 'Chào bạn 👋 Mình là trợ lý OpenDesign. Bạn cần hỗ trợ gì?' },
+    { id: 1, role: 'bot', text: this.copy().initialMessage },
   ]);
   protected readonly draft = signal('');
   protected readonly typing = signal(false);
-  // Có chữ chưa → quyết định icon suffix (send) vs mặc định (mic).
   protected readonly hasText = computed(() => this.draft().trim().length > 0);
 
   private nextId = 2;
-  // read: ElementRef — không có nó, #scroller trên <g-scroll-panel> trả về INSTANCE component
-  // (GScrollPanel), không phải ElementRef của host → .nativeElement undefined, cuộn hụt.
   private readonly scroller = viewChild('scroller', { read: ElementRef });
 
   constructor() {
-    // Zoneless: cuộn xuống đáy SAU khi render (tin mới / typing đổi). afterRenderEffect, KHÔNG
-    // setTimeout(0)/queueMicrotask (chạy TRƯỚC render → chiều cao chưa cập nhật). Đọc messages()+
-    // typing() để chạy lại khi chúng đổi; GScrollPanel host chính là phần tử cuộn (overflow:auto).
+    effect(() => {
+      this.messages.set([{ id: 1, role: 'bot', text: this.copy().initialMessage }]);
+      this.draft.set('');
+      this.typing.set(false);
+      this.nextId = 2;
+    });
+
     afterRenderEffect(() => {
       this.messages();
       this.typing();
@@ -269,12 +255,10 @@ export class ChatbotDemo {
   }
 
   protected send(e?: Event): void {
-    // Bỏ qua Enter khi bộ gõ (IME tiếng Việt) đang ghép ký tự — tránh gửi 2 lần.
     if ((e as KeyboardEvent | undefined)?.isComposing) return;
     this.sendText(this.draft());
   }
 
-  // Nút suffix: có chữ → gửi; rỗng → mic (ghi âm chỉ là minh hoạ, không làm gì trong demo).
   protected onSuffix(): void {
     if (this.hasText()) this.send();
   }
@@ -285,18 +269,15 @@ export class ChatbotDemo {
     this.messages.update((list) => [...list, { id: this.nextId++, role: 'user', text: t }]);
     this.draft.set('');
     this.typing.set(true);
-    // Giả lập độ trễ "gọi API" rồi set signal — setTimeout ở đây CHỈ để chờ (an toàn zoneless), khác
-    // với dùng setTimeout để cuộn/focus phần tử vừa render.
     setTimeout(() => {
       this.messages.update((list) => [
         ...list,
-        { id: this.nextId++, role: 'bot', text: botReply(t) },
+        { id: this.nextId++, role: 'bot', text: this.copy().reply(t) },
       ]);
       this.typing.set(false);
     }, 700);
   }
 
-  // Space trên phần tử role="button" cuộn trang theo mặc định — chặn rồi mới gửi.
   protected onChipSpace(event: Event, text: string): void {
     event.preventDefault();
     this.sendText(text);

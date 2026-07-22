@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   GButton,
@@ -22,8 +22,10 @@ import {
   GTextarea,
   GToastService,
   GToggle,
+  GLocaleService,
   gIconUser,
 } from 'ngx-opendesign';
+import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
 
 @Component({
   selector: 'docs-create-page-demo',
@@ -52,11 +54,11 @@ import {
   ],
   template: `
     <g-card class="create-demo__card">
-      <div gCardHeader>Thêm nhân viên mới</div>
+      <div gCardHeader>{{ copy().cardTitle }}</div>
 
       <form [formGroup]="form" class="create-demo__form">
         <div class="create-demo__field">
-          <span class="create-demo__label">Ảnh đại diện</span>
+          <span class="create-demo__label">{{ copy().avatar }}</span>
           <g-file-input
             [(files)]="avatar"
             accept="image/*"
@@ -69,104 +71,127 @@ import {
         </div>
 
         <label class="create-demo__field">
-          <span class="create-demo__label">Họ tên <span class="create-demo__req">*</span></span>
+          <span class="create-demo__label"
+            >{{ copy().fullName }} <span class="create-demo__req">*</span></span
+          >
           <g-input-group>
             <g-icon gInputPrefix [icon]="iconUser" size="sm" />
-            <input gInput type="text" formControlName="name" placeholder="Nguyễn Văn A" />
+            <input
+              gInput
+              type="text"
+              formControlName="name"
+              [placeholder]="copy().namePlaceholder"
+            />
           </g-input-group>
           @if (invalid('name')) {
-            <span class="create-demo__error">Vui lòng nhập họ tên.</span>
+            <span class="create-demo__error">{{ copy().requiredName }}</span>
           }
         </label>
 
         <label class="create-demo__field">
-          <span class="create-demo__label">Email <span class="create-demo__req">*</span></span>
-          <input gInput type="email" formControlName="email" placeholder="ban@vidu.com" />
+          <span class="create-demo__label"
+            >{{ copy().email }} <span class="create-demo__req">*</span></span
+          >
+          <input
+            gInput
+            type="email"
+            formControlName="email"
+            [placeholder]="copy().emailPlaceholder"
+          />
           @if (invalid('email')) {
             <span class="create-demo__error">
               @if (form.controls.email.hasError('required')) {
-                Vui lòng nhập email.
+                {{ copy().requiredEmail }}
               } @else {
-                Email không đúng định dạng.
+                {{ copy().invalidEmail }}
               }
             </span>
           }
         </label>
 
         <div class="create-demo__field">
-          <span class="create-demo__label">Phòng ban <span class="create-demo__req">*</span></span>
+          <span class="create-demo__label"
+            >{{ copy().department }} <span class="create-demo__req">*</span></span
+          >
           <g-select
             formControlName="department"
-            placeholder="Chọn phòng ban"
-            aria-label="Phòng ban"
+            [placeholder]="copy().departmentPlaceholder"
+            [attr.aria-label]="copy().department"
           >
-            <g-option value="engineering">Kỹ thuật</g-option>
-            <g-option value="design">Thiết kế</g-option>
-            <g-option value="sales">Kinh doanh</g-option>
-            <g-option value="ops">Vận hành</g-option>
+            @for (department of copy().departments; track department.value) {
+              <g-option [value]="department.value">{{ department.label }}</g-option>
+            }
           </g-select>
           @if (invalid('department')) {
-            <span class="create-demo__error">Vui lòng chọn phòng ban.</span>
+            <span class="create-demo__error">{{ copy().requiredDepartment }}</span>
           }
         </div>
 
         <div class="create-demo__field">
-          <span class="create-demo__label">Loại hợp đồng</span>
-          <g-radio-group formControlName="type" aria-label="Loại hợp đồng">
-            <g-radio value="fulltime">Chính thức</g-radio>
-            <g-radio value="probation">Thử việc</g-radio>
-            <g-radio value="contractor">Cộng tác</g-radio>
+          <span class="create-demo__label">{{ copy().contractType }}</span>
+          <g-radio-group formControlName="type" [attr.aria-label]="copy().contractType">
+            @for (type of copy().contractTypes; track type.value) {
+              <g-radio [value]="type.value">{{ type.label }}</g-radio>
+            }
           </g-radio-group>
         </div>
 
         <div class="create-demo__field">
           <span class="create-demo__label"
-            >Ngày vào làm <span class="create-demo__req">*</span></span
+            >{{ copy().startDate }} <span class="create-demo__req">*</span></span
           >
-          <g-datepicker formControlName="startDate" aria-label="Ngày vào làm" />
+          <g-datepicker formControlName="startDate" [attr.aria-label]="copy().startDate" />
           @if (invalid('startDate')) {
-            <span class="create-demo__error">Vui lòng chọn ngày vào làm.</span>
+            <span class="create-demo__error">{{ copy().requiredStartDate }}</span>
           }
         </div>
 
         <div class="create-demo__field">
-          <span class="create-demo__label">Hạn mức truy cập</span>
+          <span class="create-demo__label">{{ copy().accessQuota }}</span>
           <div class="create-demo__slider-row">
-            <g-slider [(value)]="quota" min="0" max="100" step="5" ariaLabel="Hạn mức truy cập" />
+            <g-slider
+              [(value)]="quota"
+              min="0"
+              max="100"
+              step="5"
+              [ariaLabel]="copy().accessQuota"
+            />
             <span class="create-demo__slider-value">{{ quota() }}%</span>
           </div>
         </div>
 
         <div class="create-demo__field">
-          <span class="create-demo__label">Kỹ năng / thẻ</span>
-          <g-chips formControlName="tags" placeholder="Nhập rồi Enter" />
+          <span class="create-demo__label">{{ copy().tags }}</span>
+          <g-chips formControlName="tags" [placeholder]="copy().tagsPlaceholder" />
         </div>
 
         <label class="create-demo__field">
-          <span class="create-demo__label">Ghi chú</span>
+          <span class="create-demo__label">{{ copy().notes }}</span>
           <textarea
             gTextarea
             formControlName="notes"
-            placeholder="Thông tin thêm về nhân viên…"
+            [placeholder]="copy().notesPlaceholder"
           ></textarea>
         </label>
 
         <div class="create-demo__row">
-          <span>Kích hoạt tài khoản ngay</span>
-          <g-toggle formControlName="active" aria-label="Kích hoạt tài khoản ngay" />
+          <span>{{ copy().activateNow }}</span>
+          <g-toggle formControlName="active" [attr.aria-label]="copy().activateNow" />
         </div>
 
         <div class="create-demo__field">
-          <g-checkbox formControlName="agree">Tôi xác nhận thông tin là chính xác</g-checkbox>
+          <g-checkbox formControlName="agree">{{ copy().agree }}</g-checkbox>
           @if (invalid('agree')) {
-            <span class="create-demo__error">Cần xác nhận trước khi lưu.</span>
+            <span class="create-demo__error">{{ copy().requiredAgree }}</span>
           }
         </div>
       </form>
 
       <div gCardFooter class="create-demo__footer">
-        <button g-button variant="outline" type="button" (click)="reset()">Đặt lại</button>
-        <button g-button type="button" (click)="submit()">Lưu nhân viên</button>
+        <button g-button variant="outline" type="button" (click)="reset()">
+          {{ copy().reset }}
+        </button>
+        <button g-button type="button" (click)="submit()">{{ copy().save }}</button>
       </div>
     </g-card>
   `,
@@ -227,11 +252,11 @@ import {
 export class CreatePageDemo {
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(GToastService);
+  private readonly i18n = inject(GLocaleService);
 
+  protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).create);
   protected readonly iconUser = gIconUser;
 
-  // GDatepicker nay là CVA nên vào thẳng form group (formControlName) — invalid tự tô đỏ. GSlider vẫn
-  // dùng model [(value)] (required không áp cho thanh trượt) nên giữ ngoài form.
   protected readonly quota = signal(50);
   protected readonly avatar = signal<File[]>([]);
   protected readonly triedSubmit = signal(false);
@@ -248,7 +273,6 @@ export class CreatePageDemo {
     agree: [false, Validators.requiredTrue],
   });
 
-  // Lỗi chỉ hiện khi control invalid VÀ (đã touched HOẶC đã bấm lưu) — tránh la mắng khi form còn trống.
   protected invalid(name: keyof typeof this.form.controls): boolean {
     const control = this.form.controls[name];
     return control.invalid && (control.touched || this.triedSubmit());
@@ -258,11 +282,11 @@ export class CreatePageDemo {
     this.triedSubmit.set(true);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.toast.show({ message: 'Vui lòng kiểm tra lại các trường bắt buộc.', variant: 'danger' });
+      this.toast.show({ message: this.copy().invalidToast, variant: 'danger' });
       return;
     }
     this.toast.show({
-      message: `Đã lưu nhân viên "${this.form.controls.name.value}".`,
+      message: this.copy().savedToast(this.form.controls.name.value),
       variant: 'success',
     });
   }

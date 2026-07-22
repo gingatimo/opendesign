@@ -1,20 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
 import { CodeBlock } from '../../shared/code-block';
 import { DemoSection } from '../../shared/demo-section';
 import { ChatbotDemo } from '../../demos/playbook/chatbot.demo';
+import { playbookCopyFor } from './playbook-copy';
 
 @Component({
   imports: [ChatbotDemo, CodeBlock, DemoSection],
   template: `
-    <h1>Chatbot</h1>
-    <p>
-      Khung chat tương tác thật: gõ tin (hoặc bấm chip gợi ý) → tin hiện bên phải, bot "soạn" (chấm
-      nhảy) rồi trả lời mẫu theo từ khoá. Ghép <code>GCard</code> + <code>GAvatar</code> +
-      <code>GBadge</code> + <code>GScrollPanel</code> (tự cuộn xuống đáy khi có tin mới bằng
-      <code>afterRenderEffect</code>) + <code>GChip</code> gợi ý + ô nhập
-      <code>GInputGroup</code> với nút suffix đổi icon theo ngữ cảnh: mặc định
-      <code>gIconMic</code> (ghi âm), có chữ thì chuyển <code>gIconSend</code> (gửi).
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
     <docs-demo-section>
       <docs-chatbot-demo />
     </docs-demo-section>
@@ -22,4 +17,7 @@ import { ChatbotDemo } from '../../demos/playbook/chatbot.demo';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class PlaybookChatbotPage {}
+export default class PlaybookChatbotPage {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => playbookCopyFor(this.i18n.tag()).chatbot);
+}

@@ -1,22 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
 import { CodeBlock } from '../../shared/code-block';
 import { DemoSection } from '../../shared/demo-section';
 import { CreatePageDemo } from '../../demos/playbook/create-page.demo';
+import { playbookCopyFor } from './playbook-copy';
 
 @Component({
   imports: [CreatePageDemo, CodeBlock, DemoSection],
   template: `
-    <h1>Thêm mới</h1>
-    <p>
-      Form "tạo bản ghi" gom gần đủ họ input của OpenDesign:
-      <code>GInput</code>/<code>GInputGroup</code>, <code>GTextarea</code>, <code>GSelect</code>,
-      <code>GRadioGroup</code>, <code>GCheckbox</code>, <code>GToggle</code>,
-      <code>GDatepicker</code>, <code>GSlider</code>, <code>GChips</code> và
-      <code>GFileInput</code> + <code>GImagePreview</code>. Validation qua reactive forms (trường
-      bắt buộc đánh dấu <span aria-hidden="true">*</span>), nút <b>Lưu</b> bắn toast. Riêng
-      <code>GDatepicker</code>/<code>GSlider</code> dùng model <code>[(value)]</code> (không phải
-      CVA) nên giữ ngoài form group rồi gộp tay lúc submit.
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
     <docs-demo-section>
       <docs-create-page-demo />
     </docs-demo-section>
@@ -24,4 +17,7 @@ import { CreatePageDemo } from '../../demos/playbook/create-page.demo';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class PlaybookCreatePage {}
+export default class PlaybookCreatePage {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => playbookCopyFor(this.i18n.tag()).create);
+}

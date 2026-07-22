@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import {
   GAvatar,
   GBadge,
@@ -12,21 +12,9 @@ import {
   GTimelineItem,
   gIconEdit,
   gIconTrash,
+  GLocaleService,
 } from 'ngx-opendesign';
-
-interface Field {
-  label: string;
-  value: string;
-}
-
-const FIELDS: Field[] = [
-  { label: 'Email', value: 'an.nguyen@vidu.com' },
-  { label: 'Điện thoại', value: '0901 234 567' },
-  { label: 'Phòng ban', value: 'Kỹ thuật' },
-  { label: 'Chức danh', value: 'Kỹ sư phần mềm' },
-  { label: 'Ngày vào làm', value: '02/03/2024' },
-  { label: 'Quản lý trực tiếp', value: 'Lê Hoàng Cường' },
-];
+import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
 
 @Component({
   selector: 'docs-detail-page-demo',
@@ -45,26 +33,30 @@ const FIELDS: Field[] = [
   template: `
     <g-card class="detail-demo__card">
       <div class="detail-demo__header">
-        <g-avatar name="Nguyễn Văn An" size="lg" />
+        <g-avatar [name]="copy().personName" size="lg" />
         <div class="detail-demo__ident">
           <div class="detail-demo__name-row">
-            <h3 class="detail-demo__name">Nguyễn Văn An</h3>
-            <g-badge variant="success">Đang hoạt động</g-badge>
+            <h3 class="detail-demo__name">{{ copy().personName }}</h3>
+            <g-badge variant="success">{{ copy().status }}</g-badge>
           </div>
-          <span class="detail-demo__subtitle">Kỹ thuật · Nhân viên #NV-0142</span>
+          <span class="detail-demo__subtitle">{{ copy().subtitle }}</span>
         </div>
         <div class="detail-demo__actions">
-          <button g-button variant="outline"><g-icon [icon]="iconEdit" size="sm" /> Sửa</button>
-          <button g-button variant="danger"><g-icon [icon]="iconTrash" size="sm" /> Xoá</button>
+          <button g-button variant="outline">
+            <g-icon [icon]="iconEdit" size="sm" /> {{ copy().edit }}
+          </button>
+          <button g-button variant="danger">
+            <g-icon [icon]="iconTrash" size="sm" /> {{ copy().delete }}
+          </button>
         </div>
       </div>
 
       <g-divider />
 
-      <g-tabs tablistLabel="Chi tiết nhân viên">
-        <g-tab label="Thông tin">
+      <g-tabs [tablistLabel]="copy().tablistLabel">
+        <g-tab [label]="copy().profileTab">
           <dl class="detail-demo__grid">
-            @for (field of fields; track field.label) {
+            @for (field of copy().fields; track field.label) {
               <div class="detail-demo__field">
                 <dt>{{ field.label }}</dt>
                 <dd>{{ field.value }}</dd>
@@ -72,24 +64,14 @@ const FIELDS: Field[] = [
             }
           </dl>
         </g-tab>
-        <g-tab label="Hoạt động">
+        <g-tab [label]="copy().activityTab">
           <g-timeline class="detail-demo__timeline">
-            <g-timeline-item status="warning">
-              <strong>Nhắc gia hạn hợp đồng</strong>
-              <p>Hợp đồng lao động sắp hết hạn — còn 30 ngày.</p>
-            </g-timeline-item>
-            <g-timeline-item status="success">
-              <strong>Cập nhật hồ sơ</strong>
-              <p>Đổi số điện thoại liên hệ — 15/07/2026, 09:30.</p>
-            </g-timeline-item>
-            <g-timeline-item status="success">
-              <strong>Hoàn thành onboarding</strong>
-              <p>Đã ký hợp đồng và nhận thiết bị — 05/03/2024.</p>
-            </g-timeline-item>
-            <g-timeline-item>
-              <strong>Tạo tài khoản</strong>
-              <p>Khởi tạo tài khoản nội bộ — 02/03/2024.</p>
-            </g-timeline-item>
+            @for (item of copy().timeline; track item.title) {
+              <g-timeline-item [status]="item.status ?? 'default'">
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.body }}</p>
+              </g-timeline-item>
+            }
           </g-timeline>
         </g-tab>
       </g-tabs>
@@ -99,8 +81,7 @@ const FIELDS: Field[] = [
     .detail-demo__card {
       max-width: 560px;
     }
-    /* GDivider không tự chừa margin dọc (host chỉ là 1px line) → chừa khoảng để header/tabs không
-       dán sát đường kẻ. */
+    /* GDivider is only a 1px host line, so add vertical room between header and tabs. */
     .detail-demo__card g-divider {
       margin-block: var(--g-space-4);
     }
@@ -172,7 +153,8 @@ const FIELDS: Field[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailPageDemo {
-  protected readonly fields = FIELDS;
+  private readonly i18n = inject(GLocaleService);
+  protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).detail);
   protected readonly iconEdit = gIconEdit;
   protected readonly iconTrash = gIconTrash;
 }

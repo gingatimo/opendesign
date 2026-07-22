@@ -1,18 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
 import { CodeBlock } from '../../shared/code-block';
 import { DemoSection } from '../../shared/demo-section';
 import { DetailPageDemo } from '../../demos/playbook/detail-page.demo';
+import { playbookCopyFor } from './playbook-copy';
 
 @Component({
   imports: [DetailPageDemo, CodeBlock, DemoSection],
   template: `
-    <h1>Chi tiết</h1>
-    <p>
-      Màn xem hồ sơ một bản ghi: header có <code>GAvatar</code>, tên, <code>GBadge</code> trạng thái
-      và nút <b>Sửa</b>/<b>Xoá</b> (<code>GButton</code> kèm icon). <code>GTabs</code> tách
-      <b>Thông tin</b> (lưới label/value cho các thuộc tính) và <b>Hoạt động</b> — dựng bằng
-      <code>GTimeline</code> với marker màu theo trạng thái từng mốc.
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
     <docs-demo-section>
       <docs-detail-page-demo />
     </docs-demo-section>
@@ -20,4 +17,7 @@ import { DetailPageDemo } from '../../demos/playbook/detail-page.demo';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class PlaybookDetailPage {}
+export default class PlaybookDetailPage {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => playbookCopyFor(this.i18n.tag()).detail);
+}
