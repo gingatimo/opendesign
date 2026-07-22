@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GTimeline, GTimelineItem } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GTimeline, GTimelineItem } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 @Component({
   selector: 'docs-timeline-basic-demo',
@@ -7,20 +8,20 @@ import { GTimeline, GTimelineItem } from 'ngx-opendesign';
   template: `
     <g-timeline>
       <g-timeline-item status="success">
-        <strong>Đặt hàng thành công</strong>
-        <p>Đơn hàng #10234 đã được tạo lúc 08:15, 19/07/2026.</p>
+        <strong>{{ demo().placedTitle }}</strong>
+        <p>{{ demo().placedBody }}</p>
       </g-timeline-item>
       <g-timeline-item status="success">
-        <strong>Đã đóng gói</strong>
-        <p>Kho xác nhận đơn và hoàn tất đóng gói sản phẩm.</p>
+        <strong>{{ demo().packedTitle }}</strong>
+        <p>{{ demo().packedBody }}</p>
       </g-timeline-item>
       <g-timeline-item status="warning">
-        <strong>Vận chuyển bị chậm</strong>
-        <p>Đơn hàng gặp sự cố thời tiết, dự kiến trễ 1 ngày.</p>
+        <strong>{{ demo().delayedTitle }}</strong>
+        <p>{{ demo().delayedBody }}</p>
       </g-timeline-item>
       <g-timeline-item>
-        <strong>Chờ giao hàng</strong>
-        <p>Đơn sẽ được giao trong hôm nay hoặc ngày mai.</p>
+        <strong>{{ demo().waitingTitle }}</strong>
+        <p>{{ demo().waitingBody }}</p>
       </g-timeline-item>
     </g-timeline>
   `,
@@ -41,4 +42,7 @@ import { GTimeline, GTimelineItem } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TimelineBasicDemo {}
+export class TimelineBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).timeline.demo);
+}

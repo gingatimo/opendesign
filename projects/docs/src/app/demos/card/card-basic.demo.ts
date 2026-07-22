@@ -1,18 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GCard, GCardFooter, GCardHeader } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GCard, GCardFooter, GCardHeader, GLocaleService } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 @Component({
   selector: 'docs-card-basic-demo',
   imports: [GCard, GCardHeader, GCardFooter],
   template: `
     <g-card>
-      <p>Thẻ đơn giản chỉ có nội dung.</p>
+      <p>{{ demo().simple }}</p>
     </g-card>
 
     <g-card>
-      <div gCardHeader>Thông tin tài khoản</div>
-      <p>Thẻ đầy đủ với phần đầu và phần chân.</p>
-      <div gCardFooter>Cập nhật 2 giờ trước</div>
+      <div gCardHeader>{{ demo().header }}</div>
+      <p>{{ demo().body }}</p>
+      <div gCardFooter>{{ demo().footer }}</div>
     </g-card>
   `,
   styles: `
@@ -25,4 +26,7 @@ import { GCard, GCardFooter, GCardHeader } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBasicDemo {}
+export class CardBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).card.demo);
+}

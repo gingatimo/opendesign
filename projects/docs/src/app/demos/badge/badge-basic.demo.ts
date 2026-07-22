@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GBadge } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GBadge, GLocaleService } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 @Component({
   selector: 'docs-badge-basic-demo',
   imports: [GBadge],
   template: `
-    <g-badge>Mặc định</g-badge>
-    <g-badge variant="success">Thành công</g-badge>
-    <g-badge variant="warning">Cảnh báo</g-badge>
-    <g-badge variant="danger">Lỗi</g-badge>
+    <g-badge>{{ demo().neutral }}</g-badge>
+    <g-badge variant="success">{{ demo().success }}</g-badge>
+    <g-badge variant="warning">{{ demo().warning }}</g-badge>
+    <g-badge variant="danger">{{ demo().danger }}</g-badge>
   `,
   styles: `
     :host {
@@ -20,4 +21,7 @@ import { GBadge } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BadgeBasicDemo {}
+export class BadgeBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).badge.demo);
+}

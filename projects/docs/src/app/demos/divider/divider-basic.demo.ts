@@ -1,22 +1,23 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GDivider } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GDivider, GLocaleService } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 @Component({
   selector: 'docs-divider-basic-demo',
   imports: [GDivider],
   template: `
-    <p>Đoạn nội dung phía trên.</p>
+    <p>{{ demo().above }}</p>
     <g-divider />
-    <p>Đoạn nội dung phía dưới.</p>
+    <p>{{ demo().below }}</p>
 
-    <g-divider>HOẶC</g-divider>
+    <g-divider>{{ demo().or }}</g-divider>
 
     <div class="row">
-      <span>Mục A</span>
+      <span>{{ demo().itemA }}</span>
       <g-divider orientation="vertical" />
-      <span>Mục B</span>
+      <span>{{ demo().itemB }}</span>
       <g-divider orientation="vertical" />
-      <span>Mục C</span>
+      <span>{{ demo().itemC }}</span>
     </div>
   `,
   styles: `
@@ -37,4 +38,7 @@ import { GDivider } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DividerBasicDemo {}
+export class DividerBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).divider.demo);
+}

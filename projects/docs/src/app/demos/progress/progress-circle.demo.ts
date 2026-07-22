@@ -6,7 +6,8 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { GButton, GProgressCircle } from 'ngx-opendesign';
+import { GButton, GLocaleService, GProgressCircle } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 const TOTAL_MS = 10_000;
 const TICK_MS = 100;
@@ -16,18 +17,23 @@ const TICK_MS = 100;
   imports: [GProgressCircle, GButton],
   template: `
     <div class="pc-demo">
-      <g-progress-circle [value]="percent()" [size]="140" [stroke]="10" aria-label="Đếm ngược">
+      <g-progress-circle
+        [value]="percent()"
+        [size]="140"
+        [stroke]="10"
+        [attr.aria-label]="demo().countdown"
+      >
         <div class="pc-demo__center">
           <span class="pc-demo__num">{{ secondsLeft() }}</span>
-          <span class="pc-demo__unit">giây</span>
+          <span class="pc-demo__unit">{{ demo().unit }}</span>
         </div>
       </g-progress-circle>
 
       <div class="pc-demo__controls">
         <button g-button variant="outline" (click)="toggle()">
-          {{ running() ? 'Tạm dừng' : remaining() <= 0 ? 'Chạy lại' : 'Tiếp tục' }}
+          {{ running() ? demo().pause : remaining() <= 0 ? demo().rerun : demo().resume }}
         </button>
-        <button g-button variant="ghost" (click)="restart()">Đặt lại</button>
+        <button g-button variant="ghost" (click)="restart()">{{ demo().reset }}</button>
       </div>
     </div>
   `,
@@ -64,9 +70,11 @@ const TICK_MS = 100;
 })
 export class ProgressCircleDemo {
   private timer?: ReturnType<typeof setInterval>;
+  private readonly i18n = inject(GLocaleService);
 
   protected readonly remaining = signal(TOTAL_MS); // mili-giây còn lại
   protected readonly running = signal(false);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).progress.demo);
 
   protected readonly percent = computed(() => (this.remaining() / TOTAL_MS) * 100);
   protected readonly secondsLeft = computed(() => Math.ceil(this.remaining() / 1000));

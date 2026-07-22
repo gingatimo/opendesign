@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GSpinner } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService, GSpinner } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 @Component({
   selector: 'docs-spinner-basic-demo',
@@ -9,7 +10,7 @@ import { GSpinner } from 'ngx-opendesign';
     <g-spinner />
     <g-spinner size="lg" />
     <g-spinner size="xl" />
-    <g-spinner size="2xl" aria-label="Đang tải danh sách sản phẩm" />
+    <g-spinner size="2xl" [attr.aria-label]="demo().productList" />
   `,
   styles: `
     :host {
@@ -20,4 +21,7 @@ import { GSpinner } from 'ngx-opendesign';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpinnerBasicDemo {}
+export class SpinnerBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).spinner.demo);
+}

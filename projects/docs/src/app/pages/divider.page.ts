@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ApiRow, ApiTable } from '../shared/api-table';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GLocaleService } from 'ngx-opendesign';
+import { ApiTable } from '../shared/api-table';
 import { CodeBlock } from '../shared/code-block';
 import { DemoSection } from '../shared/demo-section';
 import { DividerBasicDemo } from '../demos/divider/divider-basic.demo';
+import { displayCopyFor } from './display-copy';
 
 @Component({
   imports: [DividerBasicDemo, CodeBlock, ApiTable, DemoSection],
   template: `
-    <h1>Divider</h1>
-    <p>
-      Vạch phân cách giữa các khối nội dung. Ngang (mặc định) chiếm hết bề rộng; dọc dùng trong hàng
-      ngang để ngăn các mục. Có thể đặt nhãn ở giữa (vd "HOẶC") qua nội dung chiếu.
-    </p>
+    <h1>{{ page().title }}</h1>
+    <p>{{ page().intro }}</p>
 
     <docs-demo-section>
       <docs-divider-basic-demo />
@@ -19,27 +18,19 @@ import { DividerBasicDemo } from '../demos/divider/divider-basic.demo';
 
     <docs-code-block src="demo-sources/divider/divider-basic.demo.ts" />
 
-    <h2>API — GDivider</h2>
-    <docs-api-table [rows]="apiRows" />
+    <h2>{{ page().apiTitle }}</h2>
+    <docs-api-table [rows]="page().apiRows" />
 
-    <h2>Accessibility</h2>
+    <h2>{{ page().accessibilityTitle }}</h2>
     <ul>
-      <li>
-        Host mang <code>role="separator"</code> và <code>aria-orientation</code> theo hướng, để công
-        nghệ hỗ trợ hiểu đây là ranh giới phân tách.
-      </li>
-      <li>Nhãn (nếu có) là nội dung văn bản bình thường, đọc được cùng ngữ cảnh xung quanh.</li>
+      @for (item of page().accessibility; track $index) {
+        <li>{{ item }}</li>
+      }
     </ul>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DividerPage {
-  protected readonly apiRows: ApiRow[] = [
-    {
-      name: 'orientation',
-      type: `'horizontal' | 'vertical'`,
-      default: `'horizontal'`,
-      description: 'Hướng vạch. Dọc cần đặt trong một hàng flex có chiều cao xác định.',
-    },
-  ];
+  private readonly i18n = inject(GLocaleService);
+  protected readonly page = computed(() => displayCopyFor(this.i18n.tag()).divider);
 }

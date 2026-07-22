@@ -1,17 +1,18 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GChip } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GChip, GLocaleService } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 @Component({
   selector: 'docs-chip-basic-demo',
   imports: [GChip],
   template: `
-    <g-chip>Thiết kế</g-chip>
+    <g-chip>{{ demo().design }}</g-chip>
     @for (tag of tags(); track tag) {
-      <g-chip [removable]="true" [removeLabel]="'Xóa ' + tag" (removed)="remove(tag)">{{
+      <g-chip [removable]="true" [removeLabel]="demo().remove(tag)" (removed)="remove(tag)">{{
         tag
       }}</g-chip>
     }
-    <g-chip [removable]="true" [disabled]="true">Không xóa được</g-chip>
+    <g-chip [removable]="true" [disabled]="true">{{ demo().disabled }}</g-chip>
   `,
   styles: `
     :host {
@@ -24,7 +25,9 @@ import { GChip } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChipBasicDemo {
+  private readonly i18n = inject(GLocaleService);
   protected readonly tags = signal(['Angular', 'TypeScript', 'SCSS']);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).chip.demo);
 
   protected remove(tag: string): void {
     this.tags.update((list) => list.filter((t) => t !== tag));

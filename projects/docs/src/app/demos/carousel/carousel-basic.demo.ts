@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GCarousel } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GCarousel, GLocaleService } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 interface MixedCard {
   label: string;
@@ -10,25 +11,23 @@ interface MixedCard {
   selector: 'docs-carousel-basic-demo',
   imports: [GCarousel],
   template: `
-    <p class="cr-demo__label">Item cùng kích thước — nút flanking (mặc định, không đè lên card)</p>
+    <p class="cr-demo__label">{{ demo().equalCaption }}</p>
     <g-carousel>
       @for (n of equalItems; track n) {
-        <div class="cr-demo__card cr-demo__card--equal">Thẻ {{ n }}</div>
+        <div class="cr-demo__card cr-demo__card--equal">{{ demo().card(n) }}</div>
       }
     </g-carousel>
 
-    <p class="cr-demo__label">Nút overlay — đè lên track, mờ nhẹ lúc nghỉ, rê vào hiện rõ</p>
+    <p class="cr-demo__label">{{ demo().overlayCaption }}</p>
     <g-carousel navPlacement="overlay">
       @for (n of equalItems; track n) {
-        <div class="cr-demo__card cr-demo__card--equal">Thẻ {{ n }}</div>
+        <div class="cr-demo__card cr-demo__card--equal">{{ demo().card(n) }}</div>
       }
     </g-carousel>
 
-    <p class="cr-demo__label">
-      Item khác kích thước (thẻ ngang xen thẻ dọc) — <code>align="center"</code> căn dọc giữa
-    </p>
+    <p class="cr-demo__label">{{ demo().mixedCaption }}</p>
     <g-carousel align="center">
-      @for (c of mixedItems; track $index) {
+      @for (c of mixedItems(); track $index) {
         <div
           class="cr-demo__card"
           [class.cr-demo__card--wide]="c.wide"
@@ -79,13 +78,15 @@ interface MixedCard {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselBasicDemo {
+  private readonly i18n = inject(GLocaleService);
   protected readonly equalItems = [1, 2, 3, 4, 5, 6, 7, 8];
-  protected readonly mixedItems: MixedCard[] = [
-    { label: 'Thẻ tín dụng', wide: true },
-    { label: 'Thẻ dọc', wide: false },
-    { label: 'Thẻ tín dụng', wide: true },
-    { label: 'Thẻ dọc', wide: false },
-    { label: 'Thẻ tín dụng', wide: true },
-    { label: 'Thẻ dọc', wide: false },
-  ];
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).carousel.demo);
+  protected readonly mixedItems = computed<MixedCard[]>(() => [
+    { label: this.demo().credit, wide: true },
+    { label: this.demo().vertical, wide: false },
+    { label: this.demo().credit, wide: true },
+    { label: this.demo().vertical, wide: false },
+    { label: this.demo().credit, wide: true },
+    { label: this.demo().vertical, wide: false },
+  ]);
 }

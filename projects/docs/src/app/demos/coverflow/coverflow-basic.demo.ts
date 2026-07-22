@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GCoverflow } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GCoverflow, GLocaleService } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 interface Card {
   label: string;
@@ -14,7 +15,7 @@ interface MixedCard extends Card {
   selector: 'docs-coverflow-basic-demo',
   imports: [GCoverflow],
   template: `
-    <p class="cf-demo__label">Card cùng kích thước — loop + dot điều hướng</p>
+    <p class="cf-demo__label">{{ demo().equalCaption }}</p>
     <g-coverflow class="cf-demo" [active]="2" loop>
       @for (c of cards; track c.label) {
         <div class="cf-demo__card cf-demo__card--equal" [style.background]="c.color">
@@ -23,9 +24,9 @@ interface MixedCard extends Card {
       }
     </g-coverflow>
 
-    <p class="cf-demo__label">Card khác kích thước — thẻ ngang (thẻ tín dụng) xen thẻ dọc</p>
+    <p class="cf-demo__label">{{ demo().mixedCaption }}</p>
     <g-coverflow class="cf-demo" [active]="1">
-      @for (c of mixed; track $index) {
+      @for (c of mixed(); track $index) {
         <div
           class="cf-demo__card"
           [class.cf-demo__card--wide]="c.wide"
@@ -80,6 +81,8 @@ interface MixedCard extends Card {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoverflowBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).coverflow.demo);
   protected readonly cards: Card[] = [
     { label: 'Card 1', color: '#4f46e5' },
     { label: 'Card 2', color: '#0d9488' },
@@ -89,11 +92,11 @@ export class CoverflowBasicDemo {
     { label: 'Card 6', color: '#7c3aed' },
   ];
 
-  protected readonly mixed: MixedCard[] = [
-    { label: 'Thẻ tín dụng', wide: true, color: '#4f46e5' },
-    { label: 'Thẻ dọc', wide: false, color: '#0d9488' },
-    { label: 'Thẻ tín dụng', wide: true, color: '#d97706' },
-    { label: 'Thẻ dọc', wide: false, color: '#db2777' },
-    { label: 'Thẻ tín dụng', wide: true, color: '#0891b2' },
-  ];
+  protected readonly mixed = computed<MixedCard[]>(() => [
+    { label: this.demo().credit, wide: true, color: '#4f46e5' },
+    { label: this.demo().vertical, wide: false, color: '#0d9488' },
+    { label: this.demo().credit, wide: true, color: '#d97706' },
+    { label: this.demo().vertical, wide: false, color: '#db2777' },
+    { label: this.demo().credit, wide: true, color: '#0891b2' },
+  ]);
 }

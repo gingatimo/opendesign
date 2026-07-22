@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GGallery } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GGallery, GLocaleService } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 // Ảnh mẫu: SVG data URI (không phụ thuộc CDN ngoài) — mỗi ảnh một màu + nhãn.
 function img(color: string, label: string): string {
@@ -19,14 +20,16 @@ const COLORS = [
   '#db2777',
   '#ca8a04',
 ];
-const SAMPLE = COLORS.map((c, i) => img(c, 'Ảnh ' + (i + 1)));
-
 @Component({
   selector: 'docs-gallery-basic-demo',
   imports: [GGallery],
-  template: ` <g-gallery [images]="images" /> `,
+  template: ` <g-gallery [images]="images()" /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GalleryBasicDemo {
-  protected readonly images = SAMPLE;
+  private readonly i18n = inject(GLocaleService);
+  protected readonly images = computed(() => {
+    const demo = displayCopyFor(this.i18n.tag()).gallery.demo;
+    return COLORS.map((c, i) => img(c, demo.image(i + 1)));
+  });
 }

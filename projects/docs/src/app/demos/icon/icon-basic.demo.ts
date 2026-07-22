@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
   GIcon,
+  GLocaleService,
   gIconAlignCenter,
   gIconAlignLeft,
   gIconAlignRight,
@@ -119,6 +120,7 @@ import {
   gIconZoomOut,
   type GIconGlyph,
 } from 'ngx-opendesign';
+import { displayCopyFor } from '../../pages/display-copy';
 
 interface IconEntry {
   name: string;
@@ -265,11 +267,11 @@ const ICON_ENTRIES: readonly IconEntry[] = [
           type="button"
           class="docs-icon-grid__cell"
           [class.docs-icon-grid__cell--copied]="copied() === entry.name"
-          [attr.aria-label]="'Copy ' + entry.name"
+          [attr.aria-label]="demo().copyLabel(entry.name)"
           (click)="copy(entry.name)"
         >
           <g-icon [icon]="entry.glyph" size="lg" />
-          <code>{{ copied() === entry.name ? 'Đã copy' : entry.name }}</code>
+          <code>{{ copied() === entry.name ? demo().copied : entry.name }}</code>
         </button>
       }
     </div>
@@ -323,6 +325,8 @@ const ICON_ENTRIES: readonly IconEntry[] = [
 export class IconBasicDemo {
   protected readonly icons: readonly IconEntry[] = ICON_ENTRIES;
   protected readonly copied = signal<string | null>(null);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => displayCopyFor(this.i18n.tag()).icon.demo);
   private timer?: ReturnType<typeof setTimeout>;
 
   protected copy(name: string): void {
