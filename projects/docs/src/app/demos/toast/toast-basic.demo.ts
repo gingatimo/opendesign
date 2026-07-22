@@ -1,19 +1,24 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { GButton, GToastService } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GButton, GLocaleService, GToastService } from 'ngx-opendesign';
+import { overlayCopyFor } from '../../pages/overlay-copy';
 
 @Component({
   selector: 'docs-toast-basic-demo',
   imports: [GButton],
   template: `
-    <button g-button variant="outline" (click)="show('Đã lưu thay đổi')">Thông báo thường</button>
-    <button g-button variant="outline" (click)="show('Tải lên thành công', 'success')">
-      Thành công
+    <button g-button variant="outline" (click)="show(demo().normalMessage)">
+      {{ demo().normalButton }}
     </button>
-    <button g-button variant="outline" (click)="show('Lưu thất bại, thử lại sau', 'danger')">
-      Lỗi
+    <button g-button variant="outline" (click)="show(demo().successMessage, 'success')">
+      {{ demo().successButton }}
     </button>
-    <button g-button variant="outline" (click)="showWithTitle()">Có tiêu đề</button>
-    <button g-button variant="outline" (click)="showPersistent()">Không tự đóng</button>
+    <button g-button variant="outline" (click)="show(demo().dangerMessage, 'danger')">
+      {{ demo().dangerButton }}
+    </button>
+    <button g-button variant="outline" (click)="showWithTitle()">{{ demo().titledButton }}</button>
+    <button g-button variant="outline" (click)="showPersistent()">
+      {{ demo().persistentButton }}
+    </button>
   `,
   styles: `
     :host {
@@ -26,6 +31,8 @@ import { GButton, GToastService } from 'ngx-opendesign';
 })
 export class ToastBasicDemo {
   private readonly toast = inject(GToastService);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => overlayCopyFor(this.i18n.tag()).toast.demo);
 
   protected show(message: string, variant?: 'success' | 'danger'): void {
     this.toast.show({ message, variant });
@@ -33,13 +40,13 @@ export class ToastBasicDemo {
 
   protected showWithTitle(): void {
     this.toast.show({
-      title: 'Đã lưu đơn hàng',
-      message: 'Đơn #1234 đã được lưu và gửi email xác nhận.',
+      title: this.demo().title,
+      message: this.demo().titledMessage,
       variant: 'success',
     });
   }
 
   protected showPersistent(): void {
-    this.toast.show({ message: 'Thông báo này ở lại tới khi bạn đóng.', duration: 0 });
+    this.toast.show({ message: this.demo().persistentMessage, duration: 0 });
   }
 }

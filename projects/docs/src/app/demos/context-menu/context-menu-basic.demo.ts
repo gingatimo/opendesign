@@ -1,20 +1,21 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { GContextMenu, GMenuItem } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GContextMenu, GLocaleService, GMenuItem } from 'ngx-opendesign';
+import { overlayCopyFor } from '../../pages/overlay-copy';
 
 @Component({
   selector: 'docs-context-menu-basic-demo',
   imports: [GContextMenu, GMenuItem],
   template: `
-    <div class="cm-demo__target" [gContextMenu]="menu">Chuột phải vào vùng này</div>
+    <div class="cm-demo__target" [gContextMenu]="menu">{{ demo().target }}</div>
     <p class="cm-demo__hint">
-      Hành động gần nhất: <b>{{ last() ?? '(chưa có)' }}</b>
+      {{ demo().lastAction }} <b>{{ last() ?? demo().none }}</b>
     </p>
 
     <ng-template #menu>
-      <button g-menu-item type="button" (click)="run('Sửa')">Sửa</button>
-      <button g-menu-item type="button" (click)="run('Sao chép')">Sao chép</button>
-      <button g-menu-item type="button" (click)="run('Đổi tên')">Đổi tên</button>
-      <button g-menu-item type="button" (click)="run('Xoá')">Xoá</button>
+      <button g-menu-item type="button" (click)="run(demo().edit)">{{ demo().edit }}</button>
+      <button g-menu-item type="button" (click)="run(demo().copy)">{{ demo().copy }}</button>
+      <button g-menu-item type="button" (click)="run(demo().rename)">{{ demo().rename }}</button>
+      <button g-menu-item type="button" (click)="run(demo().delete)">{{ demo().delete }}</button>
     </ng-template>
   `,
   styles: `
@@ -39,6 +40,8 @@ import { GContextMenu, GMenuItem } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContextMenuBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => overlayCopyFor(this.i18n.tag()).contextMenu.demo);
   protected readonly last = signal<string | null>(null);
   protected run(action: string): void {
     this.last.set(action);

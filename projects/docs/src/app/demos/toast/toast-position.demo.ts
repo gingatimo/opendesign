@@ -1,14 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { GButton, GToastPosition, GToastService } from 'ngx-opendesign';
-
-const POSITION_LABELS: Record<GToastPosition, string> = {
-  'top-left': 'Trên trái',
-  'top-center': 'Trên giữa',
-  'top-right': 'Trên phải (mặc định)',
-  'bottom-left': 'Dưới trái',
-  'bottom-center': 'Dưới giữa',
-  'bottom-right': 'Dưới phải',
-};
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GButton, GLocaleService, GToastPosition, GToastService } from 'ngx-opendesign';
+import { overlayCopyFor } from '../../pages/overlay-copy';
 
 @Component({
   selector: 'docs-toast-position-demo',
@@ -21,12 +13,12 @@ const POSITION_LABELS: Record<GToastPosition, string> = {
           [variant]="current() === position ? 'primary' : 'outline'"
           (click)="choosePosition(position)"
         >
-          {{ labels[position] }}
+          {{ labels()[position] }}
         </button>
       }
     </div>
     <button g-button variant="secondary" class="toast-position-demo__trigger" (click)="show()">
-      Bắn toast ở vị trí đã chọn
+      {{ demo().positionTrigger }}
     </button>
   `,
   styles: `
@@ -50,8 +42,10 @@ const POSITION_LABELS: Record<GToastPosition, string> = {
 })
 export class ToastPositionDemo {
   private readonly toast = inject(GToastService);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => overlayCopyFor(this.i18n.tag()).toast.demo);
 
-  protected readonly labels = POSITION_LABELS;
+  protected readonly labels = computed(() => this.demo().positionLabels);
   protected readonly positions: GToastPosition[] = [
     'top-left',
     'top-center',
@@ -68,6 +62,6 @@ export class ToastPositionDemo {
   }
 
   protected show(): void {
-    this.toast.show({ message: `Toast ở vị trí "${this.labels[this.current()]}"` });
+    this.toast.show({ message: this.demo().positionedMessage(this.labels()[this.current()]) });
   }
 }

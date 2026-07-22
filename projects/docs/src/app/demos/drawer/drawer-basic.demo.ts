@@ -1,23 +1,22 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { GButton, GDrawer, GDrawerSide } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { GButton, GDrawer, GDrawerSide, GLocaleService } from 'ngx-opendesign';
+import { overlayCopyFor } from '../../pages/overlay-copy';
 
 @Component({
   selector: 'docs-drawer-basic-demo',
   imports: [GButton, GDrawer],
   template: `
     <div class="buttons">
-      <button g-button variant="outline" (click)="show('left')">Trái</button>
-      <button g-button variant="outline" (click)="show('right')">Phải</button>
-      <button g-button variant="outline" (click)="show('bottom')">Bottom sheet</button>
-      <button g-button variant="outline" (click)="show('top')">Trên</button>
+      <button g-button variant="outline" (click)="show('left')">{{ demo().left }}</button>
+      <button g-button variant="outline" (click)="show('right')">{{ demo().right }}</button>
+      <button g-button variant="outline" (click)="show('bottom')">{{ demo().bottom }}</button>
+      <button g-button variant="outline" (click)="show('top')">{{ demo().top }}</button>
     </div>
 
-    <g-drawer [(open)]="open" [side]="side()" ariaLabel="Ngăn kéo minh hoạ">
+    <g-drawer [(open)]="open" [side]="side()" [ariaLabel]="demo().ariaLabel">
       <h3 class="title">{{ heading() }}</h3>
-      <p class="body">
-        Nội dung ngăn kéo. Đóng bằng phím <kbd>Esc</kbd>, bấm ra vùng nền, hoặc nút dưới đây.
-      </p>
-      <button g-button (click)="open.set(false)">Đóng</button>
+      <p class="body">{{ demo().body }}</p>
+      <button g-button (click)="open.set(false)">{{ demo().close }}</button>
     </g-drawer>
   `,
   styles: `
@@ -47,16 +46,11 @@ import { GButton, GDrawer, GDrawerSide } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawerBasicDemo {
+  private readonly i18n = inject(GLocaleService);
   protected readonly open = signal(false);
   protected readonly side = signal<GDrawerSide>('right');
-
-  private readonly headings: Record<GDrawerSide, string> = {
-    left: 'Side panel — trái',
-    right: 'Side panel — phải',
-    bottom: 'Bottom sheet',
-    top: 'Sheet — trên',
-  };
-  protected readonly heading = computed(() => this.headings[this.side()]);
+  protected readonly demo = computed(() => overlayCopyFor(this.i18n.tag()).drawer.demo);
+  protected readonly heading = computed(() => this.demo().headings[this.side()]);
 
   protected show(s: GDrawerSide): void {
     this.side.set(s);

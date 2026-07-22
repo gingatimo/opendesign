@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { G_DIALOG_DATA, GButton, GDialogRef, GDialogService } from 'ngx-opendesign';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { G_DIALOG_DATA, GButton, GDialogRef, GDialogService, GLocaleService } from 'ngx-opendesign';
+import { overlayCopyFor } from '../../pages/overlay-copy';
 
 @Component({
   imports: [GButton],
   template: `
-    <h2 id="dialog-tieu-de">{{ data.title }}</h2>
+    <h2 id="dialog-title">{{ data.title }}</h2>
     <p>{{ data.message }}</p>
     <div class="dialog-actions">
-      <button g-button variant="outline" (click)="ref.close(false)">Hủy</button>
-      <button g-button variant="danger" (click)="ref.close(true)">Xóa</button>
+      <button g-button variant="outline" (click)="ref.close(false)">{{ demo().cancel }}</button>
+      <button g-button variant="danger" (click)="ref.close(true)">{{ demo().delete }}</button>
     </div>
   `,
   styles: `
@@ -31,15 +32,17 @@ import { G_DIALOG_DATA, GButton, GDialogRef, GDialogService } from 'ngx-opendesi
 export class ConfirmDialogComponent {
   protected readonly data = inject<{ title: string; message: string }>(G_DIALOG_DATA);
   protected readonly ref = inject<GDialogRef<boolean>>(GDialogRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => overlayCopyFor(this.i18n.tag()).dialog.demo);
 }
 
 @Component({
   selector: 'docs-dialog-basic-demo',
   imports: [GButton],
   template: `
-    <button g-button (click)="openConfirm()">Xóa tài liệu</button>
+    <button g-button (click)="openConfirm()">{{ demo().trigger }}</button>
     @if (result() !== null) {
-      <p class="ket-qua">Kết quả: {{ result() ? 'đã xóa' : 'đã hủy' }}</p>
+      <p class="ket-qua">{{ demo().result }} {{ result() ? demo().deleted : demo().canceled }}</p>
     }
   `,
   styles: `
@@ -59,7 +62,9 @@ export class ConfirmDialogComponent {
 })
 export class DialogBasicDemo {
   private readonly dialog = inject(GDialogService);
+  private readonly i18n = inject(GLocaleService);
   protected readonly result = signal<boolean | null>(null);
+  protected readonly demo = computed(() => overlayCopyFor(this.i18n.tag()).dialog.demo);
 
   protected openConfirm(): void {
     const ref = this.dialog.open<
@@ -67,9 +72,9 @@ export class DialogBasicDemo {
       { title: string; message: string },
       boolean
     >(ConfirmDialogComponent, {
-      data: { title: 'Xóa tài liệu?', message: 'Hành động này không thể hoàn tác.' },
+      data: { title: this.demo().title, message: this.demo().message },
       width: '400px',
-      ariaLabelledBy: 'dialog-tieu-de',
+      ariaLabelledBy: 'dialog-title',
     });
     ref.afterClosed().subscribe((r) => this.result.set(r ?? false));
   }
