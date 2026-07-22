@@ -45,7 +45,10 @@ const DAY_MS = 86_400_000;
 export function weekdayNames(tag: string, firstDayOfWeek: number): string[] {
   const fmt = new Intl.DateTimeFormat(tag, { weekday: 'short', timeZone: 'UTC' });
   return Array.from({ length: 7 }, (_, i) =>
-    fmt.format(new Date(SUNDAY_UTC + ((i + firstDayOfWeek) % 7) * DAY_MS)),
+    compactWeekdayLabel(
+      tag,
+      fmt.format(new Date(SUNDAY_UTC + ((i + firstDayOfWeek) % 7) * DAY_MS)),
+    ),
   );
 }
 
@@ -61,4 +64,10 @@ function compactMonthLabel(tag: string, label: string): string {
 
   // Intl vi-VN trả `Tháng 7` ngay cả khi dùng month: 'short'; picker/chart cần nhãn đủ gọn.
   return label.replace(/^tháng\s+/i, 'Th ').replace(/^thg\s*/i, 'Th ');
+}
+
+function compactWeekdayLabel(tag: string, label: string): string {
+  if (!tag.toLowerCase().startsWith('vi')) return label;
+
+  return label.replace(/^thứ\s+/i, 'T');
 }

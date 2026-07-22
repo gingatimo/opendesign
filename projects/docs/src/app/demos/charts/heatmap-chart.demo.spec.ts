@@ -33,15 +33,7 @@ describe('HeatmapChartDemo', () => {
     const fixture = TestBed.createComponent(HeatmapChartDemo);
     fixture.detectChanges();
 
-    expect(rowLabels(fixture.nativeElement)).toEqual([
-      'Thứ 2',
-      'Thứ 3',
-      'Thứ 4',
-      'Thứ 5',
-      'Thứ 6',
-      'Thứ 7',
-      'CN',
-    ]);
+    expect(rowLabels(fixture.nativeElement)).toEqual(['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']);
 
     TestBed.inject(GLocaleService).use(gLocaleEn);
     fixture.detectChanges();

@@ -37,6 +37,10 @@ describe('weekdayNames', () => {
     expect(weekdayNames('en-US', 0)[0]).toBe('Sun');
     expect(weekdayNames('vi-VN', 0)[0]).not.toBe('Sun');
   });
+
+  it('rút gọn thứ tiếng Việt cho ô lịch hẹp', () => {
+    expect(weekdayNames('vi-VN', 1)).toEqual(['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']);
+  });
 });
 
 describe('monthNames', () => {

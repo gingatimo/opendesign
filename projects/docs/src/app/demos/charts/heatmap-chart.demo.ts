@@ -2,15 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { GHeatmapCell, GHeatmapChart, GLocaleService } from 'ngx-opendesign';
 
 const HOURS = ['0h', '3h', '6h', '9h', '12h', '15h', '18h', '21h'];
-const SUNDAY_UTC = Date.UTC(2024, 0, 7);
-const DAY_MS = 86_400_000;
-
-function mondayFirstWeekdays(tag: string): string[] {
-  const fmt = new Intl.DateTimeFormat(tag, { weekday: 'short', timeZone: 'UTC' });
-  return Array.from({ length: 7 }, (_, i) =>
-    fmt.format(new Date(SUNDAY_UTC + ((i + 1) % 7) * DAY_MS)),
-  );
-}
 
 @Component({
   selector: 'docs-heatmap-chart-demo',
@@ -33,7 +24,7 @@ export class HeatmapChartDemo {
   private readonly i18n = inject(GLocaleService);
 
   protected readonly hours = HOURS;
-  protected readonly days = computed(() => mondayFirstWeekdays(this.i18n.tag()));
+  protected readonly days = computed(() => this.i18n.weekdayNamesFor(1));
   // Dựng sẵn một mẫu "giờ hành chính đông, cuối tuần thưa" cho dễ nhìn.
   protected readonly data = computed<GHeatmapCell[]>(() =>
     this.days().flatMap((row, r) =>

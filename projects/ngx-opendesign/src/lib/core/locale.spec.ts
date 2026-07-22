@@ -54,4 +54,15 @@ describe('GLocaleService', () => {
     const sunFirst = weekdayNames('vi-VN', 0);
     expect(i18n.weekdayNames()[0]).toBe(sunFirst[1]);
   });
+
+  it('weekdayNamesFor cho phép component tự chọn ngày đầu tuần', () => {
+    TestBed.configureTestingModule({});
+    const i18n = TestBed.inject(GLocaleService);
+
+    expect(i18n.weekdayNamesFor(1)).toEqual(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+
+    i18n.use(gLocaleVi);
+
+    expect(i18n.weekdayNamesFor(1)).toEqual(['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']);
+  });
 });

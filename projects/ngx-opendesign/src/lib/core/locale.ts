@@ -49,6 +49,10 @@ export class GLocaleService {
     return this.numberFormat().format(n);
   }
 
+  weekdayNamesFor(firstDayOfWeek: number): string[] {
+    return weekdayNames(this.tag(), firstDayOfWeek);
+  }
+
   use(locale: GLocale): void {
     this.locale.set(locale);
   }
