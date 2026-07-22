@@ -145,55 +145,18 @@
   gap: var(--g-space-2);
 }
 
-// Segmented control cho thấy trạng thái hiện tại rõ hơn nút toggle một chữ, vì nội dung docs tĩnh
-// không dịch toàn bộ khi đổi locale — chỉ các demo component đổi theo gói ngôn ngữ.
-.docs-language-switch,
 .docs-theme-toggle {
   background: var(--g-surface);
   border: 1px solid var(--g-border);
   box-shadow: var(--g-shadow-sm);
 }
 
-.docs-language-switch {
-  display: grid;
-  grid-template-columns: repeat(2, 40px);
-  height: 40px;
-  overflow: hidden;
-  border-radius: var(--g-radius-sm);
+// GTabs luôn render tabpanel theo APG. Ở đây chỉ dùng nó như segmented control đổi locale,
+// không có nội dung panel, nên ẩn panel để cụm toolbar giữ đúng chiều cao 40px.
+:host ::ng-deep .docs-language-tabs .g-tabs__panel {
+  display: none;
 }
 
-.docs-language-option {
-  width: 40px;
-  height: 38px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--g-text);
-  font: inherit;
-  font-size: var(--g-font-size-xs);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.docs-language-option + .docs-language-option {
-  border-left: 1px solid var(--g-border);
-}
-
-.docs-language-option:hover {
-  background: var(--g-surface-raised);
-}
-
-.docs-language-option--active {
-  background: var(--g-primary);
-  color: var(--g-bg);
-}
-
-.docs-language-option--active:hover {
-  background: var(--g-primary);
-}
-
-.docs-language-option:focus-visible {
-  outline: 2px solid var(--g-primary);
-  outline-offset: -2px;
+:host ::ng-deep .docs-language-tabs .g-tabs__list {
+  box-shadow: var(--g-shadow-sm);
 }

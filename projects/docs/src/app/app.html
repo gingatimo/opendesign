@@ -38,28 +38,15 @@
 
 <!-- Giữ hai thao tác toàn cục cạnh nhau để việc đổi ngôn ngữ có thể kiểm tra ngay trên mọi demo. -->
 <div class="docs-toolbar-actions">
-  <div class="docs-language-switch" role="group" aria-label="Ngôn ngữ">
-    <button
-      type="button"
-      class="docs-language-option"
-      [class.docs-language-option--active]="i18n.tag() === localeVi.tag"
-      [attr.aria-pressed]="i18n.tag() === localeVi.tag"
-      aria-label="Dùng tiếng Việt"
-      (click)="useLanguage('vi')"
-    >
-      VI
-    </button>
-    <button
-      type="button"
-      class="docs-language-option"
-      [class.docs-language-option--active]="i18n.tag() === localeEn.tag"
-      [attr.aria-pressed]="i18n.tag() === localeEn.tag"
-      aria-label="Use English"
-      (click)="useLanguage('en')"
-    >
-      EN
-    </button>
-  </div>
+  <g-tabs
+    class="docs-language-tabs"
+    tablistLabel="Ngôn ngữ"
+    [selectedIndex]="languageIndex()"
+    (selectedIndexChange)="useLanguageIndex($event)"
+  >
+    <g-tab label="VI" />
+    <g-tab label="EN" />
+  </g-tabs>
   <button
     class="docs-theme-toggle"
     g-icon-button
