@@ -60,6 +60,10 @@ interface DocsCopy {
     tableGroup: string;
     tableKey: string;
   };
+  tokenTable: {
+    value: string;
+    description: string;
+  };
 }
 
 const VI: DocsCopy = {
@@ -143,6 +147,10 @@ const VI: DocsCopy = {
     tableGroup: 'Nhóm',
     tableKey: 'Khoá',
   },
+  tokenTable: {
+    value: 'Giá trị',
+    description: 'Mô tả',
+  },
 };
 
 const EN: DocsCopy = {
@@ -225,6 +233,10 @@ const EN: DocsCopy = {
       'The keys below are the full GLocaleStrings contract. Parameterized keys include parameter names so custom packages keep dynamic content intact.',
     tableGroup: 'Group',
     tableKey: 'Key',
+  },
+  tokenTable: {
+    value: 'Value',
+    description: 'Description',
   },
 };
 

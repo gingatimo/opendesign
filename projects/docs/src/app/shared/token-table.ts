@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { DocsI18nService } from '../core/docs-i18n';
 
 export interface TokenRow {
   name: string;
@@ -16,8 +17,8 @@ export interface TokenRow {
             <th></th>
           }
           <th>Token</th>
-          <th>Giá trị</th>
-          <th>Mô tả</th>
+          <th>{{ copy().tokenTable.value }}</th>
+          <th>{{ copy().tokenTable.description }}</th>
         </tr>
       </thead>
       <tbody>
@@ -74,6 +75,9 @@ export interface TokenRow {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokenTable {
+  private readonly docsI18n = inject(DocsI18nService);
+  protected readonly copy = this.docsI18n.copy;
+
   readonly rows = input.required<TokenRow[]>();
   readonly preview = input<'color'>();
 }
