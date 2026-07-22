@@ -21,6 +21,7 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { actionMenuPositions, GActionMenu, GActionMenuItem } from '../action-menu/action-menu';
 import { trackControlInvalid } from '../core/control-invalid';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import {
   gIconAlignCenter,
@@ -81,7 +82,7 @@ let hintCounter = 0;
         #toolbar
         class="g-rte__toolbar"
         role="toolbar"
-        aria-label="Định dạng"
+        [attr.aria-label]="t().editor.format"
         tabindex="-1"
         (keydown)="onToolbarKeydown($event)"
         (focusin)="onToolbarFocusIn($event)"
@@ -89,7 +90,7 @@ let hintCounter = 0;
         <button
           type="button"
           class="g-rte__btn"
-          aria-label="Hoàn tác"
+          [attr.aria-label]="t().editor.undo"
           [disabled]="isDisabled()"
           (mousedown)="$event.preventDefault()"
           (click)="exec('undo')"
@@ -99,7 +100,7 @@ let hintCounter = 0;
         <button
           type="button"
           class="g-rte__btn"
-          aria-label="Làm lại"
+          [attr.aria-label]="t().editor.redo"
           [disabled]="isDisabled()"
           (mousedown)="$event.preventDefault()"
           (click)="exec('redo')"
@@ -113,15 +114,15 @@ let hintCounter = 0;
         <span class="g-rte__menu g-rte__menu--label" (mousedown)="saveSelection()">
           <g-action-menu
             variant="label"
-            label="Text styles"
-            [items]="blockItems"
+            [label]="t().editor.format"
+            [items]="blockItems()"
             placement="bottom-left"
             (action)="onBlock($event)"
           />
         </span>
         <span class="g-rte__sep"></span>
 
-        @for (m of marks; track m.cmd) {
+        @for (m of marks(); track m.cmd) {
           <button
             type="button"
             class="g-rte__btn"
@@ -140,9 +141,9 @@ let hintCounter = 0;
         <!-- Định dạng ít dùng hơn gộp vào một dropdown cho toolbar đỡ chật. -->
         <span class="g-rte__menu" (mousedown)="saveSelection()">
           <g-action-menu
-            label="Định dạng khác"
+            [label]="t().editor.moreFormats"
             [icon]="iconMore"
-            [items]="extraFormats"
+            [items]="extraFormats()"
             placement="bottom-left"
             (action)="onExtraFormat($event)"
           />
@@ -153,7 +154,7 @@ let hintCounter = 0;
           type="button"
           class="g-rte__btn"
           [class.g-rte__btn--active]="colorOpen()"
-          aria-label="Màu chữ"
+          [attr.aria-label]="t().editor.textColor"
           aria-haspopup="true"
           [attr.aria-expanded]="colorOpen()"
           [disabled]="isDisabled()"
@@ -175,13 +176,13 @@ let hintCounter = 0;
           <div
             class="g-rte__colors"
             role="group"
-            aria-label="Màu chữ"
+            [attr.aria-label]="t().editor.textColor"
             tabindex="-1"
             cdkTrapFocus
             [cdkTrapFocusAutoCapture]="true"
             (keydown.escape)="closeColor()"
           >
-            @for (c of colors; track c.value) {
+            @for (c of colors(); track c.value) {
               <button
                 type="button"
                 class="g-rte__swatch"
@@ -198,16 +199,16 @@ let hintCounter = 0;
 
         <span class="g-rte__menu" (mousedown)="saveSelection()">
           <g-action-menu
-            label="Kiểu danh sách"
+            [label]="t().editor.listStyle"
             [icon]="iconList"
-            [items]="listItems"
+            [items]="listItems()"
             placement="bottom-left"
             (action)="onList($event)"
           />
         </span>
         <span class="g-rte__sep"></span>
 
-        @for (a of aligns; track a.cmd) {
+        @for (a of aligns(); track a.cmd) {
           <button
             type="button"
             class="g-rte__btn"
@@ -224,7 +225,7 @@ let hintCounter = 0;
         <button
           type="button"
           class="g-rte__btn"
-          aria-label="Lùi lề"
+          [attr.aria-label]="t().editor.outdent"
           [disabled]="isDisabled()"
           (mousedown)="$event.preventDefault()"
           (click)="indent(true)"
@@ -234,7 +235,7 @@ let hintCounter = 0;
         <button
           type="button"
           class="g-rte__btn"
-          aria-label="Thụt lề"
+          [attr.aria-label]="t().editor.indent"
           [disabled]="isDisabled()"
           (mousedown)="$event.preventDefault()"
           (click)="indent()"
@@ -248,7 +249,7 @@ let hintCounter = 0;
           type="button"
           class="g-rte__btn"
           [class.g-rte__btn--active]="panel() === 'link'"
-          aria-label="Chèn liên kết"
+          [attr.aria-label]="t().editor.insertLink"
           aria-haspopup="true"
           [attr.aria-expanded]="panel() === 'link'"
           [disabled]="isDisabled()"
@@ -271,18 +272,18 @@ let hintCounter = 0;
                trống (thường là Địa chỉ khi chữ đã lấy từ đoạn bôi đen). Focus do effect đặt. -->
           <div class="g-rte__pop g-rte__pop--link" cdkTrapFocus>
             <label class="g-rte__field">
-              <span>Văn bản hiển thị</span>
+              <span>{{ t().editor.linkPanel.text }}</span>
               <input
                 #linkText
                 type="text"
                 class="g-rte__input"
-                placeholder="Tên hiển thị (bỏ trống = dùng địa chỉ)"
+                [placeholder]="t().editor.linkPanel.placeholder"
                 (keydown.enter)="applyLink(linkText.value, linkUrl.value)"
                 (keydown.escape)="closePanel()"
               />
             </label>
             <label class="g-rte__field">
-              <span>Địa chỉ</span>
+              <span>{{ t().editor.linkPanel.url }}</span>
               <input
                 #linkUrl
                 type="url"
@@ -295,7 +296,7 @@ let hintCounter = 0;
               />
             </label>
             @if (linkError()) {
-              <span class="g-rte__err">Chỉ nhận http, https, mailto hoặc tel.</span>
+              <span class="g-rte__err">{{ t().editor.linkPanel.invalid }}</span>
             }
             <div class="g-rte__pop-actions">
               <button
@@ -303,16 +304,18 @@ let hintCounter = 0;
                 class="g-rte__btn"
                 (click)="applyLink(linkText.value, linkUrl.value)"
               >
-                Áp dụng
+                {{ t().common.apply }}
               </button>
-              <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
+              <button type="button" class="g-rte__btn" (click)="closePanel()">
+                {{ t().common.cancel }}
+              </button>
             </div>
           </div>
         </ng-template>
         <button
           type="button"
           class="g-rte__btn"
-          aria-label="Bỏ liên kết"
+          [attr.aria-label]="t().editor.removeLink"
           [disabled]="isDisabled() || !active().has('link')"
           (mousedown)="$event.preventDefault()"
           (click)="removeLink()"
@@ -324,7 +327,7 @@ let hintCounter = 0;
           type="button"
           class="g-rte__btn"
           [class.g-rte__btn--active]="panel() === 'table'"
-          aria-label="Chèn bảng"
+          [attr.aria-label]="t().editor.insertTable"
           aria-haspopup="true"
           [attr.aria-expanded]="panel() === 'table'"
           [disabled]="isDisabled()"
@@ -346,7 +349,7 @@ let hintCounter = 0;
           <div class="g-rte__pop" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
             <div class="g-rte__pop-row">
               <label class="g-rte__field">
-                <span>Hàng</span>
+                <span>{{ t().editor.tablePanel.rows }}</span>
                 <input
                   #rowsInput
                   type="number"
@@ -358,7 +361,7 @@ let hintCounter = 0;
                 />
               </label>
               <label class="g-rte__field">
-                <span>Cột</span>
+                <span>{{ t().editor.tablePanel.cols }}</span>
                 <input
                   #colsInput
                   type="number"
@@ -376,9 +379,11 @@ let hintCounter = 0;
                 class="g-rte__btn"
                 (click)="applyTable(rowsInput.value, colsInput.value)"
               >
-                Chèn bảng
+                {{ t().editor.tablePanel.insert }}
               </button>
-              <button type="button" class="g-rte__btn" (click)="closePanel()">Huỷ</button>
+              <button type="button" class="g-rte__btn" (click)="closePanel()">
+                {{ t().common.cancel }}
+              </button>
             </div>
           </div>
         </ng-template>
@@ -387,7 +392,7 @@ let hintCounter = 0;
         <button
           type="button"
           class="g-rte__btn"
-          aria-label="Xoá định dạng"
+          [attr.aria-label]="t().editor.clearFormat"
           [disabled]="isDisabled()"
           (mousedown)="$event.preventDefault()"
           (click)="exec('removeFormat')"
@@ -401,7 +406,7 @@ let hintCounter = 0;
         class="g-rte__body"
         [attr.contenteditable]="isDisabled() ? 'false' : 'true'"
         [attr.data-placeholder]="placeholder()"
-        [attr.aria-label]="ariaLabel()"
+        [attr.aria-label]="editorAriaLabel()"
         [attr.aria-invalid]="invalid() || null"
         [attr.aria-describedby]="hintId"
         role="textbox"
@@ -419,7 +424,7 @@ let hintCounter = 0;
 
       <!-- Nói rõ quy ước phím cho screen reader: Tab bị dùng để thụt lề nên cần lối thoát riêng. -->
       <span class="cdk-visually-hidden" [id]="hintId">
-        Tab để thụt lề, Shift+Tab để lùi ra. Nhấn Escape rồi Tab để rời khỏi vùng soạn.
+        {{ t().editor.keyboardHint }}
       </span>
     </div>
   `,
@@ -431,61 +436,76 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   readonly value = model('');
   readonly minHeight = input(160);
   readonly placeholder = input('Nhập nội dung…');
-  readonly ariaLabel = input('Trình soạn văn bản');
+  readonly ariaLabel = input<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
   // Dán: 'text' = bỏ hết định dạng (mặc định, tránh rác từ Word/web); 'html' = giữ định dạng nhưng
   // đi qua sanitizer của Angular trước.
   readonly pasteMode = input<'text' | 'html'>('text');
 
-  protected readonly marks = [
-    { cmd: 'bold', label: 'B', title: 'Đậm', style: 'font-weight:700' },
-    { cmd: 'italic', label: 'I', title: 'Nghiêng', style: 'font-style:italic' },
-    { cmd: 'underline', label: 'U', title: 'Gạch dưới', style: 'text-decoration:underline' },
-  ];
-  protected readonly aligns = [
-    { cmd: 'justifyLeft', value: 'left', title: 'Căn trái', icon: gIconAlignLeft },
-    { cmd: 'justifyCenter', value: 'center', title: 'Căn giữa', icon: gIconAlignCenter },
-    { cmd: 'justifyRight', value: 'right', title: 'Căn phải', icon: gIconAlignRight },
-  ];
-  protected readonly blockItems: GActionMenuItem[] = [
-    { label: 'Normal text', value: 'p' },
-    { label: 'Heading 1', value: 'h1' },
-    { label: 'Heading 2', value: 'h2' },
-    { label: 'Heading 3', value: 'h3' },
-    { label: 'Heading 4', value: 'h4' },
-    { label: 'Heading 5', value: 'h5' },
-    { label: 'Heading 6', value: 'h6' },
-    { label: 'Quote', value: 'blockquote' },
-    { label: 'Code block', value: 'pre' },
-  ];
+  protected readonly marks = computed(() => [
+    { cmd: 'bold', label: 'B', title: this.t().editor.bold, style: 'font-weight:700' },
+    { cmd: 'italic', label: 'I', title: this.t().editor.italic, style: 'font-style:italic' },
+    {
+      cmd: 'underline',
+      label: 'U',
+      title: this.t().editor.underline,
+      style: 'text-decoration:underline',
+    },
+  ]);
+  protected readonly aligns = computed(() => [
+    { cmd: 'justifyLeft', value: 'left', title: this.t().editor.alignLeft, icon: gIconAlignLeft },
+    {
+      cmd: 'justifyCenter',
+      value: 'center',
+      title: this.t().editor.alignCenter,
+      icon: gIconAlignCenter,
+    },
+    {
+      cmd: 'justifyRight',
+      value: 'right',
+      title: this.t().editor.alignRight,
+      icon: gIconAlignRight,
+    },
+  ]);
+  protected readonly blockItems = computed<GActionMenuItem[]>(() => [
+    { label: this.t().editor.normalText, value: 'p' },
+    { label: this.t().editor.heading1, value: 'h1' },
+    { label: this.t().editor.heading2, value: 'h2' },
+    { label: this.t().editor.heading3, value: 'h3' },
+    { label: this.t().editor.heading4, value: 'h4' },
+    { label: this.t().editor.heading5, value: 'h5' },
+    { label: this.t().editor.heading6, value: 'h6' },
+    { label: this.t().editor.quote, value: 'blockquote' },
+    { label: this.t().editor.codeBlock, value: 'pre' },
+  ]);
   // Định dạng ít dùng, gộp vào một dropdown. Đây là các định dạng TRONG DÒNG — nhãn "Inline code" để
   // khỏi lẫn với "Code block" (kiểu KHỐI, nằm ở Text styles). 'code' không có lệnh execCommand nên
   // xử lý riêng.
-  protected readonly extraFormats: GActionMenuItem[] = [
-    { label: 'Strikethrough', value: 'strikeThrough', icon: gIconStrikethrough },
-    { label: 'Inline code', value: 'code', icon: gIconCode },
-    { label: 'Subscript', value: 'subscript', icon: gIconSubscript },
-    { label: 'Superscript', value: 'superscript', icon: gIconSuperscript },
-  ];
+  protected readonly extraFormats = computed<GActionMenuItem[]>(() => [
+    { label: this.t().editor.strikethrough, value: 'strikeThrough', icon: gIconStrikethrough },
+    { label: this.t().editor.inlineCode, value: 'code', icon: gIconCode },
+    { label: this.t().editor.subscript, value: 'subscript', icon: gIconSubscript },
+    { label: this.t().editor.superscript, value: 'superscript', icon: gIconSuperscript },
+  ]);
   // Kiểu danh sách. 'task' (ô đánh dấu) không có lệnh execCommand nên xử lý riêng.
-  protected readonly listItems: GActionMenuItem[] = [
-    { label: 'Bulleted list', value: 'insertUnorderedList', icon: gIconList },
-    { label: 'Numbered list', value: 'insertOrderedList', icon: gIconListOrdered },
-    { label: 'Checkbox list', value: 'task', icon: gIconListChecks },
-  ];
+  protected readonly listItems = computed<GActionMenuItem[]>(() => [
+    { label: this.t().editor.bulletedList, value: 'insertUnorderedList', icon: gIconList },
+    { label: this.t().editor.numberedList, value: 'insertOrderedList', icon: gIconListOrdered },
+    { label: this.t().editor.checkboxList, value: 'task', icon: gIconListChecks },
+  ]);
   // Bảng màu chữ: các tông trung tính đọc được trên CẢ nền sáng lẫn tối (giá trị được ghi thẳng vào
   // HTML nên không đổi theo theme). 'inherit' = trả về màu chữ mặc định của theme.
-  protected readonly colors = [
-    { label: 'Mặc định', value: 'inherit' },
-    { label: 'Đỏ', value: '#e11d48' },
-    { label: 'Cam', value: '#ea580c' },
-    { label: 'Vàng', value: '#ca8a04' },
-    { label: 'Xanh lá', value: '#16a34a' },
-    { label: 'Xanh ngọc', value: '#0891b2' },
-    { label: 'Xanh dương', value: '#2563eb' },
-    { label: 'Tím', value: '#7c3aed' },
-    { label: 'Xám', value: '#6b7280' },
-  ];
+  protected readonly colors = computed(() => [
+    { label: this.t().editor.colors.default, value: 'inherit' },
+    { label: this.t().editor.colors.red, value: '#e11d48' },
+    { label: this.t().editor.colors.orange, value: '#ea580c' },
+    { label: this.t().editor.colors.yellow, value: '#ca8a04' },
+    { label: this.t().editor.colors.green, value: '#16a34a' },
+    { label: this.t().editor.colors.teal, value: '#0891b2' },
+    { label: this.t().editor.colors.blue, value: '#2563eb' },
+    { label: this.t().editor.colors.purple, value: '#7c3aed' },
+    { label: this.t().editor.colors.gray, value: '#6b7280' },
+  ]);
   protected readonly iconUndo = gIconUndo;
   protected readonly iconRedo = gIconRedo;
   protected readonly iconLink = gIconLink;
@@ -499,10 +519,15 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   protected readonly hintId = `g-rte-hint-${++hintCounter}`;
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   private readonly destroyRef = inject(DestroyRef);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly formDisabled = signal(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
+  protected readonly editorAriaLabel = computed(
+    () => this.ariaLabel() ?? this.t().editor.richTextLabel,
+  );
   protected readonly invalid = signal(false);
   protected readonly active = signal<ReadonlySet<string>>(new Set());
   protected readonly block = signal('');

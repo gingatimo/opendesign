@@ -90,6 +90,58 @@ export interface GLocaleStrings {
       calendarHeatmap: string;
     };
   };
+  editor: {
+    format: string;
+    undo: string;
+    redo: string;
+    bold: string;
+    italic: string;
+    underline: string;
+    alignLeft: string;
+    alignCenter: string;
+    alignRight: string;
+    outdent: string;
+    indent: string;
+    insertLink: string;
+    removeLink: string;
+    insertTable: string;
+    clearFormat: string;
+    textColor: string;
+    moreFormats: string;
+    listStyle: string;
+    richTextLabel: string;
+    codeLabel: string;
+    normalText: string;
+    heading1: string;
+    heading2: string;
+    heading3: string;
+    heading4: string;
+    heading5: string;
+    heading6: string;
+    quote: string;
+    codeBlock: string;
+    strikethrough: string;
+    inlineCode: string;
+    subscript: string;
+    superscript: string;
+    bulletedList: string;
+    numberedList: string;
+    checkboxList: string;
+    colors: {
+      default: string;
+      red: string;
+      orange: string;
+      yellow: string;
+      green: string;
+      teal: string;
+      blue: string;
+      purple: string;
+      gray: string;
+    };
+    linkPanel: { text: string; placeholder: string; url: string; invalid: string };
+    tablePanel: { rows: string; cols: string; insert: string };
+    keyboardHint: string;
+  };
 }
 
 export interface GLocale {

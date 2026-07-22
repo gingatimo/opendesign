@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { trackControlInvalid } from '../core/control-invalid';
+import { GLocaleService } from '../core/locale';
 import { GCodeLanguage, highlightCode } from './code-highlight';
 
 // Trình soạn CODE nhẹ (Angular-only, 0 thư viện ngoài). Kỹ thuật "textarea overlay": <textarea> TRONG
@@ -54,7 +55,7 @@ import { GCodeLanguage, highlightCode } from './code-highlight';
           autocapitalize="off"
           [readonly]="readonly() || isDisabled()"
           [attr.placeholder]="placeholder()"
-          [attr.aria-label]="ariaLabel()"
+          [attr.aria-label]="editorAriaLabel()"
           [attr.aria-invalid]="invalid() || null"
           (input)="onInput($event)"
           (scroll)="syncScroll()"
@@ -76,14 +77,19 @@ export class GCodeEditor implements ControlValueAccessor, OnInit {
   readonly tabSize = input(2);
   readonly readonly = input(false, { transform: booleanAttribute });
   readonly placeholder = input('');
-  readonly ariaLabel = input('Trình soạn code');
+  readonly ariaLabel = input<string>();
   // Hàm tô màu riêng (vd. Prism của consumer) — bỏ trống thì dùng bộ regex nội bộ.
   readonly highlighter = input<(code: string, lang: string) => string>();
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   private readonly destroyRef = inject(DestroyRef);
   private readonly formDisabled = signal(false);
   protected readonly isDisabled = computed(() => this.formDisabled());
+  protected readonly editorAriaLabel = computed(
+    () => this.ariaLabel() ?? this.t().editor.codeLabel,
+  );
   protected readonly invalid = signal(false);
   private onChange: (v: string) => void = () => undefined;
   protected onTouchedFn: () => void = () => undefined;
