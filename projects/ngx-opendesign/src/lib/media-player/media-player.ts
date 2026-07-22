@@ -76,14 +76,14 @@ export type GMediaType = 'audio' | 'video';
         step="any"
         [value]="currentTime()"
         [style.--g-seek-fill]="seekFill() + '%'"
-        aria-label="Tua"
+        [attr.aria-label]="t().mediaPlayer.seek"
         (input)="onSeek($event)"
       />
 
       <button
         type="button"
         class="g-media-player__btn"
-        [attr.aria-label]="isMuted() ? 'Bật tiếng' : 'Tắt tiếng'"
+        [attr.aria-label]="isMuted() ? t().mediaPlayer.unmute : t().mediaPlayer.mute"
         (click)="toggleMute()"
       >
         <g-icon [icon]="isMuted() ? iconVolumeMute : iconVolume" size="sm" />

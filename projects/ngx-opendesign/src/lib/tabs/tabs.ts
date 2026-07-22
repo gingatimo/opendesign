@@ -105,7 +105,7 @@ export class GTabs {
       ) {
         gDevWarning(
           'GTabs',
-          'tablist cần tablistLabel hoặc tablistLabelledBy để có tên cho screen reader',
+          'tablist needs tablistLabel or tablistLabelledBy to have an accessible name',
         );
       }
     });

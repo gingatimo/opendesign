@@ -30,7 +30,11 @@ const POSITIONS: ConnectedPosition[] = [
 
 // Bỏ dấu tiếng Việt để tìm không dấu-nhạy: "cam" khớp "Cam", "da" khớp "Đà".
 function normalize(s: string): string {
-  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\u0111/g, 'd');
 }
 
 @Component({

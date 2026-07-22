@@ -82,7 +82,7 @@ describe('GIcon', () => {
     expect(host.getAttribute('aria-label')).toBe('Cảnh báo');
     expect(host.getAttribute('aria-hidden')).toBeNull();
     expect(warnSpy).toHaveBeenCalledWith(
-      '[OpenDesign] GIcon: icon có aria-label/aria-labelledby nhưng host cũng có aria-hidden="true" — đã gỡ aria-hidden vì hai thứ này mâu thuẫn nhau (aria-hidden xoá phần tử khỏi accessibility tree, làm aria-label vô nghĩa)',
+      '[OpenDesign] GIcon: icon has aria-label/aria-labelledby but its host also has aria-hidden="true"; removed aria-hidden because the two conflict (aria-hidden removes the element from the accessibility tree, making aria-label meaningless)',
     );
     warnSpy.mockRestore();
   });

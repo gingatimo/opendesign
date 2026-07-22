@@ -41,7 +41,7 @@ import { GLocaleService } from '../core/locale';
             class="g-pagination__page"
             [class.g-pagination__page--active]="item === page()"
             [attr.aria-current]="item === page() ? 'page' : null"
-            [attr.aria-label]="'Trang ' + item"
+            [attr.aria-label]="t().pagination.page(item)"
             (click)="go(item)"
           >
             {{ item }}

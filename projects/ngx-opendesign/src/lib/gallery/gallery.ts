@@ -27,7 +27,11 @@ import { GLocaleService } from '../core/locale';
         [attr.aria-label]="t().imagePreview.zoom"
         (click)="openLightbox()"
       >
-        <img [src]="urls()[active()]" [attr.alt]="'Ảnh ' + (active() + 1)" draggable="false" />
+        <img
+          [src]="urls()[active()]"
+          [attr.alt]="t().imagePreview.imageAlt(active() + 1)"
+          draggable="false"
+        />
       </button>
 
       @if (urls().length > 1) {
@@ -43,7 +47,7 @@ import { GLocaleService } from '../core/locale';
             >
               <img
                 [src]="url"
-                [attr.alt]="'Ảnh ' + ($index + 1)"
+                [attr.alt]="t().imagePreview.imageAlt($index + 1)"
                 loading="lazy"
                 draggable="false"
               />

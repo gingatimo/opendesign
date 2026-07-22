@@ -44,7 +44,7 @@ export class GToggle implements ControlValueAccessor {
     afterNextRender(() => {
       const el = this.elementRef.nativeElement;
       if (!el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')) {
-        gDevWarning('GToggle', 'toggle cần aria-label hoặc aria-labelledby');
+        gDevWarning('GToggle', 'toggle needs aria-label or aria-labelledby');
       }
     });
   }

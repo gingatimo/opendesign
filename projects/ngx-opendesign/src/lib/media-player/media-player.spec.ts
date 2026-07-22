@@ -54,7 +54,7 @@ describe('GMediaPlayer', () => {
     const seek = hostEl.querySelector('.g-media-player__seek');
     // Âm lượng nay là <g-slider>; nhãn nằm trên input bên trong.
     const volumeInput = hostEl.querySelector('.g-media-player__volume .g-slider__input');
-    expect(seek?.getAttribute('aria-label')).toBe('Tua');
+    expect(seek?.getAttribute('aria-label')).toBe('Seek');
     expect(volumeInput?.getAttribute('aria-label')).toBe('Volume');
   });
 

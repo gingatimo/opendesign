@@ -54,7 +54,7 @@ describe('GToggle', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     setup();
     expect(warnSpy).toHaveBeenCalledWith(
-      '[OpenDesign] GToggle: toggle cần aria-label hoặc aria-labelledby',
+      '[OpenDesign] GToggle: toggle needs aria-label or aria-labelledby',
     );
     warnSpy.mockRestore();
   });

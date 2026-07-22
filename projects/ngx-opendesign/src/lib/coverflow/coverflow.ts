@@ -74,7 +74,7 @@ import { GLocaleService } from '../core/locale';
             class="g-coverflow__dot"
             [class.g-coverflow__dot--active]="i === active()"
             [attr.aria-current]="i === active() ? 'true' : null"
-            [attr.aria-label]="'Tới card ' + (i + 1)"
+            [attr.aria-label]="t().coverflow.goTo(i + 1)"
             (click)="active.set(i)"
           ></button>
         }

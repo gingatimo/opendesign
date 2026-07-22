@@ -25,7 +25,7 @@ import { GLocaleService } from '../core/locale';
       @for (url of urls(); track $index) {
         <div class="g-image-preview__item">
           <button type="button" class="g-image-preview__thumb" (click)="openLightbox($index)">
-            <img [src]="url" [attr.alt]="'Ảnh ' + ($index + 1)" loading="lazy" />
+            <img [src]="url" [attr.alt]="t().imagePreview.imageAlt($index + 1)" loading="lazy" />
           </button>
           @if (removable()) {
             <button

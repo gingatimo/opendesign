@@ -43,13 +43,17 @@ import { GLocaleService } from '../core/locale';
                     [attr.aria-label]="t().imageSlider.zoom"
                     (click)="openAt($index)"
                   >
-                    <img [src]="url" [attr.alt]="'Ảnh ' + ($index + 1)" draggable="false" />
+                    <img
+                      [src]="url"
+                      [attr.alt]="t().imageSlider.imageAlt($index + 1)"
+                      draggable="false"
+                    />
                   </button>
                 } @else {
                   <img
                     class="g-image-slider__img"
                     [src]="url"
-                    [attr.alt]="'Ảnh ' + ($index + 1)"
+                    [attr.alt]="t().imageSlider.imageAlt($index + 1)"
                     draggable="false"
                   />
                 }
@@ -93,7 +97,7 @@ import { GLocaleService } from '../core/locale';
         }
 
         <span class="g-image-slider__status" aria-live="polite">
-          Ảnh {{ index() + 1 }}/{{ urls().length }}
+          {{ t().imageSlider.status(index() + 1, urls().length) }}
         </span>
       </div>
     }

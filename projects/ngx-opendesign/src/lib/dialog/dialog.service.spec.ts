@@ -76,7 +76,7 @@ describe('GDialogService', () => {
     service.open(TestDialogComponent, { data: { message: 'x' } });
     flush();
     expect(warnSpy).toHaveBeenCalledWith(
-      '[OpenDesign] GDialogService: dialog cần ariaLabel hoặc ariaLabelledBy để có tên cho screen reader',
+      '[OpenDesign] GDialogService: dialog needs ariaLabel or ariaLabelledBy to have an accessible name',
     );
     warnSpy.mockRestore();
   });

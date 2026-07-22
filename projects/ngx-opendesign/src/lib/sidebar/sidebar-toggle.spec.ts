@@ -123,7 +123,7 @@ describe('GSidebarToggle', () => {
     const fixture = TestBed.createComponent(NgoaiSidebarHostComponent);
     fixture.detectChanges();
     expect(warnSpy).toHaveBeenCalledWith(
-      '[OpenDesign] GSidebarToggle: <g-sidebar-toggle /> phải đặt bên trong <g-sidebar>',
+      '[OpenDesign] GSidebarToggle: <g-sidebar-toggle /> must be placed inside <g-sidebar>',
     );
     warnSpy.mockRestore();
   });

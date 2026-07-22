@@ -21,10 +21,10 @@ function setup(urls: string[], startIndex = 0) {
 }
 
 describe('GLightbox', () => {
-  it('hiện ảnh theo startIndex; alt "k/N"', () => {
+  it('hiện ảnh theo startIndex; alt "Image k of N"', () => {
     const { img } = setup(['a.png', 'b.png', 'c.png'], 1);
     expect(img().getAttribute('src')).toBe('b.png');
-    expect(img().getAttribute('alt')).toBe('Ảnh 2/3');
+    expect(img().getAttribute('alt')).toBe('Image 2 of 3');
   });
   it('nút sau/trước đổi ảnh, vòng lại ở hai đầu', () => {
     const { f, img } = setup(['a.png', 'b.png'], 0);

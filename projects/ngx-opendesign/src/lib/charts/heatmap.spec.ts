@@ -1,5 +1,34 @@
-import { calendarWeeks, dayKey } from './calendar-heatmap';
+import { TestBed } from '@angular/core/testing';
+import { maxTextWidth } from './chart-text';
+import { GCalendarHeatmap, calendarWeeks, dayKey } from './calendar-heatmap';
+import { GHeatmapChart } from './heatmap-chart';
 import { HEAT_LEVELS, heatColor, heatLevel } from './chart-utils';
+
+interface GScaleChartForTest {
+  labelSize: () => number;
+  resolvedScaleMinLabel: () => string;
+  resolvedScaleMaxLabel: () => string;
+  gridRight: () => number;
+  scale: () => {
+    minX: number;
+    maxX: number;
+    swatches: { x: number }[];
+  };
+}
+
+function expectScaleToMeasureResolvedLabels(component: unknown): void {
+  const chart = component as GScaleChartForTest;
+  const scale = chart.scale();
+  const labelSize = chart.labelSize();
+
+  // Các input nhãn mặc định rỗng để locale làm fallback, nên hình học phải đo chuỗi đã phân giải.
+  expect(scale.minX).toBe(
+    scale.swatches[0].x - 6 - maxTextWidth([chart.resolvedScaleMinLabel()], labelSize),
+  );
+  expect(scale.maxX).toBe(
+    chart.gridRight() - maxTextWidth([chart.resolvedScaleMaxLabel()], labelSize),
+  );
+}
 
 describe('heatLevel', () => {
   it('0 và giá trị âm đều là bậc 0 (ô trống)', () => {
@@ -73,5 +102,19 @@ describe('dayKey', () => {
 
   it('đệm 0 cho tháng/ngày một chữ số', () => {
     expect(dayKey(new Date(2026, 0, 5))).toBe('2026-01-05');
+  });
+});
+
+describe('GHeatmapChart và GCalendarHeatmap', () => {
+  it('đo nhãn thang fallback đã phân giải thay vì input rỗng', () => {
+    TestBed.configureTestingModule({});
+
+    const heatmap = TestBed.createComponent(GHeatmapChart);
+    heatmap.detectChanges();
+    expectScaleToMeasureResolvedLabels(heatmap.componentInstance);
+
+    const calendarHeatmap = TestBed.createComponent(GCalendarHeatmap);
+    calendarHeatmap.detectChanges();
+    expectScaleToMeasureResolvedLabels(calendarHeatmap.componentInstance);
   });
 });

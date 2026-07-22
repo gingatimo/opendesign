@@ -26,12 +26,28 @@ export const gLocaleVi: GLocale = {
     sidebar: { expand: 'Mở rộng thanh bên', collapse: 'Thu gọn thanh bên' },
     orgChart: { toggleBranch: 'Thu gọn / mở nhánh con' },
     reorderList: { dragHandle: 'Kéo để sắp xếp lại' },
+    actionExpand: { label: 'Hành động' },
+    fileInput: {
+      choose: 'Chọn tệp',
+      remove: (name: string) => `Xoá ${name}`,
+      noFile: 'Chưa chọn tệp',
+      selectedCount: (count: number) => `${count} tệp đã chọn`,
+    },
+    stepper: {
+      optional: 'tuỳ chọn',
+      completed: 'đã xong',
+      current: 'đang chọn',
+      upcoming: 'chưa tới',
+      header: (position: number, label: string, optional: string, state: string) =>
+        `Bước ${position}: ${label}${optional}, ${state}`,
+    },
     pagination: {
       label: 'Phân trang',
       first: 'Trang đầu',
       previous: 'Trang trước',
       next: 'Trang sau',
       last: 'Trang cuối',
+      page: (position: number) => `Trang ${position}`,
     },
     carousel: {
       roleDescription: 'băng chuyền',
@@ -44,6 +60,7 @@ export const gLocaleVi: GLocale = {
       label: 'Băng chuyền tâm điểm',
       previous: 'Card trước',
       next: 'Card sau',
+      goTo: (position: number) => `Tới card ${position}`,
     },
     imageSlider: {
       roleDescription: 'băng chuyền ảnh',
@@ -52,11 +69,14 @@ export const gLocaleVi: GLocale = {
       next: 'Ảnh sau',
       zoom: 'Phóng to ảnh',
       goTo: (position: number) => `Tới ảnh ${position}`,
+      imageAlt: (position: number) => `Ảnh ${position}`,
+      status: (position: number, total: number) => `Ảnh ${position}/${total}`,
     },
     imagePreview: {
       remove: (position: number) => `Xoá ảnh ${position}`,
       view: (position: number) => `Xem ảnh ${position}`,
       zoom: 'Phóng to ảnh',
+      imageAlt: (position: number) => `Ảnh ${position}`,
     },
     lightbox: {
       label: 'Xem ảnh',
@@ -64,6 +84,7 @@ export const gLocaleVi: GLocale = {
       zoomOut: 'Thu nhỏ',
       previous: 'Ảnh trước',
       next: 'Ảnh sau',
+      imageAlt: (position: number, total: number) => `Ảnh ${position}/${total}`,
     },
     select: { searchPlaceholder: 'Tìm...', noResults: 'Không có kết quả' },
     searchField: { fieldLabel: 'Trường tìm kiếm', valueLabel: 'Giá trị tìm kiếm' },
@@ -94,6 +115,9 @@ export const gLocaleVi: GLocale = {
     mediaPlayer: {
       play: 'Phát',
       pause: 'Tạm dừng',
+      seek: 'Tua',
+      mute: 'Tắt tiếng',
+      unmute: 'Bật tiếng',
       volume: 'Âm lượng',
       fullscreen: 'Toàn màn hình',
       exitFullscreen: 'Thoát toàn màn hình',
@@ -105,6 +129,8 @@ export const gLocaleVi: GLocale = {
       scaleLow: 'Ít',
       scaleHigh: 'Nhiều',
       contributionUnit: 'đóng góp',
+      total: 'Tổng',
+      dayTooltip: (value: number, unit: string, date: string) => `${value} ${unit} vào ${date}`,
       aria: {
         line: 'Biểu đồ đường',
         bar: 'Biểu đồ cột',

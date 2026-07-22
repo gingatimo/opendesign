@@ -5,11 +5,13 @@ import {
   computed,
   effect,
   ElementRef,
+  inject,
   input,
   model,
   signal,
   viewChild,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { gIconFile, gIconUpload, gIconX } from '../icon/icons';
 
@@ -32,7 +34,7 @@ import { gIconFile, gIconUpload, gIconX } from '../icon/icons';
       <div class="g-file-input__row">
         <button type="button" class="g-file-input__button" [disabled]="disabled()" (click)="pick()">
           <g-icon [icon]="iconUpload" size="sm" />
-          Chọn tệp
+          {{ t().fileInput.choose }}
         </button>
         <span class="g-file-input__name" aria-live="polite">{{ label() }}</span>
       </div>
@@ -48,7 +50,7 @@ import { gIconFile, gIconUpload, gIconX } from '../icon/icons';
                 type="button"
                 class="g-file-input__remove"
                 [disabled]="disabled()"
-                [attr.aria-label]="'Xoá ' + file.name"
+                [attr.aria-label]="t().fileInput.remove(file.name)"
                 (click)="removeAt(i)"
               >
                 <g-icon [icon]="iconX" size="sm" />
@@ -85,12 +87,14 @@ export class GFileInput {
   protected readonly iconFile = gIconFile;
   protected readonly iconX = gIconX;
   protected readonly dragover = signal(false);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   protected readonly label = computed(() => {
     const f = this.files();
-    if (f.length === 0) return 'Chưa chọn tệp';
+    if (f.length === 0) return this.t().fileInput.noFile;
     if (f.length === 1) return f[0].name;
-    return `${f.length} tệp đã chọn`;
+    return this.t().fileInput.selectedCount(f.length);
   });
 
   constructor() {

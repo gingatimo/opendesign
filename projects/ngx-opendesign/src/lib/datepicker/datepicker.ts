@@ -140,7 +140,7 @@ const POSITIONS: ConnectedPosition[] = [
                   [attr.aria-disabled]="!monthSelectable(m) ? 'true' : null"
                   (click)="selectMonth(m)"
                 >
-                  Th {{ m + 1 }}
+                  {{ monthNames()[m] }}
                 </button>
               }
             </div>
@@ -191,6 +191,7 @@ export class GDatepicker implements ControlValueAccessor, OnInit {
   private onTouchedFn: () => void = () => undefined;
   protected readonly positions = POSITIONS;
   protected readonly t = this.i18n.strings;
+  protected readonly monthNames = this.i18n.monthNames;
   // Tên thứ đã xoay theo firstDayOfWeek của gói ngôn ngữ đang dùng — không còn hằng số cứng.
   protected readonly weekdays = this.i18n.weekdayNames;
   protected readonly iconCalendar = gIconCalendar;

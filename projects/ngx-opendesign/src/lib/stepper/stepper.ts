@@ -4,10 +4,12 @@ import {
   Component,
   computed,
   contentChildren,
+  inject,
   input,
   model,
 } from '@angular/core';
 import { gNextId } from '../core/id-generator';
+import { GLocaleService } from '../core/locale';
 import { GIcon } from '../icon/icon';
 import { gIconCheck } from '../icon/icons';
 import { GStep } from './step';
@@ -46,7 +48,7 @@ import { GStep } from './step';
             <span class="g-stepper__label">
               {{ step.label() }}
               @if (step.optional()) {
-                <span class="g-stepper__optional"> (tuỳ chọn)</span>
+                <span class="g-stepper__optional"> ({{ t().stepper.optional }})</span>
               }
             </span>
           </button>
@@ -86,6 +88,8 @@ export class GStepper {
 
   protected readonly steps = contentChildren(GStep);
   protected readonly iconCheck = gIconCheck;
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
 
   // Liên kết ARIA: panel nội dung có role="group" + aria-labelledby trỏ về header của bước, header
   // active có aria-controls trỏ tới panel (gương cách GTabs nối tab↔tabpanel). Id ổn định qua gNextId.
@@ -114,8 +118,12 @@ export class GStepper {
 
   protected headerAriaLabel(step: GStep, index: number): string {
     const state =
-      index < this.active() ? 'đã xong' : index === this.active() ? 'đang chọn' : 'chưa tới';
-    const opt = step.optional() ? ', tuỳ chọn' : '';
-    return `Bước ${index + 1}: ${step.label()}${opt}, ${state}`;
+      index < this.active()
+        ? this.t().stepper.completed
+        : index === this.active()
+          ? this.t().stepper.current
+          : this.t().stepper.upcoming;
+    const optional = step.optional() ? `, ${this.t().stepper.optional}` : '';
+    return this.t().stepper.header(index + 1, step.label(), optional, state);
   }
 }

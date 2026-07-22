@@ -247,7 +247,7 @@ describe('GTabs + GTab', () => {
     const fixture = TestBed.createComponent(HostKhongLabelComponent);
     fixture.detectChanges();
     expect(warnSpy).toHaveBeenCalledWith(
-      '[OpenDesign] GTabs: tablist cần tablistLabel hoặc tablistLabelledBy để có tên cho screen reader',
+      '[OpenDesign] GTabs: tablist needs tablistLabel or tablistLabelledBy to have an accessible name',
     );
     warnSpy.mockRestore();
   });

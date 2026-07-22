@@ -68,7 +68,7 @@ export class GSidebarToggle {
 
   constructor() {
     if (!this.sidebar) {
-      gDevWarning('GSidebarToggle', '<g-sidebar-toggle /> phải đặt bên trong <g-sidebar>');
+      gDevWarning('GSidebarToggle', '<g-sidebar-toggle /> must be placed inside <g-sidebar>');
     }
   }
 

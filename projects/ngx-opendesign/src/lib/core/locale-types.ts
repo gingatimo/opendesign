@@ -23,9 +23,36 @@ export interface GLocaleStrings {
   sidebar: { expand: string; collapse: string };
   orgChart: { toggleBranch: string };
   reorderList: { dragHandle: string };
-  pagination: { label: string; first: string; previous: string; next: string; last: string };
+  actionExpand: { label: string };
+  fileInput: {
+    choose: string;
+    remove: (name: string) => string;
+    noFile: string;
+    selectedCount: (count: number) => string;
+  };
+  stepper: {
+    optional: string;
+    completed: string;
+    current: string;
+    upcoming: string;
+    header: (position: number, label: string, optional: string, state: string) => string;
+  };
+  pagination: {
+    label: string;
+    first: string;
+    previous: string;
+    next: string;
+    last: string;
+    page: (position: number) => string;
+  };
   carousel: { roleDescription: string; label: string; previous: string; next: string };
-  coverflow: { roleDescription: string; label: string; previous: string; next: string };
+  coverflow: {
+    roleDescription: string;
+    label: string;
+    previous: string;
+    next: string;
+    goTo: (position: number) => string;
+  };
   imageSlider: {
     roleDescription: string;
     label: string;
@@ -33,13 +60,23 @@ export interface GLocaleStrings {
     next: string;
     zoom: string;
     goTo: (position: number) => string;
+    imageAlt: (position: number) => string;
+    status: (position: number, total: number) => string;
   };
   imagePreview: {
     remove: (position: number) => string;
     view: (position: number) => string;
     zoom: string;
+    imageAlt: (position: number) => string;
   };
-  lightbox: { label: string; zoomIn: string; zoomOut: string; previous: string; next: string };
+  lightbox: {
+    label: string;
+    zoomIn: string;
+    zoomOut: string;
+    previous: string;
+    next: string;
+    imageAlt: (position: number, total: number) => string;
+  };
   select: { searchPlaceholder: string; noResults: string };
   searchField: { fieldLabel: string; valueLabel: string };
   otp: { charLabel: (position: number) => string };
@@ -66,6 +103,9 @@ export interface GLocaleStrings {
   mediaPlayer: {
     play: string;
     pause: string;
+    seek: string;
+    mute: string;
+    unmute: string;
     volume: string;
     fullscreen: string;
     exitFullscreen: string;
@@ -77,6 +117,8 @@ export interface GLocaleStrings {
     scaleLow: string;
     scaleHigh: string;
     contributionUnit: string;
+    total: string;
+    dayTooltip: (value: number, unit: string, date: string) => string;
     aria: {
       line: string;
       bar: string;

@@ -33,11 +33,11 @@ function fileOf(name: string, size: number): File {
 }
 
 describe('GFileInput', () => {
-  it('mặc định hiện "Chưa chọn tệp"', () => {
+  it('mặc định hiện "No file selected"', () => {
     const f = TestBed.createComponent(Host);
     f.detectChanges();
     expect(f.nativeElement.querySelector('.g-file-input__name').textContent.trim()).toBe(
-      'Chưa chọn tệp',
+      'No file selected',
     );
   });
   it('change native input → cập nhật files model + hiện tên (1 file)', () => {
@@ -49,7 +49,7 @@ describe('GFileInput', () => {
     expect(f.componentInstance.files().length).toBe(1);
     expect(f.nativeElement.querySelector('.g-file-input__name').textContent.trim()).toBe('anh.png');
   });
-  it('multiple=true → nhận nhiều file; label "N tệp"', () => {
+  it('multiple=true → nhận nhiều file; label "N files"', () => {
     const f = TestBed.createComponent(Host);
     f.componentInstance.multiple.set(true);
     f.detectChanges();
@@ -58,7 +58,7 @@ describe('GFileInput', () => {
     f.detectChanges();
     expect(f.componentInstance.files().length).toBe(2);
     expect(f.nativeElement.querySelector('.g-file-input__name').textContent.trim()).toBe(
-      '2 tệp đã chọn',
+      '2 files selected',
     );
   });
   it('multiple=false (mặc định) → chỉ lấy file đầu dù chọn nhiều', () => {

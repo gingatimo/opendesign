@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { GIcon } from '../icon/icon';
 import { gIconDownload, GIconGlyph } from '../icon/icons';
+import { GLocaleService } from '../core/locale';
 
 export interface GActionExpandItem {
   /** Nhãn hiện trên nút (vd. "PDF", "SVG"). */
@@ -32,7 +33,7 @@ export interface GActionExpandItem {
       [class.g-action-expand--open]="expanded()"
       [class.g-action-expand--end]="align() === 'end'"
       role="group"
-      [attr.aria-label]="label()"
+      [attr.aria-label]="resolvedLabel()"
       (mouseenter)="hovering.set(true)"
       (mouseleave)="hovering.set(false)"
       (focusin)="focused.set(true)"
@@ -41,7 +42,7 @@ export interface GActionExpandItem {
       <button
         type="button"
         class="g-action-expand__trigger"
-        [attr.aria-label]="label()"
+        [attr.aria-label]="resolvedLabel()"
         [attr.aria-expanded]="expanded()"
         (click)="pinned.set(!pinned())"
       >
@@ -75,7 +76,7 @@ export class GActionExpand {
   // Icon lúc thu gọn (mặc định tải xuống).
   readonly icon = input<GIconGlyph>(gIconDownload);
   readonly actions = input<readonly GActionExpandItem[]>([]);
-  readonly label = input('Hành động');
+  readonly label = input('');
   // Hướng bung: 'start' (trigger trái, bung phải — mặc định) hoặc 'end' (trigger phải, bung sang
   // TRÁI — hợp khi đặt sát mép phải như góc trên chart).
   readonly align = input<'start' | 'end'>('start');
@@ -83,11 +84,14 @@ export class GActionExpand {
   readonly action = output<GActionExpandItem>();
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly i18n = inject(GLocaleService);
+  protected readonly t = this.i18n.strings;
   // Bung khi ĐANG rê chuột HOẶC có focus bên trong HOẶC đã ghim (tap trên cảm ứng).
   protected readonly hovering = signal(false);
   protected readonly focused = signal(false);
   protected readonly pinned = signal(false);
   protected readonly expanded = computed(() => this.hovering() || this.focused() || this.pinned());
+  protected readonly resolvedLabel = computed(() => this.label() || this.t().actionExpand.label);
 
   protected onFocusOut(e: FocusEvent): void {
     const next = e.relatedTarget as Node | null;

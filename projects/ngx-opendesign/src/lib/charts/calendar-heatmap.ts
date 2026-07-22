@@ -363,7 +363,7 @@ export class GCalendarHeatmap {
 
   protected tooltipFor(day: Date): string {
     const value = this.byDay().get(dayKey(day)) ?? 0;
-    return `${value} ${this.resolvedUnit()} vào ${this.i18n.formatDate(day)}`;
+    return this.t().chart.dayTooltip(value, this.resolvedUnit(), this.i18n.formatDate(day));
   }
 }
 

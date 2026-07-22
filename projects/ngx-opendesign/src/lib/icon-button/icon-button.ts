@@ -36,7 +36,7 @@ export class GIconButton {
     afterNextRender(() => {
       const el = this.elementRef.nativeElement;
       if (!el.hasAttribute('aria-label') && !el.hasAttribute('aria-labelledby')) {
-        gDevWarning('GIconButton', 'icon button cần aria-label hoặc aria-labelledby');
+        gDevWarning('GIconButton', 'icon button needs aria-label or aria-labelledby');
       }
     });
   }

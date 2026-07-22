@@ -26,12 +26,28 @@ export const gLocaleEn: GLocale = {
     sidebar: { expand: 'Expand sidebar', collapse: 'Collapse sidebar' },
     orgChart: { toggleBranch: 'Collapse or expand branch' },
     reorderList: { dragHandle: 'Drag to reorder' },
+    actionExpand: { label: 'Actions' },
+    fileInput: {
+      choose: 'Choose file',
+      remove: (name: string) => `Remove ${name}`,
+      noFile: 'No file selected',
+      selectedCount: (count: number) => `${count} files selected`,
+    },
+    stepper: {
+      optional: 'optional',
+      completed: 'completed',
+      current: 'current',
+      upcoming: 'upcoming',
+      header: (position: number, label: string, optional: string, state: string) =>
+        `Step ${position}: ${label}${optional}, ${state}`,
+    },
     pagination: {
       label: 'Pagination',
       first: 'First page',
       previous: 'Previous page',
       next: 'Next page',
       last: 'Last page',
+      page: (position: number) => `Page ${position}`,
     },
     carousel: {
       roleDescription: 'carousel',
@@ -44,6 +60,7 @@ export const gLocaleEn: GLocale = {
       label: 'Centered carousel',
       previous: 'Previous card',
       next: 'Next card',
+      goTo: (position: number) => `Go to card ${position}`,
     },
     imageSlider: {
       roleDescription: 'image carousel',
@@ -52,11 +69,14 @@ export const gLocaleEn: GLocale = {
       next: 'Next image',
       zoom: 'Zoom image',
       goTo: (position: number) => `Go to image ${position}`,
+      imageAlt: (position: number) => `Image ${position}`,
+      status: (position: number, total: number) => `Image ${position} of ${total}`,
     },
     imagePreview: {
       remove: (position: number) => `Remove image ${position}`,
       view: (position: number) => `View image ${position}`,
       zoom: 'Zoom image',
+      imageAlt: (position: number) => `Image ${position}`,
     },
     lightbox: {
       label: 'Image viewer',
@@ -64,6 +84,7 @@ export const gLocaleEn: GLocale = {
       zoomOut: 'Zoom out',
       previous: 'Previous image',
       next: 'Next image',
+      imageAlt: (position: number, total: number) => `Image ${position} of ${total}`,
     },
     select: { searchPlaceholder: 'Search…', noResults: 'No results' },
     searchField: { fieldLabel: 'Search field', valueLabel: 'Search value' },
@@ -94,6 +115,9 @@ export const gLocaleEn: GLocale = {
     mediaPlayer: {
       play: 'Play',
       pause: 'Pause',
+      seek: 'Seek',
+      mute: 'Mute',
+      unmute: 'Unmute',
       volume: 'Volume',
       fullscreen: 'Enter full screen',
       exitFullscreen: 'Exit full screen',
@@ -105,6 +129,8 @@ export const gLocaleEn: GLocale = {
       scaleLow: 'Less',
       scaleHigh: 'More',
       contributionUnit: 'contributions',
+      total: 'Total',
+      dayTooltip: (value: number, unit: string, date: string) => `${value} ${unit} on ${date}`,
       aria: {
         line: 'Line chart',
         bar: 'Bar chart',

@@ -32,7 +32,7 @@ describe('GIconButton', () => {
     const fixture = TestBed.createComponent(HostThieuAriaComponent);
     fixture.detectChanges();
     expect(warnSpy).toHaveBeenCalledWith(
-      '[OpenDesign] GIconButton: icon button cần aria-label hoặc aria-labelledby',
+      '[OpenDesign] GIconButton: icon button needs aria-label or aria-labelledby',
     );
     warnSpy.mockRestore();
   });

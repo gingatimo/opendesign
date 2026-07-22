@@ -31,7 +31,7 @@ export class GDialogService {
     if (!config.ariaLabel && !config.ariaLabelledBy) {
       gDevWarning(
         'GDialogService',
-        'dialog cần ariaLabel hoặc ariaLabelledBy để có tên cho screen reader',
+        'dialog needs ariaLabel or ariaLabelledBy to have an accessible name',
       );
     }
 

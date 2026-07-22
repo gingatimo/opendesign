@@ -87,7 +87,7 @@ import { GLocaleService } from '../core/locale';
               [attr.y]="plotHeight() / 2 + radius() * 0.121"
               [attr.font-size]="totalLabelSize()"
             >
-              {{ totalLabel() }}
+              {{ resolvedTotalLabel() }}
             </text>
           }
         </svg>
@@ -112,7 +112,7 @@ export class GDonutChart {
   readonly showLegend = input(true);
   readonly legendPosition = input<GChartLegendPosition>('bottom');
   readonly showTotal = input(true);
-  readonly totalLabel = input('Tổng');
+  readonly totalLabel = input('');
   readonly exportable = input(true);
   /** Cho phép phóng to chart ra gần kín màn hình — nút nằm cạnh nút tải xuống. */
   readonly zoomable = input(false);
@@ -131,6 +131,7 @@ export class GDonutChart {
   protected readonly resolvedAriaLabel = computed(
     () => this.ariaLabel() || this.t().chart.aria.donut,
   );
+  protected readonly resolvedTotalLabel = computed(() => this.totalLabel() || this.t().chart.total);
 
   constructor() {
     afterNextRender(() => {
