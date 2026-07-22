@@ -88,6 +88,8 @@ export interface GLocaleStrings {
   };
   colorPicker: { open: string; area: string; hue: string; hex: string };
   timePicker: { open: string; hours: string; minutes: string };
+  terminal: { commandInput: string };
+  stepSlider: { label: string };
   datepicker: {
     open: string;
     openRange: string;
@@ -152,6 +154,7 @@ export interface GLocaleStrings {
     moreFormats: string;
     listStyle: string;
     richTextLabel: string;
+    placeholder: string;
     codeLabel: string;
     normalText: string;
     heading1: string;

@@ -15,4 +15,21 @@ describe('GRichTextEditor', () => {
     fixture.detectChanges();
     expect(toolbar.getAttribute('aria-label')).toBe('Định dạng');
   });
+
+  it('placeholder mặc định đổi theo ngôn ngữ, còn input consumer giữ nguyên', () => {
+    const fixture = TestBed.createComponent(GRichTextEditor);
+    fixture.detectChanges();
+    const editor = fixture.nativeElement.querySelector('.g-rte__body') as HTMLElement;
+    expect(editor.getAttribute('data-placeholder')).toBe('Enter content…');
+
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    fixture.detectChanges();
+    expect(editor.getAttribute('data-placeholder')).toBe('Nhập nội dung…');
+
+    fixture.componentRef.setInput('placeholder', 'Nội dung tuỳ chỉnh');
+    fixture.detectChanges();
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    fixture.detectChanges();
+    expect(editor.getAttribute('data-placeholder')).toBe('Nội dung tuỳ chỉnh');
+  });
 });

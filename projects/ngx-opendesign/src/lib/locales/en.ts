@@ -100,6 +100,8 @@ export const gLocaleEn: GLocale = {
       hex: 'Hex colour code',
     },
     timePicker: { open: 'Pick a time', hours: 'Hours', minutes: 'Minutes' },
+    terminal: { commandInput: 'Enter command' },
+    stepSlider: { label: 'Level' },
     datepicker: {
       open: 'Pick a date',
       openRange: 'Pick a date range',
@@ -164,6 +166,7 @@ export const gLocaleEn: GLocale = {
       moreFormats: 'More formatting',
       listStyle: 'List style',
       richTextLabel: 'Rich text editor',
+      placeholder: 'Enter content…',
       codeLabel: 'Code editor',
       normalText: 'Normal text',
       heading1: 'Heading 1',

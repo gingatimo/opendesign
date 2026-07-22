@@ -405,7 +405,7 @@ let hintCounter = 0;
         #editable
         class="g-rte__body"
         [attr.contenteditable]="isDisabled() ? 'false' : 'true'"
-        [attr.data-placeholder]="placeholder()"
+        [attr.data-placeholder]="editorPlaceholder()"
         [attr.aria-label]="editorAriaLabel()"
         [attr.aria-invalid]="invalid() || null"
         [attr.aria-describedby]="hintId"
@@ -435,7 +435,7 @@ let hintCounter = 0;
 export class GRichTextEditor implements ControlValueAccessor, OnInit {
   readonly value = model('');
   readonly minHeight = input(160);
-  readonly placeholder = input('Nhập nội dung…');
+  readonly placeholder = input<string>();
   readonly ariaLabel = input<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
   // Dán: 'text' = bỏ hết định dạng (mặc định, tránh rác từ Word/web); 'html' = giữ định dạng nhưng
@@ -527,6 +527,9 @@ export class GRichTextEditor implements ControlValueAccessor, OnInit {
   protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
   protected readonly editorAriaLabel = computed(
     () => this.ariaLabel() ?? this.t().editor.richTextLabel,
+  );
+  protected readonly editorPlaceholder = computed(
+    () => this.placeholder() ?? this.t().editor.placeholder,
   );
   protected readonly invalid = signal(false);
   protected readonly active = signal<ReadonlySet<string>>(new Set());

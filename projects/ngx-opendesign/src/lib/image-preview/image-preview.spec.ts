@@ -50,8 +50,11 @@ describe('GImagePreview', () => {
     TestBed.tick();
     (f.nativeElement.querySelectorAll('.g-image-preview__thumb')[1] as HTMLButtonElement).click();
     expect(openSpy).toHaveBeenCalled();
-    const data = openSpy.mock.calls[0][1].data;
+    const config = openSpy.mock.calls[0][1];
+    const data = config.data;
     expect(data.startIndex).toBe(1);
     expect(data.urls).toEqual(['a.png', 'b.png']);
+    expect(config.ariaLabel).toBeUndefined();
+    expect(config.ariaLabelledBy).toBe(data.labelId);
   });
 });

@@ -174,6 +174,6 @@ export class GImageSlider {
   }
 
   protected openAt(i: number): void {
-    openLightbox(this.dialog, this.urls(), i, this.t().lightbox.label);
+    openLightbox(this.dialog, this.urls(), i);
   }
 }

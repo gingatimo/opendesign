@@ -3,12 +3,15 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
+  inject,
   input,
   output,
   signal,
   viewChild,
 } from '@angular/core';
+import { GLocaleService } from '../core/locale';
 
 // Một dòng trong terminal. `kind` quyết định màu: command (sáng), output (xám), success (xanh lá),
 // error (đỏ).
@@ -47,7 +50,7 @@ export interface GTerminalLine {
           [value]="draft()"
           (input)="draft.set($any($event.target).value)"
           (keydown.enter)="onSubmit($event)"
-          [attr.aria-label]="title() + ' — nhập lệnh'"
+          [attr.aria-label]="inputAriaLabel()"
         />
       </div>
     }
@@ -61,6 +64,7 @@ export class GTerminal {
   readonly lines = input<readonly GTerminalLine[]>([]);
   readonly title = input('Terminal');
   readonly prompt = input('$');
+  readonly ariaLabel = input<string>();
   // Có ô nhập lệnh hay không.
   readonly interactive = input(true, { transform: booleanAttribute });
   // Phát lệnh khi người dùng gõ + Enter (component tự xoá ô nhập). Consumer tự nối kết quả vào `lines`.
@@ -69,6 +73,10 @@ export class GTerminal {
 
   protected readonly draft = signal('');
   private readonly body = viewChild<ElementRef<HTMLElement>>('body');
+  private readonly i18n = inject(GLocaleService);
+  protected readonly inputAriaLabel = computed(
+    () => this.ariaLabel() ?? `${this.title()} — ${this.i18n.strings().terminal.commandInput}`,
+  );
 
   constructor() {
     // Có dòng mới → cuộn xuống đáy (sau render, zoneless — dùng afterRenderEffect).

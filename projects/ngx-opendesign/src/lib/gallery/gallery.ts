@@ -94,6 +94,6 @@ export class GGallery {
   }
 
   protected openLightbox(): void {
-    openLightbox(this.dialog, this.urls(), this.active(), this.t().lightbox.label);
+    openLightbox(this.dialog, this.urls(), this.active());
   }
 }

@@ -1,5 +1,7 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { TestBed } from '@angular/core/testing';
+import { GLocaleService } from '../core/locale';
+import { gLocaleVi } from '../locales/vi';
 import { vi } from 'vitest';
 import { GLightbox } from './lightbox';
 
@@ -7,7 +9,7 @@ function setup(urls: string[], startIndex = 0) {
   const close = vi.fn();
   TestBed.configureTestingModule({
     providers: [
-      { provide: DIALOG_DATA, useValue: { urls, startIndex } },
+      { provide: DIALOG_DATA, useValue: { urls, startIndex, labelId: 'g-lightbox-label-test' } },
       { provide: DialogRef, useValue: { close } },
     ],
   });
@@ -55,5 +57,15 @@ describe('GLightbox', () => {
     ) as HTMLButtonElement;
     closeBtn.click();
     expect(close).toHaveBeenCalled();
+  });
+
+  it('nhãn dialog bên trong lightbox đang mở đổi theo ngôn ngữ', () => {
+    const { f } = setup(['a.png']);
+    const label = f.nativeElement.querySelector('.g-lightbox__label') as HTMLElement;
+    expect(label.textContent?.trim()).toBe('Image viewer');
+
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    f.detectChanges();
+    expect(label.textContent?.trim()).toBe('Xem ảnh');
   });
 });

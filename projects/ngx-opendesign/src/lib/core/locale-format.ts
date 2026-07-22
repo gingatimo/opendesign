@@ -16,6 +16,24 @@ export function formatDateFor(tag: string, d: Date): string {
   return new Intl.DateTimeFormat(tag, DATE_OPTIONS).format(d);
 }
 
+export function datePlaceholderFor(tag: string): string {
+  return new Intl.DateTimeFormat(tag, DATE_OPTIONS)
+    .formatToParts(new Date(2006, 10, 22))
+    .map(({ type, value }) => {
+      switch (type) {
+        case 'day':
+          return 'dd';
+        case 'month':
+          return 'MM';
+        case 'year':
+          return 'yyyy';
+        default:
+          return value;
+      }
+    })
+    .join('');
+}
+
 export function formatNumberFor(tag: string, n: number): string {
   return new Intl.NumberFormat(tag).format(n);
 }

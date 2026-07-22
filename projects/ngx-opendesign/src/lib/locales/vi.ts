@@ -100,6 +100,8 @@ export const gLocaleVi: GLocale = {
       hex: 'Mã màu hex',
     },
     timePicker: { open: 'Chọn giờ', hours: 'Giờ', minutes: 'Phút' },
+    terminal: { commandInput: 'Nhập lệnh' },
+    stepSlider: { label: 'Mức' },
     datepicker: {
       open: 'Chọn ngày',
       openRange: 'Chọn khoảng ngày',
@@ -164,6 +166,7 @@ export const gLocaleVi: GLocale = {
       moreFormats: 'Định dạng khác',
       listStyle: 'Kiểu danh sách',
       richTextLabel: 'Trình soạn văn bản',
+      placeholder: 'Nhập nội dung…',
       codeLabel: 'Trình soạn code',
       normalText: 'Văn bản thường',
       heading1: 'Tiêu đề 1',

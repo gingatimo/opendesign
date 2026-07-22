@@ -65,10 +65,20 @@ describe('GDatepicker', () => {
     expect(formatDateFor('vi-VN', cmp.viewMonth())).toBe('01/08/2026');
   });
 
-  it('hiển thị placeholder khi chưa chọn', () => {
+  it('placeholder mặc định theo thứ tự locale, còn input consumer giữ nguyên', () => {
     const { f } = make();
     const el = f.nativeElement.querySelector('.g-datepicker__value') as HTMLElement;
+    expect(el.textContent!.trim()).toBe('MM/dd/yyyy');
+
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    f.detectChanges();
     expect(el.textContent!.trim()).toBe('dd/MM/yyyy');
+
+    f.componentRef.setInput('placeholder', 'Ngày tuỳ chỉnh');
+    f.detectChanges();
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    f.detectChanges();
+    expect(el.textContent!.trim()).toBe('Ngày tuỳ chỉnh');
   });
 
   // Gói mặc định là tiếng Anh (en-US, firstDayOfWeek=0) nên cột đầu là Chủ nhật; đổi sang vi-VN

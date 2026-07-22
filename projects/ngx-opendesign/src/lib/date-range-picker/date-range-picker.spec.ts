@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { GLocaleService } from '../core/locale';
 import { formatDateFor } from '../core/locale-format';
+import { gLocaleVi } from '../locales/vi';
 import { GDateRange, GDateRangePicker } from './date-range-picker';
 
 interface Rp {
@@ -19,10 +21,20 @@ function make() {
 }
 
 describe('GDateRangePicker', () => {
-  it('placeholder khi chưa chọn', () => {
+  it('placeholder mặc định theo thứ tự locale, còn input consumer giữ nguyên', () => {
     const { f } = make();
     const el = f.nativeElement.querySelector('.g-date-range-picker__value') as HTMLElement;
+    expect(el.textContent!.trim()).toBe('MM/dd/yyyy – MM/dd/yyyy');
+
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    f.detectChanges();
     expect(el.textContent!.trim()).toBe('dd/MM/yyyy – dd/MM/yyyy');
+
+    f.componentRef.setInput('placeholder', 'Khoảng ngày tuỳ chỉnh');
+    f.detectChanges();
+    TestBed.inject(GLocaleService).use(gLocaleVi);
+    f.detectChanges();
+    expect(el.textContent!.trim()).toBe('Khoảng ngày tuỳ chỉnh');
   });
 
   it('click 1 = start (end null); click 2 sau start = end + đóng', () => {

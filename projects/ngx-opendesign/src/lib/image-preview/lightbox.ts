@@ -14,10 +14,12 @@ import { GLocaleService } from '../core/locale';
 export interface GLightboxData {
   urls: string[];
   startIndex: number;
+  labelId: string;
 }
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
+let lightboxCount = 0;
 
 // Xem ảnh toàn màn hình (mở qua CDK Dialog — focus trap/Esc/restore focus do CDK lo). Zoom cuộn/nút/
 // double-click, pan kéo khi zoom, prev/next nếu nhiều ảnh. Nội bộ: GImagePreview mở, KHÔNG export.
@@ -26,6 +28,9 @@ const MAX_SCALE = 4;
   imports: [GIcon],
   template: `
     <div class="g-lightbox">
+      <span class="cdk-visually-hidden g-lightbox__label" [id]="labelId">{{
+        t().lightbox.label
+      }}</span>
       <div class="g-lightbox__toolbar">
         <button
           type="button"
@@ -100,6 +105,7 @@ export class GLightbox {
   protected readonly t = this.i18n.strings;
 
   protected readonly urls = this.data.urls;
+  protected readonly labelId = this.data.labelId;
   protected readonly iconPrev = gIconChevronLeft;
   protected readonly iconNext = gIconChevronRight;
   protected readonly iconPlus = gIconPlus;
@@ -206,22 +212,16 @@ export class GLightbox {
 }
 
 // Mở GLightbox với cấu hình chuẩn — GImagePreview, GImageSlider, GGallery dùng chung (DRY).
-// ariaLabel do NGƯỜI GỌI truyền vào (t().lightbox.label): openLightbox là hàm thuần, không phải
-// component/service nên inject() không chạy được ở đây (không có injection context); còn caller thì
-// luôn là component đã inject GLocaleService sẵn cho chuỗi riêng của nó. Dialog được tạo MỚI mỗi lần
-// gọi nên chuỗi lấy tại thời điểm mở luôn đúng ngôn ngữ hiện tại — không có vấn đề "kẹt" như afterNextRender.
-export function openLightbox(
-  dialog: Dialog,
-  urls: string[],
-  startIndex: number,
-  ariaLabel: string,
-): void {
+// aria-labelledby trỏ vào chính component để tên dialog đọc signal locale trực tiếp, không bị chụp
+// thành chuỗi tại thời điểm mở dialog.
+export function openLightbox(dialog: Dialog, urls: string[], startIndex: number): void {
+  const labelId = `g-lightbox-label-${++lightboxCount}`;
   dialog.open<unknown, GLightboxData>(GLightbox, {
-    data: { urls, startIndex },
+    data: { urls, startIndex, labelId },
     panelClass: 'g-lightbox-panel',
     backdropClass: 'g-lightbox-backdrop',
     hasBackdrop: true,
-    ariaLabel,
+    ariaLabelledBy: labelId,
     autoFocus: 'dialog',
     restoreFocus: true,
   });

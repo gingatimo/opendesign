@@ -18,6 +18,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { GLocaleService } from '../core/locale';
+import { datePlaceholderFor } from '../core/locale-format';
 import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconCalendar, gIconChevronLeft, gIconChevronRight } from '../icon/icons';
@@ -51,7 +52,7 @@ const POSITIONS: ConnectedPosition[] = [
       (click)="toggle()"
     >
       <span class="g-datepicker__value" [class.g-datepicker__value--placeholder]="!value()">
-        {{ value() ? display() : placeholder() }}
+        {{ value() ? display() : resolvedPlaceholder() }}
       </span>
       <g-icon [icon]="iconCalendar" size="sm" />
     </button>
@@ -174,7 +175,7 @@ export class GDatepicker implements ControlValueAccessor, OnInit {
   readonly value = model<Date | null>(null);
   readonly min = input<Date>();
   readonly max = input<Date>();
-  readonly placeholder = input('dd/MM/yyyy');
+  readonly placeholder = input<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
@@ -211,6 +212,9 @@ export class GDatepicker implements ControlValueAccessor, OnInit {
     const v = this.value();
     return v ? this.i18n.formatDate(v) : '';
   });
+  protected readonly resolvedPlaceholder = computed(
+    () => this.placeholder() ?? datePlaceholderFor(this.i18n.tag()),
+  );
   protected readonly grid = computed(() =>
     buildMonthGrid(this.viewMonth(), this.i18n.firstDayOfWeek()),
   );

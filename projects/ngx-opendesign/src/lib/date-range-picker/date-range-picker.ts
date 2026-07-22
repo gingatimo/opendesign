@@ -18,6 +18,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { GLocaleService } from '../core/locale';
+import { datePlaceholderFor } from '../core/locale-format';
 import { trackControlInvalid } from '../core/control-invalid';
 import { GIcon } from '../icon/icon';
 import { gIconCalendar, gIconChevronLeft, gIconChevronRight } from '../icon/icons';
@@ -62,7 +63,7 @@ const POSITIONS: ConnectedPosition[] = [
         class="g-date-range-picker__value"
         [class.g-date-range-picker__value--placeholder]="!value().start && !value().end"
       >
-        {{ value().start || value().end ? display() : placeholder() }}
+        {{ value().start || value().end ? display() : resolvedPlaceholder() }}
       </span>
       <g-icon [icon]="iconCalendar" size="sm" />
     </button>
@@ -196,7 +197,7 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
   readonly value = model<GDateRange>({ start: null, end: null });
   readonly min = input<Date>();
   readonly max = input<Date>();
-  readonly placeholder = input('dd/MM/yyyy – dd/MM/yyyy');
+  readonly placeholder = input<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly elementRef = inject(ElementRef);
@@ -234,6 +235,13 @@ export class GDateRangePicker implements ControlValueAccessor, OnInit {
   protected readonly display = computed(() => {
     const { start, end } = this.value();
     return `${start ? this.i18n.formatDate(start) : '…'} – ${end ? this.i18n.formatDate(end) : '…'}`;
+  });
+  protected readonly resolvedPlaceholder = computed(() => {
+    const placeholder = this.placeholder();
+    return (
+      placeholder ??
+      `${datePlaceholderFor(this.i18n.tag())} – ${datePlaceholderFor(this.i18n.tag())}`
+    );
   });
 
   // Khi có start chưa có end và đang hover một ngày sau start: dùng ngày hover làm "end tạm" để xem

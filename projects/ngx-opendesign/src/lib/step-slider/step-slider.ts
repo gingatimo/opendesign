@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { trackControlInvalid } from '../core/control-invalid';
+import { GLocaleService } from '../core/locale';
 
 // Thanh trượt RỜI RẠC dạng pill: một dải pill chứa N chấm đều nhau, chấm đang chọn được thay bằng
 // "thumb" pill nổi lên. Kèm nhãn hai đầu (vd. "Faster" / "Smarter"). Chọn bằng bấm/kéo trên dải hoặc
@@ -37,7 +38,7 @@ import { trackControlInvalid } from '../core/control-invalid';
       [attr.aria-valuemin]="0"
       [attr.aria-valuemax]="steps() - 1"
       [attr.aria-valuenow]="value()"
-      [attr.aria-label]="ariaLabel()"
+      [attr.aria-label]="resolvedAriaLabel()"
       [attr.aria-disabled]="isDisabled() || null"
       (pointerdown)="onPointerDown($event)"
       (keydown)="onKeydown($event)"
@@ -76,11 +77,12 @@ export class GStepSlider implements ControlValueAccessor, OnInit {
   readonly size = input<'xs' | 'sm' | 'md'>('md');
   readonly startLabel = input('');
   readonly endLabel = input('');
-  readonly ariaLabel = input('Mức');
+  readonly ariaLabel = input<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
 
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly i18n = inject(GLocaleService);
 
   // Disabled hợp nhất từ input [disabled] và setDisabledState của form (formControl.disable()).
   private readonly formDisabled = signal(false);
@@ -93,6 +95,9 @@ export class GStepSlider implements ControlValueAccessor, OnInit {
   private readonly track = viewChild.required<ElementRef<HTMLElement>>('track');
   protected readonly stepIndexes = computed(() =>
     Array.from({ length: this.steps() }, (_, i) => i),
+  );
+  protected readonly resolvedAriaLabel = computed(
+    () => this.ariaLabel() ?? this.i18n.strings().stepSlider.label,
   );
 
   constructor() {

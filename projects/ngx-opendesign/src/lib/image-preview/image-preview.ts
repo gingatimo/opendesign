@@ -78,6 +78,6 @@ export class GImagePreview {
   }
 
   protected openLightbox(startIndex: number): void {
-    openLightbox(this.dialog, this.urls(), startIndex, this.t().lightbox.label);
+    openLightbox(this.dialog, this.urls(), startIndex);
   }
 }
