@@ -2,34 +2,29 @@
 
 [![npm](https://img.shields.io/npm/v/ngx-opendesign.svg)](https://www.npmjs.com/package/ngx-opendesign)
 
-Design system cho Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — standalone và OnPush.
+OpenDesign is a modern Angular design system with pill-shaped controls, compact rounded surfaces,
+light and dark themes, standalone components, `OnPush`, and signal-friendly APIs.
 
-78 component, 10 loại chart SVG thuần, 2 trình soạn thảo (rich text + code) và 116 icon tree-shakable. **Không có dependency bên thứ ba nào** — chỉ hai peer dependency trong chính hệ Angular (`@angular/cdk`, `@angular/forms`).
+Version 2.0.0 includes 78 components, 10 dependency-free SVG chart types, 2 Angular editors, 116
+tree-shakable icons, runtime i18n for English and Vietnamese, and no non-Angular runtime
+dependencies. The only peer dependencies are Angular packages: `@angular/core`, `@angular/common`,
+`@angular/cdk`, and `@angular/forms`.
 
-npm: https://www.npmjs.com/package/ngx-opendesign
+Documentation, live demos, source examples, API tables, and playbook screens:
+https://gingatimo.github.io/opendesign/
 
-## Tài liệu
-
-Demo sống, code mẫu và bảng API cho từng component: https://gingatimo.github.io/opendesign/
-
-## Cho AI coding agent
-
-Package kèm sẵn file [`SKILL.md`](./SKILL.md) — hướng dẫn ngắn gọn (pattern bắt buộc, form control
-CVA, các bẫy, bảng tra component + selector) để coding agent dùng ngx-opendesign đúng cách. Agent
-trong dự án của bạn đọc được ở `node_modules/ngx-opendesign/SKILL.md`.
-
-## Cài đặt
+## Install
 
 ```bash
 npm install ngx-opendesign @angular/cdk @angular/forms
 ```
 
-Thêm CSS của OpenDesign vào `angular.json` (đây là nơi định nghĩa toàn bộ design token `--g-*` và bảng màu sáng/tối):
+Add the OpenDesign stylesheet to `angular.json`:
 
 ```json
 {
   "projects": {
-    "ten-app-cua-ban": {
+    "your-app": {
       "architect": {
         "build": {
           "options": {
@@ -42,82 +37,164 @@ Thêm CSS của OpenDesign vào `angular.json` (đây là nơi định nghĩa to
 }
 ```
 
-Hoặc `@import 'ngx-opendesign/styles/opendesign.css';` trong `styles.scss` nếu bạn thích cách đó.
+You can also import the stylesheet from your global stylesheet:
 
-`opendesign.css` đã kèm sẵn rule a11y `.cdk-visually-hidden` (Toast dùng `LiveAnnouncer` của CDK để
-đọc nội dung cho screen reader), nên bạn **không** phải import thêm `@angular/cdk/a11y-prebuilt.css`
-— chỉ một file CSS này là đủ.
-
-## Ngôn ngữ giao diện
-
-Thư viện mặc định dùng tiếng Anh. Để dùng tiếng Việt cho chuỗi mặc định, nhãn trợ năng và định dạng
-ngày/số, thêm provider một lần vào `app.config.ts`:
-
-```typescript
-import { provideGLocale, gLocaleVi } from 'ngx-opendesign';
-
-export const appConfig = {
-  providers: [provideGLocale(gLocaleVi)],
-};
+```scss
+@import 'ngx-opendesign/styles/opendesign.css';
 ```
 
-`GLocaleService` cho phép đổi locale khi ứng dụng đang chạy; input app truyền vào vẫn được ưu tiên hơn
-chuỗi mặc định từ locale.
+`opendesign.css` defines the public `--g-*` design tokens, the light and dark palettes, component
+styles, chart colors, and the CDK accessibility utility used by Toast. You do not need to import
+`@angular/cdk/a11y-prebuilt.css` separately.
 
-## Dùng nhanh
+## Use Components
+
+OpenDesign is standalone-first. Import the components, directives, services, and icons you use from
+the single package entry point.
 
 ```typescript
 import { Component } from '@angular/core';
 import { GButton, GCard, GCardHeader } from 'ngx-opendesign';
 
 @Component({
-  selector: 'app-vi-du',
+  selector: 'app-example',
   imports: [GButton, GCard, GCardHeader],
   template: `
     <g-card>
-      <div gCardHeader>Xin chào</div>
-      <p>Thẻ này dùng token của OpenDesign nên tự đổi màu theo theme.</p>
-      <button g-button (click)="luu()">Lưu thay đổi</button>
-      <button g-button variant="outline">Hủy</button>
+      <div gCardHeader>Project status</div>
+      <p>This card uses OpenDesign tokens and follows the active theme.</p>
+      <button g-button (click)="save()">Save changes</button>
+      <button g-button variant="outline">Cancel</button>
     </g-card>
   `,
 })
-export class ViDuComponent {
-  luu(): void {
-    console.log('đã lưu');
+export class ExampleComponent {
+  save(): void {
+    console.log('saved');
   }
 }
 ```
 
-## Bật chế độ tối
+Some APIs are element components, such as `<g-card>` and `<g-select>`. Others are attribute
+directives on native elements, such as `<button g-button>`, `<input gInput>`, `<textarea gTextarea>`,
+and `<table gTable>`. The docs show the selector for every component.
 
-Đặt thuộc tính `data-g-theme="dark"` lên thẻ `<html>`. Không có thuộc tính này thì mặc định là giao diện sáng; mọi component đều đọc token nên đổi màu đồng loạt, không cần sửa gì thêm.
+## Theme
 
-File theme cũng khai báo sẵn `color-scheme: light`/`dark` tương ứng — đây là thứ CSS variable không làm được: nó báo cho trình duyệt biết bề mặt đang sáng hay tối, để những phần giao diện do _trình duyệt_ tự vẽ (thanh cuộn, ô chọn ngày/giờ, nền autofill, gạch chân spellcheck) cũng đi theo theme.
+Light theme is the default. Enable dark theme by setting one attribute on the root document element:
 
-## Component
+```typescript
+document.documentElement.setAttribute('data-g-theme', 'dark');
+```
 
-- **Nút** (4) — Button, Fab, Icon Button, Action Expand
-- **Form** (19) — Input, Textarea, Checkbox, Toggle, Radio, Select, File Input, Datepicker, Date
+Remove the attribute to return to light theme.
+
+The stylesheet also sets `color-scheme` for the active theme so browser-rendered UI such as
+scrollbars, date/time inputs, autofill backgrounds, and spellcheck underlines match the selected
+surface.
+
+## Internationalization
+
+The default locale is English (`en-US`). To use Vietnamese defaults, provide the Vietnamese locale
+once in `app.config.ts`:
+
+```typescript
+import { ApplicationConfig } from '@angular/core';
+import { gLocaleVi, provideGLocale } from 'ngx-opendesign';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideGLocale(gLocaleVi)],
+};
+```
+
+Locale data controls built-in labels, accessibility text, date formatting, number formatting, and the
+first day of week for date pickers. Use `GLocaleService.use(locale)` to switch locale at runtime.
+Explicit inputs supplied by your app, such as labels, placeholders, and `aria-label`, take precedence
+over locale defaults.
+
+## Forms
+
+Form controls are split into two binding models:
+
+- CVA controls bind with `formControlName`, `[formControl]`, or `[(ngModel)]`: Input, Textarea,
+  Checkbox, Toggle, Radio, Select, Cascade Select, Tree Select, Chips, Input OTP, Datepicker, Time
+  Picker, and Date Range Picker.
+- Model controls bind with component models: `GSlider` uses `[(value)]`, `GColorPicker` uses
+  `[(value)]`, and `GFileInput` uses `[(files)]`.
+
+`GDatepicker`, `GTimePicker`, `GDateRangePicker`, `GStepSlider`, and `GRating` support both form
+binding and `[(value)]`. Choose one binding style per instance.
+
+CVA controls automatically show invalid styling when the Angular control is invalid and touched or
+dirty. Add validators as usual and call `form.markAllAsTouched()` on submit when you want errors to
+appear immediately.
+
+## Icons
+
+Icons are plain data exported as `gIcon*` constants. Import only the icons you render, then pass them
+to `GIcon`.
+
+```typescript
+import { GIcon, GIconButton, gIconSave } from 'ngx-opendesign';
+```
+
+```html
+<button g-icon-button aria-label="Save">
+  <g-icon [icon]="gIconSave" />
+</button>
+```
+
+Icon-only buttons must have an accessible name, usually through `aria-label`.
+
+## Component Inventory
+
+- **Buttons (4):** Button, Fab, Icon Button, Action Expand
+- **Forms (19):** Input, Textarea, Checkbox, Toggle, Radio, Select, File Input, Datepicker, Date
   Range Picker, Time Picker, Color Picker, Slider, Step Slider, Rating, Cascade Select, Tree Select,
   Chips, Input OTP, Search Field
-- **Hiển thị** (18) — Alert, Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Divider, Image
+- **Display (18):** Alert, Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Divider, Image
   Preview, Image Slider, Carousel, Coverflow, Gallery, Media Player, Terminal, Skeleton, Timeline
-- **Overlay** (5) — Dialog, Drawer, Tooltip, Toast, Context Menu
-- **Điều hướng** (11) — Action Menu, Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb,
+- **Overlay (5):** Dialog, Drawer, Tooltip, Toast, Context Menu
+- **Navigation (11):** Action Menu, Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb,
   Menu, Accordion, Dock Menu
-- **Cấu trúc** (6) — Layout, Container, Stack, Grid, Splitter, Scroll Panel
-- **Dữ liệu** (3) — Table + Table Container, Organization Chart, Reorder List
-- **Charts** (10) — Line, Bar, Pie, Donut, Polar, Radar, Stacked Bar, Honeycomb, Heatmap, Calendar
+- **Layout (6):** Layout, Container, Stack, Grid, Splitter, Scroll Panel
+- **Data (3):** Table, Organization Chart, Reorder List
+- **Charts (10):** Line, Bar, Pie, Donut, Polar, Radar, Stacked Bar, Honeycomb, Heatmap, Calendar
   Heatmap
-- **Editor** (2) — Code Editor, Rich Text Editor
+- **Editors (2):** Code Editor, Rich Text Editor
 
-## Yêu cầu
+## Charts
 
-- Angular 22 trở lên (standalone components, signals).
-- Peer dependencies: `@angular/core`, `@angular/common`, `@angular/cdk` (overlay của Dialog,
-  Tooltip, Toast, Select), `@angular/forms` (các control CVA: Input, Textarea, Checkbox, Toggle,
-  Radio, Select).
+Charts are rendered with SVG and do not depend on charting libraries. The package includes line, bar,
+pie, donut, polar, radar, stacked bar, honeycomb, heatmap, and calendar heatmap charts.
+
+Shared chart features include:
+
+- `title` and `titlePosition`
+- optional legends with `legendPosition`
+- `exportable` PNG/SVG downloads through `GChartExport`
+- `zoomable` fullscreen-style expansion through `GChartZoom`
+- CSS-token color defaults from `--g-chart-1` through `--g-chart-18`
+
+## Editors
+
+`GCodeEditor` is an Angular code editor based on a textarea overlay and regex highlighting. It
+supports `[(value)]`, CVA binding, line numbers, Tab indentation, IME input, and custom highlighters.
+
+`GRichTextEditor` is a contenteditable rich text editor with undo/redo, text styles, inline
+formatting, text color, lists, indentation, alignment, links, tables, paste sanitization, IME support,
+and both `[(value)]` and CVA binding.
+
+## AI Agent Guide
+
+The package includes `SKILL.md` for AI coding agents. After installation, agents can read it at
+`node_modules/ngx-opendesign/SKILL.md` for selector rules, binding patterns, accessibility notes, and
+component lookup tables.
+
+## Requirements
+
+- Angular 22 or newer.
+- Peer dependencies: `@angular/core`, `@angular/common`, `@angular/cdk`, and `@angular/forms`.
 
 ## License
 

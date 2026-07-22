@@ -1,7 +1,7 @@
 {
   "name": "ngx-opendesign",
   "version": "2.0.0",
-  "description": "Design system hiện đại cho Angular — pill shape, light/dark theme, tiếng Việt",
+  "description": "Modern Angular design system with pill-shaped controls, light/dark themes, and i18n",
   "keywords": [
     "angular",
     "design-system",

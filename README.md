@@ -3,111 +3,153 @@
 [![CI](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml/badge.svg)](https://github.com/gingatimo/opendesign/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/ngx-opendesign.svg)](https://www.npmjs.com/package/ngx-opendesign)
 
-Design system Angular với thẩm mỹ pill nhất quán, sáng/tối sẵn có, viết bằng signals — 78
-component, standalone và `OnPush`. Kèm 10 loại chart SVG thuần, 2 trình soạn thảo (rich text + code)
-và bộ 116 icon tree-shakable. Không có dependency bên thứ ba nào. Package npm:
-[`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign).
+OpenDesign is a modern Angular design system with pill-shaped controls, compact rounded surfaces,
+light and dark themes, standalone components, `OnPush`, and signal-friendly APIs.
 
-**Docs site (demo sống, code mẫu, bảng API):** https://gingatimo.github.io/opendesign/
+The npm package is [`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign). Version 2.0.0
+ships 78 components, 10 dependency-free SVG chart types, 2 Angular editors, 116 tree-shakable icons,
+runtime i18n for English and Vietnamese, and no non-Angular runtime dependencies. The only peer
+dependencies are Angular packages: `@angular/core`, `@angular/common`, `@angular/cdk`, and
+`@angular/forms`.
 
-Một vài màn dựng hoàn toàn bằng OpenDesign (ảnh chụp từ chính docs site):
+**Live documentation:** https://gingatimo.github.io/opendesign/
 
-**Dashboard** — `GTopbar` + `GSidebar` + thẻ số liệu ghép thành một layout hoàn chỉnh.
+A few screens composed entirely with OpenDesign:
 
-![Dashboard dựng bằng OpenDesign](.github/screenshots/dashboard.png)
+**Dashboard**: `GTopbar`, `GSidebar`, metrics, progress, and activity widgets.
 
-**Trang danh sách** — tìm kiếm, lọc theo trạng thái (nút) và vai trò (chip), bảng đóng băng cột + phân trang.
+![Dashboard built with OpenDesign](.github/screenshots/dashboard.png)
 
-![Trang danh sách dựng bằng OpenDesign](.github/screenshots/list.png)
+**List page**: search, status filters, role chips, frozen table columns, and pagination.
 
-**Form thêm mới** — gần đủ họ input với validation reactive (trường bắt buộc tô viền đỏ).
+![List page built with OpenDesign](.github/screenshots/list.png)
 
-![Form thêm mới dựng bằng OpenDesign](.github/screenshots/create.png)
+**Create form**: form controls with reactive validation and invalid states.
 
-Repo này là source của cả thư viện lẫn docs site. Nếu bạn chỉ muốn _dùng_ OpenDesign trong dự án
-Angular của mình, xem [README của package](projects/ngx-opendesign/README.md) — hướng dẫn cài đặt
-dành cho người tiêu thụ npm. README này (ở gốc repo) dành cho người muốn phát triển/đóng góp cho
-chính dự án.
+![Create form built with OpenDesign](.github/screenshots/create.png)
 
-## Cấu trúc workspace
+This repository contains both the Angular library and the documentation app. If you only want to use
+OpenDesign in an Angular app, read the [package README](projects/ngx-opendesign/README.md).
 
-Angular CLI workspace gồm 2 project:
+## Workspace
 
-- `projects/ngx-opendesign` — thư viện component, build ra package `ngx-opendesign` publish lên
-  npm.
-- `projects/docs` — ứng dụng Angular hiển thị docs site (demo sống + code mẫu + bảng API cho từng
-  component, deploy lên GitHub Pages).
+This Angular CLI workspace contains two projects:
 
-## Phát triển
+- `projects/ngx-opendesign`: the component library published as `ngx-opendesign`.
+- `projects/docs`: the documentation site with live demos, source examples, API tables, and playbook
+  screens.
 
-Yêu cầu Node.js tương thích Angular 22 trở lên.
+## Development
+
+Use Node.js 22 or newer.
 
 ```bash
 git clone https://github.com/gingatimo/opendesign.git
 cd opendesign
 npm ci
-npm start   # ng serve docs — mở http://localhost:4200
+npm start
 ```
 
-`npm start` chạy docs site với thư viện import trực tiếp từ source (không cần build lib trước) nhờ
-path mapping của Angular CLI trong workspace.
+`npm start` runs the docs app at `http://localhost:4200`. Inside the workspace, the docs app imports
+the library directly from source through Angular path mapping, so you do not need to build the
+library before starting the docs server.
 
-### Ngôn ngữ giao diện
+## Consumer Setup
 
-`ngx-opendesign` mặc định dùng tiếng Anh. Ứng dụng muốn giữ nhãn, `aria-label` và định dạng ngày/số
-tiếng Việt cấu hình một lần trong `app.config.ts`:
+Install the package and its Angular peer dependencies:
+
+```bash
+npm install ngx-opendesign @angular/cdk @angular/forms
+```
+
+Add the OpenDesign stylesheet to your application styles:
+
+```json
+{
+  "styles": ["node_modules/ngx-opendesign/styles/opendesign.css", "src/styles.scss"]
+}
+```
+
+`opendesign.css` defines the public `--g-*` design tokens, the light and dark palettes, component
+styles, chart colors, and the CDK accessibility utility used by Toast.
+
+## Theme
+
+Light theme is the default. Enable dark theme by setting one attribute on the root document element:
 
 ```typescript
-import { provideGLocale, gLocaleVi } from 'ngx-opendesign';
+document.documentElement.setAttribute('data-g-theme', 'dark');
+```
 
-export const appConfig = {
+Remove the attribute to return to light theme. The stylesheet also sets `color-scheme` for the active
+theme so browser-rendered UI such as scrollbars, date/time inputs, autofill backgrounds, and
+spellcheck underlines match the selected surface.
+
+## Internationalization
+
+The library defaults to English (`en-US`). To use Vietnamese labels, accessibility text, date
+formatting, number formatting, and Monday-first calendars, provide the Vietnamese locale once in
+`app.config.ts`:
+
+```typescript
+import { ApplicationConfig } from '@angular/core';
+import { gLocaleVi, provideGLocale } from 'ngx-opendesign';
+
+export const appConfig: ApplicationConfig = {
   providers: [provideGLocale(gLocaleVi)],
 };
 ```
 
-### Test, lint, build
+Use `GLocaleService.use(locale)` to switch locales at runtime. Explicit inputs supplied by your app,
+such as `aria-label`, placeholders, and labels, take precedence over locale defaults.
+
+## Component Inventory
+
+- **Buttons (4):** Button, Fab, Icon Button, Action Expand
+- **Forms (19):** Input, Textarea, Checkbox, Toggle, Radio, Select, File Input, Datepicker, Date
+  Range Picker, Time Picker, Color Picker, Slider, Step Slider, Rating, Cascade Select, Tree Select,
+  Chips, Input OTP, Search Field
+- **Display (18):** Alert, Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Divider, Image
+  Preview, Image Slider, Carousel, Coverflow, Gallery, Media Player, Terminal, Skeleton, Timeline
+- **Overlay (5):** Dialog, Drawer, Tooltip, Toast, Context Menu
+- **Navigation (11):** Action Menu, Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb,
+  Menu, Accordion, Dock Menu
+- **Layout (6):** Layout, Container, Stack, Grid, Splitter, Scroll Panel
+- **Data (3):** Table, Organization Chart, Reorder List
+- **Charts (10):** Line, Bar, Pie, Donut, Polar, Radar, Stacked Bar, Honeycomb, Heatmap, Calendar
+  Heatmap
+- **Editors (2):** Code Editor, Rich Text Editor
+
+## Commands
 
 ```bash
-npm test           # test lib (ngx-opendesign) rồi test docs, Vitest, --watch=false
-npm run lint        # eslint cho cả 2 project
-npm run format       # prettier --write
-npm run format:check # prettier --check (dùng trong CI)
-npm run build:lib   # build package ngx-opendesign + biên dịch styles/opendesign.css
-npm run build:docs  # build docs site production (dist/docs/browser)
+npm test             # test ngx-opendesign, then docs, with Vitest and --watch=false
+npm run lint         # ESLint for both projects
+npm run format       # Prettier write for project sources
+npm run format:check # Prettier check used by CI
+npm run build:lib    # build ngx-opendesign and compile styles/opendesign.css
+npm run build:docs   # production build for the docs app
 ```
 
-CI (`.github/workflows/ci.yml`) chạy đủ 5 lệnh trên (trừ `format`) trên mỗi push và pull request.
+CI runs lint, format check, tests, library build, and docs build on every push and pull request.
 
-## Quy trình phát hành
+## Release
 
-Repo có 2 workflow tự động, cả hai đều **chỉ chạy khi có người push** — không có bước nào tự kích
-hoạt khi merge code thường:
+Package releases are published from `dist/ngx-opendesign`.
 
-- **`release.yml`** — trigger khi push tag khớp `v*`. Build lib rồi `npm publish` package
-  `ngx-opendesign` lên npm (kèm [provenance](https://docs.npmjs.com/generating-provenance-statements/)).
-- **`deploy-docs.yml`** — trigger khi push nhánh `main`. Build docs site với đúng base href, deploy
-  lên GitHub Pages.
+Before publishing a new version:
 
-Các bước để phát hành một phiên bản mới của `ngx-opendesign`:
+1. Update `projects/ngx-opendesign/package.json`.
+2. Update `OPENDESIGN_VERSION` in `projects/ngx-opendesign/src/public-api.ts`.
+3. Update the home page version badge in `projects/docs/src/app/pages/home.page.ts`.
+4. Update `CHANGELOG.md`.
+5. Update both README files when install steps, component counts, package contents, or breaking
+   changes affect users.
+6. Run `npm run lint`, `npm test`, `npm run build:lib`, and `npm run build:docs`.
+7. Publish with `npm publish ./dist/ngx-opendesign --access public`.
 
-1. Bump version trong `projects/ngx-opendesign/package.json`.
-2. Cập nhật `version` hardcode trong `projects/docs/src/app/pages/home.page.ts` (badge
-   `v{{ version }}` ở đầu trang chủ) cho khớp — trang docs không tự đọc version từ `package.json`.
-3. Cập nhật [`CHANGELOG.md`](CHANGELOG.md): đổi mục `chưa phát hành` hiện tại thành ngày phát hành
-   thật, thêm mục mới ở trên cho các thay đổi tiếp theo.
-4. Nếu có component mới: cập nhật số component + danh sách trong **cả hai** README (README này và
-   [README của package](projects/ngx-opendesign/README.md) — README của package chính là trang hiển
-   thị trên npmjs, và npm **chỉ** cập nhật nó khi publish, sửa sau khi tag là không kịp).
-5. Commit, tag `vX.Y.Z` (khớp version vừa bump), rồi `git push --tags`.
-6. CI tự publish lên npm khi thấy tag mới.
-
-### Trước khi tag lần đầu — việc cần làm thủ công (không nằm trong code)
-
-- **Secret `NPM_TOKEN`**: vào Settings → Secrets and variables → Actions của repo, thêm secret tên
-  `NPM_TOKEN` (access token có quyền publish của tài khoản npm). `release.yml` đọc secret này qua
-  `NODE_AUTH_TOKEN` để xác thực với registry — thiếu secret thì bước publish sẽ fail.
-- **Bật GitHub Pages**: vào Settings → Pages, đặt **Source: GitHub Actions**. Thiếu bước này thì
-  `deploy-docs.yml` sẽ fail ở bước `configure-pages` vì chưa có cấu hình Pages nào để đọc.
+The repository also includes `.github/workflows/release.yml`, which publishes on pushed `v*` tags
+when the `NPM_TOKEN` repository secret is configured.
 
 ## License
 
