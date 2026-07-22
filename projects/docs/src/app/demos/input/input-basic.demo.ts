@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GInput } from 'ngx-opendesign';
+import { GInput, GLocaleService } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-input-basic-demo',
   imports: [GInput, ReactiveFormsModule],
   template: `
-    <input gInput placeholder="Nhập tên của bạn" />
-    <input gInput [formControl]="required" placeholder="Bắt buộc nhập" />
-    <input gInput placeholder="Vô hiệu hóa" disabled />
+    <input gInput [placeholder]="demo().name" />
+    <input gInput [formControl]="required" [placeholder]="demo().required" />
+    <input gInput [placeholder]="demo().disabled" disabled />
   `,
   styles: `
     :host {
@@ -21,6 +22,8 @@ import { GInput } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).input.demo);
   protected readonly required = new FormControl('', {
     nonNullable: true,
     validators: [Validators.required],

@@ -1,17 +1,18 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GOption, GSelect } from 'ngx-opendesign';
+import { GLocaleService, GOption, GSelect } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-select-search-demo',
   imports: [GSelect, GOption, ReactiveFormsModule],
   template: `
-    <g-select [formControl]="fruit" searchable placeholder="Chọn quả">
-      @for (f of fruits; track f) {
+    <g-select [formControl]="fruit" searchable [placeholder]="demo().fruitPlaceholder">
+      @for (f of demo().fruits; track $index) {
         <g-option [value]="f">{{ f }}</g-option>
       }
     </g-select>
-    <p>Đã chọn: {{ fruit.value ?? 'chưa chọn' }}</p>
+    <p>{{ demo().selected(fruit.value) }}</p>
   `,
   styles: `
     :host {
@@ -29,17 +30,7 @@ import { GOption, GSelect } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectSearchDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).select.demo);
   protected readonly fruit = new FormControl<string | null>(null);
-  protected readonly fruits = [
-    'Táo',
-    'Cam',
-    'Chuối',
-    'Xoài',
-    'Dâu tây',
-    'Nho',
-    'Ổi',
-    'Đào',
-    'Mít',
-    'Sầu riêng',
-  ];
 }

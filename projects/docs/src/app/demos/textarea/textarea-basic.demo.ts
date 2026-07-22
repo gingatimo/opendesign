@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GTextarea } from 'ngx-opendesign';
+import { GLocaleService, GTextarea } from 'ngx-opendesign';
+import { formCopyFor } from '../../pages/form-copy';
 
 @Component({
   selector: 'docs-textarea-basic-demo',
   imports: [GTextarea, ReactiveFormsModule],
   template: `
-    <textarea gTextarea placeholder="Nhập ghi chú..."></textarea>
-    <textarea gTextarea [formControl]="required" placeholder="Bắt buộc nhập"></textarea>
-    <textarea gTextarea placeholder="Vô hiệu hóa" disabled></textarea>
+    <textarea gTextarea [placeholder]="demo().note"></textarea>
+    <textarea gTextarea [formControl]="required" [placeholder]="demo().required"></textarea>
+    <textarea gTextarea [placeholder]="demo().disabled" disabled></textarea>
   `,
   styles: `
     :host {
@@ -21,6 +22,8 @@ import { GTextarea } from 'ngx-opendesign';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextareaBasicDemo {
+  private readonly i18n = inject(GLocaleService);
+  protected readonly demo = computed(() => formCopyFor(this.i18n.tag()).textarea.demo);
   protected readonly required = new FormControl('', {
     nonNullable: true,
     validators: [Validators.required],
