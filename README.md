@@ -52,6 +52,19 @@ npm start   # ng serve docs — mở http://localhost:4200
 `npm start` chạy docs site với thư viện import trực tiếp từ source (không cần build lib trước) nhờ
 path mapping của Angular CLI trong workspace.
 
+### Ngôn ngữ giao diện
+
+`ngx-opendesign` mặc định dùng tiếng Anh. Ứng dụng muốn giữ nhãn, `aria-label` và định dạng ngày/số
+tiếng Việt cấu hình một lần trong `app.config.ts`:
+
+```typescript
+import { provideGLocale, gLocaleVi } from 'ngx-opendesign';
+
+export const appConfig = {
+  providers: [provideGLocale(gLocaleVi)],
+};
+```
+
 ### Test, lint, build
 
 ```bash

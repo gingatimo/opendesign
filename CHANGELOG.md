@@ -5,6 +5,38 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [2.0.0] — 2026-07-22
+
+### Breaking
+
+- **Ngôn ngữ mặc định đổi sang tiếng Anh (`en-US`).** Toàn bộ nhãn, thông báo và `aria-label` do
+  thư viện tự tạo nay dùng tiếng Anh nếu ứng dụng không cấu hình locale; trước đây chúng là tiếng Việt.
+- **`GDatepicker` và `GDateRangePicker` hiển thị ngày theo locale.** Thứ tự ngày/tháng/năm và tên
+  tháng, thứ không còn cố định theo tiếng Việt.
+- **Lưới ngày của picker bắt đầu theo `firstDayOfWeek` trong locale.** Locale tiếng Anh mặc định bắt
+  đầu Chủ nhật thay vì thứ Hai như trước.
+- **`buildMonthGrid` đổi chữ ký thành `buildMonthGrid(anchor, firstDayOfWeek)`.** Mã nào import helper
+  nội bộ này phải truyền chỉ số ngày đầu tuần (`0` là Chủ nhật, `1` là thứ Hai).
+- **Cảnh báo phát triển của thư viện dùng tiếng Anh.** Mã kiểm thử hoặc công cụ đang so khớp nguyên văn
+  thông báo `console.warn` cần cập nhật chuỗi mong đợi.
+
+Để giữ giao diện tiếng Việt như trước khi nâng cấp, cấu hình locale ở cấp ứng dụng:
+
+```typescript
+// Giữ giao diện tiếng Việt như trước khi nâng cấp:
+import { provideGLocale, gLocaleVi } from 'ngx-opendesign';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideGLocale(gLocaleVi)],
+};
+```
+
+### Added
+
+- **Quốc tế hoá giao diện:** `provideGLocale`, `GLocaleService`, gói `gLocaleEn` và `gLocaleVi` cho
+  phép thay đổi toàn bộ chuỗi hiển thị, nhãn trợ năng, định dạng ngày/số và ngày bắt đầu tuần ở cấp ứng
+  dụng hoặc khi đang chạy.
+
 ## [1.1.0] — 2026-07-21
 
 **10 loại chart, 2 trình soạn thảo, 3 component nút/điều hướng mới, 116 icon.**

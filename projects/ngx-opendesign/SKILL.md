@@ -36,7 +36,25 @@ File CSS đã kèm sẵn rule a11y của CDK (`.cdk-visually-hidden` cho Toast) 
 document.documentElement.setAttribute('data-g-theme', 'dark'); // hoặc xoá để về sáng
 ```
 
-## 2. Pattern BẮT BUỘC
+## 2. Ngôn ngữ giao diện (i18n)
+
+Thư viện mặc định dùng tiếng Anh (`gLocaleEn`). **Đừng truyền tay từng `aria-label` chỉ để dịch chuỗi
+có sẵn của component**: cấu hình `provideGLocale` một lần ở `app.config.ts`; mọi nhãn mặc định, thông
+báo và định dạng ngày/số sẽ theo gói ngôn ngữ đó.
+
+```ts
+import { ApplicationConfig } from '@angular/core';
+import { gLocaleVi, provideGLocale } from 'ngx-opendesign';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideGLocale(gLocaleVi)],
+};
+```
+
+`GLocaleService` cho phép đổi gói lúc chạy bằng `use(locale)`. Input như `aria-label` hoặc
+`searchPlaceholder` mà app truyền vào vẫn được ưu tiên hơn chuỗi locale.
+
+## 3. Pattern BẮT BUỘC
 
 - **Standalone, không NgModule.** Import trực tiếp từng class `G*` vào `imports: [...]` của component
   đang dùng. Ví dụ: `imports: [GButton, GCard, GSelect, GOption]`.
@@ -50,7 +68,7 @@ document.documentElement.setAttribute('data-g-theme', 'dark'); // hoặc xoá đ
 - **Nút chỉ có icon PHẢI có `aria-label`** (`<button g-icon-button aria-label="Xoá">`).
 - Tương thích signals/`OnPush` sẵn — không cần thao tác đổi phát hiện thủ công.
 
-## 3. Form control — value binding (đây là bẫy hay sai nhất)
+## 4. Form control — value binding (đây là bẫy hay sai nhất)
 
 Chia làm hai nhóm theo cách bind giá trị:
 
@@ -83,7 +101,7 @@ Chia làm hai nhóm theo cách bind giá trị:
 `touched`/`dirty` (giống `GInput`). Chỉ cần đặt validator (`Validators.required`, …) và để form đánh
 dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự style.
 
-## 4. Bẫy thường gặp
+## 5. Bẫy thường gặp
 
 - `g-button` / `g-icon-button` / `g-fab` là **attribute trên `<button>`/`<a>`**, KHÔNG phải element:
   `<button g-button variant="outline">Lưu</button>`.
@@ -101,7 +119,7 @@ dấu touched (vd `form.markAllAsTouched()` lúc submit) — không phải tự 
   `@angular/forms` — đã là peerDependencies, nhớ cài.
 - `GCard` nhận header/footer qua attribute chiếu: `<div gCardHeader>…</div>`, `<div gCardFooter>…</div>`.
 
-## 5. Bảng tra component (import → selector → ghi chú)
+## 6. Bảng tra component (import → selector → ghi chú)
 
 **Nút:** `GButton` `button[g-button]`/`a[g-button]` (`variant` primary|secondary|outline|ghost|danger,
 `size` sm|md|lg, `[loading]`) · `GIconButton` `button[g-icon-button]` (cần `aria-label`) · `GFab` `button[g-fab]`
@@ -200,6 +218,6 @@ lề, chèn/bỏ liên kết, chèn bảng, xoá định dạng;
 URL liên kết chặn `javascript:`; `[(value)]` HTML/CVA). Cả hai IME-safe. Lệnh soạn thảo gói trong
 `rte-commands.ts` (chỗ DUY NHẤT dùng `execCommand` — giữ undo native; trạng thái đọc bằng DOM).
 
-## 6. Tài liệu đầy đủ
+## 7. Tài liệu đầy đủ
 
 Demo sống, code mẫu và bảng API cho từng component: **https://gingatimo.github.io/opendesign/**

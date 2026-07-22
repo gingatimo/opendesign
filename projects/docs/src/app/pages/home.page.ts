@@ -282,7 +282,7 @@ interface HighlightCard {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class HomePage {
-  protected readonly version = '1.1.0';
+  protected readonly version = '2.0.0';
   protected readonly angularVersion = 22;
 
   // Danh mục lấy thẳng từ mục lục của sidebar: bỏ nhóm "Bắt đầu" (chỉ có link về đây) và tách
