@@ -9,6 +9,22 @@ import {
 import { GTooltip } from '../tooltip/tooltip';
 import { GSidebar } from './sidebar';
 
+// LƯU Ý THỨ TỰ: GSidebarItemIcon/GSidebarItemLabel phải khai báo TRƯỚC GSidebarItem. Static field
+// `ɵcmp` do Angular sinh cho GSidebarItem tham chiếu THẲNG GSidebarItemLabel trong queries (từ
+// contentChild bên dưới) — biểu thức này chạy EAGER ngay khi class GSidebarItem được đánh giá lúc
+// nạp module. Class trong ES module không hoisted như function, nên đặt GSidebarItemLabel sau sẽ
+// chạm temporal dead zone và bundle fesm2022 ném lỗi lúc nạp (mọi import từ thư viện) dưới môi
+// trường eager như Vitest/ng test.
+
+@Directive({ selector: '[gSidebarItemIcon]', host: { class: 'g-sidebar-item__icon' } })
+export class GSidebarItemIcon {}
+
+// Xem báo cáo task-1-2-report.md — quyết định (a): bọc nhãn chữ trong directive riêng để có
+// một phần tử ổn định làm điểm neo CSS visually-hidden khi sidebar thu gọn (text node trần
+// không style trực tiếp được).
+@Directive({ selector: '[gSidebarItemLabel]', host: { class: 'g-sidebar-item__label' } })
+export class GSidebarItemLabel {}
+
 // Selector kebab-case trên phần tử native (a[g-sidebar-item] / button[g-sidebar-item]) — giống
 // hệt cách GButton/GIconButton đã làm (button[g-button], button[g-icon-button]). Vì eslint
 // @angular-eslint/directive-selector bắt buộc camelCase, còn @angular-eslint/component-selector
@@ -46,12 +62,3 @@ export class GSidebarItem {
     this.tooltip.gTooltipSetPosition('right');
   }
 }
-
-@Directive({ selector: '[gSidebarItemIcon]', host: { class: 'g-sidebar-item__icon' } })
-export class GSidebarItemIcon {}
-
-// Xem báo cáo task-1-2-report.md — quyết định (a): bọc nhãn chữ trong directive riêng để có
-// một phần tử ổn định làm điểm neo CSS visually-hidden khi sidebar thu gọn (text node trần
-// không style trực tiếp được).
-@Directive({ selector: '[gSidebarItemLabel]', host: { class: 'g-sidebar-item__label' } })
-export class GSidebarItemLabel {}
