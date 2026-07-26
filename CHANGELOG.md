@@ -5,6 +5,22 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [2.1.0] — 2026-07-26
+
+### Added
+
+- **`GTreeView`** (`g-tree-view`): cây phân cấp accessible với roving tabindex, điều hướng bàn phím,
+  chọn/mở node two-way, tải con theo adapter và sự kiện reorder không đột biến dữ liệu đầu vào.
+- **`GEmptyState`** (`g-empty-state`): trạng thái trống compact/comfortable với icon, tiêu đề, mô tả
+  và vùng chiếu hành động.
+- **Docs song ngữ:** trang API, demo tải lười/sắp xếp, hướng dẫn accessibility cho Tree View và Empty
+  State; playbook dashboard responsive dùng Sidebar trên desktop và Dock Menu trên mobile.
+
+### Changed
+
+- **`GDockItem.active`:** mục Dock Menu đang hoạt động nhận `g-active` và
+  `aria-current="page"` để dùng làm điều hướng ứng dụng.
+
 ## [2.0.1] — 2026-07-26
 
 ### Fixed

@@ -6,8 +6,8 @@
 OpenDesign is a modern Angular design system with pill-shaped controls, compact rounded surfaces,
 light and dark themes, standalone components, `OnPush`, and signal-friendly APIs.
 
-The npm package is [`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign). Version 2.0.0
-ships 78 components, 10 dependency-free SVG chart types, 2 Angular editors, 116 tree-shakable icons,
+The npm package is [`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign). Version 2.1.0
+ships 80 components, 10 dependency-free SVG chart types, 2 Angular editors, 116 tree-shakable icons,
 runtime i18n for English and Vietnamese, and no non-Angular runtime dependencies. The only peer
 dependencies are Angular packages: `@angular/core`, `@angular/common`, `@angular/cdk`, and
 `@angular/forms`.
@@ -109,13 +109,14 @@ such as `aria-label`, placeholders, and labels, take precedence over locale defa
 - **Forms (19):** Input, Textarea, Checkbox, Toggle, Radio, Select, File Input, Datepicker, Date
   Range Picker, Time Picker, Color Picker, Slider, Step Slider, Rating, Cascade Select, Tree Select,
   Chips, Input OTP, Search Field
-- **Display (18):** Alert, Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Divider, Image
-  Preview, Image Slider, Carousel, Coverflow, Gallery, Media Player, Terminal, Skeleton, Timeline
+- **Display (19):** Alert, Badge, Spinner, Progress, Chip, Avatar, Card, Icon, Divider, Image
+  Preview, Image Slider, Carousel, Coverflow, Gallery, Media Player, Terminal, Skeleton, Timeline,
+  Empty State
 - **Overlay (5):** Dialog, Drawer, Tooltip, Toast, Context Menu
 - **Navigation (11):** Action Menu, Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb,
   Menu, Accordion, Dock Menu
 - **Layout (6):** Layout, Container, Stack, Grid, Splitter, Scroll Panel
-- **Data (3):** Table, Organization Chart, Reorder List
+- **Data (4):** Table, Organization Chart, Reorder List, Tree View
 - **Charts (10):** Line, Bar, Pie, Donut, Polar, Radar, Stacked Bar, Honeycomb, Heatmap, Calendar
   Heatmap
 - **Editors (2):** Code Editor, Rich Text Editor

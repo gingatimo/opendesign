@@ -52,6 +52,13 @@ interface SectionedCopy extends DisplayPageCopy {
 }
 
 interface DisplayCopy {
+  emptyState: DisplayPageCopy & {
+    demo: {
+      heading: string;
+      description: string;
+      action: string;
+    };
+  };
   alert: DisplayPageCopy & {
     demo: {
       neutral: string;
@@ -159,6 +166,39 @@ interface DisplayCopy {
 }
 
 const VI_DISPLAY: DisplayCopy = {
+  emptyState: {
+    title: 'Empty State',
+    intro:
+      'Trạng thái trống nhất quán cho danh sách hoặc khu vực chưa có dữ liệu, gồm icon tùy chọn, tiêu đề, mô tả và vùng hành động.',
+    apiTitle: 'API — GEmptyState',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'Component không tự đặt role alert hay live region vì trạng thái trống thường là nội dung tĩnh.',
+      'Nút hoặc liên kết trong gEmptyStateActions giữ nguyên ngữ nghĩa và thứ tự focus native.',
+    ],
+    apiRows: [
+      { name: 'icon', type: 'GIconGlyph', default: '—', description: 'Icon trang trí tùy chọn.' },
+      { name: 'heading', type: 'string', default: '—', description: 'Tiêu đề bắt buộc.' },
+      { name: 'description', type: 'string', default: '—', description: 'Mô tả tùy chọn.' },
+      {
+        name: 'size',
+        type: "'compact' | 'comfortable'",
+        default: "'comfortable'",
+        description: 'Mật độ khoảng cách.',
+      },
+      {
+        name: '[gEmptyStateActions]',
+        type: 'directive',
+        default: '—',
+        description: 'Vùng chiếu nút hoặc liên kết hành động.',
+      },
+    ],
+    demo: {
+      heading: 'Chưa có thiết bị',
+      description: 'Thêm cảm biến hoặc bộ điều khiển để theo dõi nông trại.',
+      action: 'Thêm thiết bị',
+    },
+  },
   alert: {
     title: 'Alert',
     intro:
@@ -892,6 +932,44 @@ export class ViDuComponent {
 };
 
 const EN_DISPLAY: DisplayCopy = {
+  emptyState: {
+    title: 'Empty State',
+    intro:
+      'Empty content placeholder for lists or regions without data, with an optional icon, heading, description, and actions.',
+    apiTitle: 'API — GEmptyState',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'The component does not automatically set alert or live-region semantics because empty states are usually static content.',
+      'Buttons and links projected into gEmptyStateActions keep their native semantics and focus order.',
+    ],
+    apiRows: [
+      { name: 'icon', type: 'GIconGlyph', default: '—', description: 'Optional decorative icon.' },
+      { name: 'heading', type: 'string', default: '—', description: 'Required heading.' },
+      {
+        name: 'description',
+        type: 'string',
+        default: '—',
+        description: 'Optional supporting text.',
+      },
+      {
+        name: 'size',
+        type: "'compact' | 'comfortable'",
+        default: "'comfortable'",
+        description: 'Spacing density.',
+      },
+      {
+        name: '[gEmptyStateActions]',
+        type: 'directive',
+        default: '—',
+        description: 'Projection slot for action buttons or links.',
+      },
+    ],
+    demo: {
+      heading: 'No devices yet',
+      description: 'Add a sensor or controller to start monitoring the farm.',
+      action: 'Add device',
+    },
+  },
   alert: {
     title: 'Alert',
     intro:

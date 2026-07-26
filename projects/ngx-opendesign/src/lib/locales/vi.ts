@@ -24,6 +24,12 @@ export const gLocaleVi: GLocale = {
     chips: { add: 'Thêm mục', remove: (label: string) => `Xóa ${label}` },
     progress: { label: 'Tiến độ' },
     sidebar: { expand: 'Mở rộng thanh bên', collapse: 'Thu gọn thanh bên' },
+    treeView: {
+      expand: (label: string) => `Mở ${label}`,
+      collapse: (label: string) => `Thu gọn ${label}`,
+      drag: (label: string) => `Sắp xếp ${label}`,
+      loading: 'Đang tải mục con',
+    },
     orgChart: { toggleBranch: 'Thu gọn / mở nhánh con' },
     reorderList: { dragHandle: 'Kéo để sắp xếp lại' },
     actionExpand: { label: 'Hành động' },

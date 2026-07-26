@@ -21,6 +21,12 @@ export interface GLocaleStrings {
   chips: { add: string; remove: (label: string) => string };
   progress: { label: string };
   sidebar: { expand: string; collapse: string };
+  treeView: {
+    expand: (label: string) => string;
+    collapse: (label: string) => string;
+    drag: (label: string) => string;
+    loading: string;
+  };
   orgChart: { toggleBranch: string };
   reorderList: { dragHandle: string };
   actionExpand: { label: string };

@@ -24,6 +24,12 @@ export const gLocaleEn: GLocale = {
     chips: { add: 'Add item', remove: (label: string) => `Remove ${label}` },
     progress: { label: 'Progress' },
     sidebar: { expand: 'Expand sidebar', collapse: 'Collapse sidebar' },
+    treeView: {
+      expand: (label: string) => `Expand ${label}`,
+      collapse: (label: string) => `Collapse ${label}`,
+      drag: (label: string) => `Reorder ${label}`,
+      loading: 'Loading children',
+    },
     orgChart: { toggleBranch: 'Collapse or expand branch' },
     reorderList: { dragHandle: 'Drag to reorder' },
     actionExpand: { label: 'Actions' },

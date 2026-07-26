@@ -35,6 +35,7 @@ export type NavIcon =
   | 'date-range-picker'
   | 'color-picker'
   | 'alert'
+  | 'empty-state'
   | 'badge'
   | 'spinner'
   | 'progress'
@@ -73,6 +74,7 @@ export type NavIcon =
   | 'table'
   | 'org-chart'
   | 'reorder-list'
+  | 'tree-view'
   | 'line-chart'
   | 'bar-chart'
   | 'pie-chart'
@@ -167,6 +169,11 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
     viewBox: VB,
     circles: [{ cx: 12, cy: 12, r: 9 }],
     paths: ['M12 16v-4', 'M12 8h.01'],
+  },
+  'empty-state': {
+    viewBox: VB,
+    paths: ['M8 12h8', 'M12 8v8'],
+    rects: [{ x: 3, y: 4, width: 18, height: 16, rx: 2 }],
   },
   badge: {
     viewBox: VB,
@@ -355,6 +362,14 @@ export const NAV_ICON_GLYPHS: Record<NavIcon, GIconGlyph> = {
       'M4 4v16',
       'M4 4l-2 2M4 4l2 2',
       'M4 20l-2-2M4 20l2-2',
+    ],
+  },
+  'tree-view': {
+    viewBox: VB,
+    paths: ['M5 6v12', 'M5 9h5', 'M5 15h5'],
+    circles: [
+      { cx: 12, cy: 9, r: 2 },
+      { cx: 12, cy: 15, r: 2 },
     ],
   },
   'line-chart': {

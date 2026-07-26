@@ -659,7 +659,8 @@ const VI_NAVIGATION: NavigationCopy = {
         name: 'items',
         type: 'GDockItem[]',
         default: '[]',
-        description: 'Danh sách mục { icon, label, onClick? } hiển thị trên thanh dock.',
+        description:
+          'Danh sách mục { icon, label, active?, onClick? }; active đặt class g-active và aria-current="page".',
       },
       {
         name: 'position',
@@ -1201,7 +1202,8 @@ const EN_NAVIGATION: NavigationCopy = {
         name: 'items',
         type: 'GDockItem[]',
         default: '[]',
-        description: 'Items { icon, label, onClick? } shown in the dock.',
+        description:
+          'Items { icon, label, active?, onClick? }; active adds g-active and aria-current="page".',
       },
       {
         name: 'position',

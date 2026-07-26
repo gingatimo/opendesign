@@ -87,10 +87,30 @@ interface ReorderListCopy extends DataPageCopy {
   };
 }
 
+interface TreeViewCopy extends DataPageCopy {
+  lazyTitle: string;
+  lazyIntro: string;
+  reorderTitle: string;
+  reorderIntro: string;
+  demo: {
+    ariaLabel: string;
+    basicCaption: string;
+    lazyCaption: string;
+    loadResult: string;
+    nodes: {
+      id: string;
+      label: string;
+      hasChildren?: boolean;
+      children?: { id: string; label: string }[];
+    }[];
+  };
+}
+
 interface DataCopy {
   table: TableCopy;
   orgChart: OrgChartCopy;
   reorderList: ReorderListCopy;
+  treeView: TreeViewCopy;
 }
 
 const VI_DATA: DataCopy = {
@@ -387,6 +407,91 @@ const VI_DATA: DataCopy = {
       currentOrder: 'Thứ tự hiện tại:',
     },
   },
+  treeView: {
+    title: 'Tree View',
+    intro:
+      'Trình khám phá phân cấp có hỗ trợ bàn phím cho cây khu vực, thiết bị hoặc tài nguyên. Consumer sở hữu dữ liệu; component chỉ phát ý định tải nhánh và sắp xếp.',
+    lazyTitle: 'Tải lười',
+    lazyIntro:
+      'Đặt hasChildren khi biết node có con nhưng chưa tải. Khi mở nhánh, loadChildren chỉ phát một lần trong lúc id nằm trong loadingIds.',
+    reorderTitle: 'Sắp xếp theo adapter',
+    reorderIntro:
+      'Bật reorderable để nhận sự kiện reorder gồm sourceId, targetId và vị trí. Adapter của ứng dụng kiểm tra nghiệp vụ, cập nhật nguồn dữ liệu rồi truyền cây mới xuống.',
+    apiTitle: 'API — GTreeView',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'Host dùng role tree/treeitem, aria-level, aria-expanded và roving tabindex; dùng các phím mũi tên, Home, End, Enter hoặc Space.',
+      'Node disabled được đánh dấu aria-disabled và bị bỏ qua khi di chuyển bằng bàn phím.',
+      'Kéo-thả không phải cơ chế bàn phím đầy đủ; nếu sắp xếp là bắt buộc, ứng dụng cần thêm menu Di chuyển lên/xuống/vào trong.',
+    ],
+    apiRows: [
+      {
+        name: 'nodes',
+        type: 'readonly GTreeViewNode[]',
+        default: '[]',
+        description: 'Các node gốc; consumer giữ quyền sở hữu dữ liệu.',
+      },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        default: '—',
+        description: 'Tên truy cập bắt buộc cho cây.',
+      },
+      {
+        name: '[(selectedId)]',
+        type: 'string | null',
+        default: 'null',
+        description: 'Id node đang chọn.',
+      },
+      {
+        name: '[(expandedIds)]',
+        type: 'readonly string[]',
+        default: '[]',
+        description: 'Các nhánh đang mở.',
+      },
+      {
+        name: 'loadingIds',
+        type: 'readonly string[]',
+        default: '[]',
+        description: 'Các node đang tải con.',
+      },
+      {
+        name: 'reorderable',
+        type: 'boolean',
+        default: 'false',
+        description: 'Bật tay nắm kéo-thả.',
+      },
+      {
+        name: 'nodeActivated',
+        type: 'GTreeViewNode',
+        default: '—',
+        description: 'Phát khi node được kích hoạt.',
+      },
+      {
+        name: 'loadChildren',
+        type: 'GTreeViewNode',
+        default: '—',
+        description: 'Yêu cầu adapter tải node con.',
+      },
+      {
+        name: 'reorder',
+        type: 'GTreeReorderEvent',
+        default: '—',
+        description: 'Phát ý định sắp xếp; không tự sửa nodes.',
+      },
+    ],
+    demo: {
+      ariaLabel: 'Cấu trúc nông trại',
+      basicCaption: 'Cây cơ bản — chọn và mở từng khu vực',
+      lazyCaption: 'Tải lười — mở Thiết bị để yêu cầu dữ liệu con',
+      loadResult: 'Đã yêu cầu node con:',
+      nodes: [
+        { id: 'garden', label: 'Vườn', children: [{ id: 'garden-a', label: 'Luống rau A' }] },
+        { id: 'pond', label: 'Ao' },
+        { id: 'barn', label: 'Chuồng' },
+      ],
+    },
+  },
 };
 
 const EN_DATA: DataCopy = {
@@ -680,6 +785,91 @@ const EN_DATA: DataCopy = {
         { id: 5, name: 'Release' },
       ],
       currentOrder: 'Current order:',
+    },
+  },
+  treeView: {
+    title: 'Tree View',
+    intro:
+      'Accessible hierarchical explorer for areas, devices, or resources. Consumers own the data; the component emits lazy-load and reorder intents.',
+    lazyTitle: 'Lazy loading',
+    lazyIntro:
+      'Set hasChildren when a node is known to have children but has not loaded them. Expanding it emits loadChildren once while its id is present in loadingIds.',
+    reorderTitle: 'Adapter-owned reordering',
+    reorderIntro:
+      'Enable reorderable to receive sourceId, targetId, and position. The application adapter validates business rules, updates its data source, and passes a new tree back.',
+    apiTitle: 'API — GTreeView',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'Uses tree/treeitem roles, aria-level, aria-expanded, and roving tabindex; supports arrows, Home, End, Enter, and Space.',
+      'Disabled nodes expose aria-disabled and are skipped by keyboard navigation.',
+      'Drag-and-drop is not a complete keyboard mechanism; add move up/down/inside menu actions when reordering is required.',
+    ],
+    apiRows: [
+      {
+        name: 'nodes',
+        type: 'readonly GTreeViewNode[]',
+        default: '[]',
+        description: 'Root nodes owned by the consumer.',
+      },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        default: '—',
+        description: 'Required accessible name for the tree.',
+      },
+      {
+        name: '[(selectedId)]',
+        type: 'string | null',
+        default: 'null',
+        description: 'Currently selected node id.',
+      },
+      {
+        name: '[(expandedIds)]',
+        type: 'readonly string[]',
+        default: '[]',
+        description: 'Expanded branch ids.',
+      },
+      {
+        name: 'loadingIds',
+        type: 'readonly string[]',
+        default: '[]',
+        description: 'Nodes currently loading children.',
+      },
+      {
+        name: 'reorderable',
+        type: 'boolean',
+        default: 'false',
+        description: 'Shows native drag handles.',
+      },
+      {
+        name: 'nodeActivated',
+        type: 'GTreeViewNode',
+        default: '—',
+        description: 'Emits when a node is activated.',
+      },
+      {
+        name: 'loadChildren',
+        type: 'GTreeViewNode',
+        default: '—',
+        description: 'Request child nodes from the adapter.',
+      },
+      {
+        name: 'reorder',
+        type: 'GTreeReorderEvent',
+        default: '—',
+        description: 'Emits reorder intent without mutating nodes.',
+      },
+    ],
+    demo: {
+      ariaLabel: 'Farm structure',
+      basicCaption: 'Basic tree — select and expand farm areas',
+      lazyCaption: 'Lazy loading — expand Devices to request children',
+      loadResult: 'Requested child nodes:',
+      nodes: [
+        { id: 'garden', label: 'Garden', children: [{ id: 'garden-a', label: 'Vegetable bed A' }] },
+        { id: 'pond', label: 'Pond' },
+        { id: 'barn', label: 'Barn' },
+      ],
     },
   },
 };

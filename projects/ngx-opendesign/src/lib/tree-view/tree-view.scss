@@ -1,0 +1,114 @@
+:host {
+  display: block;
+  color: var(--g-text);
+  font-family: var(--g-font-family);
+  font-size: var(--g-font-size-md);
+}
+
+.g-tree-view__tree {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-space-1);
+}
+
+.g-tree-view__row {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: var(--g-control-sm);
+  gap: var(--g-space-2);
+  padding: var(--g-space-1) var(--g-space-2);
+  border-radius: var(--g-radius-sm);
+  cursor: default;
+  transition:
+    background var(--g-duration-fast) var(--g-ease),
+    color var(--g-duration-fast) var(--g-ease),
+    box-shadow var(--g-duration-fast) var(--g-ease);
+}
+
+.g-tree-view__row:hover:not([aria-disabled='true']):not(:focus-visible) {
+  background: var(--g-surface);
+}
+
+.g-tree-view__row[aria-selected='true'] {
+  background: var(--g-secondary-bg);
+  color: var(--g-secondary-text);
+}
+
+.g-tree-view__row:focus-visible {
+  outline: none;
+  box-shadow: var(--g-focus-ring);
+}
+
+.g-tree-view__row[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.g-tree-view__row--drop-before {
+  box-shadow: inset 0 2px var(--g-primary);
+}
+
+.g-tree-view__row--drop-inside {
+  background: var(--g-secondary-bg);
+  box-shadow: inset 0 0 0 1px var(--g-primary);
+}
+
+.g-tree-view__row--drop-after {
+  box-shadow: inset 0 -2px var(--g-primary);
+}
+
+.g-tree-view__indent {
+  flex: 0 0 var(--g-space-5);
+}
+
+.g-tree-view__toggle,
+.g-tree-view__toggle-spacer,
+.g-tree-view__drag {
+  display: inline-grid;
+  flex: 0 0 var(--g-space-5);
+  width: var(--g-space-5);
+  height: var(--g-space-5);
+  place-items: center;
+}
+
+.g-tree-view__toggle {
+  padding: 0;
+  border: 0;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.g-tree-view__drag {
+  padding: 0;
+  border: 0;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: var(--g-text-muted);
+  cursor: grab;
+}
+
+.g-tree-view__drag:active {
+  cursor: grabbing;
+}
+
+.g-tree-view__chevron {
+  transition: transform var(--g-duration-fast) var(--g-ease);
+}
+
+.g-tree-view__chevron--expanded {
+  transform: rotate(90deg);
+}
+
+.g-tree-view__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+g-spinner {
+  margin-inline-start: auto;
+}

@@ -68,6 +68,8 @@ describe('playbook pages i18n', () => {
     expect(dashboardText).toContain('Orders');
     expect(dashboardText).toContain('Customers');
     expect(dashboard.querySelector('[aria-label="Notifications"]')).toBeTruthy();
+    expect(dashboard.querySelector('g-dock-menu')).toBeTruthy();
+    expect(dashboard.querySelector('[aria-label="Overview"][aria-current="page"]')).toBeTruthy();
     expect(dashboardText).not.toContain('Tổng quan');
   });
 
