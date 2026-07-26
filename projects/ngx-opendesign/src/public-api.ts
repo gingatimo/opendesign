@@ -86,6 +86,7 @@ export * from './lib/chips/chips';
 export * from './lib/dock-menu/dock-menu';
 export * from './lib/cascade-select/cascade-select';
 export * from './lib/tree-select/tree-select';
+export * from './lib/tree-view/tree-view';
 export * from './lib/org-chart/org-chart';
 export * from './lib/charts/chart-utils';
 export * from './lib/charts/chart-text';
