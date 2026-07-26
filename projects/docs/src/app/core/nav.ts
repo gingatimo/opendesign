@@ -75,6 +75,7 @@ const NAV_GROUPS_VI: NavGroup[] = [
     title: 'Hiển thị',
     links: sortByLabel([
       { path: '/components/alert', label: 'Alert', icon: 'alert' },
+      { path: '/components/empty-state', label: 'Empty State', icon: 'empty-state' },
       { path: '/components/badge', label: 'Badge', icon: 'badge' },
       { path: '/components/spinner', label: 'Spinner', icon: 'spinner' },
       { path: '/components/progress', label: 'Progress', icon: 'progress' },
@@ -137,6 +138,7 @@ const NAV_GROUPS_VI: NavGroup[] = [
       { path: '/components/table', label: 'Table', icon: 'table' },
       { path: '/components/org-chart', label: 'Organization Chart', icon: 'org-chart' },
       { path: '/components/reorder-list', label: 'Reorder List', icon: 'reorder-list' },
+      { path: '/components/tree-view', label: 'Tree View', icon: 'tree-view' },
     ]),
   },
   {
@@ -257,6 +259,7 @@ const NAV_GROUPS_EN: NavGroup[] = [
     links: sortByLabel(
       [
         { path: '/components/alert', label: 'Alert', icon: 'alert' },
+        { path: '/components/empty-state', label: 'Empty State', icon: 'empty-state' },
         { path: '/components/badge', label: 'Badge', icon: 'badge' },
         { path: '/components/spinner', label: 'Spinner', icon: 'spinner' },
         { path: '/components/progress', label: 'Progress', icon: 'progress' },
@@ -331,6 +334,7 @@ const NAV_GROUPS_EN: NavGroup[] = [
         { path: '/components/table', label: 'Table', icon: 'table' },
         { path: '/components/org-chart', label: 'Organization Chart', icon: 'org-chart' },
         { path: '/components/reorder-list', label: 'Reorder List', icon: 'reorder-list' },
+        { path: '/components/tree-view', label: 'Tree View', icon: 'tree-view' },
       ],
       'en',
     ),

@@ -103,6 +103,11 @@ export const routes: Routes = [
     title: 'Alert — OpenDesign',
   },
   {
+    path: 'components/empty-state',
+    loadComponent: () => import('./pages/empty-state.page'),
+    title: 'Empty State — OpenDesign',
+  },
+  {
     path: 'components/spinner',
     loadComponent: () => import('./pages/spinner.page'),
     title: 'Spinner — OpenDesign',
@@ -211,6 +216,11 @@ export const routes: Routes = [
     path: 'components/reorder-list',
     loadComponent: () => import('./pages/reorder-list.page'),
     title: 'Reorder List — OpenDesign',
+  },
+  {
+    path: 'components/tree-view',
+    loadComponent: () => import('./pages/tree-view.page'),
+    title: 'Tree View — OpenDesign',
   },
   {
     path: 'components/splitter',

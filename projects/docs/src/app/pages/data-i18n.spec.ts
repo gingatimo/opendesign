@@ -7,6 +7,7 @@ import { GLocaleService, gLocaleEn, gLocaleVi, provideGLocale } from 'ngx-opende
 import OrgChartPage from './org-chart.page';
 import ReorderListPage from './reorder-list.page';
 import TablePage from './table.page';
+import TreeViewPage from './tree-view.page';
 
 class NoopResizeObserver {
   observe(): void {
@@ -84,5 +85,16 @@ describe('data pages i18n', () => {
     expect(text).toContain('Current order:');
     expect(text).toContain('List of items');
     expect(text).not.toContain('Thiết kế giao diện');
+  });
+
+  it('dịch trang Tree View và demo sang tiếng Anh', () => {
+    const el = renderEn(TreeViewPage);
+    const text = el.textContent ?? '';
+
+    expect(text).toContain('Accessible hierarchical explorer');
+    expect(el.querySelector('[role="tree"][aria-label="Farm structure"]')).toBeTruthy();
+    expect(text).toContain('Lazy loading');
+    expect(text).toContain('Request child nodes');
+    expect(text).not.toContain('Cấu trúc nông trại');
   });
 });

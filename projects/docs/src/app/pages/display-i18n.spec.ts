@@ -12,6 +12,7 @@ import CarouselPage from './carousel.page';
 import ChipPage from './chip.page';
 import CoverflowPage from './coverflow.page';
 import DividerPage from './divider.page';
+import EmptyStatePage from './empty-state.page';
 import GalleryPage from './gallery.page';
 import IconPage from './icon.page';
 import ImagePreviewPage from './image-preview.page';
@@ -236,5 +237,14 @@ describe('display pages i18n', () => {
     expect(text).toContain('OR');
     expect(text).toContain('Line orientation.');
     expect(text).not.toContain('Đoạn nội dung phía trên');
+  });
+
+  it('dịch trang Empty State và demo sang tiếng Anh', () => {
+    const text = renderEn(EmptyStatePage).textContent ?? '';
+
+    expect(text).toContain('Empty content placeholder');
+    expect(text).toContain('No devices yet');
+    expect(text).toContain('Add device');
+    expect(text).not.toContain('Chưa có thiết bị');
   });
 });
