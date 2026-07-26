@@ -153,7 +153,10 @@ tâm điểm: khung 3 card, card giữa phóng to, 2 bên peek; `[(active)]`; `l
 (`[images]` string|File; ảnh chính + dải thumbnail căn giữa/có nút trái-phải khi dài + lightbox) ·
 `GMediaPlayer` `g-media-player` · `GTerminal` `g-terminal` (khung terminal nền tối cố định; `[lines]`
 `GTerminalLine[]` màu theo kind, `(run)` khi gõ+Enter; `title`/`prompt`/`interactive`) ·
-`GSkeleton` `g-skeleton` · `GTimeline`+`GTimelineItem` `g-timeline`/`g-timeline-item` (`status`).
+`GSkeleton` `g-skeleton` · `GTimeline`+`GTimelineItem` `g-timeline`/`g-timeline-item` (`status`) ·
+`GEmptyState` `g-empty-state` (`heading` bắt buộc, `description`, `icon: GIconGlyph`, `size`
+compact|comfortable; import `GEmptyStateActions` rồi chiếu nút/link qua `[gEmptyStateActions]`; không
+tự đặt alert/live region).
 
 **Overlay:** `GDialogService` (service, `.open()`) · `GTooltip` `[gTooltip]` (attribute,
 `gTooltipPosition`) · `GToastService` (service, `.show()`) · `GDrawer` `g-drawer`
@@ -170,7 +173,10 @@ auto|bottom-left|bottom-right|top-left|top-right, `(action)`) · `GTabs`+`GTab` 
 `g-pagination` (`[(page)]`, `[pageCount]`) · `GBreadcrumb` `nav[g-breadcrumb]`
 (+`a[g-breadcrumb-item]`) · `GMenu`+`GSubmenu` `g-menu`/`g-submenu` (+`a[g-menu-item]`) ·
 `GAccordion`+`GAccordionPanel` `g-accordion`/`g-accordion-panel` (`multiple`) · `GDockMenu`
-`g-dock-menu`.
+`g-dock-menu` (`[items]="items"` với `GDockItem { icon, label, active?, onClick? }`;
+`position` static|bottom; `active` tạo `g-active` + `aria-current="page"`; tự suy ra `active` từ
+Router ở consumer và dùng `onClick` để điều hướng; phù hợp điều hướng đáy mobile, còn desktop dùng
+`GSidebar`).
 
 **Cấu trúc:** `GContainer` `[gContainer]` · `GStack` `g-stack` · `GGrid` `g-grid`
 (`cols` hoặc `minColWidth`) · `GLayout` `g-layout` · `GSplitter` `g-splitter` (chia panel có thanh kéo;
@@ -183,7 +189,13 @@ panel qua `<ng-template gSplitterPanel>`; `orientation`, `[sizes]`) · `GScrollP
 tuỳ biến qua `<ng-template let-node>`; `selectable` + `[(selected)]` bấm chọn node multi;
 `collapsible` nút +/− thu gọn nhánh) ·
 `GReorderList` `g-reorder-list` (danh sách kéo-thả sắp xếp lại; `[(items)]` two-way; hàng qua
-`<ng-template let-item let-i="index">`).
+`<ng-template let-item let-i="index">`) · `GTreeView` `g-tree-view` (`[nodes]` nhận
+`readonly GTreeViewNode[]` với `{ id, label, icon?, disabled?, hasChildren?, children? }`; cây
+accessible với `ariaLabel`, `[(selectedId)]`, `[(expandedIds)]`; node lazy dùng `hasChildren`,
+`(loadChildren)` phát `GTreeViewNode` và adapter phản hồi qua `[loadingIds]="readonly string[]"`;
+bật `reorderable` để `(reorder)` phát
+`GTreeReorderEvent { sourceId, targetId, position: 'before'|'inside'|'after' }`, component không tự
+sửa `nodes`; nếu bắt buộc hỗ trợ bàn phím cho reorder thì thêm menu lên/xuống/vào trong ở ứng dụng).
 
 **Charts (SVG thuần, 0 dep) — 10 loại:** `GLineChart` `g-line-chart` (`[series]` `GChartSeries[]`,
 `[labels]`, `curve` straight|smooth) · `GBarChart` `g-bar-chart` (`orientation` vertical|horizontal,
