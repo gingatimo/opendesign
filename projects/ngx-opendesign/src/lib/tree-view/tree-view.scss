@@ -45,12 +45,26 @@
   cursor: not-allowed;
 }
 
+.g-tree-view__row--drop-before {
+  box-shadow: inset 0 2px var(--g-primary);
+}
+
+.g-tree-view__row--drop-inside {
+  background: var(--g-secondary-bg);
+  box-shadow: inset 0 0 0 1px var(--g-primary);
+}
+
+.g-tree-view__row--drop-after {
+  box-shadow: inset 0 -2px var(--g-primary);
+}
+
 .g-tree-view__indent {
   flex: 0 0 var(--g-space-5);
 }
 
 .g-tree-view__toggle,
-.g-tree-view__toggle-spacer {
+.g-tree-view__toggle-spacer,
+.g-tree-view__drag {
   display: inline-grid;
   flex: 0 0 var(--g-space-5);
   width: var(--g-space-5);
@@ -67,6 +81,19 @@
   cursor: pointer;
 }
 
+.g-tree-view__drag {
+  padding: 0;
+  border: 0;
+  border-radius: var(--g-radius-sm);
+  background: transparent;
+  color: var(--g-text-muted);
+  cursor: grab;
+}
+
+.g-tree-view__drag:active {
+  cursor: grabbing;
+}
+
 .g-tree-view__chevron {
   transition: transform var(--g-duration-fast) var(--g-ease);
 }
@@ -80,4 +107,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+g-spinner {
+  margin-inline-start: auto;
 }
