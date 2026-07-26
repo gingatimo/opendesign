@@ -5,6 +5,7 @@ import type { GIconGlyph } from '../icon/icons';
 export interface GDockItem {
   icon: GIconGlyph;
   label: string;
+  active?: boolean;
   onClick?: () => void;
 }
 
@@ -22,7 +23,9 @@ export interface GDockItem {
           <button
             type="button"
             class="g-dock-menu__btn"
+            [class.g-active]="item.active"
             [attr.aria-label]="item.label"
+            [attr.aria-current]="item.active ? 'page' : null"
             (click)="activate(item)"
           >
             <g-icon [icon]="item.icon" />

@@ -14,6 +14,8 @@ import { playbookCopyFor } from './playbook-copy';
       <docs-dashboard-layout-demo />
     </docs-demo-section>
     <docs-code-block src="demo-sources/playbook/dashboard-layout.demo.ts" />
+    <h2>{{ page().responsiveTitle }}</h2>
+    <p>{{ page().responsiveIntro }}</p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

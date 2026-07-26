@@ -45,6 +45,8 @@ interface LoginCopy extends PageCopy {
 }
 
 interface DashboardCopy extends PageCopy {
+  responsiveTitle: string;
+  responsiveIntro: string;
   collapseSidebar: string;
   expandSidebar: string;
   notifications: string;
@@ -238,6 +240,9 @@ const VI_COPY: PlaybookCopy = {
     title: 'Dashboard',
     intro:
       'GTopbar + GSidebar + vùng nội dung ghép thành một layout dashboard hoàn chỉnh với thẻ số liệu, thanh tiến độ và danh sách hoạt động. Demo thu nhỏ trong khung có chiều cao cố định để không phá layout của chính trang docs này.',
+    responsiveTitle: 'Điều hướng responsive',
+    responsiveIntro:
+      'Ở màn hình rộng, GSidebar giữ cấu trúc điều hướng đầy đủ. Dưới 720px, sidebar được thay bằng GDockMenu ở đáy; cùng adapter trạng thái active cung cấp aria-current cho cả hai cách trình bày.',
     collapseSidebar: 'Thu gọn thanh bên',
     expandSidebar: 'Mở rộng thanh bên',
     notifications: 'Thông báo',
@@ -433,6 +438,9 @@ const EN_COPY: PlaybookCopy = {
     ...VI_COPY.dashboard,
     intro:
       'Complete dashboard layout built from GTopbar, GSidebar, and a content area with metric cards and progress. The demo is constrained to a fixed-height frame so it does not interfere with the docs shell, which also uses a real topbar and sidebar.',
+    responsiveTitle: 'Responsive navigation',
+    responsiveIntro:
+      'On wide screens, GSidebar preserves the full navigation structure. Below 720px it is replaced by a bottom GDockMenu; the same active-state adapter supplies aria-current across both presentations.',
     collapseSidebar: 'Collapse sidebar',
     expandSidebar: 'Expand sidebar',
     notifications: 'Notifications',

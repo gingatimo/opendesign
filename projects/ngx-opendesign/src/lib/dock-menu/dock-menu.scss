@@ -46,6 +46,11 @@
     outline: none;
     box-shadow: var(--g-focus-ring);
   }
+
+  &.g-active {
+    background: var(--g-surface-hover);
+    color: var(--g-primary);
+  }
 }
 
 // Chỉ ICON phóng to + trồi lên trên thanh khi hover: transform-origin đáy nên lớn dần LÊN TRÊN, còn

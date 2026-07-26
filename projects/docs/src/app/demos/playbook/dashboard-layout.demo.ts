@@ -3,6 +3,8 @@ import {
   GBadge,
   GCard,
   GCardHeader,
+  GDockItem,
+  GDockMenu,
   GIcon,
   GIconButton,
   gIconCart,
@@ -39,6 +41,7 @@ import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
     GCardHeader,
     GBadge,
     GProgress,
+    GDockMenu,
   ],
   template: `
     <div class="dashboard-layout-demo__frame">
@@ -99,10 +102,13 @@ import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
           </div>
         </main>
       </div>
+
+      <g-dock-menu class="dashboard-layout-demo__mobile-nav" [items]="dockItems()" />
     </div>
   `,
   styles: `
     .dashboard-layout-demo__frame {
+      position: relative;
       display: flex;
       flex-direction: column;
       height: 420px;
@@ -145,6 +151,25 @@ import { playbookCopyFor } from '../../pages/playbook/playbook-copy';
       font-weight: 600;
       color: var(--g-text);
     }
+    .dashboard-layout-demo__mobile-nav {
+      display: none;
+    }
+    @media (max-width: 720px) {
+      .dashboard-layout-demo__brand-group > button,
+      .dashboard-layout-demo__body > g-sidebar {
+        display: none;
+      }
+      .dashboard-layout-demo__main {
+        padding-bottom: calc(var(--g-space-8) + 56px);
+      }
+      .dashboard-layout-demo__mobile-nav {
+        display: block;
+        position: absolute;
+        bottom: var(--g-space-3);
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -152,6 +177,27 @@ export class DashboardLayoutDemo {
   private readonly i18n = inject(GLocaleService);
   protected readonly copy = computed(() => playbookCopyFor(this.i18n.tag()).dashboard);
   protected readonly collapsed = signal(false);
+  protected readonly activeNav = signal<'overview' | 'orders' | 'customers'>('overview');
+  protected readonly dockItems = computed<GDockItem[]>(() => [
+    {
+      icon: gIconMenu,
+      label: this.copy().overview,
+      active: this.activeNav() === 'overview',
+      onClick: () => this.activeNav.set('overview'),
+    },
+    {
+      icon: gIconCart,
+      label: this.copy().orders,
+      active: this.activeNav() === 'orders',
+      onClick: () => this.activeNav.set('orders'),
+    },
+    {
+      icon: gIconUser,
+      label: this.copy().customers,
+      active: this.activeNav() === 'customers',
+      onClick: () => this.activeNav.set('customers'),
+    },
+  ]);
   protected readonly iconPanelOpen = gIconPanelLeftOpen;
   protected readonly iconPanelClose = gIconPanelLeftClose;
   protected readonly iconBell = iconBell;

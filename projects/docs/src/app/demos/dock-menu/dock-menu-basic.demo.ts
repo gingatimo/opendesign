@@ -26,7 +26,7 @@ export class DockMenuBasicDemo {
   private readonly i18n = inject(GLocaleService);
   private readonly copy = computed(() => navigationCopyFor(this.i18n.tag()).dockMenu.demo);
   protected readonly items = computed<GDockItem[]>(() => [
-    { icon: gIconGrid, label: this.copy().dashboard },
+    { icon: gIconGrid, label: this.copy().dashboard, active: true },
     { icon: gIconImage, label: this.copy().images },
     { icon: gIconLink, label: this.copy().links },
     { icon: gIconCopy, label: this.copy().copy },
