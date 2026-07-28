@@ -5,6 +5,17 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [2.2.0] — 2026-07-28
+
+### Added
+
+- **`GToolbar`** (`g-toolbar`) và **`GToolbarItem`** (`[gToolbarItem]`): nhóm lệnh accessible theo
+  ARIA toolbar pattern, roving tabindex, điều hướng ngang/dọc bằng phím mũi tên và Home/End, tuỳ chọn
+  wrap, giữ lệnh vô hiệu hoá ở trạng thái có thể khám phá bằng `aria-disabled`, đồng thời khôi phục
+  focus an toàn khi danh sách lệnh thay đổi.
+- **Toolbar playbook:** hướng dẫn cấu trúc, touch target và quy ước bàn phím cho thanh công cụ ứng
+  dụng.
+
 ## [2.1.0] — 2026-07-26
 
 ### Added

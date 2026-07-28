@@ -236,7 +236,7 @@ export default class HomePage {
   private readonly docsI18n = inject(DocsI18nService);
 
   protected readonly copy = this.docsI18n.copy;
-  protected readonly version = '2.1.0';
+  protected readonly version = '2.2.0';
   protected readonly angularVersion = 22;
 
   // Danh mục lấy thẳng từ mục lục của sidebar: bỏ nhóm "Bắt đầu" (chỉ có link về đây) và tách

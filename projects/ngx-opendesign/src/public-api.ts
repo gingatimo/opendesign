@@ -1,4 +1,4 @@
-export const OPENDESIGN_VERSION = '2.1.0';
+export const OPENDESIGN_VERSION = '2.2.0';
 export * from './lib/core/dev-warning';
 export * from './lib/core/id-generator';
 export * from './lib/core/locale-types';
@@ -46,6 +46,7 @@ export * from './lib/layout/container';
 export * from './lib/layout/stack';
 export * from './lib/layout/grid';
 export * from './lib/layout/layout';
+export * from './lib/toolbar/toolbar';
 export * from './lib/splitter/splitter';
 export * from './lib/table/table';
 export * from './lib/table/table-container';

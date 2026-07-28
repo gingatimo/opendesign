@@ -6,8 +6,8 @@
 OpenDesign is a modern Angular design system with pill-shaped controls, compact rounded surfaces,
 light and dark themes, standalone components, `OnPush`, and signal-friendly APIs.
 
-The npm package is [`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign). Version 2.1.0
-ships 80 components, 10 dependency-free SVG chart types, 2 Angular editors, 116 tree-shakable icons,
+The npm package is [`ngx-opendesign`](https://www.npmjs.com/package/ngx-opendesign). Version 2.2.0
+ships 81 components, 10 dependency-free SVG chart types, 2 Angular editors, 116 tree-shakable icons,
 runtime i18n for English and Vietnamese, and no non-Angular runtime dependencies. The only peer
 dependencies are Angular packages: `@angular/core`, `@angular/common`, `@angular/cdk`, and
 `@angular/forms`.
@@ -103,6 +103,15 @@ export const appConfig: ApplicationConfig = {
 Use `GLocaleService.use(locale)` to switch locales at runtime. Explicit inputs supplied by your app,
 such as `aria-label`, placeholders, and labels, take precedence over locale defaults.
 
+## Toolbar Playbook
+
+`GToolbar` groups related application commands with a single Tab stop. Add `gToolbarItem` to each
+native button, provide `ariaLabel` on the toolbar, and use
+`[gToolbarItemDisabled]="condition"` instead of the native `disabled` attribute when an unavailable
+command should remain discoverable to assistive technology. Horizontal toolbars use Left/Right
+Arrow, vertical toolbars use Up/Down Arrow, and both support Home/End. `[wrap]="true"` enables
+edge-to-edge wrapping. The component enforces a minimum 44 CSS pixel interactive target.
+
 ## Component Inventory
 
 - **Buttons (4):** Button, Fab, Icon Button, Action Expand
@@ -115,7 +124,7 @@ such as `aria-label`, placeholders, and labels, take precedence over locale defa
 - **Overlay (5):** Dialog, Drawer, Tooltip, Toast, Context Menu
 - **Navigation (11):** Action Menu, Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb,
   Menu, Accordion, Dock Menu
-- **Layout (6):** Layout, Container, Stack, Grid, Splitter, Scroll Panel
+- **Layout (7):** Layout, Container, Stack, Grid, Toolbar, Splitter, Scroll Panel
 - **Data (4):** Table, Organization Chart, Reorder List, Tree View
 - **Charts (10):** Line, Bar, Pie, Donut, Polar, Radar, Stacked Bar, Honeycomb, Heatmap, Calendar
   Heatmap

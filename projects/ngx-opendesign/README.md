@@ -5,7 +5,7 @@
 OpenDesign is a modern Angular design system with pill-shaped controls, compact rounded surfaces,
 light and dark themes, standalone components, `OnPush`, and signal-friendly APIs.
 
-Version 2.1.0 includes 80 components, 10 dependency-free SVG chart types, 2 Angular editors, 116
+Version 2.2.0 includes 81 components, 10 dependency-free SVG chart types, 2 Angular editors, 116
 tree-shakable icons, runtime i18n for English and Vietnamese, and no non-Angular runtime
 dependencies. The only peer dependencies are Angular packages: `@angular/core`, `@angular/common`,
 `@angular/cdk`, and `@angular/forms`.
@@ -146,6 +146,36 @@ import { GIcon, GIconButton, gIconSave } from 'ngx-opendesign';
 
 Icon-only buttons must have an accessible name, usually through `aria-label`.
 
+## Toolbar Playbook
+
+Use `GToolbar` for a compact group of related commands. Give the group an accessible name and mark
+each native control with `gToolbarItem`:
+
+```typescript
+import { GButton, GToolbar, GToolbarItem } from 'ngx-opendesign';
+```
+
+```html
+<g-toolbar ariaLabel="Editor commands" [wrap]="true">
+  <button g-button gToolbarItem type="button">Undo</button>
+  <button
+    g-button
+    gToolbarItem
+    type="button"
+    [gToolbarItemDisabled]="!canRedo"
+  >
+    Redo
+  </button>
+</g-toolbar>
+```
+
+The toolbar has one Tab stop. Use Left/Right Arrow for a horizontal toolbar, Up/Down Arrow when
+`orientation="vertical"`, and Home/End to reach the first or last command. Set `[wrap]="true"` only
+when moving past an edge should continue from the opposite edge. Disabled commands use
+`aria-disabled` and remain focusable so their name and unavailable state are discoverable; the
+directive prevents their click action. Keep each command's interactive target at least 44 CSS pixels
+and provide an accessible name for icon-only controls.
+
 ## Component Inventory
 
 - **Buttons (4):** Button, Fab, Icon Button, Action Expand
@@ -158,7 +188,7 @@ Icon-only buttons must have an accessible name, usually through `aria-label`.
 - **Overlay (5):** Dialog, Drawer, Tooltip, Toast, Context Menu
 - **Navigation (11):** Action Menu, Tabs, Topbar, Sidebar, Stepper, Link, Pagination, Breadcrumb,
   Menu, Accordion, Dock Menu
-- **Layout (6):** Layout, Container, Stack, Grid, Splitter, Scroll Panel
+- **Layout (7):** Layout, Container, Stack, Grid, Toolbar, Splitter, Scroll Panel
 - **Data (4):** Table, Organization Chart, Reorder List, Tree View
 - **Charts (10):** Line, Bar, Pie, Donut, Polar, Radar, Stacked Bar, Honeycomb, Heatmap, Calendar
   Heatmap
