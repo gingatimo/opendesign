@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   inject,
+  input,
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -22,12 +23,15 @@ import { gDevWarning } from '../core/dev-warning';
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[class.g-toggle--checked]': 'checked()',
     '[class.g-toggle--disabled]': 'disabled()',
+    '[class.g-toggle--sm]': 'size() === "sm"',
     '(click)': 'toggle()',
     '(keydown.space)': 'onSpace($event)',
     '(blur)': 'onTouchedFn()',
   },
 })
 export class GToggle implements ControlValueAccessor {
+  readonly size = input<'md' | 'sm'>('md');
+
   protected readonly checked = signal(false);
   protected readonly disabled = signal(false);
 

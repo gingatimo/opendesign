@@ -157,3 +157,17 @@ describe('GFileInput', () => {
     expect(f.nativeElement.querySelector('.g-file-input__list')).toBeNull();
   });
 });
+
+@Component({
+  imports: [GFileInput],
+  template: `<g-file-input size="sm" />`,
+})
+class SmSizeHost {}
+
+describe('GFileInput size="sm"', () => {
+  it('áp class g-file-input--sm lên khối chính', () => {
+    const f = TestBed.createComponent(SmSizeHost);
+    f.detectChanges();
+    expect(f.nativeElement.querySelector('.g-file-input').classList).toContain('g-file-input--sm');
+  });
+});

@@ -27,6 +27,7 @@ import { gIconFile, gIconUpload, gIconX } from '../icon/icons';
       class="g-file-input"
       [class.g-file-input--dragover]="dragover()"
       [class.g-file-input--disabled]="disabled()"
+      [class.g-file-input--sm]="size() === 'sm'"
       (dragover)="onDragOver($event)"
       (dragleave)="onDragLeave($event)"
       (drop)="onDrop($event)"
@@ -81,6 +82,7 @@ export class GFileInput {
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly showFileList = input(true, { transform: booleanAttribute });
+  readonly size = input<'md' | 'sm'>('md');
 
   private readonly native = viewChild.required<ElementRef<HTMLInputElement>>('native');
   protected readonly iconUpload = gIconUpload;

@@ -24,6 +24,13 @@
   cursor: not-allowed;
 }
 
+// Giống :host(.g-select--sm) ở GSelect: hạ kích thước track/thumb một bậc. Track vẫn giữ tỉ lệ
+// width = 2*thumb + 2*padding (2px) như bậc md (40 = 2*18 + 2*2) → sm (32 = 2*14 + 2*2).
+:host(.g-toggle--sm) {
+  width: 32px;
+  height: 18px;
+}
+
 .g-toggle__thumb {
   width: 18px;
   height: 18px;
@@ -32,8 +39,17 @@
   transition: transform var(--g-duration-fast) var(--g-ease);
 }
 
+:host(.g-toggle--sm) .g-toggle__thumb {
+  width: 14px;
+  height: 14px;
+}
+
 :host(.g-toggle--checked) .g-toggle__thumb {
   transform: translateX(18px);
+}
+
+:host(.g-toggle--sm.g-toggle--checked) .g-toggle__thumb {
+  transform: translateX(14px);
 }
 
 // Thumb trượt ngang là chuyển động theo tương tác, không phải indicator liên tục như

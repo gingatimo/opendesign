@@ -211,6 +211,13 @@ body {
   }
 }
 
+// Giống :host(.g-select--sm) ở GSelect: hạ height/padding/font-size một bậc.
+.g-input.g-input--sm {
+  height: var(--g-control-sm);
+  padding: 0 var(--g-space-3);
+  font-size: var(--g-font-size-sm);
+}
+
 .g-input.g-input--invalid {
   border-color: var(--g-danger-solid);
 }

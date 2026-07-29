@@ -73,3 +73,18 @@ describe('GInput', () => {
     expect(input.disabled).toBe(true);
   });
 });
+
+@Component({
+  imports: [GInput],
+  template: `<input gInput size="sm" />`,
+})
+class SmSizeHost {}
+
+describe('GInput size="sm"', () => {
+  it('áp class g-input--sm lên input', () => {
+    const fixture = TestBed.createComponent(SmSizeHost);
+    fixture.detectChanges();
+    const input: HTMLInputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    expect(input.classList).toContain('g-input--sm');
+  });
+});

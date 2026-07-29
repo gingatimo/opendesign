@@ -20,6 +20,21 @@
 .g-file-input--disabled {
   opacity: 0.5;
 }
+
+// Giống :host(.g-select--sm) ở GSelect: hạ padding/font-size một bậc cho nút chọn + tên tệp.
+.g-file-input--sm .g-file-input__row {
+  padding: 2px;
+  padding-right: var(--g-space-3);
+}
+
+.g-file-input--sm .g-file-input__button {
+  padding: var(--g-space-1) var(--g-space-3);
+  font-size: var(--g-font-size-xs);
+}
+
+.g-file-input--sm .g-file-input__name {
+  font-size: var(--g-font-size-xs);
+}
 .g-file-input__button {
   display: inline-flex;
   align-items: center;

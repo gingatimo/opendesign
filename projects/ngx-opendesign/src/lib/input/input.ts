@@ -1,4 +1,4 @@
-import { DestroyRef, Directive, ElementRef, inject, OnInit, signal } from '@angular/core';
+import { DestroyRef, Directive, ElementRef, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 
@@ -7,11 +7,14 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
   host: {
     class: 'g-input',
     '[class.g-input--invalid]': 'invalid()',
+    '[class.g-input--sm]': 'size() === "sm"',
     '(input)': 'onInput($event)',
     '(blur)': 'onBlurHandler()',
   },
 })
 export class GInput implements ControlValueAccessor, OnInit {
+  readonly size = input<'md' | 'sm'>('md');
+
   private readonly elementRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly destroyRef = inject(DestroyRef);

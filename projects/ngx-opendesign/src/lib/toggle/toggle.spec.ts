@@ -68,3 +68,18 @@ describe('GToggle', () => {
     warnSpy.mockRestore();
   });
 });
+
+@Component({
+  imports: [GToggle],
+  template: `<g-toggle size="sm" aria-label="Bật thông báo"></g-toggle>`,
+})
+class SmSizeHost {}
+
+describe('GToggle size="sm"', () => {
+  it('áp class g-toggle--sm lên host', () => {
+    const fixture = TestBed.createComponent(SmSizeHost);
+    fixture.detectChanges();
+    const host: HTMLElement = fixture.debugElement.query(By.directive(GToggle)).nativeElement;
+    expect(host.classList).toContain('g-toggle--sm');
+  });
+});
