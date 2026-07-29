@@ -306,23 +306,30 @@ export class GCalendarHeatmap {
     }));
   });
 
-  /** Nhãn tháng đặt tại cột của tuần ĐẦU TIÊN thuộc tháng đó. */
+  /**
+   * Nhãn tháng đặt tại cột của tuần ĐẦU TIÊN thuộc tháng đó.
+   *
+   * BỎ QUA nhãn nào quá sát nhãn trước: khi range dữ liệu ngắn (vài tuần), hai
+   * tháng liền kề rơi vào các cột gần nhau và nhãn (vd. "Jul"/"Aug") ĐÈ lên
+   * nhau. Giữ khoảng cách tối thiểu bằng bề rộng nhãn rộng nhất + đệm — thà
+   * thiếu một nhãn còn hơn vẽ chồng đọc không ra (cùng cách GitHub làm).
+   */
   protected readonly monthLabels = computed(() => {
     const months = this.i18n.monthNames();
     const labels: { index: number; x: number; label: string }[] = [];
+    const minGap = maxTextWidth(months, this.labelSize()) + 4;
     let previous = -1;
+    let lastX = -Infinity;
     this.weeks().forEach((week, column) => {
       const first = week.find((d): d is Date => d !== null);
       if (!first) return;
       const month = first.getMonth();
-      if (month !== previous) {
-        labels.push({
-          index: labels.length,
-          x: this.labelWidth() + column * (this.cell() + GAP),
-          label: months[month],
-        });
-        previous = month;
-      }
+      if (month === previous) return;
+      previous = month;
+      const x = this.labelWidth() + column * (this.cell() + GAP);
+      if (x - lastX < minGap) return;
+      labels.push({ index: labels.length, x, label: months[month] });
+      lastX = x;
     });
     return labels;
   });
