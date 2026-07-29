@@ -83,7 +83,7 @@ export interface GLocaleStrings {
     next: string;
     imageAlt: (position: number, total: number) => string;
   };
-  select: { searchPlaceholder: string; noResults: string };
+  select: { searchPlaceholder: string; noResults: string; noOptions: string };
   searchField: { fieldLabel: string; valueLabel: string };
   otp: { charLabel: (position: number) => string };
   rating: {

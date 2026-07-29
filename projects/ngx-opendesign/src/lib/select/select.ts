@@ -81,8 +81,13 @@ function normalize(s: string): string {
         }
         <div class="g-select__options" role="listbox" [attr.id]="listboxId">
           <ng-content />
-          @if (searchable() && visibleCount() === 0) {
-            <div class="g-select__empty">{{ t().select.noResults }}</div>
+          @if (visibleCount() === 0) {
+            <!-- Không có mục nào hiện được: phân biệt "chưa có lựa chọn nào"
+                 (rỗng hẳn) với "tìm không ra" (có mục nhưng bộ lọc loại hết) —
+                 hai chuyện khác nhau, người dùng cần biết là do đâu. -->
+            <div class="g-select__empty">
+              {{ optionCount() === 0 ? t().select.noOptions : t().select.noResults }}
+            </div>
           }
         </div>
       </div>
@@ -179,6 +184,8 @@ export class GSelect implements ControlValueAccessor, OnInit {
     this.optionsList().filter((o) => this.isOptionVisible(o)),
   );
   protected readonly visibleCount = computed(() => this.visibleOptions().length);
+  /** Tổng số mục (chưa lọc) — phân biệt "rỗng hẳn" với "search lọc hết". */
+  protected readonly optionCount = computed(() => this.optionsList().length);
 
   protected readonly selectedOptions = computed(() =>
     this.optionsList().filter((o) => this.isSelected(o.value())),

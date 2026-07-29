@@ -19,6 +19,14 @@ class HostComponent {
   readonly control = new FormControl<string | null>(null);
 }
 
+@Component({
+  imports: [GSelect, ReactiveFormsModule],
+  template: `<g-select [formControl]="control" placeholder="Chọn"></g-select>`,
+})
+class EmptyHostComponent {
+  readonly control = new FormControl<string | null>(null);
+}
+
 describe('GSelect + GOption', () => {
   function setup() {
     const fixture = TestBed.createComponent(HostComponent);
@@ -26,6 +34,18 @@ describe('GSelect + GOption', () => {
     const trigger: HTMLElement = fixture.debugElement.query(By.directive(GSelect)).nativeElement;
     return { fixture, trigger };
   }
+
+  it('KHÔNG có option nào: mở panel hiện thông báo "No options", không để trống trơn', () => {
+    const fixture = TestBed.createComponent(EmptyHostComponent);
+    fixture.detectChanges();
+    const trigger: HTMLElement = fixture.debugElement.query(By.directive(GSelect)).nativeElement;
+    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', cancelable: true }));
+    fixture.detectChanges();
+
+    const empty = fixture.debugElement.query(By.css('.g-select__empty'));
+    expect(empty).not.toBeNull();
+    expect(empty.nativeElement.textContent).toContain('No options');
+  });
 
   it('role combobox, hiện placeholder khi chưa chọn', () => {
     const { trigger } = setup();

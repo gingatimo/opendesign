@@ -92,7 +92,11 @@ export const gLocaleVi: GLocale = {
       next: 'Ảnh sau',
       imageAlt: (position: number, total: number) => `Ảnh ${position}/${total}`,
     },
-    select: { searchPlaceholder: 'Tìm...', noResults: 'Không có kết quả' },
+    select: {
+      searchPlaceholder: 'Tìm...',
+      noResults: 'Không có kết quả',
+      noOptions: 'Không có lựa chọn',
+    },
     searchField: { fieldLabel: 'Trường tìm kiếm', valueLabel: 'Giá trị tìm kiếm' },
     otp: { charLabel: (position: number) => `Ký tự ${position}` },
     rating: {

@@ -92,7 +92,7 @@ export const gLocaleEn: GLocale = {
       next: 'Next image',
       imageAlt: (position: number, total: number) => `Image ${position} of ${total}`,
     },
-    select: { searchPlaceholder: 'Search…', noResults: 'No results' },
+    select: { searchPlaceholder: 'Search…', noResults: 'No results', noOptions: 'No options' },
     searchField: { fieldLabel: 'Search field', valueLabel: 'Search value' },
     otp: { charLabel: (position: number) => `Character ${position}` },
     rating: {
