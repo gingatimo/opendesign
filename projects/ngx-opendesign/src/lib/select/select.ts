@@ -103,6 +103,7 @@ function normalize(s: string): string {
     '[class.g-select--invalid]': 'invalid()',
     '[class.g-select--open]': 'open()',
     '[class.g-select--multiple]': 'multiple()',
+    '[class.g-select--sm]': 'size() === "sm"',
     '(click)': 'onTriggerClick()',
     '(keydown)': 'onKeydown($event)',
     '(blur)': 'onBlur($event)',
@@ -113,6 +114,7 @@ export class GSelect implements ControlValueAccessor, OnInit {
   readonly searchable = input(false, { transform: booleanAttribute });
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly searchPlaceholder = input('');
+  readonly size = input<'md' | 'sm'>('md');
   /** Hàm so sánh option value (tham số 1) với giá trị đang bind của control (tham số 2). */
   readonly compareWith = input<(a: unknown, b: unknown) => boolean>((a, b) => a === b);
 

@@ -50,6 +50,11 @@ describe('GSelect + GOption', () => {
     expect(trigger.classList).not.toContain('g-select--invalid');
   });
 
+  it('mặc định (không set size): không có class g-select--sm', () => {
+    const { trigger } = setup();
+    expect(trigger.classList).not.toContain('g-select--sm');
+  });
+
   it('mặc định đóng panel', () => {
     const { fixture } = setup();
     expect(fixture.debugElement.query(By.css('[role="listbox"]'))).toBeNull();
@@ -398,5 +403,26 @@ describe('GSelect multiple', () => {
     const content = fixture.debugElement.query(By.css('.g-select__trigger-content'))
       .nativeElement as HTMLElement;
     expect(content.textContent?.trim()).toBe('A, C');
+  });
+});
+
+@Component({
+  imports: [GSelect, GOption, ReactiveFormsModule],
+  template: `
+    <g-select [formControl]="control" size="sm" placeholder="Chọn màu">
+      <g-option value="red">Đỏ</g-option>
+    </g-select>
+  `,
+})
+class SmSizeHost {
+  readonly control = new FormControl<string | null>(null);
+}
+
+describe('GSelect size="sm"', () => {
+  it('áp class g-select--sm lên trigger', () => {
+    const fixture = TestBed.createComponent(SmSizeHost);
+    fixture.detectChanges();
+    const trigger: HTMLElement = fixture.debugElement.query(By.directive(GSelect)).nativeElement;
+    expect(trigger.classList).toContain('g-select--sm');
   });
 });

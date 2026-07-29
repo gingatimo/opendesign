@@ -129,7 +129,7 @@ thu gọn icon tròn → hover/focus bung nút lựa chọn; `[actions]` `GActio
 **Form:** `GInput` `input[gInput]` · `GTextarea` `textarea[gTextarea]` · `GInputGroup` `g-input-group`
 (bọc `<input gInput>` + `<g-icon gInputPrefix/gInputSuffix>`) · `GCheckbox` `g-checkbox` ·
 `GToggle` `g-toggle` · `GRadioGroup`+`GRadio` `g-radio-group`/`g-radio` · `GSelect`+`GOption`
-`g-select`/`g-option` (`searchable`, `multiple`) · `GCascadeSelect` `g-cascade-select`
+`g-select`/`g-option` (`searchable`, `multiple`, `size` sm|md) · `GCascadeSelect` `g-cascade-select`
 (`[options]` cây danh mục) · `GTreeSelect` `g-tree-select` (`multiple` cascade) · `GChips` `g-chips`
 (value `string[]`) · `GInputOtp` `g-input-otp` (`length`, `integerOnly`, `mask`) · `GDatepicker`
 `g-datepicker` · `GDateRangePicker` `g-date-range-picker` · `GTimePicker` `g-timepicker` ·

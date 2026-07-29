@@ -33,6 +33,13 @@
   }
 }
 
+// Giống :host(.g-button--sm) ở GButton: hạ height/padding/font-size một bậc.
+:host(.g-select--sm) {
+  height: var(--g-control-sm);
+  padding: 0 var(--g-space-3);
+  font-size: var(--g-font-size-sm);
+}
+
 :host(.g-select--disabled) {
   opacity: 0.5;
   cursor: not-allowed;
