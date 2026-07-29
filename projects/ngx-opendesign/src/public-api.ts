@@ -1,4 +1,4 @@
-export const OPENDESIGN_VERSION = '2.5.2';
+export const OPENDESIGN_VERSION = '2.5.3';
 export * from './lib/core/dev-warning';
 export * from './lib/core/id-generator';
 export * from './lib/core/locale-types';

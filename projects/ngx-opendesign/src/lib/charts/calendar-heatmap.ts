@@ -105,7 +105,7 @@ export function calendarWeeks(
         <svg
           #chartSvg
           class="g-calendar__svg g-chart-frame__svg"
-          [attr.viewBox]="'0 0 ' + w() + ' ' + svgHeight()"
+          [attr.viewBox]="'0 0 ' + viewWidth() + ' ' + svgHeight()"
           width="100%"
           [attr.height]="svgHeight()"
           role="img"
@@ -344,6 +344,18 @@ export class GCalendarHeatmap {
     () => this.labelWidth() + this.weeks().length * (this.cell() + GAP) - GAP,
   );
   private readonly gridBottom = computed(() => this.headerHeight() + 7 * (this.cell() + GAP) - GAP);
+
+  /**
+   * Bề ngang viewBox = bề ngang LƯỚI THẬT khi lưới rộng hơn khung đo được.
+   *
+   * Ô đã chạm SÀN 6px mà vẫn thiếu chỗ (lịch một năm cần ~53 cột, khung hẹp
+   * không đủ) thì lưới vẽ tới `gridRight` > `w()`. Để viewBox rộng đúng bằng
+   * `w()` thì phần thừa nằm NGOÀI viewBox và bị cắt (SVG `overflow: hidden`),
+   * mất mấy tuần gần nhất. Cho viewBox rộng bằng lưới + `width="100%"` khiến
+   * `preserveAspectRatio` (mặc định `meet`) TỰ THU NHỎ cả hình cho vừa khung —
+   * đúng nghĩa "co lại khi không đủ chỗ" thay vì cắt.
+   */
+  protected readonly viewWidth = computed(() => Math.max(this.w(), this.gridRight()));
 
   /** Thang màu nằm dưới lưới, căn PHẢI theo mép LƯỚI (không phải mép khung). */
   protected readonly scale = computed(() => {

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import type { WritableSignal } from '@angular/core';
 import { GCalendarHeatmap } from './calendar-heatmap';
 
 describe('GCalendarHeatmap — nhãn tháng không đè nhau', () => {
@@ -38,5 +39,29 @@ describe('GCalendarHeatmap — nhãn tháng không đè nhau', () => {
     // ~3 tháng, mỗi tháng đủ rộng — không được bỏ nhãn nào.
     const labels = monthLabels(new Date(2020, 5, 1), new Date(2020, 7, 31));
     expect(labels).toEqual(['Jun', 'Jul', 'Aug']);
+  });
+});
+
+describe('GCalendarHeatmap — co lại khi khung hẹp', () => {
+  it('lịch một năm trong khung HẸP: viewBox bao trọn lưới để SVG tự thu nhỏ, KHÔNG cắt tuần', () => {
+    TestBed.configureTestingModule({});
+    const fixture = TestBed.createComponent(GCalendarHeatmap);
+    fixture.componentRef.setInput('from', new Date(2025, 0, 1));
+    fixture.componentRef.setInput('to', new Date(2025, 11, 31));
+    // Ép khung hẹp: 53 cột mà ô đã chạm sàn 6px nên lưới rộng hơn khung đo được.
+    (fixture.componentInstance as unknown as { w: WritableSignal<number> }).w.set(300);
+    fixture.detectChanges();
+
+    const svg = fixture.nativeElement.querySelector('svg') as SVGSVGElement;
+    const viewBoxWidth = Number(svg.getAttribute('viewBox')!.split(' ')[2]);
+    const rects = [...svg.querySelectorAll('rect.g-calendar__day')];
+    const gridRight = Math.max(
+      ...rects.map((r) => Number(r.getAttribute('x')) + Number(r.getAttribute('width'))),
+    );
+
+    // viewBox phải BAO TRỌN lưới (không cắt tuần gần nhất) và rộng hơn khung 300
+    // (nhờ vậy width="100%" + preserveAspectRatio thu nhỏ cả hình cho vừa).
+    expect(viewBoxWidth).toBeGreaterThanOrEqual(gridRight);
+    expect(viewBoxWidth).toBeGreaterThan(300);
   });
 });
