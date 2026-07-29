@@ -309,29 +309,35 @@ export class GCalendarHeatmap {
   /**
    * Nhãn tháng đặt tại cột của tuần ĐẦU TIÊN thuộc tháng đó.
    *
-   * BỎ QUA nhãn nào quá sát nhãn trước: khi range dữ liệu ngắn (vài tuần), hai
-   * tháng liền kề rơi vào các cột gần nhau và nhãn (vd. "Jul"/"Aug") ĐÈ lên
-   * nhau. Giữ khoảng cách tối thiểu bằng bề rộng nhãn rộng nhất + đệm — thà
-   * thiếu một nhãn còn hơn vẽ chồng đọc không ra (cùng cách GitHub làm).
+   * BỎ nhãn của tháng nào quá HẸP để nhãn không đè nhau: một tháng chỉ được vẽ
+   * nhãn khi mốc tháng KẾ tiếp còn cách đủ xa (≥ bề rộng nhãn rộng nhất + đệm).
+   * Tháng đầu range thường là MẨU VỤN vài ngày nằm sát tháng sau — bỏ mẩu vụn
+   * đó để tháng ĐẦY ĐỦ kế tiếp làm nhãn đầu (vd. dữ liệu bắt đầu cuối tháng 7
+   * thì hiện "Aug" chứ không phải "Jul" chen sát — "Jul" đã có ở mép phải).
+   * Tháng CUỐI luôn giữ: không có tháng kế, và đó là nhãn mép phải quen thuộc.
+   * Vì mỗi tháng giữ lại đều cách mốc kế ≥ khoảng tối thiểu nên hai nhãn liền
+   * nhau không bao giờ đè (cùng cách GitHub làm).
    */
   protected readonly monthLabels = computed(() => {
     const months = this.i18n.monthNames();
-    const labels: { index: number; x: number; label: string }[] = [];
     const minGap = maxTextWidth(months, this.labelSize()) + 4;
+    const step = this.cell() + GAP;
+
+    // Cột đầu tiên của mỗi tháng: một mốc cho mỗi lần đổi tháng.
+    const starts: { x: number; month: number }[] = [];
     let previous = -1;
-    let lastX = -Infinity;
     this.weeks().forEach((week, column) => {
       const first = week.find((d): d is Date => d !== null);
       if (!first) return;
       const month = first.getMonth();
       if (month === previous) return;
       previous = month;
-      const x = this.labelWidth() + column * (this.cell() + GAP);
-      if (x - lastX < minGap) return;
-      labels.push({ index: labels.length, x, label: months[month] });
-      lastX = x;
+      starts.push({ x: this.labelWidth() + column * step, month });
     });
-    return labels;
+
+    return starts
+      .filter((s, i) => i === starts.length - 1 || starts[i + 1].x - s.x >= minGap)
+      .map((s, index) => ({ index, x: s.x, label: months[s.month] }));
   });
 
   private readonly gridRight = computed(

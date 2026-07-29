@@ -16,16 +16,27 @@ describe('GCalendarHeatmap — nhãn tháng không đè nhau', () => {
     );
   }
 
-  it('range NGẮN, mốc tháng thứ hai rơi cột kề: BỎ nhãn quá sát thay vì vẽ đè', () => {
-    // 30/08 là Chủ nhật: cột 0 là tháng 8, cột 1 (06/09) đã sang tháng 9 — hai
-    // nhãn "Aug"/"Sep" chỉ cách nhau một cột nên đè lên nhau nếu vẽ cả hai.
-    const labels = monthLabels(new Date(2020, 7, 30), new Date(2020, 8, 12));
-    expect(labels.length).toBe(1);
+  it('range ngắn, tháng đầu là mẩu vụn sát tháng sau: BỎ mẩu vụn, giữ tháng đầy đủ', () => {
+    // 30/08 là Chủ nhật: cột 0 chỉ có mẩu cuối tháng 8, cột 1 (06/09) đã sang
+    // tháng 9. Hai nhãn cách một cột nên đè — giữ tháng ĐẦY ĐỦ kế ("Sep"), bỏ
+    // mẩu "Aug" chứ KHÔNG giữ mẩu đầu rồi bỏ tháng sau.
+    expect(monthLabels(new Date(2020, 7, 30), new Date(2020, 8, 12))).toEqual(['Sep']);
   });
 
-  it('range ĐỦ DÀI: các mốc tháng cách nhau vài cột thì hiện ĐỦ mọi nhãn', () => {
-    // ~3 tháng: các mốc tháng cách nhau đủ xa để không đè — không được bỏ nhãn.
+  it('range một năm bắt đầu cuối tháng 7: nhãn đầu là "Aug", KHÔNG phải mẩu "Jul"', () => {
+    // Đúng ca người dùng gặp: dữ liệu ~1 năm, cột 0 chỉ vài ngày cuối tháng 7
+    // (mẩu vụn). Phải bỏ "Jul" đầu — nó đã hiện ở mép phải (tháng hiện tại) —
+    // và để "Aug" (tháng đầy đủ đầu tiên) làm nhãn đầu.
+    const labels = monthLabels(new Date(2025, 6, 30), new Date(2026, 6, 29));
+    expect(labels[0]).toBe('Aug');
+    expect(labels.at(-1)).toBe('Jul');
+    // Không được vẽ hai "Jul" sát nhau ở đầu (mẩu đầu + tháng sau).
+    expect(labels[1]).not.toBe('Jul');
+  });
+
+  it('range đủ dài: các mốc tháng cách nhau vài cột thì hiện ĐỦ mọi nhãn', () => {
+    // ~3 tháng, mỗi tháng đủ rộng — không được bỏ nhãn nào.
     const labels = monthLabels(new Date(2020, 5, 1), new Date(2020, 7, 31));
-    expect(labels.length).toBeGreaterThanOrEqual(3);
+    expect(labels).toEqual(['Jun', 'Jul', 'Aug']);
   });
 });
