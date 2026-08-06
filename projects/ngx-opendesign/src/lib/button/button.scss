@@ -63,14 +63,15 @@
   color: var(--g-text);
   border-color: var(--g-border-strong);
   &:hover:not(:disabled) {
-    background: var(--g-surface);
+    background: var(--g-hover);
+    border-color: var(--g-text-muted);
   }
 }
 :host(.g-button--ghost) {
   background: transparent;
   color: var(--g-text);
   &:hover:not(:disabled) {
-    background: var(--g-surface);
+    background: var(--g-hover);
   }
 }
 // Danger: outline mặc định (nhẹ nhàng hơn cho hành động phá huỷ), hover mới tô đặc.
