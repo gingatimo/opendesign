@@ -5,6 +5,15 @@ Mọi thay đổi đáng chú ý của dự án này được ghi lại trong fi
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), dự án tuân theo
 [Semantic Versioning](https://semver.org/).
 
+## [2.6.0] — 2026-08-07
+
+### Added
+
+- **`GRangeSlider`** (`g-range-slider`): thanh trượt chọn KHOẢNG `[from, to]` hai đầu kéo độc lập
+  (chọn đoạn nhạc, lọc khoảng giá…). Chồng 2 `input[type="range"]` gốc — mỗi đầu giữ nguyên bàn phím
+  (←→/Home/End) + ARIA riêng (`ariaLabelFrom`/`ariaLabelTo`); kéo chéo kẹp `from ≤ to`; track tô
+  `--g-primary` giữa 2 đầu. API: `[(from)]`, `[(to)]`, `min`, `max`, `step`, `disabled`.
+
 ## [2.2.0] — 2026-07-28
 
 ### Added

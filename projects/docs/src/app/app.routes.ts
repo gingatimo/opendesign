@@ -328,6 +328,11 @@ export const routes: Routes = [
     title: 'Slider — OpenDesign',
   },
   {
+    path: 'components/range-slider',
+    loadComponent: () => import('./pages/range-slider.page'),
+    title: 'Range Slider — OpenDesign',
+  },
+  {
     path: 'components/step-slider',
     loadComponent: () => import('./pages/step-slider.page'),
     title: 'Step Slider — OpenDesign',

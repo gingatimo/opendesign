@@ -130,6 +130,14 @@ interface SliderCopy extends FormPageCopy {
   };
 }
 
+interface RangeSliderCopy extends FormPageCopy {
+  demo: {
+    fromLabel: string;
+    toLabel: string;
+    disabled: string;
+  };
+}
+
 interface StepSliderCopy extends FormPageCopy {
   demo: {
     md: string;
@@ -199,6 +207,7 @@ interface FormCopy {
   dateRangePicker: DateRangePickerCopy;
   timePicker: TimePickerCopy;
   slider: SliderCopy;
+  rangeSlider: RangeSliderCopy;
   stepSlider: StepSliderCopy;
   rating: RatingCopy;
   colorPicker: ColorPickerCopy;
@@ -731,6 +740,46 @@ const VI_FORMS: FormCopy = {
       valueLabel: 'Giá trị',
       temperatureLabel: 'Nhiệt độ',
       lockedLabel: 'Đã khoá',
+      disabled: 'Disabled',
+    },
+  },
+  rangeSlider: {
+    title: 'Range Slider',
+    intro:
+      'Thanh trượt chọn một KHOẢNG [from, to] với hai đầu kéo độc lập — vd chọn đoạn nhạc, lọc khoảng giá. Chồng hai input[type="range"] gốc nên mỗi đầu đều điều khiển được bằng chuột, chạm và bàn phím; kéo chéo bị kẹp để from luôn ≤ to.',
+    apiTitle: 'API — GRangeSlider',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'Mỗi đầu là một input[type="range"] gốc: role="slider", aria-valuenow/min/max và điều hướng bàn phím (←→/Home/End) riêng.',
+      'Cấp tên từng đầu qua ariaLabelFrom / ariaLabelTo.',
+    ],
+    apiRows: [
+      {
+        name: 'from',
+        type: 'number (model)',
+        default: '0',
+        description: 'Đầu khoảng (hai chiều).',
+      },
+      { name: 'to', type: 'number (model)', default: '0', description: 'Cuối khoảng (hai chiều).' },
+      { name: 'min', type: 'number', default: '0', description: 'Giá trị nhỏ nhất.' },
+      { name: 'max', type: 'number', default: '100', description: 'Giá trị lớn nhất.' },
+      { name: 'step', type: 'number', default: '1', description: 'Bước nhảy.' },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        default: 'false',
+        description: 'Vô hiệu hoá cả hai đầu.',
+      },
+      {
+        name: 'ariaLabelFrom / ariaLabelTo',
+        type: 'string',
+        default: '—',
+        description: 'Tên từng đầu cho screen reader.',
+      },
+    ],
+    demo: {
+      fromLabel: 'Từ',
+      toLabel: 'Đến',
       disabled: 'Disabled',
     },
   },
@@ -1503,6 +1552,36 @@ const EN_FORMS: FormCopy = {
       valueLabel: 'Value',
       temperatureLabel: 'Temperature',
       lockedLabel: 'Locked',
+      disabled: 'Disabled',
+    },
+  },
+  rangeSlider: {
+    title: 'Range Slider',
+    intro:
+      'Select a RANGE [from, to] with two independently draggable handles — e.g. audio clip selection or price filters. Two stacked native input[type="range"] elements keep pointer, touch, and keyboard control per handle; crossing drags are clamped so from ≤ to.',
+    apiTitle: 'API — GRangeSlider',
+    accessibilityTitle: 'Accessibility',
+    accessibility: [
+      'Each handle is a native input[type="range"]: its own role="slider", aria-valuenow/min/max, and keyboard navigation (←→/Home/End).',
+      'Name each handle via ariaLabelFrom / ariaLabelTo.',
+    ],
+    apiRows: [
+      { name: 'from', type: 'number (model)', default: '0', description: 'Range start (two-way).' },
+      { name: 'to', type: 'number (model)', default: '0', description: 'Range end (two-way).' },
+      { name: 'min', type: 'number', default: '0', description: 'Minimum value.' },
+      { name: 'max', type: 'number', default: '100', description: 'Maximum value.' },
+      { name: 'step', type: 'number', default: '1', description: 'Increment step.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable both handles.' },
+      {
+        name: 'ariaLabelFrom / ariaLabelTo',
+        type: 'string',
+        default: '—',
+        description: 'Per-handle screen reader names.',
+      },
+    ],
+    demo: {
+      fromLabel: 'From',
+      toLabel: 'To',
       disabled: 'Disabled',
     },
   },

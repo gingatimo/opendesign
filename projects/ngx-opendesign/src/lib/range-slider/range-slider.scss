@@ -1,0 +1,66 @@
+:host {
+  // grid xếp chồng 2 input lên đúng cùng một ô — track của chúng trùng khít, không cần absolute.
+  // align-items:center giữ track nằm đúng tâm host như GSlider (thumb làm input cao hơn track).
+  display: grid;
+  align-items: center;
+}
+
+.g-range-slider__input {
+  grid-area: 1 / 1;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  margin: 0; // gỡ margin mặc định của input[range] (Chrome ~2px)
+  border-radius: var(--g-radius-pill);
+  outline: none;
+  background: transparent;
+  // Input KHÔNG bắt chuột — chỉ thumb bắt (pointer-events ở ::thumb), để 2 lớp chồng không che nhau.
+  pointer-events: none;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  &:focus-visible {
+    box-shadow: var(--g-focus-ring);
+  }
+}
+
+// Lớp DƯỚI (from) vẽ track: nền --g-border, tô --g-primary giữa 2 đầu qua gradient 3 chặng.
+// Lớp trên (to) nền trong suốt để không che.
+.g-range-slider__input--from {
+  background: linear-gradient(
+    to right,
+    var(--g-border) var(--g-range-from, 0%),
+    var(--g-primary) var(--g-range-from, 0%),
+    var(--g-primary) var(--g-range-to, 0%),
+    var(--g-border) var(--g-range-to, 0%)
+  );
+}
+
+// Mặc định to nằm trên (DOM sau); cả 2 đầu dồn cuối track thì from phải nổi lên mới kéo được.
+.g-range-slider__input--top {
+  z-index: 1;
+}
+
+.g-range-slider__input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--g-primary);
+  border: 2px solid var(--g-surface-raised);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.g-range-slider__input::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--g-surface-raised);
+  border-radius: 50%;
+  background: var(--g-primary);
+  cursor: pointer;
+  pointer-events: auto;
+}
